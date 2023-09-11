@@ -1,4 +1,4 @@
-package com.ssafy.ssaguri.entity;
+package com.ssafy.ssaguri.entity.common;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

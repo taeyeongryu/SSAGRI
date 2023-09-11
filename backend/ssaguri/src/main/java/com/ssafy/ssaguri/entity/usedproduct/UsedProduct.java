@@ -1,6 +1,6 @@
 package com.ssafy.ssaguri.entity.usedproduct;
 
-import com.ssafy.ssaguri.entity.BaseTimeEntity;
+import com.ssafy.ssaguri.entity.common.BaseTimeEntity;
 import com.ssafy.ssaguri.entity.user.User;
 import lombok.AccessLevel;
 import lombok.Builder;
