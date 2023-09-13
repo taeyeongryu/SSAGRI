@@ -19,7 +19,7 @@ const App = () => {
       <Route path='/tradeMain' element={<TradeMainPage />} />
       {/* 경매 페이지 */}
       <Route path='/auction' element={<AuctionPage />} />
-      {/* 커뮤티니 페이지 */}
+      {/* 커뮤니티 페이지 */}
       <Route path='/community' element={<CommunityPage />} />
     </Routes>
   );
