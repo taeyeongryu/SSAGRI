@@ -1,12 +1,12 @@
 import { styled } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import React, { useState } from 'react';
 
 const NavbarDiv = styled.div`
+  position: absolute;
   width: 100vw;
   height: 7vh;
   /* border-top: 2px solid black; */
-  border-bottom: 2px solid black;
+  /* border-bottom: 2px solid black; */
   display: flex;
   justify-content: space-between;
 `;
@@ -85,16 +85,12 @@ const SideBar = () => {
 const Navbar = () => {
   return (
     <NavbarDiv>
-      <img src='/assets/img/logo.PNG' alt='' />
+      <img
+        style={{ marginTop: '1vh', marginLeft: '1vw' }}
+        src='/assets/img/logo.PNG'
+        alt=''
+      />
       <MenuBar></MenuBar>
-      <SideBar></SideBar>
-    </NavbarDiv>
-  );
-};
-const Navbar2 = () => {
-  return (
-    <NavbarDiv>
-      <img src='/assets/img/logo.PNG' alt='' />
       <SideBar></SideBar>
     </NavbarDiv>
   );
