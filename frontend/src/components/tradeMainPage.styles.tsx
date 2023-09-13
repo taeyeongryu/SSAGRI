@@ -162,10 +162,76 @@ const TradeMainProductDiv = styled.div`
   border: 2px solid red;
 `;
 
+const RegionAndSearch = styled.div`
+  width: 935px;
+  height: 60px;
+  border: 2px solid blue;
+
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  line-height: 60px;
+`;
+
+const Region = styled.div`
+  width: 152px;
+  height: 45px;
+  font-size: 30px;
+  font-weight: bold;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Search = styled.div`
+  width: 500px;
+  height: 40px;
+  border: 1px solid #383838;
+  border-radius: 20px;
+  padding: 0px 30px 0px 0px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const RecentProduct = styled.div`
+  width: 935px;
+  height: 320px;
+  border: 2px solid green;
+`;
+const PopularProduct = styled.div`
+  width: 935px;
+  height: 320px;
+  border: 2px solid blue;
+`;
+
 const TradeMainProduct = () => {
   return (
     <TradeMainProductDiv>
-      <div>검색, 목록</div>
+      <RegionAndSearch>
+        <Region>지역: 서울</Region>
+        <Search>
+          <input
+            type='text'
+            style={{
+              width: '450px',
+              height: '38px',
+              border: 0,
+              marginLeft: '16px'
+            }}
+            placeholder='Search...'
+          />
+          <img
+            src='/assets/img/searchGlass.png'
+            alt=''
+            style={{ width: '20px', height: '20px' }}
+          />
+        </Search>
+      </RegionAndSearch>
+      <RecentProduct>방금 등록된 상품</RecentProduct>
+      <PopularProduct>실시간 인기 상품</PopularProduct>
     </TradeMainProductDiv>
   );
 };
