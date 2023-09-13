@@ -5,6 +5,7 @@ import { Route, Routes } from 'react-router-dom';
 import LoginPage from './pages/loginPage';
 import MainPage from './pages/mainPage';
 import TradeMainPage from './pages/tradeMainPage';
+import TradeListPage from './pages/tradeListPage';
 import CommunityPage from './pages/communityPage';
 import AuctionPage from './pages/auctionPage';
 
@@ -17,6 +18,8 @@ const App = () => {
       <Route path='/' element={<MainPage />} />
       {/* 중고거래 메인 페이지 */}
       <Route path='/tradeMain' element={<TradeMainPage />} />
+      {/* 중고거래 페이지 */}
+      <Route path='/tradeList' element={<TradeListPage />} />
       {/* 경매 페이지 */}
       <Route path='/auction' element={<AuctionPage />} />
       {/* 커뮤티니 페이지 */}
