@@ -1,6 +1,6 @@
-package com.ssafy.ssaguri.util.jwt.controller;
+package com.ssafy.ssagri.util.jwt;
 
-import com.ssafy.ssaguri.util.jwt.JwtUtil;
+import com.ssafy.ssagri.util.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;

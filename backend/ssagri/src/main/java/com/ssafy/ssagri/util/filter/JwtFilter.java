@@ -1,11 +1,9 @@
-package com.ssafy.ssaguri.util.filter;
+package com.ssafy.ssagri.util.filter;
 
-import com.ssafy.ssaguri.util.jwt.JwtUtil;
+import com.ssafy.ssagri.util.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -29,7 +27,7 @@ public class JwtFilter extends OncePerRequestFilter {
     private String secretkey = "ssafy9kiB209teamSsaguriFightingssafy9kiB209teamSsaguriFightingssafy9kiB209teamSsaguriFighting";
 
     //필터링 거치지 않는 API endpoint,, 테스트용
-    private String[] allowedURI = new String[] {"/jwt", "/"};
+    private String[] allowedURI = new String[] {"/jwt"};
 
     //다음 해당 사항은 jwt 토큰 인증 필터링을 거치지 않는다.
     @Override
@@ -57,7 +55,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         //입력받은 토큰 검증
         String tokenType = JwtUtil.isExpired(rawToken);
-
+        log.warn("입력받은 토큰 타입 검증 : {}", tokenType);
         //토큰 타입 결과에 따른 필터 제어(Valid, Invalid, Expired)
         if(!tokenType.equals("Valid")) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
