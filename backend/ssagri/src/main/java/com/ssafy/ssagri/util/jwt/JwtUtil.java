@@ -6,6 +6,13 @@ import io.jsonwebtoken.Jwts;
 
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+
+import javax.annotation.PostConstruct;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 
 /**
@@ -14,33 +21,40 @@ import java.util.Date;
  */
 @Slf4j
 public class JwtUtil {
-
-    private final static String secretKey = "b209ssagriMemberBEschAndrtyAndrhbFEsjwAndsbhAndhjiFighting"; //salt
-
+    //Key : 추후 보안상 변경 조치 필요
+    private final static String secretKey = "ssafy9kiB209teamSsaguriFightingssafy9kiB209teamSsaguriFightingssafy9kiB209teamSsaguriFighting";
     private static long hour = 1000 * 60 * 60L;
-    private static long accessExpireTime = hour / 60 / 3; //액세스 토큰 만료시간 30분
+    private static long accessExpireTime = hour; //액세스 토큰 만료시간 30분
     private static long refreshExpireTime = hour; //리프레시 토큰 만료시간 3일
 
     //액세스 토큰 생성
-    public static String createAccessToken(Long userNo) {
+    public static ResponseEntity<String> createAccessToken(Long userNo) {
         Claims claims = Jwts.claims();
         claims.put("userNo", userNo); //payload
         claims.put("tokenType", "Access");
+        String token = tokenBuilder(claims);
 
-        return Jwts.builder() // 액세스 토큰을 생성
-                .setClaims(claims) // 유저의 pk값
-                .setIssuedAt(new Date(System.currentTimeMillis())) // 현재 시간
-                .setExpiration(new Date(System.currentTimeMillis() + accessExpireTime)) // 언제까지
-                .signWith(SignatureAlgorithm.HS256, secretKey) // 뭐로 사인됐는지
-                .compact();
+        log.info("[TOKEN]AT 확인 {}",token);
+        return ResponseEntity.ok()
+                .header("Access-Token", token)
+                .body("Access token has been created");
     }
 
     //리프레시 토큰 생성
-    public static String createRefreshToken(Long userNo) {
+    public static ResponseEntity<String> createRefreshToken(Long userNo) {
         Claims claims = Jwts.claims();
         claims.put("userNo", userNo); //payload
         claims.put("tokenType", "Refresh");
+        String token = tokenBuilder(claims);
 
+        log.info("[TOKEN]RT 확인 {}",token);
+        return ResponseEntity.ok()
+                .header("Refresh-Token", token)
+                .body("Refresh token has been created");
+    }
+
+    //토큰 만드는 로직
+    public static String tokenBuilder(Claims claims) {
         return Jwts.builder() // 리프레쉬 토큰을 생성
                 .setClaims(claims) // claim은 비어있음
                 .setIssuedAt(new Date(System.currentTimeMillis())) // 현재 시간
