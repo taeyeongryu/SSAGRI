@@ -313,7 +313,10 @@ const TradeMainProduct = () => {
       <RegionAndSearch>
         <Region>지역: 서울</Region>
         <Search>
-          <SearchInput type='text' placeholder='Search...'></SearchInput>
+          <SearchInput
+            type='text'
+            placeholder='원하는 제품을 검색해 보세요!'
+          ></SearchInput>
           <SearchButton>
             <SearchImg src='/assets/img/searchGlass.png'></SearchImg>
           </SearchButton>
