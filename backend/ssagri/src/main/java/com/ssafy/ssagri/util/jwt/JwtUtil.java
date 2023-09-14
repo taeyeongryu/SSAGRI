@@ -1,4 +1,4 @@
-package com.ssafy.ssaguri.util.jwt;
+package com.ssafy.ssagri.util.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -6,9 +6,6 @@ import io.jsonwebtoken.Jwts;
 
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-
-import java.security.SignatureException;
 import java.util.Date;
 
 /**
@@ -20,7 +17,7 @@ public class JwtUtil {
 
     private final static String secretKey = "b209ssagriMemberBEschAndrtyAndrhbFEsjwAndsbhAndhjiFighting"; //salt
 
-    static long hour = 1000 * 60 * 60L;
+    private static long hour = 1000 * 60 * 60L;
     private static long accessExpireTime = hour / 60 / 3; //액세스 토큰 만료시간 30분
     private static long refreshExpireTime = hour; //리프레시 토큰 만료시간 3일
 

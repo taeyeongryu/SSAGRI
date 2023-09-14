@@ -1,6 +1,6 @@
-package com.ssafy.ssaguri;
+package com.ssafy.ssagri;
 
-import com.ssafy.ssaguri.util.jwt.JwtUtil;
+import com.ssafy.ssagri.util.jwt.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("jwt")
 @Slf4j
-public class JWTController {
+public class JwtTestController {
 
 
     @GetMapping("at")

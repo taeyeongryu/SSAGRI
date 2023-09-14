@@ -1,4 +1,4 @@
-package com.ssafy.ssaguri.util.filter;
+package com.ssafy.ssagri.util.filter;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
