@@ -43,6 +43,8 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 
 
+
+
 	// (3) queryDSL 추가
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
 	annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
@@ -56,6 +58,9 @@ dependencies {
 
 	//	websocket
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+	//	MongoDB
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 
 
 }

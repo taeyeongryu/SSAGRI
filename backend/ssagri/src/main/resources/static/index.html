@@ -1,0 +1,17 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script>
+    const socket = new SockJS('/chat');
+    const stompClient = Stomp.over(socket);
+    stompClient.connect({}, function(frame) {
+        stompClient.subscribe('/topic/messages', function(messageOutput) {
+            // 여기에 메시지를 받았을 때의 로직을 작성
+            console.log(messageOutput.body);
+        });
+    });
+
+    // 메시지를 보내는 함수
+    function sendMessage(message) {
+        stompClient.send("/app/send", {}, message);
+    }
+</script>
