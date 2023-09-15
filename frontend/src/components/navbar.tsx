@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 const NavbarDiv = styled.div`
   position: absolute;
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 7vh;
   /* border-top: 2px solid black; */
