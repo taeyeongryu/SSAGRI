@@ -24,7 +24,6 @@ import java.io.IOException;
 @Slf4j
 public class JwtFilter extends OncePerRequestFilter {
 
-    private String secretkey = "ssafy9kiB209teamSsaguriFightingssafy9kiB209teamSsaguriFightingssafy9kiB209teamSsaguriFighting";
 
     //필터링 거치지 않는 API endpoint,, 테스트용
     private String[] allowedURI = new String[] {"/jwt"};

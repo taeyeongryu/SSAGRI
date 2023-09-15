@@ -1,6 +1,7 @@
 package com.ssafy.ssagri.config;
 
 
+import com.ssafy.ssagri.util.filter.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,7 +32,7 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) //세션 생성 X, 요청 상태 추적하지 않음
                 .and()
         //jwt Filter Setting
-//                .addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class)
         ;
 
         return http.build();
