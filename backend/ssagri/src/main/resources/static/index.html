@@ -1,17 +1,45 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket Chat</title>
+</head>
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<div id="chat">
+    <div id="messages"></div>
+    <textarea id="messageInput"></textarea>
+    <button onclick="sendMessage()">Send</button>
+</div>
+
 <script>
-    const socket = new SockJS('/chat');
-    const stompClient = Stomp.over(socket);
+    let socket = new SockJS('/ws');
+    let stompClient = Stomp.over(socket);
+
     stompClient.connect({}, function(frame) {
-        stompClient.subscribe('/topic/messages', function(messageOutput) {
-            // 여기에 메시지를 받았을 때의 로직을 작성
-            console.log(messageOutput.body);
+        console.log('Connected: ' + frame);
+        stompClient.subscribe('/sub/chat/room/1', function(messageOutput) {
+            showMessageOutput(JSON.parse(messageOutput.body));
         });
     });
 
-    // 메시지를 보내는 함수
-    function sendMessage(message) {
-        stompClient.send("/app/send", {}, message);
+    function sendMessage() {
+        let messageInput = document.getElementById('messageInput');
+        stompClient.send("/pub/chat/room/1", {}, JSON.stringify({
+            content: messageInput.value
+            // 추가적인 메시지 정보 (예: sender, timestamp 등)는 여기에 추가할 수 있습니다.
+        }));
+        messageInput.value = '';
+    }
+
+    function showMessageOutput(messageOutput) {
+        let messages = document.getElementById('messages');
+        let messageElement = document.createElement('div');
+        messageElement.innerText = messageOutput.content;
+        messages.appendChild(messageElement);
     }
 </script>
+
+</body>
+</html>
