@@ -2,6 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
+import axios from 'axios';
+
+// axios.defaults.baseURL = 'http://j9b209.p.ssafy.io'
+axios.defaults.withCredentials = true;
 
 // 라우터 - 주소경로 생성
 import { BrowserRouter } from 'react-router-dom';
