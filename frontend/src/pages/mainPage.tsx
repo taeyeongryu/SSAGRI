@@ -36,6 +36,7 @@ const mainPage = () => {
           transition: 'transform 0.1s, opacity 0.14s'
         }}
       ></div>
+
       <PageSlide></PageSlide>
     </MainPage>
   );
