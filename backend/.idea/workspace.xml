@@ -5,18 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d81de981-7408-4fc7-8287-7a155e96c599" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ssagri/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/ssagri/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ssagri/src/main/java/com/ssafy/ssagri/JwtTestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ssagri/src/main/java/com/ssafy/ssagri/JwtTestController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ssagri/src/main/java/com/ssafy/ssagri/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/ssagri/src/main/java/com/ssafy/ssagri/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ssagri/src/main/java/com/ssafy/ssagri/util/error/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/ssagri/src/main/java/com/ssafy/ssagri/util/exception/GlobalExceptionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ssagri/src/main/java/com/ssafy/ssagri/util/filter/JwtFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/ssagri/src/main/java/com/ssafy/ssagri/util/filter/JwtFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ssagri/src/main/java/com/ssafy/ssagri/util/jwt/AccessTokenCreateController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ssagri/src/main/java/com/ssafy/ssagri/util/jwt/AccessTokenCreateController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ssagri/src/main/java/com/ssafy/ssagri/util/jwt/JwtUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/ssagri/src/main/java/com/ssafy/ssagri/util/jwt/JwtUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ssagri/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/ssagri/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ssagri/src/main/java/com/ssafy/ssagri/domain/user/controller/UserRegisterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ssagri/src/main/java/com/ssafy/ssagri/domain/user/controller/UserRegisterController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ssagri/src/main/java/com/ssafy/ssagri/domain/user/service/UserRegisterService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ssagri/src/main/java/com/ssafy/ssagri/domain/user/service/UserRegisterService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,7 +25,12 @@
       <state>
         <projects_view>
           <tree_state>
-            <expand />
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="ssaguri" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
             <select />
           </tree_state>
         </projects_view>
@@ -79,6 +76,7 @@
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0",
     "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
+    "spring.configuration.checksum": "393e217040a7eec5c4a737b0873b9f91",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -100,6 +98,7 @@
       <option name="presentableId" value="Default" />
       <updated>1694653849421</updated>
       <workItem from="1694653850778" duration="7361000" />
+      <workItem from="1694738024904" duration="4431000" />
     </task>
     <servers />
   </component>
