@@ -5,10 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d81de981-7408-4fc7-8287-7a155e96c599" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ssagri/src/main/java/com/ssafy/ssagri/domain/user/controller/UserRegisterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ssagri/src/main/java/com/ssafy/ssagri/domain/user/controller/UserRegisterController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ssagri/src/main/java/com/ssafy/ssagri/domain/user/service/UserRegisterService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ssagri/src/main/java/com/ssafy/ssagri/domain/user/service/UserRegisterService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ssagri/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/ssagri/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ssagri/src/main/java/com/ssafy/ssagri/JwtTestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ssagri/src/main/java/com/ssafy/ssagri/JwtTestController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ssagri/src/main/java/com/ssafy/ssagri/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/ssagri/src/main/java/com/ssafy/ssagri/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ssagri/src/main/java/com/ssafy/ssagri/util/filter/JwtFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/ssagri/src/main/java/com/ssafy/ssagri/util/filter/JwtFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ssagri/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/ssagri/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,7 +100,7 @@
       <option name="presentableId" value="Default" />
       <updated>1694653849421</updated>
       <workItem from="1694653850778" duration="7361000" />
-      <workItem from="1694738024904" duration="4431000" />
+      <workItem from="1694738024904" duration="12717000" />
     </task>
     <servers />
   </component>
