@@ -1,11 +1,5 @@
 import { styled } from 'styled-components';
 
-// 중고거래 전체 페이지
-const TradeMainPageDiv = styled.div`
-  width: 1920px;
-  height: 1080px;
-`;
-
 // Header 제외 중고거래 컴포넌트
 const TradeMainFrameDiv = styled.div`
   width: 1920px;
@@ -55,7 +49,7 @@ const Seoul = styled.div`
   text-align: center;
   line-height: 50px;
   position: absolute;
-  top: 350px;
+  top: 270px;
   left: 400px;
   box-shadow: 2px 2px 2px 1px #383838;
 
@@ -74,7 +68,7 @@ const Dajeon = styled.div`
   text-align: center;
   line-height: 50px;
   position: absolute;
-  top: 530px;
+  top: 450px;
   left: 420px;
   box-shadow: 2px 2px 2px 1px #383838;
 
@@ -93,7 +87,7 @@ const Gumi = styled.div`
   text-align: center;
   line-height: 50px;
   position: absolute;
-  top: 550px;
+  top: 470px;
   left: 530px;
   box-shadow: 2px 2px 2px 1px #383838;
 
@@ -112,7 +106,7 @@ const Gwangju = styled.div`
   text-align: center;
   line-height: 50px;
   position: absolute;
-  top: 720px;
+  top: 640px;
   left: 340px;
   box-shadow: 2px 2px 2px 1px #383838;
 
@@ -131,7 +125,7 @@ const Buwoolkyung = styled.div`
   text-align: center;
   line-height: 50px;
   position: absolute;
-  top: 700px;
+  top: 620px;
   left: 570px;
   box-shadow: 2px 2px 2px 1px #383838;
 
@@ -188,10 +182,11 @@ const Region = styled.div`
   align-items: center;
 `;
 
-const Search = styled.div`
+// 검색 입력
+const Search01 = styled.div`
   width: 500px;
   height: 40px;
-  border: 1px solid #383838;
+  border: 1px solid #4786fa;
   border-radius: 20px;
   padding: 0px 30px 0px 0px;
   margin-right: 25px;
@@ -200,8 +195,7 @@ const Search = styled.div`
   justify-content: space-between;
   align-items: center;
 `;
-
-const SearchInput = styled.input`
+const SearchInput01 = styled.input`
   width: 440px;
   height: 38px;
   border: 0;
@@ -209,15 +203,34 @@ const SearchInput = styled.input`
   font-size: 20px;
 `;
 
+const Search02 = styled.div`
+  width: 600px;
+  height: 40px;
+  border: 1px solid #4786fa;
+  border-radius: 20px;
+  padding: 0px 30px 0px 0px;
+  margin-left: 12%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+const SearchInput02 = styled.input`
+  width: 540px;
+  height: 38px;
+  border: 0;
+  margin-left: 16px;
+  font-size: 16px;
+`;
+
 const SearchButton = styled.button`
   background-color: #fff;
   border: 0;
   cursor: pointer;
 `;
-
 const SearchImg = styled.img`
   width: 20px;
   height: 20px;
+  color: #4786fa;
 `;
 
 const RecentProductDiv = styled.div`
@@ -250,16 +263,18 @@ const PopularProductTitle = styled.div`
   line-height: 50px;
 `;
 
+// Product v01
 const ProductList01 = styled.div`
   width: 900px;
   height: 260px;
   /* border: 2px solid red; */
   display: flex;
+  flex-wrap: wrap;
 `;
 
 const ProductStyle01 = styled.div`
-  width: 200px;
-  height: 260px;
+  width: 180px;
+  height: 240px;
   border: 2px solid #4786fa;
   border-radius: 20px;
   margin: 0 15px;
@@ -271,8 +286,8 @@ const ProductStyle01 = styled.div`
 `;
 
 const ProductImgStyle01 = styled.img`
-  width: 150px;
-  height: 150px;
+  width: 130px;
+  height: 130px;
   /* border: 1px solid black; */
   border-radius: 10px;
 `;
@@ -283,8 +298,8 @@ const ProductDetailStyle01 = styled.div`
   /* border: 1px solid black; */
 `;
 
-const ProductName = styled.div`
-  width: 160px;
+const ProductName01 = styled.div`
+  width: 150px;
   height: 38px;
   font-size: 14px;
   overflow: hidden;
@@ -293,16 +308,77 @@ const ProductName = styled.div`
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 `;
-const ProductPrice = styled.div`
-  width: 160px;
+const ProductPrice01 = styled.div`
+  width: 150px;
   height: 25px;
   font-size: 20px;
   font-weight: bold;
 `;
-const SellerLocationAndTime = styled.div`
-  width: 160px;
+const SellerLocationAndTime01 = styled.div`
+  width: 150px;
   height: 17px;
   margin-top: 5px;
+  font-size: 12px;
+  color: #929292;
+`;
+
+// Product v02
+const ProductList02 = styled.div`
+  width: 79.7%;
+  /* height: 100%; */
+  /* border: 1px solid green; */
+  display: flex;
+  justify-content: start;
+  flex-wrap: wrap;
+`;
+
+const ProductStyle02 = styled.div`
+  width: 170px;
+  height: 230px;
+  border: 2px solid #4786fa;
+  border-radius: 20px;
+  margin: 10px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 2px 2px 2px 1px #757575;
+`;
+
+const ProductImgStyle02 = styled.img`
+  width: 130px;
+  height: 130px;
+  /* border: 1px solid black; */
+  border-radius: 10px;
+`;
+
+const ProductDetailStyle02 = styled.div`
+  width: 150px;
+  height: 80px;
+  margin-top: 5px;
+  /* border: 1px solid black; */
+`;
+
+const ProductName02 = styled.div`
+  width: 150px;
+  height: 38px;
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+`;
+const ProductPrice02 = styled.div`
+  width: 150px;
+  height: 25px;
+  font-size: 18px;
+  font-weight: bold;
+`;
+const SellerLocationAndTime02 = styled.div`
+  width: 150px;
+  height: 17px;
+  margin-top: 2px;
   font-size: 12px;
   color: #929292;
 `;
@@ -312,15 +388,15 @@ const TradeMainProduct = () => {
     <TradeMainProductDiv>
       <RegionAndSearch>
         <Region>지역: 서울</Region>
-        <Search>
-          <SearchInput
+        <Search01>
+          <SearchInput01
             type='text'
             placeholder='원하는 제품을 검색해 보세요!'
-          ></SearchInput>
+          ></SearchInput01>
           <SearchButton>
-            <SearchImg src='/assets/img/searchGlass.png'></SearchImg>
+            <SearchImg src='/assets/img/searchGlass-4786fa.png'></SearchImg>
           </SearchButton>
-        </Search>
+        </Search01>
       </RegionAndSearch>
       <RecentProductDiv>
         <RecentProductTitle>방금 등록된 상품</RecentProductTitle>
@@ -328,9 +404,11 @@ const TradeMainProduct = () => {
           <ProductStyle01>
             <ProductImgStyle01 src='/assets/img/zeuslab.jpg'></ProductImgStyle01>
             <ProductDetailStyle01>
-              <ProductName>제우스랩 포터블 모니터 Z16 Pro</ProductName>
-              <ProductPrice>130,000 원</ProductPrice>
-              <SellerLocationAndTime>온천2동 | 10분 전</SellerLocationAndTime>
+              <ProductName01>제우스랩 포터블 모니터 Z16 Pro</ProductName01>
+              <ProductPrice01>130,000 원</ProductPrice01>
+              <SellerLocationAndTime01>
+                온천2동 | 10분 전
+              </SellerLocationAndTime01>
             </ProductDetailStyle01>
           </ProductStyle01>
           <ProductStyle01></ProductStyle01>
@@ -352,17 +430,16 @@ const TradeMainProduct = () => {
 };
 
 export {
-  TradeMainPageDiv,
   TradeMain,
-  Search,
-  SearchInput,
+  Search02,
+  SearchInput02,
   SearchButton,
   SearchImg,
-  ProductList01,
-  ProductStyle01,
-  ProductImgStyle01,
-  ProductDetailStyle01,
-  ProductName,
-  ProductPrice,
-  SellerLocationAndTime
+  ProductList02,
+  ProductStyle02,
+  ProductImgStyle02,
+  ProductDetailStyle02,
+  ProductName02,
+  ProductPrice02,
+  SellerLocationAndTime02
 };

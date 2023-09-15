@@ -1,9 +1,18 @@
 import { styled } from 'styled-components';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 
 const MainPage = styled.div`
   width: 100%;
   height: 100vh;
+`;
+
+const Scrollbar = styled.div`
+  position: absolute;
+  margin: 90vh 25vw;
+  width: 50vw;
+  height: 10px;
+  border: 2px solid black;
+  z-index: 20;
 `;
 
 const Page = styled.div`
@@ -22,20 +31,14 @@ const PagesSection1 = styled.section`
   /* border: 1px solid black; */
 `;
 const PagesSection2 = styled.section`
-  min-width: 1000vw;
+  /* min-width: 6000px; */
   min-height: 100vh;
   display: flex;
   /* justify-content: center; */
   align-items: center;
   font-size: 4ch;
   /* overflow: hidden; */
-  /* border: 1px solid black; */
-`;
-const Pages = styled.div`
-  /* position: relative;
-    width: 100vw;
-    display: flex; */
-  /* overflow: hidden; */
+  /* border: 10px solid black; */
 `;
 const Pages1 = styled.div`
   display: flex;
@@ -140,15 +143,248 @@ const Page2_tag2 = styled.div`
   border: 2px solid red;
   margin-right: 300px;
 `;
+
+// 섹션2번 -중고거래
+
 const Page2_colorbox = styled.div`
-  margin-top: -100px;
   font-size: 40px;
-  width: 4000px;
+  width: 4300px;
   height: 100vh;
-  border: 2px solid red;
+  /* border: 2px solid red; */
   clip-path: polygon(20% 0%, 100% 0%, 100% 100%, 0% 100%);
-  background: #ff0000;
+  background: #eee1e1;
+  /* overflow: hidden; */
+  position: relative;
 `;
+
+const TradeDiv = styled.div`
+  display: flex;
+  /* border: 2px solid red; */
+`;
+const Trade_box1 = styled.div`
+  margin-top: 90px;
+  margin-left: 1000px;
+  margin-right: 400px;
+  width: 500px;
+  height: 700px;
+  /* border: 2px solid red; */
+`;
+const Trade_box2 = styled.div`
+  margin-top: 150px;
+  width: 500px;
+  height: 700px;
+  /* border: 2px solid red; */
+`;
+
+const NameTag0 = styled.p`
+  font-size: 120px;
+  width: 500px;
+  /* border: 2px solid black; */
+`;
+const NameTag0_2 = styled.p`
+  font-size: 50px;
+  width: 500px;
+  /* border: 2px solid black; */
+`;
+
+const Trade_btn = styled.div`
+  width: 200px;
+  height: 70px;
+  border: 2px solid black;
+  margin-left: 280px;
+  font-size: 20px;
+`;
+
+const Next_line = styled.div`
+  margin-top: 390px;
+  margin-left: 160px;
+  width: 250px;
+  height: 4px;
+  /* border: 5px solid black; */
+  background-color: rgb(0, 0, 0, 0.5);
+`;
+
+const Recent_box = styled.div`
+  height: 800px;
+  width: 1000px;
+  /* border: 2px solid black; */
+  margin-left: 200px;
+`;
+
+const NameTag0_3 = styled.p`
+  font-size: 50px;
+  width: 500px;
+  /* border: 2px solid black; */
+  margin: 100px auto;
+  text-align: center;
+`;
+
+const Recent_list = styled.div`
+  display: flex;
+  width: 1000px;
+  height: 300px;
+  border: 2px solid black;
+  margin: 0 auto;
+`;
+const Recent_btn = styled.div`
+  width: 200px;
+  height: 70px;
+  border: 2px solid black;
+  font-size: 20px;
+  margin: 30px auto;
+  text-align: center;
+  line-height: 70px;
+`;
+const Page2_section2 = () => {
+  return (
+    <Page2_colorbox>
+      <TradeDiv>
+        <Trade_box1>
+          <NameTag0>중고거래</NameTag0>
+          <NameTag0_2>내용</NameTag0_2>
+          <Trade_btn>거래하러가기</Trade_btn>
+        </Trade_box1>
+        <Trade_box2>이미지</Trade_box2>
+        <Next_line></Next_line>
+        <Recent_box>
+          <NameTag0_3>최근 등록 리스트</NameTag0_3>
+          <Recent_list></Recent_list>
+          <Recent_btn>최근 등록 상품</Recent_btn>
+        </Recent_box>
+      </TradeDiv>
+    </Page2_colorbox>
+  );
+};
+
+// 섹션3번 -경매
+
+const Page2_Auction = styled.div`
+  width: 1820px;
+  height: 100vh;
+  /* border: 5px solid black; */
+`;
+
+const AuctionDiv = styled.div`
+  display: flex;
+  /* border: 2px solid red; */
+`;
+
+const NameTag1 = styled.p`
+  margin-top: 150px;
+  margin-left: 400px;
+  margin-right: 50px;
+  font-size: 90px;
+  width: 200px;
+`;
+
+const NameTag1_2 = styled.p`
+  /* margin: 150px auto; */
+  margin: 150px 0 250px 500px;
+  font-size: 40px;
+`;
+
+const Auctionbox = styled.div`
+  margin-top: 150px;
+  width: 1300px;
+  height: 700px;
+  /* border: 2px solid black; */
+`;
+
+const Auction_btn = styled.div`
+  width: 200px;
+  height: 70px;
+  border: 2px solid black;
+  font-size: 30px;
+  margin: 0 auto;
+`;
+
+const Page2_section3 = () => {
+  return (
+    <Page2_Auction>
+      <AuctionDiv>
+        <NameTag1>경매</NameTag1>
+        <Auctionbox>
+          <NameTag1_2> 경매 설명</NameTag1_2>
+          <Auction_btn>경매 입장하기</Auction_btn>
+        </Auctionbox>
+      </AuctionDiv>
+    </Page2_Auction>
+  );
+};
+
+// 섹션3번 -커뮤니티
+
+const Page2_Commu = styled.div`
+  width: 2020px;
+  height: 100vh;
+  /* border: 5px solid black; */
+`;
+
+const CommuDiv = styled.div`
+  display: flex;
+  /* border: 2px solid red; */
+`;
+
+const NameTag2 = styled.p`
+  margin-top: 150px;
+  margin-left: 100px;
+  font-size: 70px;
+  width: 400px;
+`;
+
+const Commu_img = styled.div`
+  margin: 150px 200px 0 250px;
+  width: 500px;
+  height: 500px;
+  border: 2px solid black;
+`;
+
+const Page2_section4 = () => {
+  return (
+    <Page2_Commu>
+      <CommuDiv>
+        <Commu_img></Commu_img>
+        <NameTag2>커뮤니티</NameTag2>
+      </CommuDiv>
+    </Page2_Commu>
+  );
+};
+
+// 섹션4번 -Q&A
+
+const Page2_SQL = styled.div`
+  position: relative;
+  width: 2700px;
+  height: 100vh;
+  /* border: 5px solid black; */
+`;
+
+const NameTag3 = styled.p`
+  position: absolute;
+  top: 50px;
+  left: 430px;
+  font-size: 80px;
+`;
+
+const Page2_colorbox2 = styled.div`
+  font-size: 40px;
+  width: 2900px;
+  height: 100vh;
+  /* border: 2px solid red; */
+  clip-path: polygon(33% 0%, 100% 0%, 100% 100%, 0% 100%);
+  background: #cccaca;
+  /* overflow: hidden; */
+  position: relative;
+`;
+
+const Page2_section5 = () => {
+  return (
+    <Page2_SQL>
+      <Page2_colorbox2></Page2_colorbox2>
+      <NameTag3>Service</NameTag3>
+    </Page2_SQL>
+  );
+};
 
 const PageSlide = () => {
   const [rotation, setRotation] = useState(0);
@@ -223,6 +459,7 @@ const PageSlide = () => {
 
   return (
     <Page className='page-container'>
+      <Scrollbar></Scrollbar>
       <PagesSection1>
         <Pages1>
           <Pages1_Left>
@@ -258,30 +495,21 @@ const PageSlide = () => {
       </PagesSection1>
       <PagesSection2>
         <Pages2>
+          {/* 2-1 */}
           <Page2_tag1>
             당신 근처의 지역 생활 커뮤니티. <br />
             동네라서 가능한 모든 것 싸그리에서 가까운 이웃과 함께하세요. 1
             <br />
           </Page2_tag1>
           <Page2_tag2>이미지</Page2_tag2>
-          <Page2_colorbox></Page2_colorbox>
+          {/* 2-2 */}
+          <Page2_section2></Page2_section2>
+          {/* 2-3 */}
+          <Page2_section3></Page2_section3>
+          <Page2_section4></Page2_section4>
+          <Page2_section5></Page2_section5>
         </Pages2>
       </PagesSection2>
-      {/* <PagesSection>
-        <Pages>3</Pages>
-      </PagesSection>
-      <PagesSection>
-        <Pages>4</Pages>
-      </PagesSection>
-      <PagesSection>
-        <Pages>5</Pages>
-      </PagesSection>
-      <PagesSection>
-        <Pages>6</Pages>
-      </PagesSection>
-      <PagesSection>
-        <Pages>7</Pages>
-      </PagesSection> */}
     </Page>
   );
 };
