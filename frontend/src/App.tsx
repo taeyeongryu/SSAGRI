@@ -6,8 +6,10 @@ import LoginPage from './pages/loginPage';
 import MainPage from './pages/mainPage';
 import TradeMainPage from './pages/tradeMainPage';
 import TradeListPage from './pages/tradeListPage';
-import TradeProductCreatePage from './pages/tradeProductCreatePage';
-import TradeProductUpdatePage from './pages/tradeProductUpdatePage';
+import TradeCreatePage from './pages/tradeCreatePage';
+import TradeUpdatePage from './pages/tradeUpdatePage';
+import TradeDetailPage from './pages/tradeDetailPage';
+import ChattingPage from './pages/chattingPage';
 import CommunityPage from './pages/communityPage';
 import AuctionPage from './pages/auctionPage';
 import Navbar from './components/navbar';
@@ -26,15 +28,13 @@ const App = () => {
         {/* 중고거래 페이지 */}
         <Route path='/tradeList' element={<TradeListPage />} />
         {/* 중고거래 생성 페이지 */}
-        <Route
-          path='/tradeProductCreate'
-          element={<TradeProductCreatePage />}
-        />
+        <Route path='/tradeCreate' element={<TradeCreatePage />} />
         {/* 중고거래 수정 페이지 */}
-        <Route
-          path='/tradeProductUpdate'
-          element={<TradeProductUpdatePage />}
-        />
+        <Route path='/tradeUpdate' element={<TradeUpdatePage />} />
+        {/* 중고거래 상세 페이지 */}
+        <Route path='/tradeDetail' element={<TradeDetailPage />} />
+        {/* 중고거래 상세 페이지 */}
+        <Route path='/chatting' element={<ChattingPage />} />
         {/* 경매 페이지 */}
         <Route path='/auction' element={<AuctionPage />} />
         {/* 커뮤티니 페이지 */}

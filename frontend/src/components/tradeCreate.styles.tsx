@@ -126,7 +126,7 @@ const CreateAndUpdateDivItemDown = styled.div`
   align-items: center;
 `;
 
-const TradeProductCreate = () => {
+const TradeCreate = () => {
   return (
     <CreateAndUpdateFrame>
       <CreateAndUpdateDiv>
@@ -162,7 +162,7 @@ const TradeProductCreate = () => {
   );
 };
 
-const TradeProductUpdate = () => {
+const TradeUpdate = () => {
   return (
     <CreateAndUpdateFrame>
       <CreateAndUpdateDiv>
@@ -198,4 +198,4 @@ const TradeProductUpdate = () => {
   );
 };
 
-export { TradeProductCreate, TradeProductUpdate };
+export { TradeCreate, TradeUpdate };
