@@ -6,6 +6,8 @@ import LoginPage from './pages/loginPage';
 import MainPage from './pages/mainPage';
 import TradeMainPage from './pages/tradeMainPage';
 import TradeListPage from './pages/tradeListPage';
+import TradeProductCreatePage from './pages/tradeProductCreatePage';
+import TradeProductUpdatePage from './pages/tradeProductUpdatePage';
 import CommunityPage from './pages/communityPage';
 import AuctionPage from './pages/auctionPage';
 import Navbar from './components/navbar';
@@ -23,6 +25,16 @@ const App = () => {
         <Route path='/tradeMain' element={<TradeMainPage />} />
         {/* 중고거래 페이지 */}
         <Route path='/tradeList' element={<TradeListPage />} />
+        {/* 중고거래 생성 페이지 */}
+        <Route
+          path='/tradeProductCreate'
+          element={<TradeProductCreatePage />}
+        />
+        {/* 중고거래 수정 페이지 */}
+        <Route
+          path='/tradeProductUpdate'
+          element={<TradeProductUpdatePage />}
+        />
         {/* 경매 페이지 */}
         <Route path='/auction' element={<AuctionPage />} />
         {/* 커뮤티니 페이지 */}
