@@ -1,6 +1,8 @@
 package com.ssafy.ssagri.util.filter;
 
 import com.ssafy.ssagri.util.jwt.JwtUtil;
+import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -26,14 +28,23 @@ public class JwtFilter extends OncePerRequestFilter {
 
 
     //필터링 거치지 않는 API endpoint,, 테스트용
-    private String[] allowedURI = new String[] {"/jwt"};
+    private String[] allowedURI = new String[] {
+            "/swagger-ui/",
+            "/swagger-resources",
+            "/webjars/",
+            "/v2/api-docs",
+            "/jwt", //TEST API 주소
+            "/"
+    };
 
     //다음 해당 사항은 jwt 토큰 인증 필터링을 거치지 않는다.
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getRequestURI();
         for(String uri : allowedURI) {
-            if(path.startsWith(uri)) return true; //API 요청 주소가 사전 등록된 allowed에 있을 경우
+            if(path.startsWith(uri)) {
+                return true; //API 요청 주소가 사전 등록된 allowed에 있을 경우
+            }
         }
         return false;
     }
