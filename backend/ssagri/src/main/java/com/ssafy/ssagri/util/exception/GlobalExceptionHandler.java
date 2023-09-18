@@ -6,8 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.security.SignatureException;
 
@@ -29,14 +32,23 @@ public class GlobalExceptionHandler {
         log.error("[AOP] handleSignatureException Err"); // 다음 예외 발생 시 로깅을 하지 않음
     }
 
-    @ExceptionHandler(CustomException.class)
-    public CustomResponse commonExceptionHandler(CustomException e){
-
+    //CustomErr가 발생했을 때, 에러 코드를 반환하도록 전역 처리
+    @ExceptionHandler({CustomException.class, Exception.class})
+    public ResponseEntity<Object> handleAllExceptions(Exception ex) {
+        HttpStatus status;
         CustomResponse response = new CustomResponse();
-        response.setCode(e.getCustomExceptionStatus().getCode());
-        response.setMessage(e.getCustomExceptionStatus().getMessage());
 
-        return response;
+        if (ex instanceof CustomException) {
+            status = HttpStatus.BAD_REQUEST;
+            response.setCode(((CustomException) ex).getCustomExceptionStatus().getCode());
+            response.setMessage(((CustomException) ex).getCustomExceptionStatus().getMessage());
+        } else {
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            response.setCode(-500);
+            response.setMessage("알 수 없는 에러가 발생하였습니다. 에러 원문 : " + ex.getMessage());
+        }
+
+        return new ResponseEntity<>(response, status);
     }
 
 }
