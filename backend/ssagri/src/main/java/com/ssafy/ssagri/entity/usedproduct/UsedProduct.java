@@ -4,10 +4,7 @@ import com.ssafy.ssagri.domain.usedproduct.dto.response.UsedProductResponse;
 import com.ssafy.ssagri.domain.usedproductphoto.dto.UsedProductPhotoResponse;
 import com.ssafy.ssagri.entity.common.BaseTimeEntity;
 import com.ssafy.ssagri.entity.user.User;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -75,4 +72,5 @@ public class UsedProduct extends BaseTimeEntity {
 
         return usedProductResponse;
     }
+
 }

@@ -7,7 +7,6 @@ import com.ssafy.ssagri.domain.usedproductlike.repository.UsedProductLikeReposit
 import com.ssafy.ssagri.domain.usedproductphoto.dto.UsedProductPhotoResponse;
 import com.ssafy.ssagri.domain.usedproductphoto.repository.UsedProductPhotoRepository;
 import com.ssafy.ssagri.entity.usedproduct.UsedProduct;
-import com.ssafy.ssagri.entity.usedproduct.UsedProductLike;
 import com.ssafy.ssagri.entity.usedproduct.UsedProductPhoto;
 import com.ssafy.ssagri.entity.user.User;
 import com.ssafy.ssagri.util.s3upload.ImageService;
@@ -19,8 +18,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -29,14 +30,17 @@ public class UsedProductService {
     private final UsedProductRepository usedProductRepository;
     private final UsedProductPhotoRepository usedProductPhotoRepository;
     private final UsedProductLikeRepository usedProductLikeRepository;
+//    private final UserRepository userRepository;
     private final ImageService imageService;
 
     @Transactional
     public Long saveUsedProduct(UsedProductSaveRequest usedProductSaveRequest
             , List<MultipartFile> multipartFileList)throws Exception{
+        //다시 수정해야 함
         //임시로 만들어 둔것
         //나중에 usedProductSaveRequest에 가지고 있는 userNo로 user 불러와야 함
         User temporaryUser = User.builder().build();
+//        User temporaryUser = userRepository.findById(Long.parseLong("3")).get();
 
         UsedProduct usedProductEntity = usedProductSaveRequest.toEntity(temporaryUser);
         usedProductRepository.save(usedProductEntity);
@@ -51,6 +55,20 @@ public class UsedProductService {
             usedProductPhotoRepository.save(usedProductPhotoEntity);
         }
         return usedProductEntity.getNo();
+    }
+    @Transactional
+    public Long deleteUsedProduct(Long usedProductNo){
+        Optional<UsedProduct> productOptional = usedProductRepository.findById(usedProductNo);
+        if (productOptional.isPresent()) {
+            UsedProduct usedProduct = productOptional.get();
+            usedProduct.setDeleteDate(LocalDateTime.now());
+        }
+        //없는 중고 물품이면
+        //예외 처리
+        else {
+
+        }
+        return productOptional.get().getNo();
     }
 
     public Page<UsedProductResponse> selectUsedProduct(Long userNo,Pageable pageable){

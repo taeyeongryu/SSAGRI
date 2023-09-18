@@ -24,6 +24,7 @@ public class UsedProductCustomRepositoryImpl implements UsedProductCustomReposit
     @Override
     public Page<UsedProduct> selectAllUsedProduct(Pageable pageable) {
         QueryResults<UsedProduct> usedProductQueryResults = jpaQueryFactory.selectFrom(usedProduct)
+                .where(usedProduct.deleteDate.isNull())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(usedProduct.no.desc())
