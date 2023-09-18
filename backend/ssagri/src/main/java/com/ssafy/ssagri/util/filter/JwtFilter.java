@@ -33,7 +33,8 @@ public class JwtFilter extends OncePerRequestFilter {
             "/swagger-resources",
             "/webjars/",
             "/v2/api-docs",
-            "/jwt" //TEST API 주소
+            "/jwt", //TEST API 주소
+            "/"
     };
 
     //다음 해당 사항은 jwt 토큰 인증 필터링을 거치지 않는다.

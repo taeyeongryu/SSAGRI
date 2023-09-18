@@ -263,7 +263,7 @@ const PopularProductTitle = styled.div`
   line-height: 50px;
 `;
 
-// Product v01
+// -------------------- Product v01 -------------------------
 const ProductList01 = styled.div`
   width: 900px;
   height: 260px;
@@ -322,7 +322,7 @@ const SellerLocationAndTime01 = styled.div`
   color: #929292;
 `;
 
-// Product v02
+// -------------------- Product v02 -------------------------
 const ProductList02 = styled.div`
   width: 79.7%;
   /* height: 100%; */
@@ -376,6 +376,64 @@ const ProductPrice02 = styled.div`
   font-weight: bold;
 `;
 const SellerLocationAndTime02 = styled.div`
+  width: 150px;
+  height: 17px;
+  margin-top: 2px;
+  font-size: 12px;
+  color: #929292;
+`;
+
+// -------------------- Product v03 -------------------------
+const ProductList03 = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ProductStyle03 = styled.div`
+  width: 300px;
+  height: 120px;
+  border: 2px solid #4786fa;
+  border-radius: 20px;
+  margin: 10px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 2px 2px 2px 1px #757575;
+`;
+
+const ProductImgStyle03 = styled.img`
+  width: 100px;
+  height: 100px;
+  /* border: 1px solid black; */
+  border-radius: 10px;
+`;
+
+const ProductDetailStyle03 = styled.div`
+  width: 150px;
+  height: 80px;
+  margin-left: 5px;
+  /* border: 1px solid black; */
+`;
+
+const ProductName03 = styled.div`
+  width: 150px;
+  height: 38px;
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+`;
+const ProductPrice03 = styled.div`
+  width: 150px;
+  height: 25px;
+  font-size: 18px;
+  font-weight: bold;
+`;
+const SellerLocationAndTime03 = styled.div`
   width: 150px;
   height: 17px;
   margin-top: 2px;
@@ -441,5 +499,12 @@ export {
   ProductDetailStyle02,
   ProductName02,
   ProductPrice02,
-  SellerLocationAndTime02
+  SellerLocationAndTime02,
+  ProductList03,
+  ProductStyle03,
+  ProductImgStyle03,
+  ProductDetailStyle03,
+  ProductName03,
+  ProductPrice03,
+  SellerLocationAndTime03
 };
