@@ -1,10 +1,12 @@
 import { styled, keyframes } from 'styled-components';
 import { useEffect, useState } from 'react';
 
+
 const MainPage = styled.div`
   width: 100%;
   height: 100vh;
   font-family: var(--font-Pretendard);
+
 `;
 
 const Scrollbar = styled.div`
@@ -45,7 +47,8 @@ const Pages1 = styled.div`
   display: flex;
   align-items: center;
   /* overflow: hidden; */
-  margin-left: 100px;
+  margin-left: 300px;
+  position: relative;
 `;
 const Pages1_Left = styled.div`
   position: relative;
@@ -71,6 +74,7 @@ const Pages1_Img1 = styled.img`
   top: 300px;
   border-radius: 20px;
   animation: moveUpDown 1s infinite alternate; /* 애니메이션 적용 */
+  
   @keyframes moveUpDown {
     0% {
       top: 50px;
@@ -82,24 +86,23 @@ const Pages1_Img1 = styled.img`
 `;
 
 const Pages1_Right = styled.div`
-  /* position: absolute;
-  top: 110px;
-  left: 700px; */
-  position: relative;
+  position: absolute;
+  top: -250px;
+  left: 700px;
+  /* position: relative; */
   /* width: 480px;
   height: 540px; */
-  /* border: 1px solid black; */
+  border: 1px solid black;
   /* transform: rotate(20deg); */
   overflow: hidden;
-  width: 550px;
-  height: 550px;
+  width: 950px;
+  height: 950px;
   /* width: 320px;
   height: 320px; */
   @media (max-width: 1000px) {
     width: 420px;
     height: 420px;
   }
-
   transform: rotate(0deg); /* 초기 회전 각도 */
   transition: transform 0.2s ease;
 `;
@@ -111,6 +114,8 @@ const Pages1_img1 = styled.img`
   overflow: hidden;
   width: 550px;
   height: 550px;
+  margin-top: 200px;
+  
   /* width: 320px;
   height: 320px; */
   /* border: 20px solid red; */
@@ -313,7 +318,7 @@ const Page2_Auction = styled.div`
 
 const AuctionDiv = styled.div`
   display: flex;
-  align-items: center;
+  /* align-items: center; */
   /* border: 2px solid red; */
 `;
 const AuctionLeft = styled.div`
@@ -321,41 +326,63 @@ const AuctionLeft = styled.div`
   margin-left: 300px;
 `;
 const AuctionMid = styled.div`
-  width: 400px;
-  height: 400px;
-  border: 2px solid red;
+  width: 900px;
+  height: 450px;
+  /* border: 2px solid black;
+  border-radius: 10px; */
   display: flex;
   align-items: center;
-`;
+  margin-top: 250px;
+  position: relative;
+  `;
 const AuctionRight = styled.div`
-  width: 300px;
-`;
+  width: 550px;
+  height:450px;
+  border-left:2px solid black;
+  text-align: center;
+  line-height: 450px;
+  `;
 const AuctionDiv2 = styled.div`
-  margin-top: 300px;
+  margin-left: 20px;
+  z-index: 2;
+  /* width: 900px; */
+  height: 450px;
+  /* border: 2px solid black; */
+  background-color: white;
+  /* border: 2px solid black; */
+  /* height: 450px; */
 `;
 const AuctionMidtag1 = styled.div`
-  font-size: 35px;
+  font-size: 27px;
 `;
 const AuctionMidtag2 = styled.div`
-  font-size: 35px;
+  font-size: 27px;
 `;
 const NameTag1 = styled.p`
-  /* margin-top: 150px;
-  margin-left: 400px; */
-  /* margin-right: 50px; */
   font-size: 100px;
   width: 200px;
+  background-image: url('/assets/img/test1.jpg');
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  background-size: cover;
 `;
 
 const NameTag1_2 = styled.p`
-  font-size: 40px;
+  font-size: 22px;
+`;
+const NameTag1_3 = styled.p`
+  font-size: 19px;
+  margin-left: 10px;
+  color: rgb(0, 0, 0,0.4);
 `;
 
 const Auctionbox = styled.div`
-  margin-top: 50px;
-  width: 400px;
-  height: 400px;
-  border: 2px solid black;
+margin-left: 50px;
+  margin-top: 320px;
+  width: 450px;
+  height: 200px;
+  // border: 2px solid black;
 `;
 
 const Auction_tuto = styled.div`
@@ -379,6 +406,48 @@ const Auction_btn = styled.div`
   /* margin: 0 auto; */
 `;
 
+const AuctionBorder = styled.div`
+position: absolute;
+margin-left: 50px;
+  width: 750px;
+  height: 500px;
+  border: 30px solid red;
+  border-radius: 20px;
+  /* left: 100px; */
+  z-index: 1;
+  clip-path: polygon(0% 0%, 50% 0%, 50% 100%, 0% 100%);
+`
+const AuctionBorder2 = styled.div`
+margin-left: 50px;
+width: 750px;
+height: 500px;
+border: 30px solid blue;
+border-radius: 20px;
+/* left: 100px; */
+z-index: 3;
+clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);
+`
+const AuctionMain = styled.div`
+    z-index: 2;
+    display: flex;
+    border: 2px solid black;
+  border-radius: 10px;
+  transition: transform 0.5s;
+    &:hover {
+    transform: rotateY(75deg); /* hover 시 AuctionMain을 시계방향 30도 회전 */
+
+  }
+    `
+const AuctionSide = styled.div`
+position: absolute;
+    /* z-index: 2; */
+    display: flex;
+    transition: transform 0.5s;
+    &:hover {
+    transform: rotateY(-15deg); /* hover 시 AuctionMain을 시계방향 30도 회전 */
+
+  }
+`
 const Page2_section3 = () => {
   return (
     <Page2_Auction>
@@ -386,18 +455,29 @@ const Page2_section3 = () => {
         <AuctionLeft>
           <NameTag1>경매</NameTag1>
           <Auctionbox>
-            <NameTag1_2> 경매 설명</NameTag1_2>
+          <NameTag1_2>이번주의 경매 리스트.</NameTag1_2>  
+            <NameTag1_3> 가격 측정이 어렵다면, <br /> 인사이트옥션에서 제공하는 경매를 이용해보세요. </NameTag1_3>
           </Auctionbox>
         </AuctionLeft>
         <AuctionMid>
-          <AuctionDiv2>
-            <AuctionMidtag1>경매 가이드</AuctionMidtag1>
-            <Auction_tuto>튜토리얼</Auction_tuto>
-            <AuctionMidtag2>경매 시작하기</AuctionMidtag2>
-            <Auction_btn>경매 입장하기</Auction_btn>
-          </AuctionDiv2>
+            <AuctionMain>
+              <AuctionDiv2>
+
+                <AuctionMidtag1>경매 가이드</AuctionMidtag1>
+                <Auction_tuto>튜토리얼</Auction_tuto>
+                <AuctionMidtag2>경매 시작하기</AuctionMidtag2>
+                <Auction_btn>경매 입장하기</Auction_btn>
+              </AuctionDiv2>
+              <AuctionRight>반응형이미지</AuctionRight>
+            </AuctionMain>
+
+            <AuctionSide>
+              <AuctionBorder></AuctionBorder>
+              <AuctionBorder2></AuctionBorder2>
+
+            </AuctionSide>
         </AuctionMid>
-        <AuctionRight>반응형이미지</AuctionRight>
+
       </AuctionDiv>
     </Page2_Auction>
   );
@@ -477,15 +557,72 @@ const Page2_section5 = () => {
   );
 };
 
+
+
+//작업중
+
+
+const Block1 = styled.div`
+position: absolute;
+top: 0px;
+left: 0px;
+    width: 230px;
+  height: 100px;
+  border: 2px solid red;
+  clip-path: polygon(24% 0%, 100% 0%, 76% 100%, 0% 100%);
+  /* background: #27005d; */
+  background-image: url('/assets/img/page2_clip2.PNG');
+    background-position: 0px 0px;
+  color: transparent;
+  background-size: cover;
+`
+const Block2 = styled.div`
+position: absolute;
+top: 0px;
+left: 200px;
+    width: 230px;
+  height: 100px;
+  border: 2px solid red;
+  clip-path: polygon(24% 0%, 100% 0%, 76% 100%, 0% 100%);
+  /* background: #27005d; */
+  background-image: url('/assets/img/page2_clip2.PNG');
+    background-position: 80px 80px;
+  color: transparent;
+  background-size: cover;
+`
+const BlockDiv1 = styled.div`
+/* margin-top:700px; */
+position: absolute;
+top: 370px;
+left: 27px;
+z-index: 10;
+    /* background-image: url('/assets/img/page2_clip2.PNG');
+    background-position: 20px 80px;
+  color: transparent;
+  background-size: cover; */
+`
+
+const Box1 = () => {
+  return (
+    <BlockDiv1>
+      <Block1></Block1>
+      <Block2></Block2>
+    </BlockDiv1>
+  )
+}
+
+
 const PageSlide = () => {
   const [rotation, setRotation] = useState(0);
-  const [limsize, setLimSize] = useState({ width: 450, height: 450 });
-  const [size, setSize] = useState({ width: 450, height: 450 });
+  const [limsize, setLimSize] = useState({ width: 600, height: 1000 });
+  const [size, setSize] = useState({ width: 600, height: 600 });
 
   const [fadepages1Tag2, setFadepages1Tag2] = useState(100);
   const [fadepages2Tag1, setFadepages2Tag1] = useState(0);
   const [fadepages2Tag2, setFadepages2Tag2] = useState(0);
   const [backgroundPositionX, setBackgroundPositionX] = useState(-190);
+
+
   useEffect(() => {
     // 컴포넌트가 마운트될 때 실행되는 코드
     const scrollContainer: HTMLElement | null =
@@ -493,7 +630,7 @@ const PageSlide = () => {
 
     const handleWheelScroll = (evt: WheelEvent) => {
       evt.preventDefault();
-
+      
       // 태그 위치를 찾고 없애는 동작로직
       const pages1Tag2Element = document.querySelector('.Pages1_tag2');
       const pages2Tag1Element = document.querySelector('.Pages2_tag1');
@@ -502,6 +639,7 @@ const PageSlide = () => {
       const pages2Tag1Rect = pages2Tag1Element.getBoundingClientRect();
       const pages2Tag2Rect = pages2Tag2Element.getBoundingClientRect();
       console.log('Pages1_tag3 위치:', pages2Tag2Rect.left, evt.deltaY);
+
       if (evt.deltaY > 0) {
         if (pages1Tag2Rect.left <= -300) {
           setFadepages1Tag2(20);
@@ -578,31 +716,54 @@ const PageSlide = () => {
       if (scrollContainer) {
         scrollContainer.scrollLeft += evt.deltaY;
         // console.log(evt.deltaY, scrollContainer.scrollLeft);
+        const currentScrollLeft = scrollContainer.scrollLeft;
+        const deltaY = evt.deltaY;
+    
+        // 원하는 애니메이션 시간 (0.5초)을 설정
+        const animationDuration = 0.12;
+    
+        // 스크롤 애니메이션
+        const animateScroll = (startTime: number) => {
+          const currentTime = Date.now();
+          const elapsedTime = (currentTime - startTime) / 1000;
+          if (elapsedTime < animationDuration) {
+            const progress = elapsedTime / animationDuration;
+            const newScrollLeft = currentScrollLeft + deltaY * progress;
+            scrollContainer.scrollLeft = newScrollLeft;
+            // console.log(currentTime,startTime,elapsedTime,animationDuration,newScrollLeft,deltaY,progress)
+            requestAnimationFrame(() => animateScroll(startTime));
+          } else {
+            // 애니메이션이 완료된 후에도 정확한 위치로 이동
+            scrollContainer.scrollLeft = currentScrollLeft + deltaY;
+          }
+        };
+        // 애니메이션 시작
+    animateScroll(Date.now());
       }
       if (evt.deltaY < 0 && scrollContainer.scrollLeft == 0) {
         setRotation(0);
         setSize((prevSize) => ({
-          width: 450,
-          height: 450
+          width: 600,
+          height: 600
         }));
         setLimSize((prevSize) => ({
-          width: 450,
-          height: 450
+          width: 600,
+          height: 1000
         }));
       }
       if (scrollContainer.scrollLeft > 0 && scrollContainer.scrollLeft < 1250) {
         if (evt.deltaY > 0) {
           // 이미지 반시계 회전
-          setRotation((prevRotation) => prevRotation - 13);
+          setRotation((prevRotation) => prevRotation - 11);
           //이미지 크기 변경
           setSize((prevSize) => ({
-            width: prevSize.width + 35,
-            height: prevSize.height + 35
+            width: prevSize.width + 75,
+            height: prevSize.height + 75
           }));
           if (scrollContainer.scrollLeft < 1050) {
             setLimSize((prevSize) => ({
-              width: prevSize.width + 55,
-              height: prevSize.height + 35
+              width: prevSize.width + 95,
+              height: prevSize.height + 75
             }));
           }
         } else {
@@ -636,7 +797,7 @@ const PageSlide = () => {
   }, []);
 
   return (
-    <Page className='page-container'>
+    <Page className='page-container' >
       <Scrollbar></Scrollbar>
       <PagesSection1>
         <Pages1>
@@ -665,13 +826,23 @@ const PageSlide = () => {
               height: `${limsize.height}px`
             }}
           >
+            <Box1           
+          
+              // style={{
+              //   transform: `rotate(${rotation}deg)`,
+              //   width: `${size.width}px`,
+              //   height: `${size.height}px`,
+              //   transition: 'transform 0.3s, width 0.1s, height 0.1s'
+              // }}
+              ></Box1>
             <Pages1_img1
               src='/assets/img/mainbox1.png'
               alt=''
               style={{
                 transform: `rotate(${rotation}deg)`,
                 width: `${size.width}px`,
-                height: `${size.height}px`
+                height: `${size.height}px`,
+                transition: 'transform 0.3s, width 0.1s, height 0.1s'
               }}
             />
           </Pages1_Right>
