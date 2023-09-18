@@ -1,11 +1,14 @@
-import './loginPage.css';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/navbar';
-import LoginPage from '../components/loginPage.styles';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import {
+  LoginPage,
+  SignInAndUpComponent
+} from '../components/loginPage.styles';
+import { useRecoilValue } from 'recoil';
 import { isLoggedInAtom } from '../states/account/loginAtom';
 import axios from 'axios';
+import { Avatar } from 'antd';
 
 const loginPage = () => {
   const navigate = useNavigate();
@@ -17,14 +20,15 @@ const loginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const onEmailHandler = (event) => {
+  const onEmailHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.currentTarget.value);
   };
-  const onPasswordHandler = (event) => {
+  const onPasswordHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(event.currentTarget.value);
   };
 
-  const onLoginHandler = (event) => {
+  // 로그인 버튼 눌렀을 때
+  const onLoginHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
     // 버튼 누르면 새로고침 되는것을 막아줌
     event.preventDefault();
 
@@ -37,143 +41,101 @@ const loginPage = () => {
   // 로그인 여부
   const isLoggedIn = useRecoilValue(isLoggedInAtom);
 
-  // 로그인 로직
-  const onLogin = (email, password) => {
-    const data = {
-      email,
-      password
-    };
+  const JWT_EXPIRY_TIME = 24 * 3600 * 1000; // 만료 시간 (24시간)
+
+  // 로그인 요청 api
+  // const onLogin = (email: any, password: any) => {
+  //   const data = {
+  //     email,
+  //     password
+  //   };
+  //   axios
+  //     .post('/login', data)
+  //     .then((response) => {
+  //       const { accessToken } = response.data;
+
+  //       // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
+  //       axios.defaults.headers.common[
+  //         'Authorization'
+  //       ] = `Bearer ${accessToken}`;
+
+  //       // accessToken을 localStorage, cookie 등에 저장하지 않는다!
+  //     })
+  //     .catch((error) => {
+  //       // ... 에러 처리
+  //     });
+  // };
+
+  const onSilentRefresh = () => {
     axios
-      .post('/login', data)
-      .then((response) => {
-        const { accessToken } = response.data;
-
-        // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
-        axios.defaults.headers.common[
-          'Authorization'
-        ] = `Bearer ${accessToken}`;
-
-        // accessToken을 localStorage, cookie 등에 저장하지 않는다!
-      })
+      .post('/silent-refresh')
+      .then(onLoginSuccess)
       .catch((error) => {
-        // ... 에러 처리
+        console.log(error);
+        // 로그인 실패처리
       });
   };
 
-  // 회원가입
-  const regionList = ['대전', '서울', '구미', '광주', '부울경'];
-  const cardinalList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  // 로그인 성공 시
+  const onLoginSuccess = (response: { data: { accessToken: any } }) => {
+    const { accessToken } = response.data;
 
-  const [signUpEmail, setSignUpEmail] = useState('');
-  const [signUpPassword, setSignUpPassword] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState('');
-  const [region, setRegion] = useState(regionList[0]);
-  const [cardinalNumber, setCardinalNumber] = useState(cardinalList[0]);
-  const [nickname, setNickname] = useState('');
+    // accessToken 설정
+    axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
 
-  const onSignUpEmailHandler = (e) => {
-    setSignUpEmail(e.target.value);
-  };
-  const onSignUpPasswordHandler = (e) => {
-    setSignUpPassword(e.target.value);
-  };
-  const onPasswordConfirmHandler = (e) => {
-    setPasswordConfirm(e.target.value);
-  };
-  const onNicknameHandler = (e) => {
-    setNickname(e.target.value);
+    // accessToken 만료하기 1분 전에 로그인 연장
+    setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
   };
 
-  const onCardinalHandler = (e) => {
-    setCardinalNumber(e.target.value);
+  // 회원가입 요청 api
+  const onSignUp = () => {
+    try {
+      const response = axios.post('url', signUpForm);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const onRegionHandler = (e) => {
-    setRegion(e.target.value);
-  };
-
-  const onSignUpHandler = (e) => {
+  // 회원가입 버튼 눌렀을때
+  const onSignUpHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
+    // 회원가입 데이터 정보 확인
     console.log('회원가입 정보');
-    console.log('이메일: ', signUpEmail);
-    console.log('비밀번호: ', signUpPassword);
-    console.log('비밀번호 확인: ', passwordConfirm);
-    console.log('지역: ', region);
-    console.log('기수: ', cardinalNumber);
-    console.log('닉네임: ', nickname);
+    console.log('프로필 사진: ', file);
+    console.log(signUpForm);
+  };
+
+  const [image, setImage] = useState(
+    'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
+  );
+  const [file, setFile] = useState(null);
+  const fileInput = useRef(null);
+
+  const onChange = (e) => {
+    if (e.target.files[0]) {
+      setFile(e.target.files[0]);
+    } else {
+      // 업로드 취소할 시
+      setImage(
+        'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
+      );
+      return;
+    }
+    // 화면에 프로필 사진 표시
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setImage(reader.result);
+      }
+    };
+    reader.readAsDataURL(e.target.files[0]);
   };
 
   return (
     <LoginPage>
-      <Navbar></Navbar>
-      <p>{isLoggedIn ? '로그인되었습니다.' : '로그인이 필요합니다.'}</p>
-      <div onClick={goMain}>메인으로</div>
-
-      <div className='container' id='container'>
-        <div className='form-container sign-in-container'>
-          <form onSubmit={onLoginHandler}>
-            <h1>로그인</h1>
-            <label htmlFor='email'>이메일</label>
-            <br />
-            <input type='email' onChange={onEmailHandler} />
-            <br />
-            <label htmlFor='password'>비밀번호</label>
-            <br />
-            <input type='password' onChange={onPasswordHandler} />
-            <br />
-            <a href='#'>비밀번호를 잊으셨나요?</a>
-            <br />
-            <button>로그인</button>
-          </form>
-        </div>
-        <div className='form-container sign-up-container'>
-          <form onSubmit={onSignUpHandler}>
-            <h1>회원가입</h1>
-            <label htmlFor='email'>이메일</label>
-            <br />
-            <input type='email' onChange={onSignUpEmailHandler} />
-            <br />
-
-            <label htmlFor='password'>비밀번호</label>
-            <br />
-            <input type='password' onChange={onSignUpPasswordHandler} />
-            <br />
-
-            <label htmlFor='passwordConfirm'>비밀번호 확인</label>
-            <br />
-            <input type='password' onChange={onPasswordConfirmHandler} />
-            <br />
-
-            <label htmlFor='region'>지역</label>
-            <select name='region' onChange={onRegionHandler} value={region}>
-              {regionList.map((item) => (
-                <option value={item} key={item}>
-                  {item}
-                </option>
-              ))}
-            </select>
-
-            <label htmlFor='cardinal-number'>기수</label>
-            <select
-              name='cardinal-number'
-              onChange={onCardinalHandler}
-              value={cardinalNumber}
-            >
-              {cardinalList.map((item) => (
-                <option value={item} key={item}>
-                  {item}
-                </option>
-              ))}
-            </select>
-
-            <label htmlFor='nickname'>닉네임</label>
-            <input type='text' onChange={onNicknameHandler} />
-            <br />
-            <button>회원 가입</button>
-          </form>
-        </div>
-      </div>
+      <SignInAndUpComponent></SignInAndUpComponent>
     </LoginPage>
   );
 };
