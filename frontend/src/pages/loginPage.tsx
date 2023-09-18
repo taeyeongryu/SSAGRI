@@ -87,19 +87,6 @@ const loginPage = () => {
     setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
   };
 
-  // 회원가입
-  const regionList = ['대전', '서울', '구미', '광주', '부울경'];
-  const cardinalList = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
-
-  const [signUpForm, setSignUpForm] = useState({
-    email: '',
-    password: '',
-    passwordConfirm: '',
-    region: regionList[0],
-    cardinalNumber: cardinalList[0],
-    nickname: ''
-  });
-
   // 회원가입 요청 api
   const onSignUp = () => {
     try {
@@ -149,28 +136,7 @@ const loginPage = () => {
   return (
     <LoginPage>
       <Navbar></Navbar>
-      {/* <p>{isLoggedIn ? '로그인되었습니다.' : '로그인이 필요합니다.'}</p> */}
-      <div onClick={goMain}>메인으로</div>
-
       <SignInAndUpComponent></SignInAndUpComponent>
-      <div className='overlay-container'>
-        <div className='overlay'>
-          <div className='overlay-panel overlay-left'>
-            <h1>회원이신가요?</h1>
-            <p>계정이 이미 있으시다면</p>
-            <button className='ghost' id='signIn'>
-              로그인
-            </button>
-          </div>
-          <div className='overlay-panel overlay-right'>
-            <h1>안녕하세요!</h1>
-            <p>처음이시라면 회원가입 후 필요한 물건을 구해보세요</p>
-            <button className='ghost' id='signUp'>
-              회원가입
-            </button>
-          </div>
-        </div>
-      </div>
     </LoginPage>
   );
 };

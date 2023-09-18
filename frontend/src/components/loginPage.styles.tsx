@@ -1,6 +1,18 @@
-import { styled } from 'styled-components';
-import { useState, useRef } from 'react';
+import { styled, keyframes } from 'styled-components';
+import { useState, useRef, useEffect } from 'react';
 import { Avatar } from 'antd';
+
+const show = keyframes`
+  0%, 49.99% {
+    opacity: 0;
+    z-index: 1;
+  }
+
+  50%, 100% {
+    opacity: 1;
+    z-index: 5;
+  }
+`;
 
 const LoginPage = styled.div`
   width: 100vw;
@@ -97,6 +109,7 @@ const Container = styled.div`
   position: relative;
   overflow: hidden;
   width: 768px;
+  top: 200px;
   max-width: 100%;
   min-height: 480px;
 `;
@@ -112,10 +125,10 @@ const FormContainer = styled.div`
     left: 0;
     width: 50%;
     z-index: 2;
-  }
 
-  &.container.right-panel-active &.sign-in-container {
-    transform: translateX(100%);
+    &.right-panel-active {
+      transform: translateX(100%);
+    }
   }
 
   &.sign-up-container {
@@ -123,17 +136,17 @@ const FormContainer = styled.div`
     width: 50%;
     opacity: 0;
     z-index: 1;
-  }
 
-  &.container.right-panel-active &.sign-up-container {
-    transform: translateX(100%);
-    opacity: 1;
-    z-index: 5;
-    animation: show 0.6s;
+    &.right-panel-active {
+      transform: translateX(100%);
+      opacity: 1;
+      z-index: 5;
+      animation: ${show} 0.6s;
+    }
   }
 `;
 
-// overlay
+// overlay Container
 const OverlayContainer = styled.div`
   position: absolute;
   top: 0;
@@ -144,28 +157,52 @@ const OverlayContainer = styled.div`
   transition: transform 0.6s ease-in-out;
   z-index: 100;
 
-  &.overlay {
-    background: #ff416c;
-    background: -webkit-linear-gradient(to right, #ff4b2b, #ff416c);
-    background: linear-gradient(to right, #ff4b2b, #ff416c);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: 0 0;
-    color: #ffffff;
-    position: relative;
-    left: -100%;
-    height: 100%;
-    width: 200%;
-    transform: translateX(0);
-    transition: transform 0.6s ease-in-out;
-  }
-
-  &.container.right-panel-active &.overlay-container {
+  &.right-panel-active {
     transform: translateX(-100%);
   }
+`;
 
-  &.container.right-panel-active &.overlay {
+const Overlay = styled.div`
+  background: #ff416c;
+  background: -webkit-linear-gradient(to right, #ff4b2b, #ff416c);
+  background: linear-gradient(to right, #ff4b2b, #ff416c);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 0 0;
+  color: #ffffff;
+  position: relative;
+  left: -100%;
+  height: 100%;
+  width: 200%;
+  transform: translateX(0);
+  transition: transform 0.6s ease-in-out;
+
+  &.right-panel-active {
     transform: translateX(50%);
+  }
+`;
+
+const OverlayPanel = styled.div`
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  /* padding: 0 40px; */
+  text-align: center;
+  top: 0;
+  height: 100%;
+  width: 50%;
+  transform: translateX(0);
+  transition: transform 0.6s ease-in-out;
+
+  &.overlay-left {
+    transform: translateX(-20%);
+  }
+
+  &.overlay-right {
+    right: 0;
+    transform: translateX(0);
   }
 `;
 
@@ -209,9 +246,42 @@ const SignInAndUpComponent = () => {
     nickname: ''
   });
 
+  useEffect(() => {
+    const signUpButton = document.getElementById('signUp');
+    const signInButton = document.getElementById('signIn');
+    const container = document.getElementById('container');
+
+    const OverlayContainer = document.getElementById('overlay-container');
+    const Overlay = document.getElementById('overlay');
+    const signInContainer = document.getElementById('sign-in-container');
+    const signUpContainer = document.getElementById('sign-up-container');
+
+    const signUpClickHandler = () => {
+      signInContainer.classList.add('right-panel-active');
+      signUpContainer.classList.add('right-panel-active');
+      OverlayContainer.classList.add('right-panel-active');
+      Overlay.classList.add('right-panel-active');
+    };
+
+    const signInClickHandler = () => {
+      signInContainer.classList.remove('right-panel-active');
+      signUpContainer.classList.remove('right-panel-active');
+      OverlayContainer.classList.remove('right-panel-active');
+      Overlay.classList.remove('right-panel-active');
+    };
+
+    signUpButton.addEventListener('click', signUpClickHandler);
+    signInButton.addEventListener('click', signInClickHandler);
+
+    return () => {
+      signUpButton.removeEventListener('click', signUpClickHandler);
+      signInButton.removeEventListener('click', signInClickHandler);
+    };
+  }, []);
+
   return (
-    <Container>
-      <FormContainer className='sign-in-container'>
+    <Container id='container' style={{ margin: 'auto' }}>
+      <FormContainer className='sign-in-container' id='sign-in-container'>
         <Form>
           <H1>로그인</H1>
           <Label htmlFor='email'>이메일</Label>
@@ -222,7 +292,7 @@ const SignInAndUpComponent = () => {
           <Button>로그인</Button>
         </Form>
       </FormContainer>
-      <FormContainer className='sign-up-container'>
+      <FormContainer className='sign-up-container' id='sign-up-container'>
         <Form>
           <H1>회원가입</H1>
           <Avatar
@@ -303,19 +373,19 @@ const SignInAndUpComponent = () => {
           <Button>회원 가입</Button>
         </Form>
       </FormContainer>
-      <OverlayContainer>
-        <div className='overlay'>
-          <div className='overlay-panel overlay-left'>
+      <OverlayContainer id='overlay-container'>
+        <Overlay id='overlay'>
+          <OverlayPanel className='overlay-left'>
             <H1>회원이신가요?</H1>
             <P>계정이 이미 있으시다면</P>
             <Button id='signIn'>로그인</Button>
-          </div>
-          <div className='overlay-panel overlay-right'>
+          </OverlayPanel>
+          <OverlayPanel className='overlay-right'>
             <H1>안녕하세요!</H1>
             <P>처음이시라면 회원가입 후 필요한 물건을 구해보세요</P>
             <Button id='signUp'>회원가입</Button>
-          </div>
-        </div>
+          </OverlayPanel>
+        </Overlay>
       </OverlayContainer>
     </Container>
   );
