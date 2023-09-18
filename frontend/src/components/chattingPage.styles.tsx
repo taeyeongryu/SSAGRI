@@ -80,6 +80,7 @@ const ChatProfile = styled.img`
   width: 60px;
   height: 60px;
 `;
+
 const ChatRight = styled.div`
   width: 60%;
   height: 100%;
@@ -142,20 +143,107 @@ const ChatContentFrame = styled.div`
   height: 100%;
   font-size: 30px;
 `;
-const ChatOtherNick = styled.div`
-  border: 1px solid black;
+const ChatContentHeader = styled.div`
   width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid #4786fa;
+`;
+const ChatProfileRight = styled.img`
+  width: 50px;
+  height: 50px;
+  margin: 0 5px;
+`;
+const ChatOtherNick = styled.div`
+  /* border: 1px solid black; */
+  width: 80%;
   height: 70px;
+  margin: 0 10px;
+  font-size: 24px;
+  font-weight: bold;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+`;
+const SellorProduct = styled.button`
+  background: none;
+  border: none;
+  width: 50px;
+  height: 50px;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+const SellorProductImg = styled.img`
+  width: 40px;
+  height: 40px;
 `;
 const ChatContent = styled.div`
-  border: 1px solid black;
+  border-bottom: 1px solid #4786fa;
   width: 100%;
-  height: 500px;
+  height: 648.5px;
+  background-color: #f1fafb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 const ChatMessage = styled.div`
-  border: 1px solid black;
   width: 100%;
   height: 140px;
+  position: relative;
+  transform: translate(0px, -150px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+const ChatMessageDiv = styled.div`
+  width: 98%;
+  height: 98%;
+  background-color: #fff;
+  border: 2px solid black;
+  border-radius: 10px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+`;
+const ChatInput = styled.input`
+  width: 720px;
+  height: 130px;
+  margin-left: 5px;
+  border: none;
+  &:active {
+    border: none;
+  }
+`;
+const ChatMessageDivRight = styled.div`
+  width: 120px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: end;
+`;
+const ChatButton = styled.button`
+  width: 100px;
+  height: 40px;
+  margin-bottom: 10px;
+  background-color: #4786fa;
+  box-shadow: 2px 2px 2px 1px #929292;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 20px;
+  font-weight: bold;
+  &:hover {
+    cursor: pointer;
+    color: #ce83f7;
+    border: 1px solid #ce83f7;
+  }
+  &:active {
+    border: 1px solid #ce83f7;
+    color: #ce83f7;
+    background-color: #fff;
+  }
 `;
 
 const Chatting = () => {
@@ -315,9 +403,22 @@ const Chatting = () => {
           </ChatItem>
         </ChatList>
         <ChatContentFrame>
-          <ChatOtherNick>상대방 닉네임</ChatOtherNick>
+          <ChatContentHeader>
+            <ChatProfileRight src='/assets/img/profile.png'></ChatProfileRight>
+            <ChatOtherNick>코딩왕123</ChatOtherNick>
+            <SellorProduct>
+              <SellorProductImg src='/assets/img/setting.png'></SellorProductImg>
+            </SellorProduct>
+          </ChatContentHeader>
           <ChatContent>대화 내용</ChatContent>
-          <ChatMessage>메세지 입력</ChatMessage>
+          <ChatMessage>
+            <ChatMessageDiv>
+              <ChatInput placeholder='메세지를 입력해주세요...'></ChatInput>
+              <ChatMessageDivRight>
+                <ChatButton>전송</ChatButton>
+              </ChatMessageDivRight>
+            </ChatMessageDiv>
+          </ChatMessage>
         </ChatContentFrame>
       </ChatDiv>
     </ChatFrame>
