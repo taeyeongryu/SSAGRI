@@ -34,7 +34,7 @@ const App = () => {
         {/* 중고거래 상세 페이지 */}
         <Route path='/tradeDetail' element={<TradeDetailPage />} />
         {/* 중고거래 상세 페이지 */}
-        <Route path='/chatting' element={<ChattingPage />} />
+        <Route path='/chat' element={<ChattingPage />} />
         {/* 경매 페이지 */}
         <Route path='/auction' element={<AuctionPage />} />
         {/* 커뮤티니 페이지 */}
