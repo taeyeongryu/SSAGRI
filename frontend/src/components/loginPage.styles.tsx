@@ -42,8 +42,8 @@ const A = styled.a`
 
 const Button = styled.div`
   border-radius: 20px;
-  border: 1px solid #ff4b2b;
-  background-color: #ff4b2b;
+  border: 1px solid #4786fa;
+  background-color: #4786fa;
   color: #ffffff;
   font-size: 12px;
   font-weight: bold;
@@ -108,10 +108,10 @@ const Container = styled.div`
     0 10px 10px rgba(0, 0, 0, 0.22);
   position: relative;
   overflow: hidden;
-  width: 768px;
+  width: 1200px;
   top: 200px;
   max-width: 100%;
-  min-height: 480px;
+  min-height: 800px;
 `;
 
 // input form
@@ -163,9 +163,11 @@ const OverlayContainer = styled.div`
 `;
 
 const Overlay = styled.div`
-  background: #ff416c;
+  background-image: url('/assets/img/overlayImg.png');
+  background-size: contain;
+  /* background: #ff416c;
   background: -webkit-linear-gradient(to right, #ff4b2b, #ff416c);
-  background: linear-gradient(to right, #ff4b2b, #ff416c);
+  background: linear-gradient(to right, #ff4b2b, #ff416c); */
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 0 0;
@@ -197,7 +199,7 @@ const OverlayPanel = styled.div`
   transition: transform 0.6s ease-in-out;
 
   &.overlay-left {
-    transform: translateX(-20%);
+    transform: translateX(0);
   }
 
   &.overlay-right {
@@ -205,6 +207,8 @@ const OverlayPanel = styled.div`
     transform: translateX(0);
   }
 `;
+
+//
 
 const SignInAndUpComponent = () => {
   const [image, setImage] = useState(
@@ -233,7 +237,34 @@ const SignInAndUpComponent = () => {
     reader.readAsDataURL(e.target.files[0]);
   };
 
-  // 회원가입
+  // 로그인 //
+  const [signInForm, setSignInForm] = useState({
+    email: '',
+    password: ''
+  });
+
+  // 안내 메시지
+  const [signInEmailMessage, setSignInEmailMessage] = useState('');
+
+  // 유효성 검사
+  const [isEmail, setIsEmail] = useState(false);
+
+  const onChangeEmail = (e) => {
+    const currentEmail = e.target.value;
+    setSignInForm({ ...signInForm, email: currentEmail });
+    const emailRegExp =
+      /^[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}$/;
+
+    if (!emailRegExp.test(currentEmail)) {
+      setSignInEmailMessage('이메일의 형식이 올바르지 않습니다!');
+      setIsEmail(false);
+    } else {
+      setSignInEmailMessage('사용 가능한 이메일 입니다.');
+      setIsEmail(true);
+    }
+  };
+
+  // 회원가입 //
   const regionList = ['대전', '서울', '구미', '광주', '부울경'];
   const cardinalList = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 
@@ -285,7 +316,12 @@ const SignInAndUpComponent = () => {
         <Form>
           <H1>로그인</H1>
           <Label htmlFor='email'>이메일</Label>
-          <Input type='email'></Input>
+          <div>{!isEmail ? signInEmailMessage : null}</div>
+          <Input
+            type='email'
+            value={signInForm.email}
+            onChange={onChangeEmail}
+          ></Input>
           <Label htmlFor='password'>비밀번호</Label>
           <Input type='password'></Input>
           <A>비밀번호를 잊으셨나요?</A>
@@ -295,6 +331,7 @@ const SignInAndUpComponent = () => {
       <FormContainer className='sign-up-container' id='sign-up-container'>
         <Form>
           <H1>회원가입</H1>
+          <Label htmlFor='profile-img'>프로필 사진</Label>
           <Avatar
             src={image}
             style={{ margin: '20px' }}
@@ -312,6 +349,7 @@ const SignInAndUpComponent = () => {
           ></FileInput>
           <Label htmlFor='email'>이메일</Label>
           <Input
+            placeholder='이메일을 입력하세요'
             type='email'
             value={signUpForm.email}
             onChange={(e) =>
@@ -331,7 +369,7 @@ const SignInAndUpComponent = () => {
             type='password'
             value={signUpForm.passwordConfirm}
             onChange={(e) =>
-              setSignUpForm({ ...signUpForm, password: e.target.value })
+              setSignUpForm({ ...signUpForm, passwordConfirm: e.target.value })
             }
           ></Input>
           <Label htmlFor='region'>지역</Label>

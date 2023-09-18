@@ -135,7 +135,6 @@ const loginPage = () => {
 
   return (
     <LoginPage>
-      <Navbar></Navbar>
       <SignInAndUpComponent></SignInAndUpComponent>
     </LoginPage>
   );
