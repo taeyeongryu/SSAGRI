@@ -46,4 +46,7 @@ public class UserRegisterController {
     }
 
     //인증번호 유효 검증
+
+    //이미지 받기
+
 }
