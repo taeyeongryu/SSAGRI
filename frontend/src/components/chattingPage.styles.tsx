@@ -4,7 +4,7 @@ const ChatFrame = styled.div`
   width: 1920px;
   height: 890px;
   margin-top: 7vh;
-  border: 2px solid black;
+  /* border: 2px solid black; */
   display: flex;
   justify-content: center;
   align-items: center;
