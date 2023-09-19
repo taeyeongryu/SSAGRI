@@ -66,7 +66,10 @@ const Button = styled.div`
   }
 `;
 
-const Select = styled.select``;
+const Select = styled.select`
+  width: 60px;
+  margin: 8px 0px;
+`;
 
 const Form = styled.form`
   background-color: #ffffff;
@@ -80,6 +83,14 @@ const Form = styled.form`
 `;
 
 const Label = styled.label`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-weight: bold;
+`;
+
+const SelectLabel = styled.label`
+  display: flex;
   font-weight: bold;
 `;
 
@@ -144,6 +155,10 @@ const FormContainer = styled.div`
       animation: ${show} 0.6s;
     }
   }
+`;
+
+const FormContent = styled.div`
+  margin: 30px 0;
 `;
 
 // overlay Container
@@ -289,12 +304,20 @@ const SignInAndUpComponent = () => {
     const emailRegExp =
       /^[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}$/;
 
-    if (e.target.value || !emailRegExp.test(e.target.value)) {
-      setSignUpEmailMessage('이메일의 형식이 올바르지 않습니다!');
-      setIsEmailSignUp(false);
+    if (e.target.value) {
+      // 입력값이 존재
+      if (!emailRegExp.test(e.target.value)) {
+        // 유효성 검증 실패
+        setSignUpEmailMessage('이메일의 형식이 올바르지 않습니다!');
+        setIsEmailSignUp(false);
+      } else {
+        // 유효성 검증 성공
+        setSignUpEmailMessage('');
+        setIsEmailSignUp(true);
+      }
     } else {
-      setSignUpEmailMessage('사용 가능한 이메일 입니다.');
-      setIsEmailSignUp(true);
+      setSignUpEmailMessage('');
+      setIsEmailSignUp(false);
     }
   };
 
@@ -352,81 +375,106 @@ const SignInAndUpComponent = () => {
       <FormContainer className='sign-up-container' id='sign-up-container'>
         <Form>
           <H1>회원가입</H1>
-          <Label htmlFor='profile-img'>프로필 사진</Label>
-          <Avatar
-            src={image}
-            style={{ margin: '20px' }}
-            size={200}
-            onClick={() => {
-              fileInput.current.click();
-            }}
-          ></Avatar>
-          <FileInput
-            type='file'
-            accept='image/jpg, image/png, image/jpeg'
-            name='profile_img'
-            onChange={onChange}
-            ref={fileInput}
-          ></FileInput>
-          <Label htmlFor='email'>이메일</Label>
-          {<div>{signUpEmailMessage}</div>}
-          <Input
-            type='email'
-            value={signUpForm.email}
-            onChange={onChangeEmailSignUp}
-          ></Input>
-          <Label htmlFor='password'>비밀번호</Label>
-          <Input
-            type='password'
-            value={signUpForm.password}
-            onChange={(e) =>
-              setSignUpForm({ ...signUpForm, password: e.target.value })
-            }
-          ></Input>
-          <Label htmlFor='passwordConfirm'>비밀번호 확인</Label>
-          <Input
-            type='password'
-            value={signUpForm.passwordConfirm}
-            onChange={(e) =>
-              setSignUpForm({ ...signUpForm, passwordConfirm: e.target.value })
-            }
-          ></Input>
-          <Label htmlFor='region'>지역</Label>
-          <Select
-            name='region'
-            value={signUpForm.region}
-            onChange={(e) =>
-              setSignUpForm({ ...signUpForm, region: e.target.value })
-            }
-          >
-            {regionList.map((item) => (
-              <option value={item} key={item}>
-                {item}
-              </option>
-            ))}
-          </Select>
-          <Label htmlFor='cardinal-number'>기수</Label>
-          <Select
-            name='cardinal-number'
-            value={signUpForm.cardinalNumber}
-            onChange={(e) =>
-              setSignUpForm({ ...signUpForm, cardinalNumber: e.target.value })
-            }
-          >
-            {cardinalList.map((item) => (
-              <option value={item} key={item}>
-                {item}
-              </option>
-            ))}
-          </Select>
-          <Label htmlFor='nickname'>닉네임</Label>
-          <Input
-            type='text'
-            value={signUpForm.nickname}
-            onChange={(e) =>
-              setSignUpForm({ ...signUpForm, nickname: e.target.value })
-            }
-          ></Input>
+          <FormContent>
+            <Label htmlFor='profile-img'>프로필 사진</Label>
+            <Avatar
+              src={image}
+              style={{ margin: '20px' }}
+              size={200}
+              onClick={() => {
+                fileInput.current.click();
+              }}
+            ></Avatar>
+            <FileInput
+              type='file'
+              accept='image/jpg, image/png, image/jpeg'
+              name='profile_img'
+              onChange={onChange}
+              ref={fileInput}
+            ></FileInput>
+            <Label htmlFor='email'>
+              <div>이메일</div>
+              <div>{signUpEmailMessage}</div>
+            </Label>
+
+            <Input
+              type='email'
+              value={signUpForm.email}
+              onChange={onChangeEmailSignUp}
+            ></Input>
+            <Label htmlFor='password'>비밀번호</Label>
+            <Input
+              type='password'
+              value={signUpForm.password}
+              onChange={(e) =>
+                setSignUpForm({ ...signUpForm, password: e.target.value })
+              }
+            ></Input>
+            <Label htmlFor='passwordConfirm'>비밀번호 확인</Label>
+            <Input
+              type='password'
+              value={signUpForm.passwordConfirm}
+              onChange={(e) =>
+                setSignUpForm({
+                  ...signUpForm,
+                  passwordConfirm: e.target.value
+                })
+              }
+            ></Input>
+            <div
+              style={{
+                display: 'flex',
+                gap: '10px',
+                justifyContent: 'space-between'
+              }}
+            >
+              <SelectLabel htmlFor='region'>
+                <p style={{ width: '40px', lineHeight: '24px' }}>지역</p>
+                <Select
+                  name='region'
+                  value={signUpForm.region}
+                  onChange={(e) =>
+                    setSignUpForm({ ...signUpForm, region: e.target.value })
+                  }
+                >
+                  {regionList.map((item) => (
+                    <option value={item} key={item}>
+                      {item}
+                    </option>
+                  ))}
+                </Select>
+              </SelectLabel>
+              <SelectLabel htmlFor='cardinal-number'>
+                <p style={{ width: '40px', lineHeight: '24px' }}>기수</p>
+                <Select
+                  name='cardinal-number'
+                  value={signUpForm.cardinalNumber}
+                  onChange={(e) =>
+                    setSignUpForm({
+                      ...signUpForm,
+                      cardinalNumber: e.target.value
+                    })
+                  }
+                >
+                  {cardinalList.map((item) => (
+                    <option value={item} key={item}>
+                      {item}
+                    </option>
+                  ))}
+                </Select>
+              </SelectLabel>
+              <Label htmlFor='nickname'>
+                <p style={{ width: '60px', lineHeight: '24px' }}>닉네임</p>
+                <Input
+                  type='text'
+                  value={signUpForm.nickname}
+                  onChange={(e) =>
+                    setSignUpForm({ ...signUpForm, nickname: e.target.value })
+                  }
+                ></Input>
+              </Label>
+            </div>
+          </FormContent>
           <Button>회원 가입</Button>
         </Form>
       </FormContainer>
