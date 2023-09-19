@@ -241,7 +241,7 @@ const ChatDate = styled.div`
 // 채팅 메세지 Div - 내가 보낼 때, 받을 때
 const ChatMyMessageFrame = styled.div`
   width: 100%;
-  margin: 5px 0px;
+  margin: 10px 0px;
   display: flex;
   justify-content: end;
   align-items: end;
@@ -266,7 +266,7 @@ const ChatMyMessage = styled.div`
 `;
 const ChatOthersMessageFrame = styled.div`
   width: 100%;
-  margin: 5px 0px;
+  margin: 10px 0px;
   display: flex;
   justify-content: start;
   align-items: end;
@@ -398,7 +398,7 @@ const Chatting = () => {
                   <ChatTime>봉명동 · 2시간전</ChatTime>
                 </ChatInfo>
                 <ChatMiniContent>
-                  대화내용대화내용대화내용대화내용
+                  대화내용대화내용대화내용대화내용대화내용대화내용
                 </ChatMiniContent>
               </ChatRight>
               <ChatUnReadDiv>
@@ -544,8 +544,31 @@ const Chatting = () => {
             </ChatDateDiv>
             <ChatMyMessageFrame>
               <ChatMessageTime>오후 1시 30분</ChatMessageTime>
+              <ChatMyMessage>제우스랩?</ChatMyMessage>
+            </ChatMyMessageFrame>
+            <ChatOthersMessageFrame>
+              <ChatOthersProfile>
+                <ChatOthersProfileImg src='/assets/img/profile.png'></ChatOthersProfileImg>
+              </ChatOthersProfile>
+              <ChatOthersMessage>네</ChatOthersMessage>
+              <ChatMessageTime>오후 1시 30분</ChatMessageTime>
+            </ChatOthersMessageFrame>
+            <ChatMyMessageFrame>
+              <ChatMessageTime>오후 1시 30분</ChatMessageTime>
+              <ChatMyMessage>안녕하세요 지금도?</ChatMyMessage>
+            </ChatMyMessageFrame>
+            <ChatOthersMessageFrame>
+              <ChatOthersProfile>
+                <ChatOthersProfileImg src='/assets/img/profile.png'></ChatOthersProfileImg>
+              </ChatOthersProfile>
+              <ChatOthersMessage>네 팝니다.</ChatOthersMessage>
+              <ChatMessageTime>오후 1시 30분</ChatMessageTime>
+            </ChatOthersMessageFrame>
+            <ChatMyMessageFrame>
+              <ChatMessageTime>오후 1시 30분</ChatMessageTime>
               <ChatMyMessage>
-                안녕하세요 지금도 제우스랩 판매하시나요?
+                안녕하세요 지금도 제우스랩 판매하시나요? 안녕하세요 지금도
+                제우스랩 판매하시나요?안녕하세요 지금도 제우스랩 판매하시나요?
               </ChatMyMessage>
             </ChatMyMessageFrame>
             <ChatOthersMessageFrame>
@@ -565,33 +588,10 @@ const Chatting = () => {
               <ChatOthersProfile>
                 <ChatOthersProfileImg src='/assets/img/profile.png'></ChatOthersProfileImg>
               </ChatOthersProfile>
-              <ChatOthersMessage>안녕하세요. 네 팝니다.</ChatOthersMessage>
-              <ChatMessageTime>오후 1시 30분</ChatMessageTime>
-            </ChatOthersMessageFrame>
-            <ChatMyMessageFrame>
-              <ChatMessageTime>오후 1시 30분</ChatMessageTime>
-              <ChatMyMessage>
-                안녕하세요 지금도 제우스랩 판매하시나요?
-              </ChatMyMessage>
-            </ChatMyMessageFrame>
-            <ChatOthersMessageFrame>
-              <ChatOthersProfile>
-                <ChatOthersProfileImg src='/assets/img/profile.png'></ChatOthersProfileImg>
-              </ChatOthersProfile>
-              <ChatOthersMessage>안녕하세요. 네 팝니다.</ChatOthersMessage>
-              <ChatMessageTime>오후 1시 30분</ChatMessageTime>
-            </ChatOthersMessageFrame>
-            <ChatMyMessageFrame>
-              <ChatMessageTime>오후 1시 30분</ChatMessageTime>
-              <ChatMyMessage>
-                안녕하세요 지금도 제우스랩 판매하시나요?
-              </ChatMyMessage>
-            </ChatMyMessageFrame>
-            <ChatOthersMessageFrame>
-              <ChatOthersProfile>
-                <ChatOthersProfileImg src='/assets/img/profile.png'></ChatOthersProfileImg>
-              </ChatOthersProfile>
-              <ChatOthersMessage>안녕하세요. 네 팝니다.</ChatOthersMessage>
+              <ChatOthersMessage>
+                안녕하세요. 네 팝니다.안녕하세요. 네 팝니다.안녕하세요. 네
+                팝니다.안녕하세요. 네 팝니다.
+              </ChatOthersMessage>
               <ChatMessageTime>오후 1시 30분</ChatMessageTime>
             </ChatOthersMessageFrame>
             <ChatMyMessageFrame>

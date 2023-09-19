@@ -3,7 +3,8 @@ import { styled } from 'styled-components';
 // Header 제외 중고거래 컴포넌트
 const TradeMainFrameDiv = styled.div`
   width: 1920px;
-  height: 1010px;
+  height: 900px;
+  margin-top: 50px;
   /* border: 2px solid black; */
   display: flex;
   justify-content: center;
@@ -241,6 +242,7 @@ const RecentProductDiv = styled.div`
 const RecentProductTitle = styled.div`
   width: 200px;
   height: 50px;
+  margin-bottom: 10px;
   font-size: 24px;
   font-weight: bold;
   text-align: center;
@@ -256,6 +258,7 @@ const PopularProductDiv = styled.div`
 const PopularProductTitle = styled.div`
   width: 200px;
   height: 50px;
+  margin-bottom: 10px;
   font-size: 24px;
   font-weight: bold;
   text-align: center;
@@ -336,7 +339,7 @@ const ProductList02 = styled.div`
 
 const ProductStyle02 = styled.div`
   width: 170px;
-  height: 230px;
+  height: 240px;
   border: 2px solid #4786fa;
   border-radius: 20px;
   margin: 10px 20px;
