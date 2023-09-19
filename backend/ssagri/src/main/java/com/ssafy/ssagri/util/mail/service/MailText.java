@@ -59,6 +59,6 @@ public class MailText {
         msgg += "</p></div></td></tr><tr><td style='text-align: center;'>";
         msgg += "<img src='https://damda.s3.ap-northeast-2.amazonaws.com/EMAIL_CONFIRM/DAMDA.png' alt='footer' loading='lazy'>";
         msgg += "</td></tr></tbody></table>";
-        return msgg
+        return msgg;
     }
 }
