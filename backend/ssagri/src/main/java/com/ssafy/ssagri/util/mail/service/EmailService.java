@@ -3,8 +3,6 @@ package com.ssafy.ssagri.util.mail.service;
 import com.ssafy.ssagri.entity.email.EmailSendLog;
 import com.ssafy.ssagri.entity.email.SignUpEmailLog;
 import com.ssafy.ssagri.util.exception.CustomException;
-import com.ssafy.ssagri.util.mail.repository.EmailSendLogRepository;
-import com.ssafy.ssagri.util.mail.repository.SignUpEmailLogRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.MailException;
@@ -27,8 +25,8 @@ import java.security.SecureRandom;
 public class EmailService {
 
     private final JavaMailSender javaMailSender;
-    private final EmailSendLogRepository emailSendLogRepository;
-    private final SignUpEmailLogRepository signupEmailLogRepository;
+//    private final EmailSendLogRepository emailSendLogRepository;
+//    private final SignUpEmailLogRepository signupEmailLogRepository;
     private final MailText mailText;
     SignUpEmailLog signupEmailLog;
     EmailSendLog emailSendLog;
