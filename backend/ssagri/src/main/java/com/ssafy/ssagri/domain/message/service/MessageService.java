@@ -1,9 +1,7 @@
-package com.ssafy.ssagri.domain.chat.service;
+package com.ssafy.ssagri.domain.message.service;
 
-import com.ssafy.ssagri.domain.chat.repository.MessageRepository;
+import com.ssafy.ssagri.domain.message.repository.MessageRepository;
 import com.ssafy.ssagri.entity.chat.Message;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

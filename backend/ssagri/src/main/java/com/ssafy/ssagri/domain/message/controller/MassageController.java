@@ -1,7 +1,7 @@
-package com.ssafy.ssagri.domain.chat.controller;
+package com.ssafy.ssagri.domain.message.controller;
 
 
-import com.ssafy.ssagri.domain.chat.service.MessageService;
+import com.ssafy.ssagri.domain.message.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
