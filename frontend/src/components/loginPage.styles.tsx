@@ -254,12 +254,12 @@ const SignInAndUpComponent = () => {
   const [image, setImage] = useState(
     'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
   );
-  const [file, setFile] = useState(null);
+  const [profile, setProfile] = useState(null);
   const fileInput = useRef(null);
 
   const onChange = (e) => {
     if (e.target.files[0]) {
-      setFile(e.target.files[0]);
+      setProfile(e.target.files[0]);
     } else {
       // 업로드 취소할 시
       setImage(
@@ -444,6 +444,20 @@ const SignInAndUpComponent = () => {
     }
   };
 
+  const onSignUp = (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('profile', profile);
+
+    const config = {
+      headers: {
+        'content-type': 'multipart/form-data'
+      }
+    };
+
+    axios.post('SIGNUP_URL', formData, config);
+  };
+
   useEffect(() => {
     const signUpButton = document.getElementById('signUp');
     const signInButton = document.getElementById('signIn');
@@ -611,7 +625,7 @@ const SignInAndUpComponent = () => {
               <DoubleCheck onClick={doubleCheckNickname}>중복 확인</DoubleCheck>
             </div>
           </FormContent>
-          <Button>회원 가입</Button>
+          <Button onClick={OnSignUp}>회원 가입</Button>
         </Form>
       </FormContainer>
       <OverlayContainer id='overlay-container'>
