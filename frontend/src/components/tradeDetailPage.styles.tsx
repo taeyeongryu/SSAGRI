@@ -175,11 +175,12 @@ const DetailDivHeart = styled.button`
     box-shadow: 0px 0px 0px 1px #757575;
   }
   &:hover {
-    border: 1px solid #ec53b0;
+    /* border: 1px solid #ec53b0; */
     cursor: pointer;
+    box-shadow: 2px 2px 3px 3px #757575;
   }
   &:hover > div {
-    color: #ec53b0;
+    /* color: #ec53b0; */
   }
 `;
 const HeartText = styled.div`
@@ -211,15 +212,13 @@ const DetailDivChat = styled.button`
   justify-content: center;
   align-items: center;
   box-shadow: 2px 2px 2px 1px #757575;
-  &:active {
-    box-shadow: 0px 0px 0px 1px #757575;
-  }
   &:hover {
-    border: 1px solid #ffa1f5;
+    /* border: 1px solid #ffa1f5; */
     cursor: pointer;
+    box-shadow: 2px 2px 3px 3px #757575;
   }
   &:hover > div {
-    color: #ffa1f5;
+    /* color: #ffa1f5; */
   }
 `;
 const ChatText = styled.div`
@@ -429,8 +428,10 @@ const DetailRecommendText = styled.div`
 `;
 const Tag = styled.div`
   font-size: 50px;
+  line-height: 40px;
   font-weight: bold;
   color: #4786fa;
+  margin-bottom: 15px;
   &:hover {
     color: tomato;
     cursor: pointer;
