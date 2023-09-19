@@ -19,19 +19,14 @@ const ChatDiv = styled.div`
   align-items: center;
 `;
 // 채팅 목록
-const ChatList = styled.div`
-  border-top: 1px solid #4786fa;
-  border-bottom: 1px solid #4786fa;
-  width: 35%;
+const ChatLeft = styled.div`
+  width: 460px;
   height: 100%;
-  font-size: 30px;
-  overflow-y: scroll;
-  overflow-x: hidden;
 `;
 // 내 닉네임, 안읽은 메세지만 보기
 const ChatHeader = styled.div`
   border: 1px solid #4786fa;
-  width: 450px;
+  width: 460px;
   height: 70px;
   display: flex;
   flex-direction: column;
@@ -58,11 +53,30 @@ const ChatUnRead = styled.div`
   justify-content: end;
   align-items: center;
 `;
+const ChatList = styled.div`
+  border-top: 1px solid #4786fa;
+  border-bottom: 1px solid #4786fa;
+  width: 460px;
+  height: 642px;
+  font-size: 30px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #76a9fa; /* 스크롤바 막대 색상 */
+    border-radius: 10px;
+  }
+  &::-webkit-scrollbar-track {
+    background: #f1fafb; /* 스크롤바 뒷 배경 색상 */
+  }
+`;
 // 채팅 한줄한줄 요소
 const ChatItem = styled.div`
   border: 1px solid #4786fa;
   border-collapse: collapse;
-  width: 450px;
+  width: 452px;
   height: 80px;
   font-size: 20px;
   display: flex;
@@ -190,11 +204,23 @@ const ChatContent = styled.div`
   flex-direction: column;
   justify-content: start;
   align-items: center;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #76a9fa; /* 스크롤바 막대 색상 */
+    border-radius: 10px;
+  }
+  &::-webkit-scrollbar-track {
+    background: #f1fafb; /* 스크롤바 뒷 배경 색상 */
+  }
 `;
 // 채팅날짜
 const ChatDateDiv = styled.div`
   width: 100%;
   height: 30px;
+  margin: 5px 0px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -272,7 +298,7 @@ const ChatMessageTyping = styled.div`
   width: 100%;
   height: 138px;
   background-color: #f1fafb;
-  border-bottom: 1px solid #4786fa;
+  /* border-bottom: 1px solid #4786fa; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -347,7 +373,7 @@ const Chatting = () => {
     <ChatFrame>
       <ChatDiv>
         {/* 채팅 목록 */}
-        <ChatList>
+        <ChatLeft>
           <ChatHeader>
             <ChatMyId>내 아이디</ChatMyId>
             <ChatUnRead>
@@ -363,142 +389,144 @@ const Chatting = () => {
               />
             </ChatUnRead>
           </ChatHeader>
-          <ChatItem>
-            <ChatProfile src='/assets/img/profile.png'></ChatProfile>
-            <ChatRight>
-              <ChatInfo>
-                <ChatName>코딩왕123</ChatName>
-                <ChatTime>봉명동 · 2시간전</ChatTime>
-              </ChatInfo>
-              <ChatMiniContent>
-                대화내용대화내용대화내용대화내용
-              </ChatMiniContent>
-            </ChatRight>
-            <ChatUnReadDiv>
-              <ChatUnReadNumber>75</ChatUnReadNumber>
-            </ChatUnReadDiv>
-          </ChatItem>
-          <ChatItem>
-            <ChatProfile src='/assets/img/profile.png'></ChatProfile>
-            <ChatRight>
-              <ChatInfo>
-                <ChatName>코딩왕123</ChatName>
-                <ChatTime>봉명동 · 2시간전</ChatTime>
-              </ChatInfo>
-              <ChatMiniContent>
-                대화내용대화내용대화내용대화내용
-              </ChatMiniContent>
-            </ChatRight>
-            <ChatUnReadDiv>
-              <ChatUnReadNumber>75</ChatUnReadNumber>
-            </ChatUnReadDiv>
-          </ChatItem>
-          <ChatItem>
-            <ChatProfile src='/assets/img/profile.png'></ChatProfile>
-            <ChatRight>
-              <ChatInfo>
-                <ChatName>코딩왕123</ChatName>
-                <ChatTime>봉명동 · 2시간전</ChatTime>
-              </ChatInfo>
-              <ChatMiniContent>
-                대화내용대화내용대화내용대화내용대화내용대화내용
-              </ChatMiniContent>
-            </ChatRight>
-            <ChatUnReadDiv>
-              <ChatUnReadNumber>75</ChatUnReadNumber>
-            </ChatUnReadDiv>
-          </ChatItem>
-          <ChatItem>
-            <ChatProfile src='/assets/img/profile.png'></ChatProfile>
-            <ChatRight>
-              <ChatInfo>
-                <ChatName>코딩왕123</ChatName>
-                <ChatTime>봉명동 · 2시간전</ChatTime>
-              </ChatInfo>
-              <ChatMiniContent>
-                대화내용대화내용대화내용대화내용
-              </ChatMiniContent>
-            </ChatRight>
-            <ChatUnReadDiv>
-              <ChatUnReadNumber>75</ChatUnReadNumber>
-            </ChatUnReadDiv>
-          </ChatItem>
-          <ChatItem>
-            <ChatProfile src='/assets/img/profile.png'></ChatProfile>
-            <ChatRight>
-              <ChatInfo>
-                <ChatName>코딩왕123</ChatName>
-                <ChatTime>봉명동 · 2시간전</ChatTime>
-              </ChatInfo>
-              <ChatMiniContent>
-                대화내용대화내용대화내용대화내용
-              </ChatMiniContent>
-            </ChatRight>
-            <ChatUnReadDiv>
-              <ChatUnReadNumber>75</ChatUnReadNumber>
-            </ChatUnReadDiv>
-          </ChatItem>
-          <ChatItem>
-            <ChatProfile src='/assets/img/profile.png'></ChatProfile>
-            <ChatRight>
-              <ChatInfo>
-                <ChatName>코딩왕123</ChatName>
-                <ChatTime>봉명동 · 2시간전</ChatTime>
-              </ChatInfo>
-              <ChatMiniContent>
-                대화내용대화내용대화내용대화내용
-              </ChatMiniContent>
-            </ChatRight>
-            <ChatUnReadDiv>
-              <ChatUnReadNumber>75</ChatUnReadNumber>
-            </ChatUnReadDiv>
-          </ChatItem>
-          <ChatItem>
-            <ChatProfile src='/assets/img/profile.png'></ChatProfile>
-            <ChatRight>
-              <ChatInfo>
-                <ChatName>코딩왕123</ChatName>
-                <ChatTime>봉명동 · 2시간전</ChatTime>
-              </ChatInfo>
-              <ChatMiniContent>
-                대화내용대화내용대화내용대화내용
-              </ChatMiniContent>
-            </ChatRight>
-            <ChatUnReadDiv>
-              <ChatUnReadNumber>75</ChatUnReadNumber>
-            </ChatUnReadDiv>
-          </ChatItem>
-          <ChatItem>
-            <ChatProfile src='/assets/img/profile.png'></ChatProfile>
-            <ChatRight>
-              <ChatInfo>
-                <ChatName>코딩왕123</ChatName>
-                <ChatTime>봉명동 · 2시간전</ChatTime>
-              </ChatInfo>
-              <ChatMiniContent>
-                대화내용대화내용대화내용대화내용
-              </ChatMiniContent>
-            </ChatRight>
-            <ChatUnReadDiv>
-              <ChatUnReadNumber>75</ChatUnReadNumber>
-            </ChatUnReadDiv>
-          </ChatItem>
-          <ChatItem>
-            <ChatProfile src='/assets/img/profile.png'></ChatProfile>
-            <ChatRight>
-              <ChatInfo>
-                <ChatName>코딩왕123</ChatName>
-                <ChatTime>봉명동 · 2시간전</ChatTime>
-              </ChatInfo>
-              <ChatMiniContent>
-                대화내용대화내용대화내용대화내용
-              </ChatMiniContent>
-            </ChatRight>
-            <ChatUnReadDiv>
-              <ChatUnReadNumber>75</ChatUnReadNumber>
-            </ChatUnReadDiv>
-          </ChatItem>
-        </ChatList>
+          <ChatList>
+            <ChatItem>
+              <ChatProfile src='/assets/img/profile.png'></ChatProfile>
+              <ChatRight>
+                <ChatInfo>
+                  <ChatName>코딩왕123</ChatName>
+                  <ChatTime>봉명동 · 2시간전</ChatTime>
+                </ChatInfo>
+                <ChatMiniContent>
+                  대화내용대화내용대화내용대화내용
+                </ChatMiniContent>
+              </ChatRight>
+              <ChatUnReadDiv>
+                <ChatUnReadNumber>75</ChatUnReadNumber>
+              </ChatUnReadDiv>
+            </ChatItem>
+            <ChatItem>
+              <ChatProfile src='/assets/img/profile.png'></ChatProfile>
+              <ChatRight>
+                <ChatInfo>
+                  <ChatName>코딩왕123</ChatName>
+                  <ChatTime>봉명동 · 2시간전</ChatTime>
+                </ChatInfo>
+                <ChatMiniContent>
+                  대화내용대화내용대화내용대화내용
+                </ChatMiniContent>
+              </ChatRight>
+              <ChatUnReadDiv>
+                <ChatUnReadNumber>75</ChatUnReadNumber>
+              </ChatUnReadDiv>
+            </ChatItem>
+            <ChatItem>
+              <ChatProfile src='/assets/img/profile.png'></ChatProfile>
+              <ChatRight>
+                <ChatInfo>
+                  <ChatName>코딩왕123</ChatName>
+                  <ChatTime>봉명동 · 2시간전</ChatTime>
+                </ChatInfo>
+                <ChatMiniContent>
+                  대화내용대화내용대화내용대화내용대화내용대화내용
+                </ChatMiniContent>
+              </ChatRight>
+              <ChatUnReadDiv>
+                <ChatUnReadNumber>75</ChatUnReadNumber>
+              </ChatUnReadDiv>
+            </ChatItem>
+            <ChatItem>
+              <ChatProfile src='/assets/img/profile.png'></ChatProfile>
+              <ChatRight>
+                <ChatInfo>
+                  <ChatName>코딩왕123</ChatName>
+                  <ChatTime>봉명동 · 2시간전</ChatTime>
+                </ChatInfo>
+                <ChatMiniContent>
+                  대화내용대화내용대화내용대화내용
+                </ChatMiniContent>
+              </ChatRight>
+              <ChatUnReadDiv>
+                <ChatUnReadNumber>75</ChatUnReadNumber>
+              </ChatUnReadDiv>
+            </ChatItem>
+            <ChatItem>
+              <ChatProfile src='/assets/img/profile.png'></ChatProfile>
+              <ChatRight>
+                <ChatInfo>
+                  <ChatName>코딩왕123</ChatName>
+                  <ChatTime>봉명동 · 2시간전</ChatTime>
+                </ChatInfo>
+                <ChatMiniContent>
+                  대화내용대화내용대화내용대화내용
+                </ChatMiniContent>
+              </ChatRight>
+              <ChatUnReadDiv>
+                <ChatUnReadNumber>75</ChatUnReadNumber>
+              </ChatUnReadDiv>
+            </ChatItem>
+            <ChatItem>
+              <ChatProfile src='/assets/img/profile.png'></ChatProfile>
+              <ChatRight>
+                <ChatInfo>
+                  <ChatName>코딩왕123</ChatName>
+                  <ChatTime>봉명동 · 2시간전</ChatTime>
+                </ChatInfo>
+                <ChatMiniContent>
+                  대화내용대화내용대화내용대화내용
+                </ChatMiniContent>
+              </ChatRight>
+              <ChatUnReadDiv>
+                <ChatUnReadNumber>75</ChatUnReadNumber>
+              </ChatUnReadDiv>
+            </ChatItem>
+            <ChatItem>
+              <ChatProfile src='/assets/img/profile.png'></ChatProfile>
+              <ChatRight>
+                <ChatInfo>
+                  <ChatName>코딩왕123</ChatName>
+                  <ChatTime>봉명동 · 2시간전</ChatTime>
+                </ChatInfo>
+                <ChatMiniContent>
+                  대화내용대화내용대화내용대화내용
+                </ChatMiniContent>
+              </ChatRight>
+              <ChatUnReadDiv>
+                <ChatUnReadNumber>75</ChatUnReadNumber>
+              </ChatUnReadDiv>
+            </ChatItem>
+            <ChatItem>
+              <ChatProfile src='/assets/img/profile.png'></ChatProfile>
+              <ChatRight>
+                <ChatInfo>
+                  <ChatName>코딩왕123</ChatName>
+                  <ChatTime>봉명동 · 2시간전</ChatTime>
+                </ChatInfo>
+                <ChatMiniContent>
+                  대화내용대화내용대화내용대화내용
+                </ChatMiniContent>
+              </ChatRight>
+              <ChatUnReadDiv>
+                <ChatUnReadNumber>75</ChatUnReadNumber>
+              </ChatUnReadDiv>
+            </ChatItem>
+            <ChatItem>
+              <ChatProfile src='/assets/img/profile.png'></ChatProfile>
+              <ChatRight>
+                <ChatInfo>
+                  <ChatName>코딩왕123</ChatName>
+                  <ChatTime>봉명동 · 2시간전</ChatTime>
+                </ChatInfo>
+                <ChatMiniContent>
+                  대화내용대화내용대화내용대화내용
+                </ChatMiniContent>
+              </ChatRight>
+              <ChatUnReadDiv>
+                <ChatUnReadNumber>75</ChatUnReadNumber>
+              </ChatUnReadDiv>
+            </ChatItem>
+          </ChatList>
+        </ChatLeft>
         {/* 채팅 하나 공간 */}
         <ChatContentFrame>
           <ChatContentHeader>
@@ -514,6 +542,71 @@ const Chatting = () => {
               <ChatDate>2023년 9월 19일</ChatDate>
               <ChatDateLine></ChatDateLine>
             </ChatDateDiv>
+            <ChatMyMessageFrame>
+              <ChatMessageTime>오후 1시 30분</ChatMessageTime>
+              <ChatMyMessage>
+                안녕하세요 지금도 제우스랩 판매하시나요?
+              </ChatMyMessage>
+            </ChatMyMessageFrame>
+            <ChatOthersMessageFrame>
+              <ChatOthersProfile>
+                <ChatOthersProfileImg src='/assets/img/profile.png'></ChatOthersProfileImg>
+              </ChatOthersProfile>
+              <ChatOthersMessage>안녕하세요. 네 팝니다.</ChatOthersMessage>
+              <ChatMessageTime>오후 1시 30분</ChatMessageTime>
+            </ChatOthersMessageFrame>
+            <ChatMyMessageFrame>
+              <ChatMessageTime>오후 1시 30분</ChatMessageTime>
+              <ChatMyMessage>
+                안녕하세요 지금도 제우스랩 판매하시나요?
+              </ChatMyMessage>
+            </ChatMyMessageFrame>
+            <ChatOthersMessageFrame>
+              <ChatOthersProfile>
+                <ChatOthersProfileImg src='/assets/img/profile.png'></ChatOthersProfileImg>
+              </ChatOthersProfile>
+              <ChatOthersMessage>안녕하세요. 네 팝니다.</ChatOthersMessage>
+              <ChatMessageTime>오후 1시 30분</ChatMessageTime>
+            </ChatOthersMessageFrame>
+            <ChatMyMessageFrame>
+              <ChatMessageTime>오후 1시 30분</ChatMessageTime>
+              <ChatMyMessage>
+                안녕하세요 지금도 제우스랩 판매하시나요?
+              </ChatMyMessage>
+            </ChatMyMessageFrame>
+            <ChatOthersMessageFrame>
+              <ChatOthersProfile>
+                <ChatOthersProfileImg src='/assets/img/profile.png'></ChatOthersProfileImg>
+              </ChatOthersProfile>
+              <ChatOthersMessage>안녕하세요. 네 팝니다.</ChatOthersMessage>
+              <ChatMessageTime>오후 1시 30분</ChatMessageTime>
+            </ChatOthersMessageFrame>
+            <ChatMyMessageFrame>
+              <ChatMessageTime>오후 1시 30분</ChatMessageTime>
+              <ChatMyMessage>
+                안녕하세요 지금도 제우스랩 판매하시나요?
+              </ChatMyMessage>
+            </ChatMyMessageFrame>
+            <ChatOthersMessageFrame>
+              <ChatOthersProfile>
+                <ChatOthersProfileImg src='/assets/img/profile.png'></ChatOthersProfileImg>
+              </ChatOthersProfile>
+              <ChatOthersMessage>안녕하세요. 네 팝니다.</ChatOthersMessage>
+              <ChatMessageTime>오후 1시 30분</ChatMessageTime>
+            </ChatOthersMessageFrame>
+            <ChatMyMessageFrame>
+              <ChatMessageTime>오후 1시 30분</ChatMessageTime>
+              <ChatMyMessage>
+                안녕하세요 지금도 제우스랩 판매하시나요?
+              </ChatMyMessage>
+            </ChatMyMessageFrame>
+            <ChatOthersMessageFrame>
+              <ChatOthersProfile>
+                <ChatOthersProfileImg src='/assets/img/profile.png'></ChatOthersProfileImg>
+              </ChatOthersProfile>
+              <ChatOthersMessage>안녕하세요. 네 팝니다.</ChatOthersMessage>
+              <ChatMessageTime>오후 1시 30분</ChatMessageTime>
+            </ChatOthersMessageFrame>
             <ChatMyMessageFrame>
               <ChatMessageTime>오후 1시 30분</ChatMessageTime>
               <ChatMyMessage>
