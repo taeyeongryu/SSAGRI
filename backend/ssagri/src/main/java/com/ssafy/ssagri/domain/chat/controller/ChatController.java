@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class ChatController {
 
     @MessageMapping("/chat/room/1")
-    @SendTo("/sub/chat/1")
+    @SendTo("/sub/chat/room/1")
     public String sendMessage(String message) {
+
+        System.out.println("message = " + message);
         return message;
     }
 }
