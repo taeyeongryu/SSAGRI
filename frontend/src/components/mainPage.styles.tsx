@@ -84,17 +84,17 @@ const Pages1_Img1 = styled.img`
 `;
 
 const Pages1_Right = styled.div`
-  position: absolute;
+  /* position: absolute;
   top: -250px;
-  left: 700px;
-  /* position: relative; */
+  left: 700px; */
+  position: relative;
   /* width: 480px;
   height: 540px; */
   border: 1px solid black;
   /* transform: rotate(20deg); */
   overflow: hidden;
-  width: 950px;
-  height: 950px;
+  width: 150vh;
+  height: 100vh;
   /* width: 320px;
   height: 320px; */
   @media (max-width: 1000px) {
@@ -126,7 +126,7 @@ const Pages1_img1 = styled.img`
 const Pages2 = styled.div`
   display: flex;
   /* align-items: center; */
-  /* overflow: hidden; */
+  overflow: hidden;
   margin-left: 10px;
 `;
 
@@ -177,6 +177,7 @@ const Page2_tag2 = styled.div`
   &.hidden {
     animation: ${fadeOut} 10.5s ease forwards;
   }
+  overflow: hidden;
 `;
 
 const Page2_img1 = styled.img`
@@ -560,10 +561,10 @@ const Block1 = styled.div`
   position: absolute;
   top: 0px;
   left: 0px;
-  width: 230px;
-  height: 100px;
+  width: 213px;
+  height: 255px;
   border: 2px solid red;
-  clip-path: polygon(24% 0%, 100% 0%, 76% 100%, 0% 100%);
+  clip-path: polygon(60% 0%, 100% 0%, 40% 100%, 0% 100%);
   /* background: #27005d; */
   background-image: url('/assets/img/page2_clip2.PNG');
   background-position: 0px 0px;
@@ -573,11 +574,11 @@ const Block1 = styled.div`
 const Block2 = styled.div`
   position: absolute;
   top: 0px;
-  left: 200px;
-  width: 230px;
-  height: 100px;
+  left: 167px;
+  width: 213px;
+  height: 255px;
   border: 2px solid red;
-  clip-path: polygon(24% 0%, 100% 0%, 76% 100%, 0% 100%);
+  clip-path: polygon(60% 0%, 100% 0%, 40% 100%, 0% 100%);
   /* background: #27005d; */
   background-image: url('/assets/img/page2_clip2.PNG');
   background-position: 80px 80px;
@@ -587,9 +588,69 @@ const Block2 = styled.div`
 const BlockDiv1 = styled.div`
   /* margin-top:700px; */
   position: absolute;
-  top: 370px;
-  left: 27px;
+  top: 215px;
+  left: 21px;
   z-index: 10;
+  border: 2px solid purple;
+  width: 600px;
+  height: 600px;
+  /* background-image: url('/assets/img/page2_clip2.PNG');
+    background-position: 20px 80px;
+  color: transparent;
+  background-size: cover; */
+`;
+
+const Block3 = styled.div`
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 213px;
+  height: 255px;
+  border: 2px solid red;
+  clip-path: polygon(60% 0%, 100% 0%, 40% 100%, 0% 100%);
+  /* background: #27005d; */
+  background-image: url('/assets/img/page2_clip2.PNG');
+  background-position: 0px 0px;
+  color: transparent;
+  background-size: cover;
+`;
+const Block4 = styled.div`
+  position: absolute;
+  top: 0px;
+  left: 167px;
+  width: 213px;
+  height: 255px;
+  border: 2px solid red;
+  clip-path: polygon(60% 0%, 100% 0%, 40% 100%, 0% 100%);
+  /* background: #27005d; */
+  background-image: url('/assets/img/page2_clip2.PNG');
+  background-position: 80px 80px;
+  color: transparent;
+  background-size: cover;
+`;
+const BlockDiv2 = styled.div`
+  /* margin-top:700px; */
+  position: absolute;
+  top: 215px;
+  left: 21px;
+  z-index: 10;
+  border: 2px solid purple;
+  width: 600px;
+  height: 600px;
+  /* background-image: url('/assets/img/page2_clip2.PNG');
+    background-position: 20px 80px;
+  color: transparent;
+  background-size: cover; */
+`;
+const BlockDot = styled.div`
+  /* margin-top:700px; */
+  position: absolute;
+  top: 300px;
+  left: 300px;
+  z-index: 10;
+  width: 5px;
+  height: 5px;
+  background-color: red;
   /* background-image: url('/assets/img/page2_clip2.PNG');
     background-position: 20px 80px;
   color: transparent;
@@ -607,8 +668,8 @@ const Box1 = () => {
 
 const PageSlide = () => {
   const [rotation, setRotation] = useState(0);
-  const [limsize, setLimSize] = useState({ width: 600, height: 1000 });
-  const [size, setSize] = useState({ width: 600, height: 600 });
+  const [limsize, setLimSize] = useState({ width: 600, height: 750 });
+  const [size, setSize] = useState({ width: 213, height: 255 });
 
   const [fadepages1Tag2, setFadepages1Tag2] = useState(100);
   const [fadepages2Tag1, setFadepages2Tag1] = useState(0);
@@ -706,23 +767,23 @@ const PageSlide = () => {
 
       // 이미지 회전 동작로직
       if (scrollContainer) {
-        scrollContainer.scrollLeft += evt.deltaY;
+        // scrollContainer.scrollLeft += evt.deltaY;
         // console.log(evt.deltaY, scrollContainer.scrollLeft);
         const currentScrollLeft = scrollContainer.scrollLeft;
         const deltaY = evt.deltaY;
 
         // 원하는 애니메이션 시간 (0.5초)을 설정
-        const animationDuration = 0.12;
+        const animationDuration = 0.05;
 
         // 스크롤 애니메이션
         const animateScroll = (startTime: number) => {
           const currentTime = Date.now();
-          const elapsedTime = (currentTime - startTime) / 1000;
+          const elapsedTime = (currentTime - startTime) / 2500;
           if (elapsedTime < animationDuration) {
             const progress = elapsedTime / animationDuration;
             const newScrollLeft = currentScrollLeft + deltaY * progress;
             scrollContainer.scrollLeft = newScrollLeft;
-            // console.log(currentTime,startTime,elapsedTime,animationDuration,newScrollLeft,deltaY,progress)
+            console.log(Date.now());
             requestAnimationFrame(() => animateScroll(startTime));
           } else {
             // 애니메이션이 완료된 후에도 정확한 위치로 이동
@@ -735,12 +796,12 @@ const PageSlide = () => {
       if (evt.deltaY < 0 && scrollContainer.scrollLeft == 0) {
         setRotation(0);
         setSize((prevSize) => ({
-          width: 600,
-          height: 600
+          width: 213,
+          height: 255
         }));
         setLimSize((prevSize) => ({
           width: 600,
-          height: 1000
+          height: 750
         }));
       }
       if (scrollContainer.scrollLeft > 0 && scrollContainer.scrollLeft < 1250) {
@@ -812,28 +873,38 @@ const PageSlide = () => {
               <br />
             </Pages1_tag2>
           </Pages1_Left>
-          <Pages1_Right
-            style={{
-              width: `${limsize.width}px`,
-              height: `${limsize.height}px`
-            }}
-          >
-            <Box1
+          <Pages1_Right>
+            <BlockDiv1
+              style={{
+                transform: `rotate(${rotation}deg)`,
+                // width: `${size.width}px`,
+                // height: `${size.height}px`,
+                transition: 'transform 0.3s, width 0.1s, height 0.1s',
+                transformOrigin: '488 303 0'
+              }}
+            >
+              <BlockDot></BlockDot>
+              <Block1
+                style={{
+                  transition: 'transform 0.3s, width 0.1s, height 0.1s'
+                  // transformOrigin: '488 303 0'
+                }}
+              ></Block1>
+              <Block2
+                style={{
+                  transition: 'transform 0.3s, width 0.1s, height 0.1s'
+                  // transformOrigin: '488 303 0'
+                }}
+              ></Block2>
+            </BlockDiv1>
 
-            // style={{
-            //   transform: `rotate(${rotation}deg)`,
-            //   width: `${size.width}px`,
-            //   height: `${size.height}px`,
-            //   transition: 'transform 0.3s, width 0.1s, height 0.1s'
-            // }}
-            ></Box1>
             <Pages1_img1
               src='/assets/img/mainbox1.png'
               alt=''
               style={{
                 transform: `rotate(${rotation}deg)`,
-                width: `${size.width}px`,
-                height: `${size.height}px`,
+                width: `600px`,
+                height: `600px`,
                 transition: 'transform 0.3s, width 0.1s, height 0.1s'
               }}
             />
