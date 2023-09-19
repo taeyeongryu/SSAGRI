@@ -109,7 +109,7 @@ const Container = styled.div`
   position: relative;
   overflow: hidden;
   width: 1200px;
-  top: 200px;
+  top: 100px;
   max-width: 100%;
   min-height: 800px;
 `;
@@ -285,12 +285,11 @@ const SignInAndUpComponent = () => {
 
   // 이메일
   const onChangeEmailSignUp = (e) => {
-    const currentEmailSignUp = e.target.value;
-    setSignUpForm({ ...signUpForm, email: currentEmailSignUp });
+    setSignUpForm({ ...signUpForm, email: e.target.value });
     const emailRegExp =
       /^[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}$/;
 
-    if (currentEmailSignUp && !emailRegExp.test(currentEmailSignUp)) {
+    if (e.target.value || !emailRegExp.test(e.target.value)) {
       setSignUpEmailMessage('이메일의 형식이 올바르지 않습니다!');
       setIsEmailSignUp(false);
     } else {
