@@ -136,7 +136,8 @@ const ChatUnReadNumber = styled.div`
   margin-bottom: 2px;
   color: #fff;
 `;
-// 채팅창
+
+// ---------------- 우측 채팅창 ----------------
 const ChatContentFrame = styled.div`
   border: 1px solid #4786fa;
   width: 65%;
@@ -145,6 +146,7 @@ const ChatContentFrame = styled.div`
 `;
 const ChatContentHeader = styled.div`
   width: 100%;
+  height: 70px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -179,54 +181,147 @@ const SellorProductImg = styled.img`
   width: 40px;
   height: 40px;
 `;
+// 대화 내용 공간
 const ChatContent = styled.div`
-  border-bottom: 1px solid #4786fa;
   width: 100%;
-  height: 637px;
+  height: 500px;
   background-color: #f1fafb;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: start;
   align-items: center;
 `;
-const ChatMessage = styled.div`
+// 채팅날짜
+const ChatDateDiv = styled.div`
   width: 100%;
-  height: 140px;
-  position: relative;
-  transform: translate(0px, -150px);
+  height: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
-const ChatMessageDiv = styled.div`
-  width: 98%;
-  height: 98%;
+const ChatDateLine = styled.div`
+  width: 42%;
+  height: 1px;
+  border-top: 1px solid #929292;
+`;
+const ChatDate = styled.div`
+  width: 16%;
+  height: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #929292;
+  text-align: center;
+`;
+// 채팅 메세지 Div - 내가 보낼 때, 받을 때
+const ChatMyMessageFrame = styled.div`
+  width: 100%;
+  margin: 5px 0px;
+  display: flex;
+  justify-content: end;
+  align-items: end;
+`;
+const ChatMessageTime = styled.div`
+  width: 100px;
+  height: 20px;
+  line-height: 20px;
+  color: #929292;
+  font-size: 12px;
+  text-align: center;
+`;
+const ChatMyMessage = styled.div`
+  max-width: 35%;
+  padding: 5px 10px;
+  margin-right: 10px;
+  border-radius: 10px;
+  background-color: #76a9fa;
+  color: #fff;
+  box-shadow: 2px 2px 2px 1px #929292;
+  font-size: 16px;
+`;
+const ChatOthersMessageFrame = styled.div`
+  width: 100%;
+  margin: 5px 0px;
+  display: flex;
+  justify-content: start;
+  align-items: end;
+`;
+const ChatOthersProfile = styled.div`
+  width: 30px;
+  height: 30px;
+  margin-left: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+const ChatOthersProfileImg = styled.img`
+  width: 30px;
+  height: 30px;
+`;
+const ChatOthersMessage = styled.div`
+  max-width: 35%;
+  padding: 5px 10px;
+  margin-left: 10px;
+  border-radius: 10px;
+  background-color: #f0f0f0;
+  color: #000;
+  box-shadow: 2px 2px 2px 1px #929292;
+  font-size: 16px;
+`;
+// 메세지 입력
+const ChatMessageTyping = styled.div`
+  width: 100%;
+  height: 138px;
+  background-color: #f1fafb;
+  border-bottom: 1px solid #4786fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+const ChatMessageTypingDiv = styled.div`
+  width: 99%;
+  height: 130px;
   background-color: #fff;
   border: 2px solid black;
   border-radius: 10px;
   display: flex;
-  justify-content: start;
+  justify-content: space-between;
   align-items: center;
 `;
-const ChatInput = styled.input`
+const ChatInput = styled.div`
   width: 720px;
-  height: 130px;
+  height: 125px;
   margin-left: 5px;
+  position: relative;
   border: none;
   &:active {
     border: none;
   }
 `;
+const ChatInputMessage = styled.div`
+  /* border: 1px solid red; */
+  width: 740px;
+  height: 120px;
+  color: #929292;
+  font-size: 16px;
+  margin-top: 5px;
+`;
 const ChatMessageDivRight = styled.div`
-  width: 120px;
+  width: 113px;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: end;
 `;
+const ChatButtonMarginDiv = styled.div`
+  /* border: 1px solid black; */
+  width: 20px;
+  height: 40px;
+  margin-bottom: 5px;
+`;
 const ChatButton = styled.button`
   width: 100px;
   height: 40px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   background-color: #4786fa;
   box-shadow: 2px 2px 2px 1px #929292;
   border: none;
@@ -237,7 +332,8 @@ const ChatButton = styled.button`
   &:hover {
     cursor: pointer;
     color: #ce83f7;
-    border: 1px solid #ce83f7;
+    /* border: 1px solid #ce83f7; */
+    box-shadow: 1px 1px 3px 3px #929292;
   }
   &:active {
     border: 1px solid #ce83f7;
@@ -250,6 +346,7 @@ const Chatting = () => {
   return (
     <ChatFrame>
       <ChatDiv>
+        {/* 채팅 목록 */}
         <ChatList>
           <ChatHeader>
             <ChatMyId>내 아이디</ChatMyId>
@@ -402,6 +499,7 @@ const Chatting = () => {
             </ChatUnReadDiv>
           </ChatItem>
         </ChatList>
+        {/* 채팅 하나 공간 */}
         <ChatContentFrame>
           <ChatContentHeader>
             <ChatProfileRight src='/assets/img/profile.png'></ChatProfileRight>
@@ -410,15 +508,37 @@ const Chatting = () => {
               <SellorProductImg src='/assets/img/setting.png'></SellorProductImg>
             </SellorProduct>
           </ChatContentHeader>
-          <ChatContent>대화 내용</ChatContent>
-          <ChatMessage>
-            <ChatMessageDiv>
-              <ChatInput placeholder='메세지를 입력해주세요...'></ChatInput>
+          <ChatContent>
+            <ChatDateDiv>
+              <ChatDateLine></ChatDateLine>
+              <ChatDate>2023년 9월 19일</ChatDate>
+              <ChatDateLine></ChatDateLine>
+            </ChatDateDiv>
+            <ChatMyMessageFrame>
+              <ChatMessageTime>오후 1시 30분</ChatMessageTime>
+              <ChatMyMessage>
+                안녕하세요 지금도 제우스랩 판매하시나요?
+              </ChatMyMessage>
+            </ChatMyMessageFrame>
+            <ChatOthersMessageFrame>
+              <ChatOthersProfile>
+                <ChatOthersProfileImg src='/assets/img/profile.png'></ChatOthersProfileImg>
+              </ChatOthersProfile>
+              <ChatOthersMessage>안녕하세요. 네 팝니다.</ChatOthersMessage>
+              <ChatMessageTime>오후 1시 30분</ChatMessageTime>
+            </ChatOthersMessageFrame>
+          </ChatContent>
+          <ChatMessageTyping>
+            <ChatMessageTypingDiv>
+              <ChatInput>
+                <ChatInputMessage>메세지를 입력해주세요...</ChatInputMessage>
+              </ChatInput>
               <ChatMessageDivRight>
+                {/* <ChatButtonMarginDiv></ChatButtonMarginDiv> */}
                 <ChatButton>전송</ChatButton>
               </ChatMessageDivRight>
-            </ChatMessageDiv>
-          </ChatMessage>
+            </ChatMessageTypingDiv>
+          </ChatMessageTyping>
         </ChatContentFrame>
       </ChatDiv>
     </ChatFrame>

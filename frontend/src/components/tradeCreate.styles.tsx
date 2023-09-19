@@ -21,7 +21,7 @@ const CreateAndUpdateDiv = styled.div`
 const CreateAndUpdateDivHeader = styled.div`
   width: 100%;
   height: 60px;
-  border: 1px solid red;
+  /* border: 1px solid red; */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -30,7 +30,7 @@ const CreateAndUpdateDivHeader = styled.div`
 const CreateAndUpdateDivHeaderItem = styled.div`
   /* width: 100%;
   height: 50px; */
-  border: 1px solid red;
+  /* border: 1px solid red; */
   /* margin-left: 20px; */
   line-height: 40px;
   font-size: 32px;
@@ -113,8 +113,10 @@ const CreateAndUpdateDivItemUpRight = styled.div`
 
 const RightItemImage = styled.div`
   width: 100%;
-  height: 130px;
+  height: 120px;
   border: 1px solid blue;
+  overflow-y: hidden;
+  overflow-x: auto;
 `;
 
 const CreateAndUpdateDivItemDown = styled.div`
