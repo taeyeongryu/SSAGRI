@@ -1,6 +1,7 @@
 import { styled, keyframes } from 'styled-components';
 import { useState, useRef, useEffect } from 'react';
 import { Avatar } from 'antd';
+import axios from 'axios';
 
 const show = keyframes`
   0%, 49.99% {
@@ -66,8 +67,20 @@ const Button = styled.div`
   }
 `;
 
+// 중복확인 버튼
+const DoubleCheck = styled.button`
+  width: 180px;
+  height: 42px;
+
+  border: none;
+  background-color: grey;
+  color: white;
+  letter-spacing: 0.5px;
+`;
+
 const Select = styled.select`
   width: 60px;
+  height: 42px;
   margin: 8px 0px;
 `;
 
@@ -87,6 +100,7 @@ const Label = styled.label`
   justify-content: space-between;
   width: 100%;
   font-weight: bold;
+  gap: 5px;
 `;
 
 const SelectLabel = styled.label`
@@ -100,6 +114,7 @@ const Input = styled.input`
   padding: 12px 15px;
   margin: 8px 0;
   width: 100%;
+  height: 42px;
 `;
 
 const FileInput = styled.input`
@@ -159,6 +174,16 @@ const FormContainer = styled.div`
 
 const FormContent = styled.div`
   margin: 30px 0;
+`;
+
+const ValidMsg = styled.div`
+  color: green;
+  font-size: 12px;
+`;
+
+const InvalidMsg = styled.div`
+  color: #ff4b2b;
+  font-size: 12px;
 `;
 
 // overlay Container
@@ -292,32 +317,130 @@ const SignInAndUpComponent = () => {
     nickname: ''
   });
 
-  // 유효성 검사
-  const [isEmailSignUp, setIsEmailSignUp] = useState(false);
+  // 유효성 검증
+  const [isEmailValid, setIsEmailValid] = useState(false);
+  const [isPasswordValid, setIsPasswordValid] = useState(false);
+  const [isConfirmValid, setIsConfirmValid] = useState(false);
+  const [isNicknameValid, setIsNicknameValid] = useState(false);
 
   // 안내 메시지
   const [signUpEmailMessage, setSignUpEmailMessage] = useState('');
+  const [signUpPasswordMessage, setSignUpPasswordMessage] = useState('');
+  const [passwordConfirmMessage, setPasswordConfirmMessage] = useState('');
+  const [nickNameMessage, setNicknameMessage] = useState('');
 
-  // 이메일
   const onChangeEmailSignUp = (e) => {
     setSignUpForm({ ...signUpForm, email: e.target.value });
-    const emailRegExp =
+    // 이메일 형식 유효성 검증
+    const emailRegex =
       /^[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}$/;
 
     if (e.target.value) {
       // 입력값이 존재
-      if (!emailRegExp.test(e.target.value)) {
+      if (!emailRegex.test(e.target.value)) {
         // 유효성 검증 실패
         setSignUpEmailMessage('이메일의 형식이 올바르지 않습니다!');
-        setIsEmailSignUp(false);
       } else {
         // 유효성 검증 성공
         setSignUpEmailMessage('');
-        setIsEmailSignUp(true);
       }
     } else {
+      // 입력값이 없는 경우
       setSignUpEmailMessage('');
-      setIsEmailSignUp(false);
+    }
+  };
+
+  const onChangeSignUpPassword = (e) => {
+    setSignUpForm({ ...signUpForm, password: e.target.value });
+    const passwordRegex =
+      /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
+
+    if (e.target.value) {
+      // 입력값 존재
+      if (!passwordRegex.test(e.target.value)) {
+        // 유효성 검증 실패
+        setSignUpPasswordMessage(
+          '숫자, 영문자, 특수문자 조합으로 8자리 이상 입력해주세요!'
+        );
+        setIsPasswordValid(false);
+      } else {
+        // 유효성 검증 성공
+        setSignUpPasswordMessage('안전한 비밀번호입니다 : )');
+        setIsPasswordValid(true);
+      }
+    } else {
+      // 입력값이 없는 경우
+      setSignUpPasswordMessage('');
+      setIsPasswordValid(false);
+    }
+  };
+
+  const onChangePasswordConfirm = (e) => {
+    setSignUpForm({ ...signUpForm, passwordConfirm: e.target.value });
+
+    if (e.target.value) {
+      // 입력값 존재
+      if (e.target.value === signUpForm.password) {
+        setPasswordConfirmMessage('입력한 비밀번호와 일치합니다.');
+        setIsConfirmValid(true);
+      } else {
+        setPasswordConfirmMessage('입력한 비밀번호와 일치하지 않습니다.');
+        setIsConfirmValid(false);
+      }
+    } else {
+      // 입력값이 없는 경우
+      setPasswordConfirmMessage('');
+      setIsConfirmValid(false);
+    }
+  };
+
+  const onChangeNickname = (e) => {
+    const nameRegex = /[ \{\}\[\]\/?.,;:|\)*~`!^\-_+┼<>@\#$%&\'\"\\\(\=]/gi;
+    let check = true;
+
+    if (nameRegex.test(e.target.value)) {
+      alert('특수문자는 입력할 수 없습니다.');
+      check = false;
+    }
+
+    check && setSignUpForm({ ...signUpForm, nickname: e.target.value });
+  };
+
+  // 중복 확인
+  const doubleCheckEmail = (e) => {
+    e.preventDefault();
+
+    try {
+      axios
+        .get('DOUBLECHECK_EMAIL_URL', {
+          params: {
+            email: signUpForm.email
+          },
+          withCredentials: true
+        })
+        .then((res) => {
+          console.log(res);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const doubleCheckNickname = (e) => {
+    e.preventDefault();
+
+    try {
+      axios
+        .get('http://localhost:8080/user/regist/check', {
+          params: {
+            nickname: signUpForm.nickname
+          }
+        })
+        .then((res) => {
+          console.log(res);
+        });
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -394,38 +517,52 @@ const SignInAndUpComponent = () => {
             ></FileInput>
             <Label htmlFor='email'>
               <div>이메일</div>
-              <div>{signUpEmailMessage}</div>
+              {isEmailValid ? (
+                <ValidMsg>{signUpEmailMessage}</ValidMsg>
+              ) : (
+                <InvalidMsg>{signUpEmailMessage}</InvalidMsg>
+              )}
             </Label>
-
-            <Input
-              type='email'
-              value={signUpForm.email}
-              onChange={onChangeEmailSignUp}
-            ></Input>
-            <Label htmlFor='password'>비밀번호</Label>
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+              <Input
+                type='email'
+                value={signUpForm.email}
+                onChange={onChangeEmailSignUp}
+              ></Input>
+              <DoubleCheck onClick={doubleCheckEmail}>중복 확인</DoubleCheck>
+            </div>
+            <Label htmlFor='password'>
+              <div>비밀번호</div>
+              {isPasswordValid ? (
+                <ValidMsg>{signUpPasswordMessage}</ValidMsg>
+              ) : (
+                <InvalidMsg>{signUpPasswordMessage}</InvalidMsg>
+              )}
+            </Label>
             <Input
               type='password'
               value={signUpForm.password}
-              onChange={(e) =>
-                setSignUpForm({ ...signUpForm, password: e.target.value })
-              }
+              onChange={onChangeSignUpPassword}
             ></Input>
-            <Label htmlFor='passwordConfirm'>비밀번호 확인</Label>
+            <Label htmlFor='passwordConfirm'>
+              <div>비밀번호 확인</div>
+              {isConfirmValid ? (
+                <ValidMsg>{passwordConfirmMessage}</ValidMsg>
+              ) : (
+                <InvalidMsg>{passwordConfirmMessage}</InvalidMsg>
+              )}
+            </Label>
             <Input
               type='password'
               value={signUpForm.passwordConfirm}
-              onChange={(e) =>
-                setSignUpForm({
-                  ...signUpForm,
-                  passwordConfirm: e.target.value
-                })
-              }
+              onChange={onChangePasswordConfirm}
             ></Input>
             <div
               style={{
                 display: 'flex',
                 gap: '10px',
-                justifyContent: 'space-between'
+                justifyContent: 'space-between',
+                alignItems: 'center'
               }}
             >
               <SelectLabel htmlFor='region'>
@@ -464,15 +601,14 @@ const SignInAndUpComponent = () => {
                 </Select>
               </SelectLabel>
               <Label htmlFor='nickname'>
-                <p style={{ width: '60px', lineHeight: '24px' }}>닉네임</p>
+                <p style={{ width: '70px', lineHeight: '24px' }}>닉네임</p>
                 <Input
                   type='text'
                   value={signUpForm.nickname}
-                  onChange={(e) =>
-                    setSignUpForm({ ...signUpForm, nickname: e.target.value })
-                  }
+                  onChange={onChangeNickname}
                 ></Input>
               </Label>
+              <DoubleCheck onClick={doubleCheckNickname}>중복 확인</DoubleCheck>
             </div>
           </FormContent>
           <Button>회원 가입</Button>
