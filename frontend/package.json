@@ -10,15 +10,20 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ashthornton/asscroll": "^2.0.11",
     "@types/react-router-dom": "^5.3.3",
+    "antd": "^5.9.0",
     "axios": "^1.5.0",
     "npm": "^10.1.0",
     "nvm": "^0.0.4",
     "react": "^18.2.0",
+    "react-cookie": "^6.1.1",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.15.0",
     "recoil": "^0.7.7",
-    "styled-components": "^6.0.7"
+    "smooth-scrollbar": "^8.8.4",
+    "styled-components": "^6.0.7",
+    "universal-cookie": "^6.1.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",
