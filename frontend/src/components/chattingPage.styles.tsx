@@ -2,7 +2,7 @@ import { styled } from 'styled-components';
 
 const ChatFrame = styled.div`
   width: 1920px;
-  height: 900px;
+  height: 890px;
   margin-top: 7vh;
   border: 2px solid black;
   display: flex;
@@ -182,7 +182,7 @@ const SellorProductImg = styled.img`
 const ChatContent = styled.div`
   border-bottom: 1px solid #4786fa;
   width: 100%;
-  height: 648.5px;
+  height: 637px;
   background-color: #f1fafb;
   display: flex;
   justify-content: center;
