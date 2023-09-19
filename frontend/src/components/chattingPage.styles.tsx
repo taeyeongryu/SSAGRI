@@ -69,13 +69,13 @@ const ChatList = styled.div`
     border-radius: 10px;
   }
   &::-webkit-scrollbar-track {
-    background: #f1fafb; /* 스크롤바 뒷 배경 색상 */
+    background: #fff; /* 스크롤바 뒷 배경 색상 */
   }
 `;
 // 채팅 한줄한줄 요소
 const ChatItem = styled.div`
-  border: 1px solid #4786fa;
-  border-collapse: collapse;
+  border-left: 1px solid #4786fa;
+  border-bottom: 1px solid #4786fa;
   width: 452px;
   height: 80px;
   font-size: 20px;
