@@ -255,7 +255,7 @@ const SignInAndUpComponent = () => {
     const emailRegExp =
       /^[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}$/;
 
-    if (!emailRegExp.test(currentEmail)) {
+    if (currentEmail && !emailRegExp.test(currentEmail)) {
       setSignInEmailMessage('이메일의 형식이 올바르지 않습니다!');
       setIsEmail(false);
     } else {
@@ -276,6 +276,28 @@ const SignInAndUpComponent = () => {
     cardinalNumber: cardinalList[0],
     nickname: ''
   });
+
+  // 유효성 검사
+  const [isEmailSignUp, setIsEmailSignUp] = useState(false);
+
+  // 안내 메시지
+  const [signUpEmailMessage, setSignUpEmailMessage] = useState('');
+
+  // 이메일
+  const onChangeEmailSignUp = (e) => {
+    const currentEmailSignUp = e.target.value;
+    setSignUpForm({ ...signUpForm, email: currentEmailSignUp });
+    const emailRegExp =
+      /^[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}$/;
+
+    if (currentEmailSignUp && !emailRegExp.test(currentEmailSignUp)) {
+      setSignUpEmailMessage('이메일의 형식이 올바르지 않습니다!');
+      setIsEmailSignUp(false);
+    } else {
+      setSignUpEmailMessage('사용 가능한 이메일 입니다.');
+      setIsEmailSignUp(true);
+    }
+  };
 
   useEffect(() => {
     const signUpButton = document.getElementById('signUp');
@@ -348,13 +370,11 @@ const SignInAndUpComponent = () => {
             ref={fileInput}
           ></FileInput>
           <Label htmlFor='email'>이메일</Label>
+          {<div>{signUpEmailMessage}</div>}
           <Input
-            placeholder='이메일을 입력하세요'
             type='email'
             value={signUpForm.email}
-            onChange={(e) =>
-              setSignUpForm({ ...signUpForm, email: e.target.value })
-            }
+            onChange={onChangeEmailSignUp}
           ></Input>
           <Label htmlFor='password'>비밀번호</Label>
           <Input
