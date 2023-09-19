@@ -338,12 +338,6 @@ const ChatMessageDivRight = styled.div`
   justify-content: center;
   align-items: end;
 `;
-const ChatButtonMarginDiv = styled.div`
-  /* border: 1px solid black; */
-  width: 20px;
-  height: 40px;
-  margin-bottom: 5px;
-`;
 const ChatButton = styled.button`
   width: 100px;
   height: 40px;
