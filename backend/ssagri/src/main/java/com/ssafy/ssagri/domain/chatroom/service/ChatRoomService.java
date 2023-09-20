@@ -32,8 +32,8 @@ public class ChatRoomService {
             //임시로 하는 것 나중에 파라미터로 받은 유저를 select 해서
             //채팅방 만들어야 함
             //야미로 만든 것임
-            User userA = User.builder().build();
-            User userb = User.builder().build();
+            User userA = null;
+            User userb = null;
             String roomCode = UUID.randomUUID().toString();
             ChatRoom chatRoom = ChatRoom.builder()
                     .userA(userA)
