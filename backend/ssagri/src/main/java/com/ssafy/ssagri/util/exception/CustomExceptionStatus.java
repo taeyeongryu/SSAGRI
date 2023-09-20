@@ -20,6 +20,8 @@ public enum CustomExceptionStatus {
     LOGIN_GET_TOKEN_ERROR(-1102, "토큰 발급 과정에서 문제가 발생했습니다."),
     LOGIN_SAVE_TOKEN_ERROR(-1103, "토큰을 Redis로 저장하는 과정에서 문제가 발생했습니다."),
 
+    //LOGOUT = 12xx
+    LOGOUT_TOKEN_ERR(-1201, "토큰 헤더가 없거나 유효하지 않습니다."),
     ;
     private final int code;
     private final String message;

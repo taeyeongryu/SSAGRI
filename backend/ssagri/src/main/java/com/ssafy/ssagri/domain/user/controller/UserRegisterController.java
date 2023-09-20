@@ -3,22 +3,23 @@ package com.ssafy.ssagri.domain.user.controller;
 import com.ssafy.ssagri.domain.user.service.UserRegisterService;
 import com.ssafy.ssagri.dto.user.UserRegisterDTO;
 import com.ssafy.ssagri.util.exception.CustomException;
+import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * 유저 회원가입에 사용되는 인증 로직 및
- * 이메일 인증 관리에 사용되는 컨트롤러
- */
+
 @RestController
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/user/regist")
+@Api(tags = "유저 회원가입에 사용되는 인증 로직 및 이메일 인증 관리에 사용되는 컨트롤러")
 public class UserRegisterController {
 
     private final UserRegisterService userRegisterService;
+
 
     //유저 회원가입 최종 등록
     @PostMapping("/")
