@@ -7,6 +7,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -22,7 +23,7 @@ public class CorsConfig {
     private List<String> allowedHeader = List.of("*"); //허용되는 헤더
     private List<String> allowedExposeHeader = List.of("*"); //서버가 클라이언트에게 응답할 때 브라우저에서 노출되어야 하는 헤더(응답 헤더)를 지정
 
-
+    
     @Bean
     @Primary
     public CorsConfigurationSource configurationSource() {
@@ -32,6 +33,7 @@ public class CorsConfig {
         //corsConfigure 설정
         corsConfiguration.setAllowCredentials(true); //CORS 자격 증명 요청
         corsConfiguration.setAllowedOrigins(allowedSite); //해당 페이지 요청 허용
+        corsConfiguration.setAllowedMethods(Arrays.asList("GET","POST","DELETE","PUT","OPTIONS")); //허용 HTTP 메서드
         corsConfiguration.setAllowedHeaders(allowedHeader);
         corsConfiguration.setExposedHeaders(allowedExposeHeader);
 
