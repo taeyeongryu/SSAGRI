@@ -427,7 +427,7 @@ const SignInAndUpComponent = () => {
     e.preventDefault();
 
     axios
-      .get('/user/regist/check/email', {
+      .post('/user/regist/check/email', {
         params: {
           email: signUpForm.email
         }
@@ -470,7 +470,7 @@ const SignInAndUpComponent = () => {
   const doubleCheckNickname = (e) => {
     e.preventDefault();
     axios
-      .get('/user/regist/check/nickname', {
+      .post('/user/regist/check/nickname', {
         params: {
           nickname: signUpForm.nickname
         }
