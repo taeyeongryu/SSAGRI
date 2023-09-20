@@ -15,6 +15,11 @@ public enum CustomExceptionStatus {
     REGISTER_NICKNAME_IS_DUPLICATE(-1000, "유저 닉네임이 중복됩니다."),
     REGISTER_EMAIL_IS_DUPLICATE(-1001, "이메일이 중복됩니다."),
 
+    //LOGIN = 11xx
+    LOGIN_HAVE_NO_ACCOUT(-1101, "일치하는 계정이 없습니다."),
+    LOGIN_GET_TOKEN_ERROR(-1102, "토큰 발급 과정에서 문제가 발생했습니다."),
+    LOGIN_SAVE_TOKEN_ERROR(-1103, "토큰을 Redis로 저장하는 과정에서 문제가 발생했습니다."),
+
     //ChatRoom = 2xxx
     CHATROOM_DOES_NOT_EXSIST(-2002, "존재하지 않는 채팅방입니다.");
 
@@ -22,3 +27,5 @@ public enum CustomExceptionStatus {
     private final String message;
 
 }
+
+
