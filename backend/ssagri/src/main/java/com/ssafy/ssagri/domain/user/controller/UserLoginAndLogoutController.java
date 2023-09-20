@@ -25,7 +25,7 @@ public class UserLoginAndLogoutController {
 
     //로그인
     @PostMapping("/login/")
-    public ResponseEntity<String> loginUser(@RequestBody UserLoginDTO userLoginDTO) {
+    public ResponseEntity<?> loginUser(@RequestBody UserLoginDTO userLoginDTO) {
         return userLoginAndLogoutService.loginUser(userLoginDTO);
     }
 
