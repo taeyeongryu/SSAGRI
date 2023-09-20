@@ -599,6 +599,7 @@ const AuctionMid = styled.div`
     }
   }
 `;
+
 const Page2_section3 = () => {
   return (
     <Page2_Auction>
@@ -951,6 +952,7 @@ const PageSlide = () => {
       }
       console.log(s_pos);
       pct = (s_pos * 100) / s_move_max;
+      // @ts-ignore
       indi_bar.style.clipPath = `
       polygon(0% 0%, ${pct}% 0%, ${pct}% 100%, 0% 100%)
       `;
@@ -1335,6 +1337,7 @@ const PageSlide = () => {
       <PagesSection2>
         <Pages2>
           {/* 2-1 */}
+
           <Page2_tag1
             className='Pages2_tag1'
             style={{
