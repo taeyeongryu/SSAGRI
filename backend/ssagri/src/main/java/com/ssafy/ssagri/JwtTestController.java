@@ -34,7 +34,7 @@ public class JwtTestController {
             @ApiResponse(code = 500, message = "서버 오류 발생")
     })
     @GetMapping("at")
-    public ResponseEntity<String> createAccessToken() {
+    public String createAccessToken() {
         log.warn("ac 생성 : {}");
         return JwtUtil.createAccessToken(1L);
     }

@@ -42,4 +42,9 @@ public class ChatRoom extends BaseTimeEntity {
         this.roomCode = roomCode;
         this.chatUpdateDate = chatUpdateDate;
     }
+
+    public void updateDate(){
+        this.chatUpdateDate = LocalDateTime.now();
+    }
+
 }

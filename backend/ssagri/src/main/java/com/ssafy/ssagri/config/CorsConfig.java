@@ -24,6 +24,7 @@ public class CorsConfig {
 
     
     @Bean
+    @Primary
     public CorsConfigurationSource configurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
