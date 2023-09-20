@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/user")
 public class UserLoginAndLogoutController {
 
-    private final UserRegisterService userRegisterService;
     private final UserLoginAndLogoutService userLoginAndLogoutService;
 
     //로그인

@@ -34,7 +34,7 @@ public class JwtFilter extends OncePerRequestFilter {
             "/webjars/",
             "/v2/api-docs",
             "/jwt", //TEST API 주소
-            "/"
+            "/" //테스팅 목적으로 jwt 필터를 일시 잠금하였음
     };
 
     //다음 해당 사항은 jwt 토큰 인증 필터링을 거치지 않는다.
@@ -78,7 +78,6 @@ public class JwtFilter extends OncePerRequestFilter {
             }
             return;
         }
-
 
         //이상 없을 경우
         filterChain.doFilter(request, response);
