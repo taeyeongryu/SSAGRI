@@ -427,7 +427,7 @@ const SignInAndUpComponent = () => {
     e.preventDefault();
 
     axios
-      .get('/user/regist/check/email', {
+      .post('/user/regist/check/email', {
         params: {
           email: signUpForm.email
         }
@@ -437,8 +437,9 @@ const SignInAndUpComponent = () => {
         setSignUpEmailMessage('사용 가능한 이메일입니다.');
         setIsEmailValid(true);
       })
-      .catch(() => {
+      .catch((err) => {
         // 이미 등록된 이메일인 경우
+        console.log(err);
         setSignUpEmailMessage('이미 등록된 이메일입니다.');
         setIsEmailValid(false);
       });
@@ -466,11 +467,27 @@ const SignInAndUpComponent = () => {
       });
   };
 
+  // 인증번호 확인 요청
+  // const checkVerificationCode = (e) => {
+  //   e.preventDefault();
+
+  //   const data = {
+  //     number: verifyNumber
+  //   };
+
+  //   axios.post('인증번호 확인 URL')
+  //   .then((res) => { // 인증 완료
+  //     console.log(res);
+  //   }).catch((err) => { // 인증 실패
+  //     console.log(err)
+  //   });
+  // };
+
   // 닉네임 중복확인
   const doubleCheckNickname = (e) => {
     e.preventDefault();
     axios
-      .get('/user/regist/check/nickname', {
+      .post('/user/regist/check/nickname', {
         params: {
           nickname: signUpForm.nickname
         }
