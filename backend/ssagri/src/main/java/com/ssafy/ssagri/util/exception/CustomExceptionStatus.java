@@ -13,8 +13,10 @@ public enum CustomExceptionStatus {
 
     //Register = 1xxx
     REGISTER_NICKNAME_IS_DUPLICATE(-1000, "유저 닉네임이 중복됩니다."),
-    REGISTER_EMAIL_IS_DUPLICATE(-1001, "이메일이 중복됩니다.");
+    REGISTER_EMAIL_IS_DUPLICATE(-1001, "이메일이 중복됩니다."),
 
+    //ChatRoom = 2xxx
+    CHATROOM_DOES_NOT_EXSIST(-2002, "존재하지 않는 채팅방입니다.");
 
     private final int code;
     private final String message;

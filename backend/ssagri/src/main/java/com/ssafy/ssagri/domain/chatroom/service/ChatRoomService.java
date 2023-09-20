@@ -7,6 +7,7 @@ import com.ssafy.ssagri.domain.message.dto.MessageResponse;
 import com.ssafy.ssagri.domain.message.service.MessageService;
 import com.ssafy.ssagri.entity.chat.ChatRoom;
 import com.ssafy.ssagri.entity.user.User;
+import com.ssafy.ssagri.util.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import static com.ssafy.ssagri.util.exception.CustomExceptionStatus.CHATROOM_DOES_NOT_EXSIST;
 
 @Service
 @Transactional(readOnly = true)
@@ -30,7 +33,7 @@ public class ChatRoomService {
      Service 내부에서만 사용하는 메서드
      */
     @Transactional
-    public ChatRoom saveChatRoom(Long userANo, Long userBNo){
+    public ChatRoomResponse saveChatRoom(Long userANo, Long userBNo){
         //임시로 하는 것 나중에 파라미터로 받은 유저를 select 해서
         //채팅방 만들어야 함
         //야미로 만든 것임
@@ -42,7 +45,7 @@ public class ChatRoomService {
                 .userB(userb)
                 .roomCode(roomCode).build();
         chatRoomRepository.save(chatRoom);
-        return chatRoom;
+        return chatRoom.toResponse();
         //채팅방 생성한다.
     }
     /*
@@ -65,8 +68,18 @@ public class ChatRoomService {
         return chatRoomResponseList;
     }
 
+    public ChatRoomResponse selectOneChatRoom(Long chatRoomNo){
+        Optional<ChatRoom> findChatRoom = chatRoomRepository.findById(chatRoomNo);
+        if (findChatRoom.isEmpty()){
+            //예외처리 해야함
+            throw new CustomException(CHATROOM_DOES_NOT_EXSIST);
+        }else{
+            return findChatRoom.get().toResponse();
+        }
+    }
+
     //이 메서드 실행하기 전에는 save 먼저 해서 채팅방을 만들어 줘야 한다.
-    public ChatRoomDetailResponse selectChatRoomDetailByUser(Long userA , Long userB, Pageable pageable){
+    public ChatRoomDetailResponse selectChatRoomDetailByUsers(Long userA , Long userB, Pageable pageable){
         Optional<ChatRoom> findChatRoom = chatRoomRepository.selectByUserAUserB(userA, userB);
         ChatRoom chatRoom = findChatRoom.get();
 

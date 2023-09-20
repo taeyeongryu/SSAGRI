@@ -6,8 +6,10 @@ import com.ssafy.ssagri.domain.usedproduct.repository.UsedProductRepository;
 import com.ssafy.ssagri.domain.usedproductlike.repository.UsedProductLikeRepository;
 import com.ssafy.ssagri.domain.usedproductphoto.dto.UsedProductPhotoResponse;
 import com.ssafy.ssagri.domain.usedproductphoto.repository.UsedProductPhotoRepository;
+import com.ssafy.ssagri.entity.usedproduct.ProductCategory;
 import com.ssafy.ssagri.entity.usedproduct.UsedProduct;
 import com.ssafy.ssagri.entity.usedproduct.UsedProductPhoto;
+import com.ssafy.ssagri.entity.user.Region;
 import com.ssafy.ssagri.entity.user.User;
 import com.ssafy.ssagri.util.s3upload.ImageService;
 import lombok.RequiredArgsConstructor;
@@ -71,8 +73,8 @@ public class UsedProductService {
         return productOptional.get().getNo();
     }
 
-    public Page<UsedProductResponse> selectUsedProduct(Long userNo,Pageable pageable){
-        Page<UsedProduct> usedProducts = usedProductRepository.selectAllUsedProduct(pageable);
+    public Page<UsedProductResponse> selectUsedProduct(Long userNo,ProductCategory productCategory, Region region,Pageable pageable){
+        Page<UsedProduct> usedProducts = usedProductRepository.selectAllUsedProduct(productCategory, region, pageable);
         List<UsedProduct> usedProductList = usedProducts.getContent();
 
         List<UsedProductResponse> usedProductResponseList = new ArrayList<>();
