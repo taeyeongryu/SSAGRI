@@ -22,8 +22,16 @@ public enum CustomExceptionStatus {
 
     //LOGOUT = 12xx
     LOGOUT_TOKEN_ERR(-1201, "토큰 헤더가 없거나 유효하지 않습니다."),
+
+
+    //ChatRoom = 2xxx
+    CHATROOM_DOES_NOT_EXSIST(-2002, "존재하지 않는 채팅방입니다.");
+
+
     ;
     private final int code;
     private final String message;
 
 }
+
+

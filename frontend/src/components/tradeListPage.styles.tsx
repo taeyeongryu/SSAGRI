@@ -210,53 +210,71 @@ const TradeList = () => {
             <ProductStyle02></ProductStyle02>
           </ProductList02>
         </ProductList>
-        <PagingSpace>
-          <PagingButton>
-            <PagingButtonText>&lt;&lt;</PagingButtonText>
-          </PagingButton>
-          <PagingButton>
-            <PagingButtonText>&lt;</PagingButtonText>
-          </PagingButton>
-          <PagingButton>
-            <PagingButtonText>1</PagingButtonText>
-          </PagingButton>
-          <PagingButton>
-            <PagingButtonText>2</PagingButtonText>
-          </PagingButton>
-          <PagingButton>
-            <PagingButtonText>3</PagingButtonText>
-          </PagingButton>
-          <PagingButton>
-            <PagingButtonText>4</PagingButtonText>
-          </PagingButton>
-          <PagingButton>
-            <PagingButtonText>5</PagingButtonText>
-          </PagingButton>
-          <PagingButton>
-            <PagingButtonText>6</PagingButtonText>
-          </PagingButton>
-          <PagingButton>
-            <PagingButtonText>7</PagingButtonText>
-          </PagingButton>
-          <PagingButton>
-            <PagingButtonText>8</PagingButtonText>
-          </PagingButton>
-          <PagingButton>
-            <PagingButtonText>9</PagingButtonText>
-          </PagingButton>
-          <PagingButton>
-            <PagingButtonText>10</PagingButtonText>
-          </PagingButton>
-          <PagingButton>
-            <PagingButtonText>&gt;</PagingButtonText>
-          </PagingButton>
-          <PagingButton>
-            <PagingButtonText>&gt;&gt;</PagingButtonText>
-          </PagingButton>
-        </PagingSpace>
+        <BottomPageSpace></BottomPageSpace>
       </TradeListDiv>
     </TradeListFrameDiv>
   );
 };
 
-export { TradeList };
+const AuctionTradeList = () => {
+  return (
+    <CategoryList>
+      <CategoryItem>전체</CategoryItem>
+      <CategoryItem>모니터</CategoryItem>
+      <CategoryItem>키보드</CategoryItem>
+      <CategoryItem>마우스</CategoryItem>
+      <CategoryItem>생활용품</CategoryItem>
+      <CategoryItem>기타용품</CategoryItem>
+    </CategoryList>
+  );
+};
+
+const BottomPageSpace = () => {
+  return (
+    <PagingSpace>
+      <PagingButton>
+        <PagingButtonText>&lt;&lt;</PagingButtonText>
+      </PagingButton>
+      <PagingButton>
+        <PagingButtonText>&lt;</PagingButtonText>
+      </PagingButton>
+      <PagingButton>
+        <PagingButtonText>1</PagingButtonText>
+      </PagingButton>
+      <PagingButton>
+        <PagingButtonText>2</PagingButtonText>
+      </PagingButton>
+      <PagingButton>
+        <PagingButtonText>3</PagingButtonText>
+      </PagingButton>
+      <PagingButton>
+        <PagingButtonText>4</PagingButtonText>
+      </PagingButton>
+      <PagingButton>
+        <PagingButtonText>5</PagingButtonText>
+      </PagingButton>
+      <PagingButton>
+        <PagingButtonText>6</PagingButtonText>
+      </PagingButton>
+      <PagingButton>
+        <PagingButtonText>7</PagingButtonText>
+      </PagingButton>
+      <PagingButton>
+        <PagingButtonText>8</PagingButtonText>
+      </PagingButton>
+      <PagingButton>
+        <PagingButtonText>9</PagingButtonText>
+      </PagingButton>
+      <PagingButton>
+        <PagingButtonText>10</PagingButtonText>
+      </PagingButton>
+      <PagingButton>
+        <PagingButtonText>&gt;</PagingButtonText>
+      </PagingButton>
+      <PagingButton>
+        <PagingButtonText>&gt;&gt;</PagingButtonText>
+      </PagingButton>
+    </PagingSpace>
+  );
+};
+export { TradeList, AuctionTradeList, BottomPageSpace };
