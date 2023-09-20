@@ -18,6 +18,7 @@ public enum CustomExceptionStatus {
     //LOGIN = 11xx
     LOGIN_HAVE_NO_ACCOUT(-1101, "일치하는 계정이 없습니다."),
     LOGIN_GET_TOKEN_ERROR(-1102, "토큰 발급 과정에서 문제가 발생했습니다."),
+    LOGIN_SAVE_TOKEN_ERROR(-1103, "토큰을 Redis로 저장하는 과정에서 문제가 발생했습니다."),
 
     ;
     private final int code;
