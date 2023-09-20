@@ -1,0 +1,635 @@
+import { styled, keyframes } from 'styled-components';
+import { useState, useRef, useEffect } from 'react';
+import { Avatar } from 'antd';
+import axios from 'axios';
+
+const show = keyframes`
+  0%, 49.99% {
+    opacity: 0;
+    z-index: 1;
+  }
+
+  50%, 100% {
+    opacity: 1;
+    z-index: 5;
+  }
+`;
+
+const LoginPage = styled.div`
+  width: 100vw;
+  height: 100vh;
+  /* border: 2px solid red; */
+`;
+
+const H1 = styled.h1`
+  font-weight: bold;
+  margin: 0;
+`;
+
+const P = styled.p`
+  font-size: 14px;
+  font-weight: 100;
+  line-height: 20px;
+  letter-spacing: 0.5px;
+  margin: 20px 0 30px;
+`;
+
+const A = styled.a`
+  color: #333;
+  font-size: 14px;
+  text-decoration: none;
+  margin: 15px 0;
+`;
+
+const Button = styled.div`
+  border-radius: 20px;
+  border: 1px solid #4786fa;
+  background-color: #4786fa;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 12px 45px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: transform 80ms ease-in;
+
+  &.ghost {
+    background-color: transparent;
+    border-color: #ffffff;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &:focus {
+    outline: none;
+  }
+`;
+
+// 중복확인 버튼
+const DoubleCheck = styled.button`
+  width: 180px;
+  height: 42px;
+
+  border: none;
+  background-color: grey;
+  color: white;
+  letter-spacing: 0.5px;
+`;
+
+const Select = styled.select`
+  width: 60px;
+  height: 42px;
+  margin: 8px 0px;
+`;
+
+const Form = styled.form`
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0 50px;
+  height: 100%;
+  text-align: center;
+`;
+
+const Label = styled.label`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-weight: bold;
+  gap: 5px;
+`;
+
+const SelectLabel = styled.label`
+  display: flex;
+  font-weight: bold;
+`;
+
+const Input = styled.input`
+  background-color: #eee;
+  border: none;
+  padding: 12px 15px;
+  margin: 8px 0;
+  width: 100%;
+  height: 42px;
+`;
+
+const FileInput = styled.input`
+  display: none;
+`;
+
+const CustomFileInput = styled(FileInput)`
+  /* 여기에 원하는 스타일 추가*/
+`;
+
+// Container
+const Container = styled.div`
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow:
+    0 14px 28px rgba(0, 0, 0, 0.25),
+    0 10px 10px rgba(0, 0, 0, 0.22);
+  position: relative;
+  overflow: hidden;
+  width: 1200px;
+  top: 100px;
+  max-width: 100%;
+  min-height: 800px;
+`;
+
+// input form
+const FormContainer = styled.div`
+  position: absolute;
+  top: 0;
+  height: 100%;
+  transition: all 0.6s ease-in-out;
+
+  &.sign-in-container {
+    left: 0;
+    width: 50%;
+    z-index: 2;
+
+    &.right-panel-active {
+      transform: translateX(100%);
+    }
+  }
+
+  &.sign-up-container {
+    left: 0;
+    width: 50%;
+    opacity: 0;
+    z-index: 1;
+
+    &.right-panel-active {
+      transform: translateX(100%);
+      opacity: 1;
+      z-index: 5;
+      animation: ${show} 0.6s;
+    }
+  }
+`;
+
+const FormContent = styled.div`
+  margin: 30px 0;
+`;
+
+const ValidMsg = styled.div`
+  color: green;
+  font-size: 12px;
+`;
+
+const InvalidMsg = styled.div`
+  color: #ff4b2b;
+  font-size: 12px;
+`;
+
+// overlay Container
+const OverlayContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  transition: transform 0.6s ease-in-out;
+  z-index: 100;
+
+  &.right-panel-active {
+    transform: translateX(-100%);
+  }
+`;
+
+const Overlay = styled.div`
+  background-image: url('/assets/img/overlayImg.png');
+  background-size: contain;
+  /* background: #ff416c;
+  background: -webkit-linear-gradient(to right, #ff4b2b, #ff416c);
+  background: linear-gradient(to right, #ff4b2b, #ff416c); */
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 0 0;
+  color: #ffffff;
+  position: relative;
+  left: -100%;
+  height: 100%;
+  width: 200%;
+  transform: translateX(0);
+  transition: transform 0.6s ease-in-out;
+
+  &.right-panel-active {
+    transform: translateX(50%);
+  }
+`;
+
+const OverlayPanel = styled.div`
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  /* padding: 0 40px; */
+  text-align: center;
+  top: 0;
+  height: 100%;
+  width: 50%;
+  transform: translateX(0);
+  transition: transform 0.6s ease-in-out;
+
+  &.overlay-left {
+    transform: translateX(0);
+  }
+
+  &.overlay-right {
+    right: 0;
+    transform: translateX(0);
+  }
+`;
+
+//
+
+const SignInAndUpComponent = () => {
+  const [image, setImage] = useState(
+    'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
+  );
+  const [file, setFile] = useState(null);
+  const fileInput = useRef(null);
+
+  const onChange = (e) => {
+    if (e.target.files[0]) {
+      setFile(e.target.files[0]);
+    } else {
+      // 업로드 취소할 시
+      setImage(
+        'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
+      );
+      return;
+    }
+    // 화면에 프로필 사진 표시
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setImage(reader.result);
+      }
+    };
+    reader.readAsDataURL(e.target.files[0]);
+  };
+
+  // 로그인 //
+  const [signInForm, setSignInForm] = useState({
+    email: '',
+    password: ''
+  });
+
+  // 안내 메시지
+  const [signInEmailMessage, setSignInEmailMessage] = useState('');
+
+  // 유효성 검사
+  const [isEmail, setIsEmail] = useState(false);
+
+  const onChangeEmail = (e) => {
+    const currentEmail = e.target.value;
+    setSignInForm({ ...signInForm, email: currentEmail });
+    const emailRegExp =
+      /^[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}$/;
+
+    if (currentEmail && !emailRegExp.test(currentEmail)) {
+      setSignInEmailMessage('이메일의 형식이 올바르지 않습니다!');
+      setIsEmail(false);
+    } else {
+      setSignInEmailMessage('사용 가능한 이메일 입니다.');
+      setIsEmail(true);
+    }
+  };
+
+  // 회원가입 //
+  const regionList = ['대전', '서울', '구미', '광주', '부울경'];
+  const cardinalList = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+
+  const [signUpForm, setSignUpForm] = useState({
+    email: '',
+    password: '',
+    passwordConfirm: '',
+    region: regionList[0],
+    cardinalNumber: cardinalList[0],
+    nickname: ''
+  });
+
+  // 유효성 검증
+  const [isEmailValid, setIsEmailValid] = useState(false);
+  const [isPasswordValid, setIsPasswordValid] = useState(false);
+  const [isConfirmValid, setIsConfirmValid] = useState(false);
+  const [isNicknameValid, setIsNicknameValid] = useState(false);
+
+  // 안내 메시지
+  const [signUpEmailMessage, setSignUpEmailMessage] = useState('');
+  const [signUpPasswordMessage, setSignUpPasswordMessage] = useState('');
+  const [passwordConfirmMessage, setPasswordConfirmMessage] = useState('');
+  const [nickNameMessage, setNicknameMessage] = useState('');
+
+  const onChangeEmailSignUp = (e) => {
+    setSignUpForm({ ...signUpForm, email: e.target.value });
+    // 이메일 형식 유효성 검증
+    const emailRegex =
+      /^[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}$/;
+
+    if (e.target.value) {
+      // 입력값이 존재
+      if (!emailRegex.test(e.target.value)) {
+        // 유효성 검증 실패
+        setSignUpEmailMessage('이메일의 형식이 올바르지 않습니다!');
+      } else {
+        // 유효성 검증 성공
+        setSignUpEmailMessage('');
+      }
+    } else {
+      // 입력값이 없는 경우
+      setSignUpEmailMessage('');
+    }
+  };
+
+  const onChangeSignUpPassword = (e) => {
+    setSignUpForm({ ...signUpForm, password: e.target.value });
+    const passwordRegex =
+      /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
+
+    if (e.target.value) {
+      // 입력값 존재
+      if (!passwordRegex.test(e.target.value)) {
+        // 유효성 검증 실패
+        setSignUpPasswordMessage(
+          '숫자, 영문자, 특수문자 조합으로 8자리 이상 입력해주세요!'
+        );
+        setIsPasswordValid(false);
+      } else {
+        // 유효성 검증 성공
+        setSignUpPasswordMessage('안전한 비밀번호입니다 : )');
+        setIsPasswordValid(true);
+      }
+    } else {
+      // 입력값이 없는 경우
+      setSignUpPasswordMessage('');
+      setIsPasswordValid(false);
+    }
+  };
+
+  const onChangePasswordConfirm = (e) => {
+    setSignUpForm({ ...signUpForm, passwordConfirm: e.target.value });
+
+    if (e.target.value) {
+      // 입력값 존재
+      if (e.target.value === signUpForm.password) {
+        setPasswordConfirmMessage('입력한 비밀번호와 일치합니다.');
+        setIsConfirmValid(true);
+      } else {
+        setPasswordConfirmMessage('입력한 비밀번호와 일치하지 않습니다.');
+        setIsConfirmValid(false);
+      }
+    } else {
+      // 입력값이 없는 경우
+      setPasswordConfirmMessage('');
+      setIsConfirmValid(false);
+    }
+  };
+
+  const onChangeNickname = (e) => {
+    const nameRegex = /[ \{\}\[\]\/?.,;:|\)*~`!^\-_+┼<>@\#$%&\'\"\\\(\=]/gi;
+    let check = true;
+
+    if (nameRegex.test(e.target.value)) {
+      alert('특수문자는 입력할 수 없습니다.');
+      check = false;
+    }
+
+    check && setSignUpForm({ ...signUpForm, nickname: e.target.value });
+  };
+
+  // 중복 확인
+  const doubleCheckEmail = (e) => {
+    e.preventDefault();
+
+    try {
+      axios
+        .get('DOUBLECHECK_EMAIL_URL', {
+          params: {
+            email: signUpForm.email
+          },
+          withCredentials: true
+        })
+        .then((res) => {
+          console.log(res);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const doubleCheckNickname = (e) => {
+    e.preventDefault();
+
+    try {
+      axios
+        .get('http://localhost:8080/user/regist/check', {
+          params: {
+            nickname: signUpForm.nickname
+          }
+        })
+        .then((res) => {
+          console.log(res);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    const signUpButton = document.getElementById('signUp');
+    const signInButton = document.getElementById('signIn');
+    const container = document.getElementById('container');
+
+    const OverlayContainer = document.getElementById('overlay-container');
+    const Overlay = document.getElementById('overlay');
+    const signInContainer = document.getElementById('sign-in-container');
+    const signUpContainer = document.getElementById('sign-up-container');
+
+    const signUpClickHandler = () => {
+      signInContainer.classList.add('right-panel-active');
+      signUpContainer.classList.add('right-panel-active');
+      OverlayContainer.classList.add('right-panel-active');
+      Overlay.classList.add('right-panel-active');
+    };
+
+    const signInClickHandler = () => {
+      signInContainer.classList.remove('right-panel-active');
+      signUpContainer.classList.remove('right-panel-active');
+      OverlayContainer.classList.remove('right-panel-active');
+      Overlay.classList.remove('right-panel-active');
+    };
+
+    signUpButton.addEventListener('click', signUpClickHandler);
+    signInButton.addEventListener('click', signInClickHandler);
+
+    return () => {
+      signUpButton.removeEventListener('click', signUpClickHandler);
+      signInButton.removeEventListener('click', signInClickHandler);
+    };
+  }, []);
+
+  return (
+    <Container id='container' style={{ margin: 'auto' }}>
+      <FormContainer className='sign-in-container' id='sign-in-container'>
+        <Form>
+          <H1>로그인</H1>
+          <Label htmlFor='email'>이메일</Label>
+          <div>{!isEmail ? signInEmailMessage : null}</div>
+          <Input
+            type='email'
+            value={signInForm.email}
+            onChange={onChangeEmail}
+          ></Input>
+          <Label htmlFor='password'>비밀번호</Label>
+          <Input type='password'></Input>
+          <A>비밀번호를 잊으셨나요?</A>
+          <Button>로그인</Button>
+        </Form>
+      </FormContainer>
+      <FormContainer className='sign-up-container' id='sign-up-container'>
+        <Form>
+          <H1>회원가입</H1>
+          <FormContent>
+            <Label htmlFor='profile-img'>프로필 사진</Label>
+            <Avatar
+              src={image}
+              style={{ margin: '20px' }}
+              size={200}
+              onClick={() => {
+                fileInput.current.click();
+              }}
+            ></Avatar>
+            <FileInput
+              type='file'
+              accept='image/jpg, image/png, image/jpeg'
+              name='profile_img'
+              onChange={onChange}
+              ref={fileInput}
+            ></FileInput>
+            <Label htmlFor='email'>
+              <div>이메일</div>
+              {isEmailValid ? (
+                <ValidMsg>{signUpEmailMessage}</ValidMsg>
+              ) : (
+                <InvalidMsg>{signUpEmailMessage}</InvalidMsg>
+              )}
+            </Label>
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+              <Input
+                type='email'
+                value={signUpForm.email}
+                onChange={onChangeEmailSignUp}
+              ></Input>
+              <DoubleCheck onClick={doubleCheckEmail}>중복 확인</DoubleCheck>
+            </div>
+            <Label htmlFor='password'>
+              <div>비밀번호</div>
+              {isPasswordValid ? (
+                <ValidMsg>{signUpPasswordMessage}</ValidMsg>
+              ) : (
+                <InvalidMsg>{signUpPasswordMessage}</InvalidMsg>
+              )}
+            </Label>
+            <Input
+              type='password'
+              value={signUpForm.password}
+              onChange={onChangeSignUpPassword}
+            ></Input>
+            <Label htmlFor='passwordConfirm'>
+              <div>비밀번호 확인</div>
+              {isConfirmValid ? (
+                <ValidMsg>{passwordConfirmMessage}</ValidMsg>
+              ) : (
+                <InvalidMsg>{passwordConfirmMessage}</InvalidMsg>
+              )}
+            </Label>
+            <Input
+              type='password'
+              value={signUpForm.passwordConfirm}
+              onChange={onChangePasswordConfirm}
+            ></Input>
+            <div
+              style={{
+                display: 'flex',
+                gap: '10px',
+                justifyContent: 'space-between',
+                alignItems: 'center'
+              }}
+            >
+              <SelectLabel htmlFor='region'>
+                <p style={{ width: '40px', lineHeight: '24px' }}>지역</p>
+                <Select
+                  name='region'
+                  value={signUpForm.region}
+                  onChange={(e) =>
+                    setSignUpForm({ ...signUpForm, region: e.target.value })
+                  }
+                >
+                  {regionList.map((item) => (
+                    <option value={item} key={item}>
+                      {item}
+                    </option>
+                  ))}
+                </Select>
+              </SelectLabel>
+              <SelectLabel htmlFor='cardinal-number'>
+                <p style={{ width: '40px', lineHeight: '24px' }}>기수</p>
+                <Select
+                  name='cardinal-number'
+                  value={signUpForm.cardinalNumber}
+                  onChange={(e) =>
+                    setSignUpForm({
+                      ...signUpForm,
+                      cardinalNumber: e.target.value
+                    })
+                  }
+                >
+                  {cardinalList.map((item) => (
+                    <option value={item} key={item}>
+                      {item}
+                    </option>
+                  ))}
+                </Select>
+              </SelectLabel>
+              <Label htmlFor='nickname'>
+                <p style={{ width: '70px', lineHeight: '24px' }}>닉네임</p>
+                <Input
+                  type='text'
+                  value={signUpForm.nickname}
+                  onChange={onChangeNickname}
+                ></Input>
+              </Label>
+              <DoubleCheck onClick={doubleCheckNickname}>중복 확인</DoubleCheck>
+            </div>
+          </FormContent>
+          <Button>회원 가입</Button>
+        </Form>
+      </FormContainer>
+      <OverlayContainer id='overlay-container'>
+        <Overlay id='overlay'>
+          <OverlayPanel className='overlay-left'>
+            <H1>회원이신가요?</H1>
+            <P>계정이 이미 있으시다면</P>
+            <Button id='signIn'>로그인</Button>
+          </OverlayPanel>
+          <OverlayPanel className='overlay-right'>
+            <H1>안녕하세요!</H1>
+            <P>처음이시라면 회원가입 후 필요한 물건을 구해보세요</P>
+            <Button id='signUp'>회원가입</Button>
+          </OverlayPanel>
+        </Overlay>
+      </OverlayContainer>
+    </Container>
+  );
+};
+
+export { LoginPage, SignInAndUpComponent };
