@@ -27,7 +27,7 @@ public class EmailConfig {
     @Value("${spring.mail.smtp.starttls.required}")
     private boolean starttls_required;
 
-    @Value("${spring.mail.smtp.socketFactory.fallback}")
+    @Value("${spring.mail.smtp.socketfactory.fallback}")
     private boolean fallback;
 
     @Value("${spring.mail.admin.id}")

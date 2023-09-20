@@ -1,6 +1,5 @@
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/navbar';
 import {
   LoginPage,
   SignInAndUpComponent
@@ -8,24 +7,9 @@ import {
 import { useRecoilValue } from 'recoil';
 import { isLoggedInAtom } from '../states/account/loginAtom';
 import axios from 'axios';
-import { Avatar } from 'antd';
 
 const loginPage = () => {
   const navigate = useNavigate();
-
-  const goMain = () => {
-    navigate('/');
-  };
-
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  const onEmailHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.currentTarget.value);
-  };
-  const onPasswordHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.currentTarget.value);
-  };
 
   // 로그인 버튼 눌렀을 때
   const onLoginHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
