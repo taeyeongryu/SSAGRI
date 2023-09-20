@@ -28,29 +28,25 @@ public class JwtUtil {
     private static long refreshExpireTime = hour; //리프레시 토큰 만료시간 3일
 
     //액세스 토큰 생성
-    public static ResponseEntity<String> createAccessToken(Long userNo) {
+    public static String createAccessToken(Long userNo) {
         Claims claims = Jwts.claims();
         claims.put("userNo", userNo); //payload
         claims.put("tokenType", "Access");
-        String token = tokenBuilder(claims);
+        String accessToken = tokenBuilder(claims);
 
-        log.info("[TOKEN]AT 확인 {}",token);
-        return ResponseEntity.ok()
-                .header("Access-Token", token)
-                .body("Access token has been created");
+        log.info("[TOKEN]AT 확인 {}",accessToken);
+        return accessToken;
     }
 
     //리프레시 토큰 생성
-    public static ResponseEntity<String> createRefreshToken(Long userNo) {
+    public static String createRefreshToken(Long userNo) {
         Claims claims = Jwts.claims();
         claims.put("userNo", userNo); //payload
         claims.put("tokenType", "Refresh");
-        String token = tokenBuilder(claims);
+        String refreshToken = tokenBuilder(claims);
 
-        log.info("[TOKEN]RT 확인 {}",token);
-        return ResponseEntity.ok()
-                .header("Refresh-Token", token)
-                .body("Refresh token has been created");
+        log.info("[TOKEN]RT 확인 {}",refreshToken);
+        return refreshToken;
     }
 
     //토큰 만드는 로직

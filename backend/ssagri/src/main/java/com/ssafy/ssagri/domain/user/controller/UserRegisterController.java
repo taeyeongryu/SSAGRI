@@ -27,17 +27,19 @@ public class UserRegisterController {
     }
 
     //닉네임 중복 확인
-    @GetMapping("/check")
+    @PostMapping("/check/nickname")
     public ResponseEntity<?> checkDuplicateNickname(@RequestParam("nickname")String nickname) throws CustomException {
         return userRegisterService.checkDuplicateNickname(nickname);
     }
 
     //이메일 중복 확인
+    @PostMapping("/check/email")
     public ResponseEntity<?> checkDuplicateEmail(@RequestParam("email")String email) throws CustomException {
         return userRegisterService.checkDuplicateEmail(email);
     }
 
     //인증번호 유효 검증(개발필요)
+    @PostMapping("/check/auth-number")
     public ResponseEntity<?> checkNumberIsCorrect(@RequestParam("email") String email) throws CustomException {
         return userRegisterService.checkNumberIsCorrect(email);
     }
