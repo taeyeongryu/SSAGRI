@@ -39,7 +39,7 @@ public class UsedProductService {
         //다시 수정해야 함
         //임시로 만들어 둔것
         //나중에 usedProductSaveRequest에 가지고 있는 userNo로 user 불러와야 함
-        User temporaryUser = User.builder().build();
+        User temporaryUser = null;
 //        User temporaryUser = userRepository.findById(Long.parseLong("3")).get();
 
         UsedProduct usedProductEntity = usedProductSaveRequest.toEntity(temporaryUser);
