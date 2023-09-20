@@ -3,7 +3,8 @@ import { styled } from 'styled-components';
 // Header 제외 중고거래 컴포넌트
 const TradeMainFrameDiv = styled.div`
   width: 1920px;
-  height: 1010px;
+  height: 900px;
+  margin-top: 50px;
   /* border: 2px solid black; */
   display: flex;
   justify-content: center;
@@ -200,7 +201,7 @@ const SearchInput01 = styled.input`
   height: 38px;
   border: 0;
   margin-left: 16px;
-  font-size: 20px;
+  font-size: 16px;
 `;
 
 const Search02 = styled.div`
@@ -209,7 +210,6 @@ const Search02 = styled.div`
   border: 1px solid #4786fa;
   border-radius: 20px;
   padding: 0px 30px 0px 0px;
-  margin-left: 12%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -242,6 +242,7 @@ const RecentProductDiv = styled.div`
 const RecentProductTitle = styled.div`
   width: 200px;
   height: 50px;
+  margin-bottom: 10px;
   font-size: 24px;
   font-weight: bold;
   text-align: center;
@@ -257,6 +258,7 @@ const PopularProductDiv = styled.div`
 const PopularProductTitle = styled.div`
   width: 200px;
   height: 50px;
+  margin-bottom: 10px;
   font-size: 24px;
   font-weight: bold;
   text-align: center;
@@ -265,7 +267,7 @@ const PopularProductTitle = styled.div`
 
 // -------------------- Product v01 -------------------------
 const ProductList01 = styled.div`
-  width: 900px;
+  width: 840px;
   height: 260px;
   /* border: 2px solid red; */
   display: flex;
@@ -283,6 +285,9 @@ const ProductStyle01 = styled.div`
   justify-content: center;
   align-items: center;
   box-shadow: 2px 2px 2px 1px #757575;
+  &:hover {
+    box-shadow: 2px 2px 3px 3px #757575;
+  }
 `;
 
 const ProductImgStyle01 = styled.img`
@@ -324,7 +329,7 @@ const SellerLocationAndTime01 = styled.div`
 
 // -------------------- Product v02 -------------------------
 const ProductList02 = styled.div`
-  width: 79.7%;
+  width: 840px;
   /* height: 100%; */
   /* border: 1px solid green; */
   display: flex;
@@ -334,7 +339,7 @@ const ProductList02 = styled.div`
 
 const ProductStyle02 = styled.div`
   width: 170px;
-  height: 230px;
+  height: 240px;
   border: 2px solid #4786fa;
   border-radius: 20px;
   margin: 10px 20px;
@@ -343,6 +348,9 @@ const ProductStyle02 = styled.div`
   justify-content: center;
   align-items: center;
   box-shadow: 2px 2px 2px 1px #757575;
+  &:hover {
+    box-shadow: 2px 2px 3px 3px #757575;
+  }
 `;
 
 const ProductImgStyle02 = styled.img`
@@ -401,6 +409,9 @@ const ProductStyle03 = styled.div`
   justify-content: center;
   align-items: center;
   box-shadow: 2px 2px 2px 1px #757575;
+  &:hover {
+    box-shadow: 2px 2px 3px 3px #757575;
+  }
 `;
 
 const ProductImgStyle03 = styled.img`
