@@ -5,7 +5,6 @@ import com.ssafy.ssagri.domain.message.dto.MessageRequest;
 import com.ssafy.ssagri.domain.message.dto.MessageResponse;
 import com.ssafy.ssagri.domain.message.service.MessageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
