@@ -22,7 +22,7 @@ public class UserRegisterController {
 
     //유저 회원가입 최종 등록
     @PostMapping("/")
-    public ResponseEntity<String> registUser(@RequestBody UserRegisterDTO userRegisterDTO) throws Exception {
+    public ResponseEntity<?> registUser(@RequestBody UserRegisterDTO userRegisterDTO) throws Exception {
         return userRegisterService.registUser(userRegisterDTO);
     }
 

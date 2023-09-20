@@ -1,6 +1,7 @@
 package com.ssafy.ssagri.domain.user.service;
 
 import com.ssafy.ssagri.domain.user.repository.UserRegistRepository;
+import com.ssafy.ssagri.dto.user.ResponseDTO;
 import com.ssafy.ssagri.dto.user.UserRegisterDTO;
 import com.ssafy.ssagri.entity.user.User;
 import com.ssafy.ssagri.util.exception.CustomException;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+import static com.ssafy.ssagri.util.ResponseStatusEnum.*;
 import static com.ssafy.ssagri.util.exception.CustomExceptionStatus.REGISTER_EMAIL_IS_DUPLICATE;
 import static com.ssafy.ssagri.util.exception.CustomExceptionStatus.REGISTER_NICKNAME_IS_DUPLICATE;
 
@@ -23,7 +25,7 @@ public class UserRegisterService {
     private final UserRegistRepository userRegistRepository;
 
     @Transactional
-    public ResponseEntity<String> registUser(UserRegisterDTO userRegisterDTO) throws Exception {
+    public ResponseEntity<ResponseDTO> registUser(UserRegisterDTO userRegisterDTO) throws Exception {
         userRegistRepository.save(
                 new User(userRegisterDTO.getEmail(),
                         userRegisterDTO.getPassword(),
@@ -33,22 +35,22 @@ public class UserRegisterService {
                         userRegisterDTO.getNumber()
                         )
         );
-        return ResponseEntity.status(HttpStatus.OK).body("등록 완료");
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(REGISTER_IS_OK.getCode(), REGISTER_IS_OK.getMessage()));
     }
 
     //닉네임 중복 확인 로직
-    public ResponseEntity<String> checkDuplicateNickname(String nickname) throws CustomException {
+    public ResponseEntity<ResponseDTO> checkDuplicateNickname(String nickname) throws CustomException {
         if (userRegistRepository.isNicknameExists(nickname)) {
             throw new CustomException(REGISTER_NICKNAME_IS_DUPLICATE);
         }
-        return ResponseEntity.status(HttpStatus.OK).body("닉네임이 유효합니다.");
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(REGISTER_NICKNAME_IS_OK.getCode(), REGISTER_NICKNAME_IS_OK.getMessage()));
     }
 
     public ResponseEntity<?> checkDuplicateEmail(String email) throws CustomException {
         if(userRegistRepository.isEmailExists(email)) {
             throw new CustomException(REGISTER_EMAIL_IS_DUPLICATE);
         }
-        return ResponseEntity.status(HttpStatus.OK).body("이메일이 유효합니다.");
+        return ResponseEntity.status(HttpStatus.OK).body(REGISTER_EMAIL_IS_OK);
     }
 
     public ResponseEntity<?> checkNumberIsCorrect(String email) {
@@ -64,4 +66,5 @@ public class UserRegisterService {
         //개발 필요
         return ResponseEntity.status(HttpStatus.OK).body("이미지 URI 등록 완료");
     }
+
 }
