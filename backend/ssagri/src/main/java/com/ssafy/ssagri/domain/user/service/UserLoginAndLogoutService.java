@@ -1,8 +1,9 @@
 package com.ssafy.ssagri.domain.user.service;
 
+import com.ssafy.ssagri.domain.redis.RedisService;
 import com.ssafy.ssagri.domain.user.repository.UserLoginAndLogoutRepository;
+import com.ssafy.ssagri.domain.redis.UserTokenRepository;
 import com.ssafy.ssagri.domain.user.repository.UserRegistRepository;
-import com.ssafy.ssagri.domain.user.repository.UserTokenRepository;
 import com.ssafy.ssagri.dto.user.ResponseDTO;
 import com.ssafy.ssagri.dto.user.UserLoginDTO;
 import com.ssafy.ssagri.entity.user.RefreshToken;
@@ -17,8 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
-import static com.ssafy.ssagri.util.ResponseStatusEnum.LOGIN_IS_OK;
-import static com.ssafy.ssagri.util.ResponseStatusEnum.REGISTER_NICKNAME_IS_OK;
+import static com.ssafy.ssagri.util.ResponseStatusEnum.*;
 import static com.ssafy.ssagri.util.exception.CustomExceptionStatus.*;
 
 @Service
@@ -27,10 +27,11 @@ import static com.ssafy.ssagri.util.exception.CustomExceptionStatus.*;
 public class UserLoginAndLogoutService {
 
     private final UserLoginAndLogoutRepository userLoginAndLogoutRepository;
+    private final RedisService redisService;
     private final UserTokenRepository userTokenRepository;
 
     /**
-     * 해당 메서드를 중심으로 하여 모듈화된 메서드들이 동작
+     * 로그인 : 해당 메서드를 중심으로 하여 모듈화된 메서드들이 동작
      * @param userLoginDTO
      * @return responseResult(and tokens at header)
      * @throws CustomException
@@ -97,5 +98,21 @@ public class UserLoginAndLogoutService {
         catch (Exception e) {
             throw new CustomException(LOGIN_GET_TOKEN_ERROR);
         }
+    }
+
+    public ResponseEntity<?> logoutUser(String accessToken) throws CustomException {
+        Long userNo;
+        try {
+            accessToken = accessToken.split(" ")[1]; //Bearer 제거
+            userNo = JwtUtil.getUserNo(accessToken);
+        } catch (Exception e) {
+            throw new CustomException(LOGOUT_TOKEN_ERR);
+        }
+        //here -> 저장 및 제거 로직 이상
+
+        //Redis에 저장된 Refresh Token 제거
+        redisService.deleteRefreshTokenByUserNo(userNo);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(LOGOUT_IS_OK.getCode(),LOGOUT_IS_OK.getMessage()));
     }
 }
