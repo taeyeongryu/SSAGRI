@@ -35,7 +35,7 @@ const P = styled.p`
 `;
 
 const A = styled.a`
-  color: #333;
+  color: #4786fa;
   font-size: 14px;
   text-decoration: none;
   margin: 15px 0;
@@ -69,6 +69,16 @@ const Button = styled.div`
 
 // 중복확인 버튼
 const DoubleCheck = styled.button`
+  width: 180px;
+  height: 42px;
+
+  border: none;
+  background-color: grey;
+  color: white;
+  letter-spacing: 0.5px;
+`;
+
+const Verify = styled.button`
   width: 180px;
   height: 42px;
 
@@ -262,6 +272,7 @@ const SignInAndUpComponent = () => {
       setProfile(e.target.files[0]);
     } else {
       // 업로드 취소할 시
+      setProfile(null);
       setImage(
         'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
       );
@@ -299,7 +310,7 @@ const SignInAndUpComponent = () => {
       setSignInEmailMessage('이메일의 형식이 올바르지 않습니다!');
       setIsEmail(false);
     } else {
-      setSignInEmailMessage('사용 가능한 이메일 입니다.');
+      setSignInEmailMessage('');
       setIsEmail(true);
     }
   };
@@ -406,48 +417,86 @@ const SignInAndUpComponent = () => {
     check && setSignUpForm({ ...signUpForm, nickname: e.target.value });
   };
 
-  // 중복 확인
+  // 이메일 중복확인
   const doubleCheckEmail = (e) => {
     e.preventDefault();
 
-    try {
-      axios
-        .get('DOUBLECHECK_EMAIL_URL', {
-          params: {
-            email: signUpForm.email
-          },
-          withCredentials: true
-        })
-        .then((res) => {
-          console.log(res);
-        });
-    } catch (error) {
-      console.log(error);
-    }
+    axios
+      .get('/user/regist/check/email', {
+        params: {
+          email: signUpForm.email
+        }
+      })
+      .then(() => {
+        // 이메일이 사용가능한 경우
+        setSignUpEmailMessage('사용 가능한 이메일입니다.');
+        setIsEmailValid(true);
+      })
+      .catch(() => {
+        // 이미 등록된 이메일인 경우
+        setSignUpEmailMessage('이미 등록된 이메일입니다.');
+        setIsEmailValid(false);
+      });
   };
 
-  const doubleCheckNickname = (e) => {
+  // 이메일 인증번호 전송
+  const sendEmail = (e) => {
     e.preventDefault();
 
-    try {
-      axios
-        .get('http://localhost:8080/user/regist/check', {
-          params: {
-            nickname: signUpForm.nickname
-          }
-        })
-        .then((res) => {
-          console.log(res);
-        });
-    } catch (error) {
-      console.log(error);
-    }
+    const data = {
+      email: signUpForm.email
+    };
+
+    axios
+      .post('/sendEmail', {
+        headers: { 'Content-Type': 'application/json' }
+      })
+      .then((res) => {
+        // 메일 전송 성공
+        console.log(res);
+      })
+      .catch((err) => {
+        // 메일 전송 실패
+        console.log(err);
+      });
+  };
+
+  // 닉네임 중복확인
+  const doubleCheckNickname = (e) => {
+    e.preventDefault();
+    axios
+      .get('/user/regist/check/nickname', {
+        params: {
+          nickname: signUpForm.nickname
+        }
+      })
+      .then(() => {
+        // 닉네임이 사용가능한 경우
+        setNicknameMessage('사용 가능한 닉네임입니다.');
+        setIsNicknameValid(true);
+      })
+      .catch(() => {
+        // 이미 등록된 닉네임인 경우
+        setNicknameMessage('사용중인 닉네임입니다.');
+        setIsNicknameValid(false);
+      });
   };
 
   const onSignUp = (e) => {
     e.preventDefault();
     const formData = new FormData();
+    // 프로필 사진 추가
     formData.append('profile', profile);
+    // 필드 입력값 추가
+    formData.append('email', signUpForm.email); // 이메일
+    formData.append('password', signUpForm.password); // 비밀번호
+    formData.append('regions', signUpForm.region); // 지역
+    formData.append('number', signUpForm.cardinalNumber); // 기수
+    formData.append('nickname', signUpForm.nickname); // 닉네임
+
+    for (let key of formData.keys()) {
+      console.log(`${key}: ${formData.get(key)}`);
+    }
 
     const config = {
       headers: {
@@ -493,22 +542,30 @@ const SignInAndUpComponent = () => {
 
   return (
     <Container id='container' style={{ margin: 'auto' }}>
+      {/* 로그인 폼*/}
       <FormContainer className='sign-in-container' id='sign-in-container'>
         <Form>
           <H1>로그인</H1>
-          <Label htmlFor='email'>이메일</Label>
-          <div>{!isEmail ? signInEmailMessage : null}</div>
-          <Input
-            type='email'
-            value={signInForm.email}
-            onChange={onChangeEmail}
-          ></Input>
-          <Label htmlFor='password'>비밀번호</Label>
-          <Input type='password'></Input>
-          <A>비밀번호를 잊으셨나요?</A>
+          <FormContent>
+            <Label htmlFor='email'>
+              이메일
+              <div style={{ color: 'red', fontSize: '12px' }}>
+                {!isEmail ? signInEmailMessage : null}
+              </div>
+            </Label>
+            <Input
+              type='email'
+              value={signInForm.email}
+              onChange={onChangeEmail}
+            ></Input>
+            <Label htmlFor='password'>비밀번호</Label>
+            <Input type='password'></Input>
+            <A>비밀번호를 잊으셨나요?</A>
+          </FormContent>
           <Button>로그인</Button>
         </Form>
       </FormContainer>
+      {/* 회원가입 폼*/}
       <FormContainer className='sign-up-container' id='sign-up-container'>
         <Form>
           <H1>회원가입</H1>
@@ -544,6 +601,7 @@ const SignInAndUpComponent = () => {
                 onChange={onChangeEmailSignUp}
               ></Input>
               <DoubleCheck onClick={doubleCheckEmail}>중복 확인</DoubleCheck>
+              <Verify onClick={sendEmail}>인증</Verify>
             </div>
             <Label htmlFor='password'>
               <div>비밀번호</div>
@@ -624,8 +682,17 @@ const SignInAndUpComponent = () => {
               </Label>
               <DoubleCheck onClick={doubleCheckNickname}>중복 확인</DoubleCheck>
             </div>
+            {isNicknameValid ? (
+              <ValidMsg style={{ textAlign: 'end' }}>
+                {nickNameMessage}
+              </ValidMsg>
+            ) : (
+              <InvalidMsg style={{ textAlign: 'end' }}>
+                {nickNameMessage}
+              </InvalidMsg>
+            )}
           </FormContent>
-          <Button onClick={OnSignUp}>회원 가입</Button>
+          <Button onClick={onSignUp}>회원 가입</Button>
         </Form>
       </FormContainer>
       <OverlayContainer id='overlay-container'>
