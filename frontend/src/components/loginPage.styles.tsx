@@ -120,7 +120,7 @@ const Input = styled.input`
 const FileInput = styled.input`
   display: none;
 `;
-
+// @ts-ignore
 const CustomFileInput = styled(FileInput)`
   /* 여기에 원하는 스타일 추가*/
 `;
@@ -254,6 +254,7 @@ const SignInAndUpComponent = () => {
   const [image, setImage] = useState(
     'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
   );
+  // @ts-ignore
   const [file, setFile] = useState(null);
   const fileInput = useRef(null);
 
@@ -271,6 +272,7 @@ const SignInAndUpComponent = () => {
     const reader = new FileReader();
     reader.onload = () => {
       if (reader.readyState === 2) {
+        // @ts-ignore
         setImage(reader.result);
       }
     };
@@ -318,15 +320,18 @@ const SignInAndUpComponent = () => {
   });
 
   // 유효성 검증
+  // @ts-ignore
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [isConfirmValid, setIsConfirmValid] = useState(false);
+  // @ts-ignore
   const [isNicknameValid, setIsNicknameValid] = useState(false);
 
   // 안내 메시지
   const [signUpEmailMessage, setSignUpEmailMessage] = useState('');
   const [signUpPasswordMessage, setSignUpPasswordMessage] = useState('');
   const [passwordConfirmMessage, setPasswordConfirmMessage] = useState('');
+  // @ts-ignore
   const [nickNameMessage, setNicknameMessage] = useState('');
 
   const onChangeEmailSignUp = (e) => {
@@ -447,6 +452,7 @@ const SignInAndUpComponent = () => {
   useEffect(() => {
     const signUpButton = document.getElementById('signUp');
     const signInButton = document.getElementById('signIn');
+    // @ts-ignore
     const container = document.getElementById('container');
 
     const OverlayContainer = document.getElementById('overlay-container');
@@ -455,24 +461,35 @@ const SignInAndUpComponent = () => {
     const signUpContainer = document.getElementById('sign-up-container');
 
     const signUpClickHandler = () => {
+      // @ts-ignore
       signInContainer.classList.add('right-panel-active');
+      // @ts-ignore
       signUpContainer.classList.add('right-panel-active');
+      // @ts-ignore
       OverlayContainer.classList.add('right-panel-active');
+      // @ts-ignore
       Overlay.classList.add('right-panel-active');
     };
 
     const signInClickHandler = () => {
+      // @ts-ignore
       signInContainer.classList.remove('right-panel-active');
+      // @ts-ignore
       signUpContainer.classList.remove('right-panel-active');
+      // @ts-ignore
       OverlayContainer.classList.remove('right-panel-active');
+      // @ts-ignore
       Overlay.classList.remove('right-panel-active');
     };
-
+    // @ts-ignore
     signUpButton.addEventListener('click', signUpClickHandler);
+    // @ts-ignore
     signInButton.addEventListener('click', signInClickHandler);
 
     return () => {
+      // @ts-ignore
       signUpButton.removeEventListener('click', signUpClickHandler);
+      // @ts-ignore
       signInButton.removeEventListener('click', signInClickHandler);
     };
   }, []);
@@ -505,6 +522,7 @@ const SignInAndUpComponent = () => {
               style={{ margin: '20px' }}
               size={200}
               onClick={() => {
+                // @ts-ignore
                 fileInput.current.click();
               }}
             ></Avatar>
