@@ -1,5 +1,6 @@
 package com.ssafy.ssagri.entity.chat;
 
+import com.ssafy.ssagri.domain.message.dto.MessageResponse;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
@@ -15,16 +16,31 @@ import java.time.LocalDateTime;
 public class Message {
     @Id
     private String id;
-    private Long roomId;
-    private Long userId;
+    private Long roomNo;
+    private Long senderNo;
+    private Long receiverNo;
     private String content;
     private LocalDateTime time;
+
     @Builder
-    public Message(String id, Long roomId, Long userId, String content, LocalDateTime time) {
+    public Message(String id, Long roomNo, Long senderNo, Long receiverNo, String content, LocalDateTime time) {
         this.id = id;
-        this.roomId = roomId;
-        this.userId = userId;
+        this.roomNo = roomNo;
+        this.senderNo = senderNo;
+        this.receiverNo = receiverNo;
         this.content = content;
         this.time = time;
+    }
+
+
+    public MessageResponse toResponse(){
+        MessageResponse messageResponse = MessageResponse.builder()
+                .chatRoomNo(roomNo)
+                .senderNo(senderNo)
+                .receiverNo(receiverNo)
+                .content(content)
+                .time(time)
+                .build();
+        return messageResponse;
     }
 }
