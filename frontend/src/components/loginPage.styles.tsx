@@ -448,7 +448,7 @@ const SignInAndUpComponent = () => {
   // 이메일 인증번호 전송
   const sendEmail = (e) => {
     e.preventDefault();
-
+    // @ts-ignore
     const data = {
       email: signUpForm.email
     };
@@ -508,6 +508,7 @@ const SignInAndUpComponent = () => {
     e.preventDefault();
     const formData = new FormData();
     // 프로필 사진 추가
+    // @ts-ignore
     formData.append('profile', profile);
     // 필드 입력값 추가
     formData.append('email', signUpForm.email); // 이메일
