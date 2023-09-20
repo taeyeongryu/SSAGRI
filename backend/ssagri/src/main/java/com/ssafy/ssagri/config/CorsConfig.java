@@ -2,6 +2,7 @@ package com.ssafy.ssagri.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -23,12 +24,13 @@ public class CorsConfig {
 
 
     @Bean
+    @Primary
     public CorsConfigurationSource configurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
 
         //corsConfigure 설정
-        corsConfiguration.setAllowCredentials(false); //CORS 자격 증명 요청
+        corsConfiguration.setAllowCredentials(true); //CORS 자격 증명 요청
         corsConfiguration.setAllowedOrigins(allowedSite); //해당 페이지 요청 허용
         corsConfiguration.setAllowedHeaders(allowedHeader);
         corsConfiguration.setExposedHeaders(allowedExposeHeader);
