@@ -20,12 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/user")
 public class UserLoginAndLogoutController {
 
-    private final UserRegisterService userRegisterService;
     private final UserLoginAndLogoutService userLoginAndLogoutService;
 
     //로그인
     @PostMapping("/login/")
-    public ResponseEntity<String> loginUser(@RequestBody UserLoginDTO userLoginDTO) {
+    public ResponseEntity<?> loginUser(@RequestBody UserLoginDTO userLoginDTO) {
         return userLoginAndLogoutService.loginUser(userLoginDTO);
     }
 

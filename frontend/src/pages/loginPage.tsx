@@ -9,20 +9,25 @@ import { isLoggedInAtom } from '../states/account/loginAtom';
 import axios from 'axios';
 
 const loginPage = () => {
+  // @ts-ignore
   const navigate = useNavigate();
 
   // 로그인 버튼 눌렀을 때
+  // @ts-ignore
   const onLoginHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
     // 버튼 누르면 새로고침 되는것을 막아줌
     event.preventDefault();
 
     console.log('로그인 정보');
+    // @ts-ignore
     console.log('이메일: ', email);
+    // @ts-ignore
     console.log('비밀번호: ', password);
     // onLogin(email, password)
   };
 
   // 로그인 여부
+  // @ts-ignore
   const isLoggedIn = useRecoilValue(isLoggedInAtom);
 
   const JWT_EXPIRY_TIME = 24 * 3600 * 1000; // 만료 시간 (24시간)
@@ -72,8 +77,10 @@ const loginPage = () => {
   };
 
   // 회원가입 요청 api
+  // @ts-ignore
   const onSignUp = () => {
     try {
+      // @ts-ignore
       const response = axios.post('url', signUpForm);
       console.log(response);
     } catch (error) {
@@ -82,21 +89,24 @@ const loginPage = () => {
   };
 
   // 회원가입 버튼 눌렀을때
+  // @ts-ignore
   const onSignUpHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     // 회원가입 데이터 정보 확인
     console.log('회원가입 정보');
     console.log('프로필 사진: ', file);
+    // @ts-ignore
     console.log(signUpForm);
   };
-
+  // @ts-ignore
   const [image, setImage] = useState(
     'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
   );
   const [file, setFile] = useState(null);
+  // @ts-ignore
   const fileInput = useRef(null);
-
+  // @ts-ignore
   const onChange = (e) => {
     if (e.target.files[0]) {
       setFile(e.target.files[0]);
@@ -111,6 +121,7 @@ const loginPage = () => {
     const reader = new FileReader();
     reader.onload = () => {
       if (reader.readyState === 2) {
+        // @ts-ignore
         setImage(reader.result);
       }
     };

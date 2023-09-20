@@ -50,7 +50,7 @@ public class UserRegisterService {
         if(userRegistRepository.isEmailExists(email)) {
             throw new CustomException(REGISTER_EMAIL_IS_DUPLICATE);
         }
-        return ResponseEntity.status(HttpStatus.OK).body(REGISTER_EMAIL_IS_OK);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(REGISTER_EMAIL_IS_OK.getCode(), REGISTER_IS_OK.getMessage()));
     }
 
     public ResponseEntity<?> checkNumberIsCorrect(String email) {
