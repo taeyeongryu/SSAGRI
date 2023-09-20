@@ -13,9 +13,12 @@ public enum CustomExceptionStatus {
 
     //Register = 1xxx
     REGISTER_NICKNAME_IS_DUPLICATE(-1000, "유저 닉네임이 중복됩니다."),
-    REGISTER_EMAIL_IS_DUPLICATE(-1001, "이메일이 중복됩니다.");
+    REGISTER_EMAIL_IS_DUPLICATE(-1001, "이메일이 중복됩니다."),
 
+    //LOGIN = 11xx
+    LOGIN_HAVE_NO_ACCOUT(-1101, "일치하는 계정이 없습니다."),
 
+    ;
     private final int code;
     private final String message;
 

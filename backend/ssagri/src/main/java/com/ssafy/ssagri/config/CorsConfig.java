@@ -2,6 +2,7 @@ package com.ssafy.ssagri.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -21,14 +22,15 @@ public class CorsConfig {
     private List<String> allowedHeader = List.of("*"); //허용되는 헤더
     private List<String> allowedExposeHeader = List.of("*"); //서버가 클라이언트에게 응답할 때 브라우저에서 노출되어야 하는 헤더(응답 헤더)를 지정
 
-
+    
     @Bean
+    @Primary
     public CorsConfigurationSource configurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
 
         //corsConfigure 설정
-        corsConfiguration.setAllowCredentials(false); //CORS 자격 증명 요청
+        corsConfiguration.setAllowCredentials(true); //CORS 자격 증명 요청
         corsConfiguration.setAllowedOrigins(allowedSite); //해당 페이지 요청 허용
         corsConfiguration.setAllowedHeaders(allowedHeader);
         corsConfiguration.setExposedHeaders(allowedExposeHeader);

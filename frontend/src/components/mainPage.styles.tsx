@@ -195,7 +195,7 @@ const Pages1_Right = styled.div`
   transform: rotate(0deg); /* 초기 회전 각도 */
   transition: transform 0.2s ease;
 `;
-
+// @ts-ignore
 const Pages1_img1 = styled.img`
   position: absolute;
   top: 0;
@@ -901,6 +901,7 @@ const PageSlide = () => {
     top: 215,
     left: 21
   });
+  // @ts-ignore
   const [arrow, setArrow] = useState(1);
   const [fadepages1Tag2, setFadepages1Tag2] = useState(100);
   const [fadepages2Tag1, setFadepages2Tag1] = useState(0);
@@ -964,10 +965,15 @@ const PageSlide = () => {
       const pages2Tag2Element = document.querySelector('.Pages2_tag2');
       const pages3Tag1Element = document.querySelector('.Pages3_tag1');
       const pages3Tag2Element = document.querySelector('.Pages3_tag2');
+      // @ts-ignore
       const pages1Tag2Rect = pages1Tag2Element.getBoundingClientRect();
+      // @ts-ignore
       const pages2Tag1Rect = pages2Tag1Element.getBoundingClientRect();
+      // @ts-ignore
       const pages2Tag2Rect = pages2Tag2Element.getBoundingClientRect();
+      // @ts-ignore
       const pages3Tag1Rect = pages3Tag1Element.getBoundingClientRect();
+      // @ts-ignore
       const pages3Tag2Rect = pages3Tag2Element.getBoundingClientRect();
       // console.log('Pages1_tag3 위치:', pages2Tag2Rect.left, evt.deltaY);
       on_indicator(pages1Tag2Rect.left);
@@ -1106,16 +1112,17 @@ const PageSlide = () => {
       }
       // 회전 로직
       //초기상태
+      // @ts-ignore
       if (evt.deltaY < 0 && scrollContainer.scrollLeft == 0) {
         rotation.current = 0;
       }
       // console.log( size.width);
-
+      // @ts-ignore
       if (scrollContainer.scrollLeft > 0 && scrollContainer.scrollLeft < 1650) {
         if (evt.deltaY > 0) {
           // 이미지 반시계 회전
           //이미지 크기 변경
-
+          // @ts-ignore
           if (scrollContainer.scrollLeft < 300) {
             rotation.current = rotation.current - 1;
             size.current = {
@@ -1124,6 +1131,7 @@ const PageSlide = () => {
               top: size.current.top,
               left: size.current.left - 20
             };
+            // @ts-ignore
           } else if (scrollContainer.scrollLeft < 650) {
             rotation.current = rotation.current - 10;
             size.current = {
@@ -1138,6 +1146,7 @@ const PageSlide = () => {
               top: size.current.top <= -60 ? -60 : size.current.top - 20,
               left: size.current.left >= 100 ? 100 : size.current.left + 20
             };
+            // @ts-ignore
           } else if (scrollContainer.scrollLeft < 1659) {
             rotation.current =
               rotation.current < -125 ? -125 : rotation.current - 13;
@@ -1152,6 +1161,7 @@ const PageSlide = () => {
           }
         } else {
           // //이미지 크기 변경
+          // @ts-ignore
           if (scrollContainer.scrollLeft < 300) {
             rotation.current = rotation.current > 0 ? 0 : rotation.current + 1;
 
@@ -1161,6 +1171,7 @@ const PageSlide = () => {
               top: size.current.top,
               left: size.current.left + 20
             };
+            // @ts-ignore
           } else if (scrollContainer.scrollLeft < 650) {
             rotation.current = rotation.current > 0 ? 0 : rotation.current + 10;
             size.current = {
@@ -1170,6 +1181,7 @@ const PageSlide = () => {
               top: size.current.top + 10,
               left: size.current.left - 20
             };
+            // @ts-ignore
           } else if (scrollContainer.scrollLeft < 2059) {
             rotation.current = rotation.current + 13;
 
