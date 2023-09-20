@@ -195,8 +195,7 @@ const ItemCurrent2 = styled.div`
 const AuctionItme = () => {
   const navigate = useNavigate();
   const goAuctionDetail = () => {
-    console.log('asdsad');
-    navigate('/login');
+    navigate('/auctionDetail');
   };
 
   return (
@@ -218,6 +217,10 @@ const AuctionItme = () => {
 };
 
 const AuctionPage = () => {
+  const navigate = useNavigate();
+  const goAuctionCreate = () => {
+    navigate('/auctionCreate');
+  };
   return (
     <AuctionDiv>
       <AuctionBody>
@@ -239,7 +242,9 @@ const AuctionPage = () => {
             <AuctionItme></AuctionItme>
             <AuctionItme></AuctionItme>
           </AuctionList>
-          <AuctionCreateBtn>경매 등록</AuctionCreateBtn>
+          <AuctionCreateBtn onClick={goAuctionCreate}>
+            경매 등록
+          </AuctionCreateBtn>
           <AuctionTag4>
             <BottomPageSpace></BottomPageSpace>
           </AuctionTag4>
