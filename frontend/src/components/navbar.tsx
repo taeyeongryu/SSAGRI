@@ -6,7 +6,7 @@ const NavbarDiv = styled.div`
   top: 0;
   left: 0;
   width: 100vw;
-  height: 7vh;
+  height: 60px;
   /* border-top: 2px solid black; */
   /* border-bottom: 2px solid black; */
   display: flex;
@@ -19,10 +19,11 @@ const NavbarDiv = styled.div`
 const MenuDiv = styled.div`
   width: 50vw;
   height: 7vh;
+  margin-top: 5px;
   /* border: 2px solid red; */
   display: flex;
   /* line-height: 4vh; */
-  align-items: center;
+  /* align-items: center; */
 `;
 
 const MenuName = styled.p`
@@ -41,7 +42,7 @@ const MenuName = styled.p`
 const TitleTag = styled.div`
   width: 80px;
   height: 30px;
-  /* margin-top: -40px; */
+  margin-top: 4px;
   margin-left: 17px;
 `;
 

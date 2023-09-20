@@ -11,10 +11,101 @@ const Scrollbar = styled.div`
   position: absolute;
   margin: 90vh 25vw;
   width: 50vw;
-  height: 10px;
-  border: 2px solid black;
+  height: 6px;
+  border: 1px solid rgb(73, 147, 250, 0.7);
+  border-radius: 1px;
   z-index: 20;
 `;
+
+const Scroller = styled.div`
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background: rgba(23, 206, 219, 1);
+  clip-path: polygon(0% 0%, 10px 0%, 10px 100%, 0% 100%);
+  transition: all 0.2s;
+`;
+
+const ScrollTagDiv = styled.div`
+  display: flex;
+  position: absolute;
+  top: -25px;
+  color: rgb(0, 0, 0, 0.5);
+`;
+const ScrollTag = (scrollposition) => {
+  return (
+    <ScrollTagDiv>
+      {/* <span style={HomeStyle}>Home</span> */}
+      <span
+        style={{
+          marginRight: '90px',
+          color:
+            scrollposition.scrollposition === 1
+              ? 'orange'
+              : 'rgba(0, 0, 0, 0.5)'
+        }}
+      >
+        Home
+      </span>
+      <span
+        style={{
+          marginRight: '100px',
+          color:
+            scrollposition.scrollposition === 2
+              ? 'orange'
+              : 'rgba(0, 0, 0, 0.5)'
+        }}
+      >
+        about
+      </span>
+      <span
+        style={{
+          marginRight: '125px',
+          color:
+            scrollposition.scrollposition === 3
+              ? 'orange'
+              : 'rgba(0, 0, 0, 0.5)'
+        }}
+      >
+        중고거래
+      </span>
+      <span
+        style={{
+          marginRight: '155px',
+          color:
+            scrollposition.scrollposition === 4
+              ? 'orange'
+              : 'rgba(0, 0, 0, 0.5)'
+        }}
+      >
+        경매
+      </span>
+      <span
+        style={{
+          marginRight: '100px',
+          color:
+            scrollposition.scrollposition === 5
+              ? 'orange'
+              : 'rgba(0, 0, 0, 0.5)'
+        }}
+      >
+        커뮤니티
+      </span>
+      <span
+        style={{
+          color:
+            scrollposition.scrollposition === 6
+              ? 'orange'
+              : 'rgba(0, 0, 0, 0.5)'
+        }}
+      >
+        Service
+      </span>
+    </ScrollTagDiv>
+  );
+};
 
 const Page = styled.div`
   display: flex;
@@ -556,14 +647,14 @@ const CommuDiv = styled.div`
   margin-left: 400px;
   width: 1400px;
   height: 900px;
-  border: 2px solid red;
+  /* border: 2px solid red; */
 `;
 
 const NameTag2 = styled.p`
   text-align: center;
   margin: 0 auto;
 
-  border: 2px solid red;
+  /* border: 2px solid red; */
   margin-top: 150px;
   font-size: 70px;
   width: 400px;
@@ -818,10 +909,51 @@ const PageSlide = () => {
   const [fadepages3Tag2, setFadepages3Tag2] = useState(0);
   const [backgroundPositionX, setBackgroundPositionX] = useState(-190);
 
+  const scrollposition = useRef(0);
+
   useEffect(() => {
     // 컴포넌트가 마운트될 때 실행되는 코드
     const scrollContainer: HTMLElement | null =
       document.querySelector('.page-container');
+
+    // 스크롤바 계산
+    const indi_bar = document.getElementById('indi_bar');
+    let pct = 0;
+    let s_pos = 0;
+    // const win_wid = window.innerWidth;
+    let s_move_max = 11000; // 슬라이드 전체길이
+
+    // 스크롤바 게이지
+
+    const on_indicator = (moving) => {
+      s_pos = moving;
+      if (s_pos > 200) {
+        s_pos = 180;
+      } else if (s_pos > 100) {
+        s_pos = 360;
+      } else if (s_pos < 0) {
+        s_pos = 360 - moving;
+      }
+
+      if (s_pos <= 1500) {
+        scrollposition.current = 1;
+      } else if (s_pos <= 3100) {
+        scrollposition.current = 2;
+      } else if (s_pos <= 5200) {
+        scrollposition.current = 3;
+      } else if (s_pos <= 7500) {
+        scrollposition.current = 4;
+      } else if (s_pos <= 9300) {
+        scrollposition.current = 5;
+      } else if (s_pos <= 11000) {
+        scrollposition.current = 6;
+      }
+      console.log(s_pos);
+      pct = (s_pos * 100) / s_move_max;
+      indi_bar.style.clipPath = `
+      polygon(0% 0%, ${pct}% 0%, ${pct}% 100%, 0% 100%)
+      `;
+    };
 
     const handleWheelScroll = (evt: WheelEvent) => {
       evt.preventDefault();
@@ -838,6 +970,7 @@ const PageSlide = () => {
       const pages3Tag1Rect = pages3Tag1Element.getBoundingClientRect();
       const pages3Tag2Rect = pages3Tag2Element.getBoundingClientRect();
       // console.log('Pages1_tag3 위치:', pages2Tag2Rect.left, evt.deltaY);
+      on_indicator(pages1Tag2Rect.left);
 
       if (evt.deltaY > 0) {
         if (pages1Tag2Rect.left >= 300) {
@@ -890,8 +1023,6 @@ const PageSlide = () => {
         } else if (pages3Tag2Rect.left <= 1900) {
           setFadepages3Tag2(100);
         }
-
-        console.log(pages2Tag2Rect.left);
       } else if (evt.deltaY < 0) {
         if (pages1Tag2Rect.left >= 0) {
           setFadepages1Tag2(100);
@@ -1068,7 +1199,10 @@ const PageSlide = () => {
 
   return (
     <Page className='page-container'>
-      <Scrollbar></Scrollbar>
+      <Scrollbar>
+        <ScrollTag scrollposition={scrollposition.current}></ScrollTag>
+        <Scroller id='indi_bar'></Scroller>
+      </Scrollbar>
       <PagesSection1>
         <Pages1>
           <Pages1_Left
