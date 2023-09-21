@@ -17,7 +17,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+
+import java.io.IOException;
 
 import static com.ssafy.ssagri.util.ResponseStatusEnum.*;
 import static com.ssafy.ssagri.util.exception.CustomExceptionStatus.*;
@@ -103,14 +106,20 @@ public class UserLoginAndLogoutService {
         }
     }
 
-    public ResponseEntity<?> logoutUser(HttpServletRequest httpServletRequest) throws CustomException {
+    public ResponseEntity<?> logoutUser(HttpServletRequest request) throws CustomException {
         Long userNo;
         String accessToken;
+        String rawToken = request.getHeader(HttpHeaders.AUTHORIZATION);
+
+        if(rawToken == null || !rawToken.startsWith("Bearer ")) throw new CustomException(LOGOUT_TOKEN_ERR);
+        else {
+            accessToken = rawToken.split(" ")[1]; //Bearer 제거
+        }
+
         try {
-            accessToken = JwtUtil.parseRawHeaderToken(httpServletRequest);
             userNo = JwtUtil.getUserNo(accessToken);
         } catch (Exception e) {
-            throw new CustomException(LOGOUT_TOKEN_ERR);
+            throw new CustomException(JWT_TOKEN_INVALID);
         }
 
         //Redis에 저장된 Refresh Token 제거
