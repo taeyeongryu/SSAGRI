@@ -12,6 +12,8 @@ import TradeDetailPage from './pages/tradeDetailPage';
 import ChattingPage from './pages/chattingPage';
 import CommunityPage from './pages/communityPage';
 import AuctionPage from './pages/auctionPage';
+import AuctionDetailPage from './pages/auctionDetailPage';
+import AuctionCreatePage from './pages/auctionCreatePage';
 import Navbar from './components/navbar';
 
 const App = () => {
@@ -34,9 +36,13 @@ const App = () => {
         {/* 중고거래 상세 페이지 */}
         <Route path='/tradeDetail' element={<TradeDetailPage />} />
         {/* 중고거래 상세 페이지 */}
-        <Route path='/chatting' element={<ChattingPage />} />
+        <Route path='/chat' element={<ChattingPage />} />
         {/* 경매 페이지 */}
         <Route path='/auction' element={<AuctionPage />} />
+        {/* 경매 생성 페이지 */}
+        <Route path='/auctionCreate' element={<AuctionCreatePage />} />
+        {/* 경매 상세 페이지 */}
+        <Route path='/auctionDetail' element={<AuctionDetailPage />} />
         {/* 커뮤티니 페이지 */}
         <Route path='/community' element={<CommunityPage />} />
       </Routes>

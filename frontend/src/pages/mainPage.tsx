@@ -8,9 +8,17 @@ const mainPage = () => {
     const { clientX, clientY } = event;
     setCirclePosition({ x: clientX, y: clientY });
   };
+  const handleScrollWithDelay = () => {
+    // 스크롤 이동 코드를 0.5초의 딜레이와 함께 실행
+    setTimeout(() => {
+      window.scrollTo({ top: 1000, left: 2000, behavior: 'smooth' });
+    }, 500); // 0.5초 (500 밀리초) 딜레이
+  };
 
   useEffect(() => {
     window.addEventListener('mousemove', handleMouseMove);
+    // window.scrollTo({top: -1000, left: -2000, behavior: "smooth"});
+    handleScrollWithDelay();
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);

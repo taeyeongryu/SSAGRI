@@ -1,7 +1,6 @@
 package com.ssafy.ssagri.entity.user;
 
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -41,20 +40,15 @@ public class User {
     @Column(name = "user_region",nullable = false)
     private Region region;
 
-
     //기수
     @Column(name = "user_number",nullable = false)
     private int number;
 
-    @Builder
-    public User(Long no, String email, String password, String nickname, int temper, String profile, int point, Region region, int number) {
-        this.no = no;
+    public User(String email, String password, String nickname, String profile, Region region, int number) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
-        this.temper = temper;
         this.profile = profile;
-        this.point = point;
         this.region = region;
         this.number = number;
     }

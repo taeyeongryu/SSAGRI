@@ -9,12 +9,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <div id="chat">
     <div id="messages"></div>
-    <textarea id="messageInput"></textarea>
+    <input type="number" id="chatRoomNo" placeholder="Chat Room No">
+    <input type="number" id="senderNo" placeholder="Sender No">
+    <input type="number" id="receiverNo" placeholder="Receiver No">
+    <textarea id="messageInput" placeholder="Message"></textarea>
     <button onclick="sendMessage()">Send</button>
 </div>
 
 <script>
-    let socket = new SockJS('http://localhost:8080/ws');
+    let socket = new SockJS('http://localhost:5000/ws');
     let stompClient = Stomp.over(socket);
 
     stompClient.connect({}, function(frame) {
@@ -25,12 +28,21 @@
     });
 
     function sendMessage() {
-        let messageInput = document.getElementById('messageInput');
-        stompClient.send("/pub/chat/room/1", {}, JSON.stringify({
-            content: messageInput.value
-            // 추가적인 메시지 정보 (예: sender, timestamp 등)는 여기에 추가할 수 있습니다.
-        }));
-        messageInput.value = '';
+        let chatRoomNo = document.getElementById('chatRoomNo').value;
+        let senderNo = document.getElementById('senderNo').value;
+        let receiverNo = document.getElementById('receiverNo').value;
+        let content = document.getElementById('messageInput').value;
+
+        let messageRequest = {
+            chatRoomNo: chatRoomNo,
+            senderNo: senderNo,
+            receiverNo: receiverNo,
+            content: content
+        };
+
+        // "/chat/room/{roomId}" 이 URL 구조에 따라 메시지를 보냅니다.
+        stompClient.send("/pub/chat/room/1" , {}, JSON.stringify(messageRequest));
+        document.getElementById('messageInput').value = '';
     }
 
     function showMessageOutput(messageOutput) {

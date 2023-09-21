@@ -3,7 +3,8 @@ import { styled } from 'styled-components';
 // Header 제외 중고거래 컴포넌트
 const TradeMainFrameDiv = styled.div`
   width: 1920px;
-  height: 1010px;
+  height: 900px;
+  margin: 50px auto 0;
   /* border: 2px solid black; */
   display: flex;
   justify-content: center;
@@ -35,6 +36,7 @@ const TradeMain = () => {
 const TradeMainMapDiv = styled.div`
   width: 400px;
   height: 700px;
+  position: relative;
   /* border: 2px solid green; */
 `;
 
@@ -49,8 +51,8 @@ const Seoul = styled.div`
   text-align: center;
   line-height: 50px;
   position: absolute;
-  top: 270px;
-  left: 400px;
+  top: 110px;
+  left: 110px;
   box-shadow: 2px 2px 2px 1px #383838;
 
   &:hover {
@@ -68,8 +70,8 @@ const Dajeon = styled.div`
   text-align: center;
   line-height: 50px;
   position: absolute;
-  top: 450px;
-  left: 420px;
+  top: 290px;
+  left: 130px;
   box-shadow: 2px 2px 2px 1px #383838;
 
   &:hover {
@@ -87,8 +89,8 @@ const Gumi = styled.div`
   text-align: center;
   line-height: 50px;
   position: absolute;
-  top: 470px;
-  left: 530px;
+  top: 310px;
+  left: 240px;
   box-shadow: 2px 2px 2px 1px #383838;
 
   &:hover {
@@ -106,8 +108,8 @@ const Gwangju = styled.div`
   text-align: center;
   line-height: 50px;
   position: absolute;
-  top: 640px;
-  left: 340px;
+  top: 480px;
+  left: 50px;
   box-shadow: 2px 2px 2px 1px #383838;
 
   &:hover {
@@ -125,8 +127,8 @@ const Buwoolkyung = styled.div`
   text-align: center;
   line-height: 50px;
   position: absolute;
-  top: 620px;
-  left: 570px;
+  top: 460px;
+  left: 280px;
   box-shadow: 2px 2px 2px 1px #383838;
 
   &:hover {
@@ -200,7 +202,7 @@ const SearchInput01 = styled.input`
   height: 38px;
   border: 0;
   margin-left: 16px;
-  font-size: 20px;
+  font-size: 16px;
 `;
 
 const Search02 = styled.div`
@@ -209,7 +211,6 @@ const Search02 = styled.div`
   border: 1px solid #4786fa;
   border-radius: 20px;
   padding: 0px 30px 0px 0px;
-  margin-left: 12%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -242,6 +243,7 @@ const RecentProductDiv = styled.div`
 const RecentProductTitle = styled.div`
   width: 200px;
   height: 50px;
+  margin-bottom: 10px;
   font-size: 24px;
   font-weight: bold;
   text-align: center;
@@ -257,6 +259,7 @@ const PopularProductDiv = styled.div`
 const PopularProductTitle = styled.div`
   width: 200px;
   height: 50px;
+  margin-bottom: 10px;
   font-size: 24px;
   font-weight: bold;
   text-align: center;
@@ -265,7 +268,7 @@ const PopularProductTitle = styled.div`
 
 // -------------------- Product v01 -------------------------
 const ProductList01 = styled.div`
-  width: 900px;
+  width: 840px;
   height: 260px;
   /* border: 2px solid red; */
   display: flex;
@@ -283,6 +286,9 @@ const ProductStyle01 = styled.div`
   justify-content: center;
   align-items: center;
   box-shadow: 2px 2px 2px 1px #757575;
+  &:hover {
+    box-shadow: 2px 2px 3px 3px #757575;
+  }
 `;
 
 const ProductImgStyle01 = styled.img`
@@ -324,7 +330,7 @@ const SellerLocationAndTime01 = styled.div`
 
 // -------------------- Product v02 -------------------------
 const ProductList02 = styled.div`
-  width: 79.7%;
+  width: 840px;
   /* height: 100%; */
   /* border: 1px solid green; */
   display: flex;
@@ -334,7 +340,7 @@ const ProductList02 = styled.div`
 
 const ProductStyle02 = styled.div`
   width: 170px;
-  height: 230px;
+  height: 240px;
   border: 2px solid #4786fa;
   border-radius: 20px;
   margin: 10px 20px;
@@ -343,6 +349,9 @@ const ProductStyle02 = styled.div`
   justify-content: center;
   align-items: center;
   box-shadow: 2px 2px 2px 1px #757575;
+  &:hover {
+    box-shadow: 2px 2px 3px 3px #757575;
+  }
 `;
 
 const ProductImgStyle02 = styled.img`
@@ -401,6 +410,9 @@ const ProductStyle03 = styled.div`
   justify-content: center;
   align-items: center;
   box-shadow: 2px 2px 2px 1px #757575;
+  &:hover {
+    box-shadow: 2px 2px 3px 3px #757575;
+  }
 `;
 
 const ProductImgStyle03 = styled.img`
@@ -441,20 +453,39 @@ const SellerLocationAndTime03 = styled.div`
   color: #929292;
 `;
 
+const SearchInput = () => {
+  return (
+    <Search01>
+      <SearchInput01
+        type='text'
+        placeholder='원하는 제품을 검색해 보세요!'
+      ></SearchInput01>
+      <SearchButton>
+        <SearchImg src='/assets/img/searchGlass-4786fa.png'></SearchImg>
+      </SearchButton>
+    </Search01>
+  );
+};
+const AuctionSearchInput = () => {
+  return (
+    <Search01>
+      <SearchInput01
+        type='text'
+        placeholder='원하는 제품을 검색해 보세요!'
+      ></SearchInput01>
+      <SearchButton>
+        <SearchImg src='/assets/img/searchGlass-4786fa.png'></SearchImg>
+      </SearchButton>
+    </Search01>
+  );
+};
+
 const TradeMainProduct = () => {
   return (
     <TradeMainProductDiv>
       <RegionAndSearch>
         <Region>지역: 서울</Region>
-        <Search01>
-          <SearchInput01
-            type='text'
-            placeholder='원하는 제품을 검색해 보세요!'
-          ></SearchInput01>
-          <SearchButton>
-            <SearchImg src='/assets/img/searchGlass-4786fa.png'></SearchImg>
-          </SearchButton>
-        </Search01>
+        <SearchInput></SearchInput>
       </RegionAndSearch>
       <RecentProductDiv>
         <RecentProductTitle>방금 등록된 상품</RecentProductTitle>
@@ -489,6 +520,7 @@ const TradeMainProduct = () => {
 
 export {
   TradeMain,
+  AuctionSearchInput,
   Search02,
   SearchInput02,
   SearchButton,

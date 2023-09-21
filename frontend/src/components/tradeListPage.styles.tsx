@@ -36,7 +36,7 @@ const TradeListDiv = styled.div`
 `;
 
 const CategorySpace = styled.div`
-  width: 70%;
+  width: 800px;
   height: 140px;
   margin-top: 50px;
   display: flex;
@@ -56,7 +56,7 @@ const CategoryName = styled.div`
 `;
 
 const CategoryList = styled.div`
-  width: 1300px;
+  width: 100%;
   height: 60px;
   display: flex;
   justify-content: center;
@@ -64,20 +64,20 @@ const CategoryList = styled.div`
 `;
 
 const CategoryItem = styled.div`
-  width: 140px;
+  width: 130px;
   height: 50px;
   font-size: 20px;
   text-align: center;
   line-height: 50px;
-  text-decoration: underline;
   &:hover {
     color: #4786fa;
     font-weight: bold;
+    text-decoration: underline;
   }
 `;
 
 const SearchSpace = styled.div`
-  width: 70%;
+  width: 800px;
   margin: 30px 0px;
   display: flex;
   justify-content: space-between;
@@ -89,7 +89,6 @@ const SearchSpace = styled.div`
 const SearchOrder = styled.select`
   width: 100px;
   height: 30px;
-  margin-right: 12%;
   border: 1px solid #4786fa;
   border-radius: 5px;
   text-align: center;
@@ -137,13 +136,20 @@ const PagingButton = styled.button`
   border: 1px solid #4786fa;
   border-radius: 5px;
   background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &:hover {
+    /* border: 2px solid #4786fa;
+    background-color: #4786fa;
+    color: #fff; */
+    box-shadow: 1px 1px 2px 2px #757575;
+  }
+`;
+const PagingButtonText = styled.div`
+  height: 30px;
   font-size: 20px;
   font-weight: bold;
-  &:hover {
-    border: 2px solid #4786fa;
-    background-color: #4786fa;
-    color: #fff;
-  }
 `;
 
 const TradeList = () => {
@@ -204,25 +210,71 @@ const TradeList = () => {
             <ProductStyle02></ProductStyle02>
           </ProductList02>
         </ProductList>
-        <PagingSpace>
-          <PagingButton>&lt;&lt;</PagingButton>
-          <PagingButton>&lt;</PagingButton>
-          <PagingButton>1</PagingButton>
-          <PagingButton>2</PagingButton>
-          <PagingButton>3</PagingButton>
-          <PagingButton>4</PagingButton>
-          <PagingButton>5</PagingButton>
-          <PagingButton>6</PagingButton>
-          <PagingButton>7</PagingButton>
-          <PagingButton>8</PagingButton>
-          <PagingButton>9</PagingButton>
-          <PagingButton>10</PagingButton>
-          <PagingButton>&gt;</PagingButton>
-          <PagingButton>&gt;&gt;</PagingButton>
-        </PagingSpace>
+        <BottomPageSpace></BottomPageSpace>
       </TradeListDiv>
     </TradeListFrameDiv>
   );
 };
 
-export { TradeList };
+const AuctionTradeList = () => {
+  return (
+    <CategoryList>
+      <CategoryItem>전체</CategoryItem>
+      <CategoryItem>모니터</CategoryItem>
+      <CategoryItem>키보드</CategoryItem>
+      <CategoryItem>마우스</CategoryItem>
+      <CategoryItem>생활용품</CategoryItem>
+      <CategoryItem>기타용품</CategoryItem>
+    </CategoryList>
+  );
+};
+
+const BottomPageSpace = () => {
+  return (
+    <PagingSpace>
+      <PagingButton>
+        <PagingButtonText>&lt;&lt;</PagingButtonText>
+      </PagingButton>
+      <PagingButton>
+        <PagingButtonText>&lt;</PagingButtonText>
+      </PagingButton>
+      <PagingButton>
+        <PagingButtonText>1</PagingButtonText>
+      </PagingButton>
+      <PagingButton>
+        <PagingButtonText>2</PagingButtonText>
+      </PagingButton>
+      <PagingButton>
+        <PagingButtonText>3</PagingButtonText>
+      </PagingButton>
+      <PagingButton>
+        <PagingButtonText>4</PagingButtonText>
+      </PagingButton>
+      <PagingButton>
+        <PagingButtonText>5</PagingButtonText>
+      </PagingButton>
+      <PagingButton>
+        <PagingButtonText>6</PagingButtonText>
+      </PagingButton>
+      <PagingButton>
+        <PagingButtonText>7</PagingButtonText>
+      </PagingButton>
+      <PagingButton>
+        <PagingButtonText>8</PagingButtonText>
+      </PagingButton>
+      <PagingButton>
+        <PagingButtonText>9</PagingButtonText>
+      </PagingButton>
+      <PagingButton>
+        <PagingButtonText>10</PagingButtonText>
+      </PagingButton>
+      <PagingButton>
+        <PagingButtonText>&gt;</PagingButtonText>
+      </PagingButton>
+      <PagingButton>
+        <PagingButtonText>&gt;&gt;</PagingButtonText>
+      </PagingButton>
+    </PagingSpace>
+  );
+};
+export { TradeList, AuctionTradeList, BottomPageSpace };

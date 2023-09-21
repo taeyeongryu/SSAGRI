@@ -10,6 +10,8 @@ import lombok.extern.apachecommons.CommonsLog;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -46,15 +48,28 @@ public class AuctionProduct extends BaseTimeEntity {
     @Column(name = "auction_product_comment")
     private String comment;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "auction_product_status",nullable = false)
     private AuctionStatus auctionStatus;
 
     @Column(name = "auction_product_finally_price")
     private int finallyPrice;
 
+    @Column(name = "auction_product_modify_date")
+    private LocalDateTime modifyDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "auction_product_type")
+    private AuctionProductType type;
+
+    @Column(name = "auction_product_origin_price")
+    private int originPrice;
+
+    @OneToMany(mappedBy = "auctionProductNo", fetch = FetchType.LAZY)
+    List<AuctionProductImage> images = new ArrayList<>();
+
     @Builder
-    public AuctionProduct(Long no, User user, String name, int upPrice, int downPrice, int price, LocalDateTime startDate, LocalDateTime endDate, String comment, AuctionStatus auctionStatus, int finallyPrice) {
-        this.no = no;
+    public AuctionProduct(LocalDateTime modifyDate ,int originPrice, AuctionProductType type,User user, String name, int upPrice, int downPrice, int price, LocalDateTime startDate, LocalDateTime endDate, String comment) {
         this.user = user;
         this.name = name;
         this.upPrice = upPrice;
@@ -64,6 +79,8 @@ public class AuctionProduct extends BaseTimeEntity {
         this.endDate = endDate;
         this.comment = comment;
         this.auctionStatus = auctionStatus;
-        this.finallyPrice = finallyPrice;
-    }
+        this.originPrice = originPrice;
+        this.type = type;
+        this.modifyDate = modifyDate;
+        }
 }

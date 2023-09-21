@@ -4,8 +4,9 @@ import App from './App.tsx';
 import './index.css';
 import axios from 'axios';
 
-// axios.defaults.baseURL = 'http://j9b209.p.ssafy.io'
-axios.defaults.withCredentials = true;
+// axios 설정
+axios.defaults.baseURL = 'https://j9b209.p.ssafy.io/api';
+axios.defaults.withCredentials = true; // refreshToken cookie를 주고받기 위함
 
 // 라우터 - 주소경로 생성
 import { BrowserRouter } from 'react-router-dom';

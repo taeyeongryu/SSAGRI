@@ -8,7 +8,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
-
+/**
+ * 이메일에 관련된 설정
+ */
 @Configuration
 public class EmailConfig {
 
@@ -27,7 +29,7 @@ public class EmailConfig {
     @Value("${spring.mail.smtp.starttls.required}")
     private boolean starttls_required;
 
-    @Value("${spring.mail.smtp.socketFactory.fallback}")
+    @Value("${spring.mail.smtp.socketfactory.fallback}")
     private boolean fallback;
 
     @Value("${spring.mail.admin.id}")
