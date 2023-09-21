@@ -51,7 +51,7 @@ const Seoul = styled.div`
   text-align: center;
   line-height: 50px;
   position: absolute;
-  top: 110px;
+  top: 120px;
   left: 110px;
   box-shadow: 2px 2px 2px 1px #383838;
 
@@ -70,7 +70,7 @@ const Dajeon = styled.div`
   text-align: center;
   line-height: 50px;
   position: absolute;
-  top: 290px;
+  top: 300px;
   left: 130px;
   box-shadow: 2px 2px 2px 1px #383838;
 
@@ -89,7 +89,7 @@ const Gumi = styled.div`
   text-align: center;
   line-height: 50px;
   position: absolute;
-  top: 310px;
+  top: 320px;
   left: 240px;
   box-shadow: 2px 2px 2px 1px #383838;
 
@@ -108,7 +108,7 @@ const Gwangju = styled.div`
   text-align: center;
   line-height: 50px;
   position: absolute;
-  top: 480px;
+  top: 490px;
   left: 50px;
   box-shadow: 2px 2px 2px 1px #383838;
 
@@ -127,7 +127,7 @@ const Buwoolkyung = styled.div`
   text-align: center;
   line-height: 50px;
   position: absolute;
-  top: 460px;
+  top: 470px;
   left: 280px;
   box-shadow: 2px 2px 2px 1px #383838;
 
