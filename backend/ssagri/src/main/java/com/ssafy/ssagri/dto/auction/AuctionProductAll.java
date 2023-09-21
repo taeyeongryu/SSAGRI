@@ -64,5 +64,6 @@ public class AuctionProductAll {
     private int originPrice;
 
     // 경매 상품에 대한 이미지들
+    @Builder.Default
     private List<AuctionProductPhoto> photos = new ArrayList<>();
 }
