@@ -1,4 +1,4 @@
-package com.ssafy.ssagri.dto.auction;
+package com.ssafy.ssagri.domain.auction.dto;
 
 import com.ssafy.ssagri.entity.auction.AuctionProductType;
 import com.ssafy.ssagri.entity.auction.AuctionStatus;
