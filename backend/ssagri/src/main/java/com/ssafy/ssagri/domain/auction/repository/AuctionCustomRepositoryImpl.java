@@ -10,7 +10,7 @@ import java.util.List;
 
 public class AuctionCustomRepositoryImpl implements AuctionCustomRepository{
 
-    private final JPAQueryFactory jpaQueryFactory;
+    //private final JPAQueryFactory jpaQueryFactory;
 
 
 
