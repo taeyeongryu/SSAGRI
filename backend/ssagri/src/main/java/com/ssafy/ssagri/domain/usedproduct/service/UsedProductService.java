@@ -56,6 +56,7 @@ public class UsedProductService {
         }else{
             throw new CustomException(CustomExceptionStatus.USER_DOES_NOT_EXSIST);
         }
+        System.out.println("user.getRegion() = " + user.getRegion());
         UsedProduct usedProductEntity = usedProductSaveRequest.toEntity(user);
         usedProductRepository.save(usedProductEntity);
 
