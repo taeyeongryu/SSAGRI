@@ -10,7 +10,7 @@ const CreateDiv = styled.div`
   width: 100%;
   height: 1200px;
 
-  border: 2px solid black;
+  /* border: 2px solid black; */
 `;
 
 const CreateDiv1 = styled.div`
@@ -58,6 +58,14 @@ const CreateDiv6 = styled.div`
 `;
 const CreateDiv7 = styled.div`
   margin: 30px auto 40px;
+  width: 1000px;
+  height: 50px;
+
+  display: flex;
+  justify-content: center;
+`;
+const CreateDiv8 = styled.div`
+  margin: 0px auto;
   width: 1000px;
   height: 50px;
 
@@ -160,8 +168,44 @@ const InputTag3 = styled.div`
   /* background-color: #555453; */
 `;
 
+const InputTag5 = styled.div`
+  width: 150px;
+  height: 40px;
+
+  margin-left: 10px;
+  border-radius: 3px;
+
+  border: 1px solid rgb(0, 0, 0, 0.3);
+  box-shadow: 2px 2px rgb(0, 0, 0, 0.3);
+  /* background-color: #555453; */
+`;
+
 const Div1 = styled.div``;
 const Div2 = styled.div``;
+const Div3 = styled.div``;
+const Div4 = styled.div`
+  display: flex;
+`;
+const Div5 = styled.div`
+  width: 300px;
+  height: 50px;
+  border: 2px solid black;
+`;
+const Div6 = styled.div`
+  width: 100%;
+  height: 400px;
+  display: flex;
+  margin-top: 30px;
+  justify-content: center;
+  /* border: 2px solid red; */
+`;
+const Div7 = styled.div`
+  margin-right: 50px;
+`;
+const Div8 = styled.div`
+  display: flex;
+  margin-bottom: 10px;
+`;
 
 const SelectDiv = styled.select`
   margin: 13px 0 0 5px;
@@ -169,6 +213,10 @@ const SelectDiv = styled.select`
   height: 35px;
   border-radius: 5px;
   border: 2px solid #555453;
+`;
+
+const TextDiv = styled.div`
+  font-size: 20px;
 `;
 
 const AuctionCreate = () => {
@@ -193,6 +241,8 @@ const AuctionCreate = () => {
   const [itemName, setItemName] = useState('');
   const [itemDescription, setItemDescription] = useState('');
   const [Selected, setSelected] = useState('');
+
+  console.log(selectedDate, itemName, itemDescription);
 
   const Checking = () => {
     setNextPage(true);
@@ -258,12 +308,54 @@ const AuctionCreate = () => {
         </div>
       ) : (
         <div>
-          <Calendar
-            onChange={onCalendarChange}
-            value={value}
-            // selectRange={true}
-            formatDay={(locale, date) => moment(date).format('DD')}
-          />
+          <Div6 style={{ display: 'flex' }}>
+            <Div7>
+              <TagBtn1 style={{ marginBottom: '10px' }}>경매 기간</TagBtn1>
+              <Div4>
+                <Calendar
+                  onChange={onCalendarChange}
+                  value={value}
+                  // @ts-ignore
+                  formatDay={(locale, date) => moment(date).format('DD')}
+                />
+                <Calendar
+                  onChange={onCalendarChange}
+                  value={value}
+                  // @ts-ignore
+                  formatDay={(locale, date) => moment(date).format('DD')}
+                />
+              </Div4>
+              <Div4>
+                <Div3>
+                  <TextDiv>시작 시간</TextDiv>
+                  <Div5></Div5>
+                </Div3>
+                <Div3>--</Div3>
+                <Div3>
+                  <TextDiv>마감시간</TextDiv>
+                  <Div5></Div5>
+                </Div3>
+              </Div4>
+            </Div7>
+            <Div3>
+              <Div8>
+                <TagBtn1>시작가</TagBtn1>
+                <InputTag5></InputTag5>
+              </Div8>
+              <Div8>
+                <TagBtn1>정가</TagBtn1>
+                <InputTag5></InputTag5>
+              </Div8>
+              <Div8>
+                <TagBtn1>입찰 단위</TagBtn1>
+                <InputTag5></InputTag5>
+              </Div8>
+            </Div3>
+          </Div6>
+          <CreateDiv8>
+            <TagBtn3 onClick={Checking}>다음</TagBtn3>
+            <TagBtn4>취소</TagBtn4>
+          </CreateDiv8>
         </div>
       )}
     </CreateDiv>
