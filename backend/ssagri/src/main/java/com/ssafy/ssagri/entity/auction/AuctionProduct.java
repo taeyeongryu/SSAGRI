@@ -38,10 +38,10 @@ public class AuctionProduct extends BaseTimeEntity {
     private int price;
 
     @Column(name = "auction_product_start_date",nullable = false)
-    private LocalDateTime startDate;
+    private String startDate;
 
     @Column(name = "auction_product_end_date",nullable = false)
-    private LocalDateTime endDate;
+    private String endDate;
 
     @Column(name = "auction_product_comment")
     private String comment;
@@ -64,7 +64,7 @@ public class AuctionProduct extends BaseTimeEntity {
     private int originPrice;
 
     @Builder
-    public AuctionProduct(LocalDateTime modifyDate ,int originPrice, AuctionProductType type,User user, String name, int upPrice, int downPrice, int price, LocalDateTime startDate, LocalDateTime endDate, String comment, AuctionStatus auctionStatus) {
+    public AuctionProduct(LocalDateTime modifyDate ,int originPrice, AuctionProductType type,User user, String name, int upPrice, int downPrice, int price, String startDate, String endDate, String comment) {
         this.user = user;
         this.name = name;
         this.upPrice = upPrice;

@@ -37,10 +37,10 @@ public class AuctionProductAll {
     private int priceCount;
 
     // 경매 시작 시간
-    private LocalDateTime startDate;
+    private String startDate;
 
     // 경매 마감 시간
-    private LocalDateTime endDate;
+    private String  endDate;
 
     // 경매 상품 설명
     private String comment;
