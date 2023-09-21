@@ -105,9 +105,9 @@ public class UserLoginAndLogoutService {
 
     public ResponseEntity<?> logoutUser(HttpServletRequest httpServletRequest) throws CustomException {
         Long userNo;
+        String accessToken;
         try {
-            String accessToken = httpServletRequest.getH
-            accessToken = accessToken.split(" ")[1]; //Bearer 제거
+            accessToken = JwtUtil.parseRawHeaderToken(httpServletRequest);
             userNo = JwtUtil.getUserNo(accessToken);
         } catch (Exception e) {
             throw new CustomException(LOGOUT_TOKEN_ERR);
