@@ -5,7 +5,7 @@ import './index.css';
 import axios from 'axios';
 
 // axios 설정
-axios.defaults.baseURL = 'http://localhost:8080';
+axios.defaults.baseURL = 'http://localhost:5000/api';
 axios.defaults.withCredentials = true; // refreshToken cookie를 주고받기 위함
 
 // 라우터 - 주소경로 생성

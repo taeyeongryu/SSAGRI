@@ -1,7 +1,7 @@
 package com.ssafy.ssagri.config;
 
 
-import com.ssafy.ssagri.util.filter.JwtFilter;
+import com.ssafy.ssagri.util.jwt.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
