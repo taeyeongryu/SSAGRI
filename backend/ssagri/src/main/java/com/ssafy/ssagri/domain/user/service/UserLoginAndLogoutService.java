@@ -28,7 +28,7 @@ public class UserLoginAndLogoutService {
 
     private final UserLoginAndLogoutRepository userLoginAndLogoutRepository;
     private final RedisService redisService;
-    private final UserTokenRepository userTokenRepository;
+//    private final UserTokenRepository userTokenRepository;
 
     /**
      * 로그인 : 해당 메서드를 중심으로 하여 모듈화된 메서드들이 동작
@@ -67,7 +67,9 @@ public class UserLoginAndLogoutService {
 
     private void saveRefreshToken(Long userNo, String refreshToken) throws CustomException{
         try {
-            userTokenRepository.save(new RefreshToken(userNo, refreshToken));
+//            userTokenRepository.save(new RefreshToken(userNo, refreshToken, 3600 * 24L)); //TTL = 24Hour
+            redisService.saveRefreshToken(new RefreshToken(userNo, refreshToken, 3600 * 24L)); //TTL = 24Hour
+            log.info("[토큰 저장] {} , {}", userNo, refreshToken);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             throw new CustomException(LOGIN_SAVE_TOKEN_ERROR);
@@ -112,7 +114,7 @@ public class UserLoginAndLogoutService {
 
         //Redis에 저장된 Refresh Token 제거
         redisService.deleteRefreshTokenByUserNo(userNo);
-
+        log.info("[토큰 제거] {} , {}", userNo, accessToken);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(LOGOUT_IS_OK.getCode(),LOGOUT_IS_OK.getMessage()));
     }
 }
