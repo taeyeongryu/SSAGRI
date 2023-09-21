@@ -1,8 +1,6 @@
 package com.ssafy.ssagri.domain.usedproduct.dto.request;
 
-import com.ssafy.ssagri.domain.usedproductphoto.dto.UsedProductPhotoRequest;
-import com.ssafy.ssagri.entity.usedproduct.ProductCategory;
-import com.ssafy.ssagri.entity.usedproduct.SaleStatus;
+
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;

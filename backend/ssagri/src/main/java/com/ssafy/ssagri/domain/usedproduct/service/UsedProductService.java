@@ -6,11 +6,14 @@ import com.ssafy.ssagri.domain.usedproduct.repository.UsedProductRepository;
 import com.ssafy.ssagri.domain.usedproductlike.repository.UsedProductLikeRepository;
 import com.ssafy.ssagri.domain.usedproductphoto.dto.UsedProductPhotoResponse;
 import com.ssafy.ssagri.domain.usedproductphoto.repository.UsedProductPhotoRepository;
+import com.ssafy.ssagri.domain.user.repository.UserRegistRepository;
 import com.ssafy.ssagri.entity.usedproduct.ProductCategory;
 import com.ssafy.ssagri.entity.usedproduct.UsedProduct;
 import com.ssafy.ssagri.entity.usedproduct.UsedProductPhoto;
 import com.ssafy.ssagri.entity.user.Region;
 import com.ssafy.ssagri.entity.user.User;
+import com.ssafy.ssagri.util.exception.CustomException;
+import com.ssafy.ssagri.util.exception.CustomExceptionStatus;
 import com.ssafy.ssagri.util.s3upload.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,19 +35,21 @@ public class UsedProductService {
     private final UsedProductRepository usedProductRepository;
     private final UsedProductPhotoRepository usedProductPhotoRepository;
     private final UsedProductLikeRepository usedProductLikeRepository;
-//    private final UserRepository userRepository;
+    private final UserRegistRepository userRegistRepository;
     private final ImageService imageService;
 
     @Transactional
     public Long saveUsedProduct(UsedProductSaveRequest usedProductSaveRequest
             , List<MultipartFile> multipartFileList)throws Exception{
-        //다시 수정해야 함
-        //임시로 만들어 둔것
-        //나중에 usedProductSaveRequest에 가지고 있는 userNo로 user 불러와야 함
-        User temporaryUser = null;
-//        User temporaryUser = userRepository.findById(Long.parseLong("3")).get();
 
-        UsedProduct usedProductEntity = usedProductSaveRequest.toEntity(temporaryUser);
+        Optional<User> findUser = userRegistRepository.findById(usedProductSaveRequest.getUserNo());
+        User user = null;
+        if (findUser.isPresent()) {
+            user = findUser.get();
+        }else{
+            throw new CustomException(CustomExceptionStatus.USER_DOES_NOT_EXSIST);
+        }
+        UsedProduct usedProductEntity = usedProductSaveRequest.toEntity(user);
         usedProductRepository.save(usedProductEntity);
 
         for (MultipartFile multipartFile : multipartFileList) {
