@@ -1,5 +1,8 @@
 import { styled, keyframes } from 'styled-components';
 import { useState, useRef, useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
+import { isLoggedInAtom } from '../states/account/loginAtom';
+
 import { Avatar } from 'antd';
 import axios from 'axios';
 
@@ -335,6 +338,53 @@ const SignInAndUpComponent = () => {
     }
   };
 
+  const onChangePassword = (e) => {
+    setSignInForm({ ...signInForm, password: e.target.value });
+  };
+
+  // 로그인 여부
+  const isLoggedIn = useRecoilValue(isLoggedInAtom);
+
+  const JWT_EXPIRY_TIME = 24 * 3600 * 1000; // 만료 시간 (24시간)
+
+  // 로그인 요청 api
+  const onLogin = () => {
+    const data = {
+      email: signInForm.email,
+      password: signInForm.password
+    };
+    axios
+      .post('/user/login/', data)
+      .then(onLoginSuccess)
+      .catch((error) => {
+        // ... 에러 처리
+        console.log(error);
+      });
+  };
+
+  const onSilentRefresh = () => {
+    axios
+      .post('/silent-refresh')
+      .then(onLoginSuccess)
+      .catch((error) => {
+        console.log(error);
+        // 로그인 실패처리
+      });
+  };
+
+  // 로그인 성공 시
+  const onLoginSuccess = (response: { data: { accessToken: any } }) => {
+    console.log(response);
+    const { accessToken } = response.data;
+    console.log(response.data);
+
+    // accessToken 설정
+    axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+
+    // accessToken 만료하기 1분 전에 로그인 연장
+    setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
+  };
+
   // 회원가입 //
   const regionList = ['대전', '서울', '구미', '광주', '부울경'];
   const cardinalList = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
@@ -650,10 +700,14 @@ const SignInAndUpComponent = () => {
               onChange={onChangeEmail}
             ></Input>
             <Label htmlFor='password'>비밀번호</Label>
-            <Input type='password'></Input>
+            <Input
+              type='password'
+              value={signInForm.password}
+              onChange={onChangePassword}
+            ></Input>
             <A>비밀번호를 잊으셨나요?</A>
           </FormContent>
-          <Button>로그인</Button>
+          <Button onClick={onLogin}>로그인</Button>
         </Form>
       </FormContainer>
       {/* 회원가입 폼*/}
