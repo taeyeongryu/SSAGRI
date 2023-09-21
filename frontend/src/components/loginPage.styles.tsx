@@ -373,10 +373,12 @@ const SignInAndUpComponent = () => {
   };
 
   // 로그인 성공 시
-  const onLoginSuccess = (response: { data: { accessToken: any } }) => {
+  const onLoginSuccess = (response: any) => {
     console.log(response);
+    console.log(response.headers);
+    console.log(response.headers['Access-Token']);
+
     const { accessToken } = response.data;
-    console.log(response.data);
 
     // accessToken 설정
     axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
