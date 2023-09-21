@@ -1,5 +1,11 @@
 import { styled } from 'styled-components';
 import { useState, useEffect } from 'react';
+
+//달력
+import 'react-calendar/dist/Calendar.css';
+import './calendarstyle.css';
+import Calendar from 'react-calendar';
+import moment from 'moment';
 const CreateDiv = styled.div`
   width: 100%;
   height: 1200px;
@@ -121,7 +127,7 @@ const TagBtn4 = styled.div`
   color: white;
 `;
 
-const InputTag1 = styled.div`
+const InputTag1 = styled.input`
   width: 500px;
   height: 45px;
   margin-top: 20px;
@@ -131,7 +137,7 @@ const InputTag1 = styled.div`
   border: 1px solid rgb(0, 0, 0, 0.3);
   box-shadow: 2px 2px rgb(0, 0, 0, 0.3);
 `;
-const InputTag2 = styled.div`
+const InputTag2 = styled.input`
   width: 980px;
   height: 200px;
   border-radius: 5px;
@@ -157,15 +163,52 @@ const InputTag3 = styled.div`
 const Div1 = styled.div``;
 const Div2 = styled.div``;
 
+const SelectDiv = styled.select`
+  margin: 13px 0 0 5px;
+  width: 80px;
+  height: 35px;
+  border-radius: 5px;
+  border: 2px solid #555453;
+`;
+
 const AuctionCreate = () => {
+  const [selectedDate, setSelectedDate] = useState(new Date()); // 선택된 날짜를 상태로 관리
+  const value = new Date();
+  const onCalendarChange = async (value) => {
+    setSelectedDate(value); // 선택된 날짜를 상태에 반영
+
+    console.log('선택된 날짜:', formatDate(value)); // 업데이트된 값 사용
+  };
+
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
   const [nextPage, setNextPage] = useState(false);
+  const LocalList = ['서울', '대전', '구미', '광주', '부울경'];
+
+  const [itemName, setItemName] = useState('');
+  const [itemDescription, setItemDescription] = useState('');
+  const [Selected, setSelected] = useState('');
+
   const Checking = () => {
     setNextPage(true);
   };
 
+  const onInput1 = (e) => {
+    setItemName(e.target.value);
+  };
+
+  const onInput2 = (e) => {
+    setItemDescription(e.target.value);
+  };
+
   useEffect(() => {
     setNextPage(false);
-    console.log(nextPage);
+
     return setNextPage(false);
   }, []);
 
@@ -184,15 +227,25 @@ const AuctionCreate = () => {
           <CreateDiv4>
             <Div1>
               <TagBtn1>상품명</TagBtn1>
-              <InputTag1></InputTag1>
+              <InputTag1 onChange={onInput1}></InputTag1>
             </Div1>
             <Div2>
               <TagBtn1>분류</TagBtn1>
+              <SelectDiv
+                value={Selected}
+                onChange={(e) => setSelected(e.target.value)}
+              >
+                {LocalList.map((item) => (
+                  <option value={item} key={item}>
+                    {item}
+                  </option>
+                ))}
+              </SelectDiv>
             </Div2>
           </CreateDiv4>
           <CreateDiv5>
             <TagBtn2>상품설명</TagBtn2>
-            <InputTag2></InputTag2>
+            <InputTag2 onChange={onInput2}></InputTag2>
           </CreateDiv5>
           <CreateDiv6>
             <TagBtn1>이미지</TagBtn1>
@@ -204,7 +257,14 @@ const AuctionCreate = () => {
           </CreateDiv7>
         </div>
       ) : (
-        <div>asdf</div>
+        <div>
+          <Calendar
+            onChange={onCalendarChange}
+            value={value}
+            // selectRange={true}
+            formatDay={(locale, date) => moment(date).format('DD')}
+          />
+        </div>
       )}
     </CreateDiv>
   );
