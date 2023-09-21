@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
@@ -41,26 +42,31 @@ public class UserLoginAndLogoutService {
      * @throws CustomException
      */
     @Transactional
-    public ResponseEntity<ResponseDTO> loginUser(UserLoginDTO userLoginDTO) throws CustomException {
+    public ResponseEntity<ResponseDTO> loginUser(UserLoginDTO userLoginDTO, HttpServletResponse response) throws CustomException {
         //1. 유저 DB 존재 체크
         ResponseEntity<ResponseDTO> responseResult = checkAccount(userLoginDTO);
         Long userNo = userLoginAndLogoutRepository.getUserNoUsingEmail(userLoginDTO.getEmail()); //userNo 찾기
 
-        //2. 유저가 존재한다면 Access token과 Refresh token 발급
+        //2. 유저가 존재한다면 Access token과 Refresh token 발급, Refresh의 경우 Cookie로 설정
         String accessToken = getToken(userNo, "Access");
         String refreshToken = getToken(userNo, "Refresh");
+        Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
+        refreshTokenCookie.setHttpOnly(true); //HTTP Only Cookie set
+        refreshTokenCookie.setPath("/");      //모든 경로에서 쿠키에 접근 가능
+        refreshTokenCookie.setMaxAge(3600 * 12); //12시간으로 수명 설정
+        response.addCookie(refreshTokenCookie);
 
         //3. Redis에 Refresh 토큰 저장
         saveRefreshToken(userNo, refreshToken);
 
         //4. 헤더에 토큰 추가하여 메시지 발급
-        return addJwtTokenAtHeader(responseResult, accessToken, refreshToken);
+        return addJwtTokenAtHeader(responseResult, accessToken);
     }
 
-    private ResponseEntity<ResponseDTO> addJwtTokenAtHeader(ResponseEntity<ResponseDTO> responseResult, String accessToken, String refreshToken) throws CustomException {
+    private ResponseEntity<ResponseDTO> addJwtTokenAtHeader(ResponseEntity<ResponseDTO> responseResult, String accessToken) throws CustomException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Access-Token", "Bearer " + accessToken);
-        headers.add("Refresh-Token", refreshToken);
+//        headers.add("Refresh-Token", refreshToken); 현재는 Token이 아닌 Cookie에 저장
 
         // 기존 ResponseEntity 객체에 HttpHeaders 추가
         return ResponseEntity
@@ -71,7 +77,6 @@ public class UserLoginAndLogoutService {
 
     private void saveRefreshToken(Long userNo, String refreshToken) throws CustomException{
         try {
-//            userTokenRepository.save(new RefreshToken(userNo, refreshToken, 3600 * 24L)); //TTL = 24Hour
             redisService.saveRefreshToken(new RefreshToken(userNo, refreshToken, 3600 * 24L)); //TTL = 24Hour
             log.info("[토큰 저장] {} , {}", userNo, refreshToken);
         } catch (Exception e) {

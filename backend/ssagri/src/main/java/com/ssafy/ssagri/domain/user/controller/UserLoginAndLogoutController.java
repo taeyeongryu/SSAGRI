@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -38,8 +39,8 @@ public class UserLoginAndLogoutController {
             "\n" +
             "네 가지 경우의 결과가 나옵니다. 200OK 받으면 성공적으로 로그아웃 된 것.\n")
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody UserLoginDTO userLoginDTO) {
-        return userLoginAndLogoutService.loginUser(userLoginDTO);
+    public ResponseEntity<?> loginUser(@RequestBody UserLoginDTO userLoginDTO, HttpServletResponse response) {
+        return userLoginAndLogoutService.loginUser(userLoginDTO, response);
     }
 
     //로그아웃
