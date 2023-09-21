@@ -25,13 +25,13 @@ public class AuctionProductCreate {
     private String comment;
 
     // 상태
-    private AuctionStatus status;
+//    private AuctionStatus status;
 
     // 경매 시작 시간
-    private LocalDateTime startDate;
+    private String startDate;
 
     // 경매 마감 시간
-    private LocalDateTime endDate;
+    private String endDate;
 
     // 경매 하한가
     private int downPrice;
