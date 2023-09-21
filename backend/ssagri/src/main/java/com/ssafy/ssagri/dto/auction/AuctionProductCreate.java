@@ -1,6 +1,5 @@
 package com.ssafy.ssagri.dto.auction;
 
-import com.ssafy.ssagri.entity.auction.AuctionProductType;
 import com.ssafy.ssagri.entity.auction.AuctionStatus;
 import com.ssafy.ssagri.entity.user.User;
 import lombok.Builder;
