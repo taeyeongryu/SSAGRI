@@ -348,7 +348,8 @@ const SignInAndUpComponent = () => {
   const JWT_EXPIRY_TIME = 24 * 3600 * 1000; // 만료 시간 (24시간)
 
   // 로그인 요청 api
-  const onLogin = () => {
+  const onLogin = (e) => {
+    e.preventDefault();
     const data = {
       email: signInForm.email,
       password: signInForm.password
@@ -389,11 +390,16 @@ const SignInAndUpComponent = () => {
   };
 
   // 로그아웃
-  const onLogout = () => {
+  const onLogout = (e) => {
+    e.preventDefault();
     axios
       .get('/user/logout')
       .then((res) => {
         console.log(res);
+        console.log(document.cookie);
+        // axios의 헤더에 AccessToken 초기화
+        axios.defaults.headers.common['Authorization'] = '';
+        // cookie에 저장된 RefreshToken 삭제
       })
       .catch((err) => {
         console.log(err);
