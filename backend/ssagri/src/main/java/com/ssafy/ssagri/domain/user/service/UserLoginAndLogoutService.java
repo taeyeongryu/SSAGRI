@@ -17,7 +17,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+
+import java.io.IOException;
 
 import static com.ssafy.ssagri.util.ResponseStatusEnum.*;
 import static com.ssafy.ssagri.util.exception.CustomExceptionStatus.*;
@@ -103,15 +106,22 @@ public class UserLoginAndLogoutService {
         }
     }
 
-    public ResponseEntity<?> logoutUser(HttpServletRequest httpServletRequest) throws CustomException {
+    public ResponseEntity<?> logoutUser(HttpServletRequest request, HttpServletResponse response) throws CustomException, IOException {
         Long userNo;
-        String accessToken;
-        try {
-            accessToken = JwtUtil.parseRawHeaderToken(httpServletRequest);
+        String accessToken = null;
+
+            String rawToken = request.getHeader(HttpHeaders.AUTHORIZATION);
+            if(rawToken == null || !rawToken.startsWith("Bearer ")){
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.setContentType("application/json");
+                response.getWriter().write("{\"error\": \"Null or Not Bearer Token\"}");
+                throw new CustomException(LOGOUT_TOKEN_ERR);
+            }
+            else {
+                rawToken = rawToken.split(" ")[1]; //Bearer 제거
+            }
             userNo = JwtUtil.getUserNo(accessToken);
-        } catch (Exception e) {
-            throw new CustomException(LOGOUT_TOKEN_ERR);
-        }
+
 
         //Redis에 저장된 Refresh Token 제거
         redisService.deleteRefreshTokenByUserNo(userNo);

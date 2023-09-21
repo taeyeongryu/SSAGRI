@@ -1,5 +1,6 @@
 package com.ssafy.ssagri.util.jwt;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.ssagri.util.exception.CustomException;
 import com.ssafy.ssagri.util.exception.CustomExceptionStatus;
 import com.ssafy.ssagri.util.jwt.JwtUtil;
@@ -34,12 +35,13 @@ public class JwtFilter extends OncePerRequestFilter {
 
     //필터링 거치지 않는 API endpoint,, 테스트용
     private String[] allowedURI = new String[] {
-            "/swagger-ui/",
-            "/swagger-resources",
-            "/webjars/",
-            "/v2/api-docs",
-            "/jwt", //TEST API 주소
-            "/" //테스팅 목적으로 jwt 필터를 일시 잠금하였음
+
+            "/api/swagger-ui/",
+            "/api/swagger-resources",
+            "/api/webjars/",
+            "/api/v2/api-docs",
+            "/api/jwt", //TEST API 주소
+//            "/" //테스팅 목적으로 jwt 필터를 일시 잠금하였음
     };
 
     //다음 해당 사항은 jwt 토큰 인증 필터링을 거치지 않는다.
@@ -55,24 +57,37 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws CustomException, ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         //토큰 원본 꺼내기 및 처리
-        String rawToken = JwtUtil.parseRawHeaderToken(request);
+        String rawToken = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if(rawToken == null || !rawToken.startsWith("Bearer ")){
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\": \"Null or Not Bearer Token\"}");
+            return;
+        }
+        else {
+            rawToken = rawToken.split(" ")[1]; //Bearer 제거
+        }
+
 
         //입력받은 토큰 검증
         String tokenType = JwtUtil.isExpired(rawToken);
         log.warn("입력받은 토큰 타입 검증 : {}", tokenType);
         //토큰 타입 결과에 따른 필터 제어(Valid, Invalid, Expired)
-
         if(!tokenType.equals("Valid")) {
+            response.setStatus(HttpServletResponse.SC_GATEWAY_TIMEOUT);
+            response.setContentType("application/json");
             if(tokenType.equals("Expired")) {
-                throw new CustomException(JWT_TOKEN_EXPIRED);
+                response.getWriter().write("{\"error\": \"Expired\"}");
             }
-            if(tokenType.equals("Invalid")) {
-                throw new CustomException(JWT_TOKEN_INVALID);
+            else {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.getWriter().write("{\"error\": \"Invalid\"}");
             }
-            throw new CustomException(JWT_TOKENTYPE_ERR);
+            return;
         }
+
 
         //이상 없을 경우
         filterChain.doFilter(request, response);

@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * 유저 로그인 및 로그아웃 컨트롤러
@@ -34,8 +36,8 @@ public class UserLoginAndLogoutController {
     //로그아웃
     @Operation(summary = "로그아웃 기능", description = "로그아웃 시 Header에 `Access-Token`을 주어야 합니다. HttpHeaders.AUTHORIZATION로 받을 예정입니다.")
     @GetMapping("/logout")
-    public ResponseEntity<?> logoutUser(HttpServletRequest httpServletRequest) {
-        return userLoginAndLogoutService.logoutUser(httpServletRequest);
+    public ResponseEntity<?> logoutUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        return userLoginAndLogoutService.logoutUser(request, response);
     }
 
 }
