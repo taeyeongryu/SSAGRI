@@ -77,8 +77,8 @@ public class AuctionProductService {
                 .comment(auctionProductCreate.getComment())
                 .auctionStatus(auctionProductCreate.getStatus())
                // .modifyDate(LocalDateTime.now())
-                .originPrice(auctionProductCreate.getOriginPrice())
-                .type(auctionProductCreate.getType()).build();
+               // .originPrice(auctionProductCreate.getOriginPrice())
+                //.type(auctionProductCreate.getType()).build();
 
 
 
