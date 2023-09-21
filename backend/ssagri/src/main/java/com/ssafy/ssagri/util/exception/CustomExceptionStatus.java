@@ -23,6 +23,11 @@ public enum CustomExceptionStatus {
     //LOGOUT = 12xx
     LOGOUT_TOKEN_ERR(-1201, "토큰 헤더가 없거나 유효하지 않습니다."),
 
+    //JWT = 13xx
+    JWT_PARSING_ERR(-1300, "Null or Not Bearer Token"),
+    JWT_TOKEN_EXPIRED(-1301, "만료된 토큰입니다."),
+    JWT_TOKEN_INVALID(-1302, "유효하지 않은 토큰입니다."),
+    JWT_TOKENTYPE_ERR(-1303, "TokenType Parsing중 오류가 발생했습니다."),
 
     //ChatRoom = 2xxx
     CHATROOM_DOES_NOT_EXSIST(-2002, "존재하지 않는 채팅방입니다.");

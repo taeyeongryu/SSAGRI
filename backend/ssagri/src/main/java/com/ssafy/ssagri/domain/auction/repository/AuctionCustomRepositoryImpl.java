@@ -14,7 +14,7 @@ public class AuctionCustomRepositoryImpl implements AuctionCustomRepository{
 
 
 
-    
+
     // 모든 경매리스트 출력 (상품정보)
    // @Override
    // public void getAuctionProducts(){

@@ -1,5 +1,7 @@
 package com.ssafy.ssagri.util.jwt;
 
+import com.ssafy.ssagri.util.exception.CustomException;
+import com.ssafy.ssagri.util.exception.CustomExceptionStatus;
 import com.ssafy.ssagri.util.jwt.JwtUtil;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,6 +16,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.ConnectException;
+
+import static com.ssafy.ssagri.util.exception.CustomExceptionStatus.*;
 
 
 /**
@@ -50,14 +55,11 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws CustomException, ServletException, IOException {
         //토큰 원본 꺼내기 및 처리
         String rawToken = request.getHeader(HttpHeaders.AUTHORIZATION);
         if(rawToken == null || !rawToken.startsWith("Bearer ")){
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.setContentType("application/json");
-            response.getWriter().write("{\"error\": \"Null or Not Bearer Token\"}");
-            return;
+            throw new CustomException(JWT_PARSING_ERR);
         }
         else {
             rawToken = rawToken.split(" ")[1]; //Bearer 제거
@@ -67,16 +69,15 @@ public class JwtFilter extends OncePerRequestFilter {
         String tokenType = JwtUtil.isExpired(rawToken);
         log.warn("입력받은 토큰 타입 검증 : {}", tokenType);
         //토큰 타입 결과에 따른 필터 제어(Valid, Invalid, Expired)
+
         if(!tokenType.equals("Valid")) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.setContentType("application/json");
             if(tokenType.equals("Expired")) {
-                response.getWriter().write("{\"error\": \"Expired\"}");
+                throw new CustomException(JWT_TOKEN_EXPIRED);
             }
-            else {
-                response.getWriter().write("{\"error\": \"Invalid\"}");
+            if(tokenType.equals("Invalid")) {
+                throw new CustomException(JWT_TOKEN_INVALID);
             }
-            return;
+            throw new CustomException(JWT_TOKENTYPE_ERR);
         }
 
         //이상 없을 경우
