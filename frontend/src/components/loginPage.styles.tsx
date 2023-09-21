@@ -1,7 +1,7 @@
 import { styled, keyframes } from 'styled-components';
 import { useState, useRef, useEffect } from 'react';
-import { useRecoilValue } from 'recoil';
-import { isLoggedInAtom } from '../states/account/loginAtom';
+// import { useRecoilValue } from 'recoil';
+// import { isLoggedInAtom } from '../states/account/loginAtom';
 
 import { Avatar } from 'antd';
 import axios from 'axios';
@@ -343,7 +343,7 @@ const SignInAndUpComponent = () => {
   };
 
   // 로그인 여부
-  const isLoggedIn = useRecoilValue(isLoggedInAtom);
+  // const isLoggedIn = useRecoilValue(isLoggedInAtom);
 
   const JWT_EXPIRY_TIME = 24 * 3600 * 1000; // 만료 시간 (24시간)
 
