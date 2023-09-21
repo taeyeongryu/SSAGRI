@@ -1,6 +1,6 @@
 package com.ssafy.ssagri.entity.chat;
 
-import com.ssafy.ssagri.domain.message.dto.MessageResponse;
+import com.ssafy.ssagri.domain.message.dto.MessageResponseDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
@@ -33,8 +33,8 @@ public class Message {
     }
 
 
-    public MessageResponse toResponse(){
-        MessageResponse messageResponse = MessageResponse.builder()
+    public MessageResponseDto toResponse(){
+        MessageResponseDto messageResponse = MessageResponseDto.builder()
                 .chatRoomNo(roomNo)
                 .senderNo(senderNo)
                 .receiverNo(receiverNo)

@@ -1,7 +1,7 @@
 package com.ssafy.ssagri.domain.message.service;
 
-import com.ssafy.ssagri.domain.message.dto.MessageRequest;
-import com.ssafy.ssagri.domain.message.dto.MessageResponse;
+import com.ssafy.ssagri.domain.message.dto.MessageRequestDto;
+import com.ssafy.ssagri.domain.message.dto.MessageResponseDto;
 import com.ssafy.ssagri.domain.message.repository.MessageRepository;
 import com.ssafy.ssagri.entity.chat.Message;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +19,9 @@ import java.util.List;
 public class MessageService {
     private final MessageRepository messageRepository;
 
-    public Page<MessageResponse> selectMessageResponse(Long roomNo, Pageable pageable){
+    public Page<MessageResponseDto> selectMessageResponse(Long roomNo, Pageable pageable){
         Page<Message> messages = messageRepository.findMessagesByRoomIdOrderByTimeDesc(roomNo, pageable);
-        List<MessageResponse> messageResponseList = new ArrayList<>();
+        List<MessageResponseDto> messageResponseList = new ArrayList<>();
         for (Message message : messages) {
             messageResponseList.add(message.toResponse());
         }
@@ -36,7 +36,7 @@ public class MessageService {
     * MessageResponse로 바꿔서 client로 반환
     * */
     @Transactional
-    public MessageResponse saveMessage(MessageRequest messageRequest){
+    public MessageResponseDto saveMessage(MessageRequestDto messageRequest){
         //Entity로 바꾸고
         Message message = messageRequest.toEntity();
 

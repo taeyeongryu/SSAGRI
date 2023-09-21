@@ -1,25 +1,21 @@
 package com.ssafy.ssagri.domain.chatroom.dto;
 
-import com.ssafy.ssagri.domain.message.dto.MessageResponse;
+import com.ssafy.ssagri.domain.message.dto.MessageResponseDto;
 
 import lombok.Builder;
 import org.springframework.data.domain.Page;
-import org.springframework.objenesis.instantiator.perc.PercInstantiator;
 
-
-import java.util.List;
-
-public class ChatRoomDetailResponse {
+public class ChatRoomDetailResponseDto {
     private Long chatRoomNo;
     private Long userANo;
     private Long userBNo;
     private String chatRoomCode;
 
 
-    private Page<MessageResponse> messageResponseList;
+    private Page<MessageResponseDto> messageResponseList;
     @Builder
 
-    public ChatRoomDetailResponse(Long chatRoomNo, Long userANo, Long userBNo, String chatRoomCode, Page<MessageResponse> messageResponseList) {
+    public ChatRoomDetailResponseDto(Long chatRoomNo, Long userANo, Long userBNo, String chatRoomCode, Page<MessageResponseDto> messageResponseList) {
         this.chatRoomNo = chatRoomNo;
         this.userANo = userANo;
         this.userBNo = userBNo;

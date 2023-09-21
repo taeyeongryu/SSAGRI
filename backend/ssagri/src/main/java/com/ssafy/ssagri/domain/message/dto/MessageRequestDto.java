@@ -11,22 +11,22 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
-public class MessageRequest {
+public class MessageRequestDto {
     private Long chatRoomNo;
     private Long senderNo;
     private Long receiverNo;
     private String content;
 
     @Builder
-    public MessageRequest(Long chatRoomNo, Long senderNo, Long receiverNo, String content) {
+    public MessageRequestDto(Long chatRoomNo, Long senderNo, Long receiverNo, String content) {
         this.chatRoomNo = chatRoomNo;
         this.senderNo = senderNo;
         this.receiverNo = receiverNo;
         this.content = content;
     }
 
-    public MessageResponse toResponse(){
-        return MessageResponse.builder()
+    public MessageResponseDto toResponse(){
+        return MessageResponseDto.builder()
                 .chatRoomNo(this.chatRoomNo)
                 .senderNo(this.senderNo)
                 .receiverNo(this.receiverNo)

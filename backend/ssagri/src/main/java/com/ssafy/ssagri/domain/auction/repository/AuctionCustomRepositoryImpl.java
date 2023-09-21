@@ -8,7 +8,9 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 
-public class AuctionCustomRepositoryImpl implements AuctionCustomRepository{
+public class AuctionCustomRepositoryImpl
+//        implements AuctionCustomRepository
+{
 
     //private final JPAQueryFactory jpaQueryFactory;
 
