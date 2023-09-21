@@ -1,6 +1,8 @@
 package com.ssafy.ssagri.domain.usedproduct.repository;
 
 import com.querydsl.core.QueryResults;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import com.ssafy.ssagri.entity.usedproduct.ProductCategory;
@@ -10,6 +12,7 @@ import com.ssafy.ssagri.entity.user.Region;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -31,7 +34,7 @@ public class UsedProductCustomRepositoryImpl implements UsedProductCustomReposit
                         .and(usedProduct.user.region.eq(region)))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(usedProduct.no.desc())
+                .orderBy(getOrderSpecifier(pageable))
                 .fetchResults();
 
         List<UsedProduct> results = usedProductQueryResults.getResults();
@@ -40,5 +43,23 @@ public class UsedProductCustomRepositoryImpl implements UsedProductCustomReposit
         return new PageImpl<>(results, pageable, total);
     }
 
+    private OrderSpecifier<?> getOrderSpecifier(Pageable pageable){
+        if (!pageable.getSort().isEmpty()){
+            for (Sort.Order order : pageable.getSort()) {
+                Order direction = order.getDirection().isAscending() ? Order.ASC : Order.DESC;
+                switch (order.getProperty()){
+                    case "no":
+                        return new OrderSpecifier<>(direction, usedProduct.no);
+                    case "price":
+                        return new OrderSpecifier<>(direction, usedProduct.price);
+//                    case "like":
+//                        return new OrderSpecifier<>(direction, usedProduct.like);
+                    default:
+                        return null;
+                }
 
+            }
+        }
+        return null;
+    }
 }

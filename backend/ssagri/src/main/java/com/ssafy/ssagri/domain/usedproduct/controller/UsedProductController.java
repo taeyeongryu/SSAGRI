@@ -30,6 +30,7 @@ public class UsedProductController {
         return id;
     }
 
+
     @GetMapping("/{userNo}")
     @ApiOperation("중고물품 리스트 조회하는 메서드 파라미터 값으로 userNo를 넣어주면 좋아요 상태도 같이 조회")
     public Page<UsedProductResponse> select(@PathVariable(name = "userNo")Long userNo
@@ -39,6 +40,7 @@ public class UsedProductController {
         Page<UsedProductResponse> usedProductResponses = usedProductService.selectUsedProduct(userNo, productCategory, region, pageable);
         return usedProductResponses;
     }
+
 
     @DeleteMapping("/{usedProductNo}")
     @ApiOperation("삭제하는 메서드")
