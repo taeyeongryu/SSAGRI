@@ -30,7 +30,11 @@ public class AuctionProductService {
 
     // 경매 모든 리스트 출력
     public List<AuctionProductAll> getAuctionProducts() {
+
+        System.out.println("야야야");
          List<AuctionProduct> products = auctionRepository.findAll();
+
+        System.out.println(products.size() + "야야야");
 
 
          List<AuctionProductAll> result = new ArrayList<>();

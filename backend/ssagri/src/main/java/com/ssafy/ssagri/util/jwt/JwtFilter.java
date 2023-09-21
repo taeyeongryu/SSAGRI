@@ -57,13 +57,7 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws CustomException, ServletException, IOException {
         //토큰 원본 꺼내기 및 처리
-        String rawToken = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if(rawToken == null || !rawToken.startsWith("Bearer ")){
-            throw new CustomException(JWT_PARSING_ERR);
-        }
-        else {
-            rawToken = rawToken.split(" ")[1]; //Bearer 제거
-        }
+        String rawToken = JwtUtil.parseRawHeaderToken(request);
 
         //입력받은 토큰 검증
         String tokenType = JwtUtil.isExpired(rawToken);

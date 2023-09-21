@@ -1,20 +1,25 @@
 package com.ssafy.ssagri.domain.auction.repository;
 
 
-import com.ssafy.ssagri.entity.auction.AuctionProduct;
-
+import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import javax.persistence.EntityManager;
-import java.util.List;
 
 
 public class AuctionCustomRepositoryImpl
 //        implements AuctionCustomRepository
 {
 
-    //private final JPAQueryFactory jpaQueryFactory;
+    private final JPAQueryFactory jpaQueryFactory;
 
+    public AuctionCustomRepositoryImpl(EntityManager entityManager) {
+        this.jpaQueryFactory = new JPAQueryFactory(entityManager);
+    }
 
+    @Override
+    public void getAuctionProducts() {
+        
+    }
 
 
     // 모든 경매리스트 출력 (상품정보)
