@@ -374,20 +374,17 @@ const SignInAndUpComponent = () => {
 
   // 로그인 성공 시
   const onLoginSuccess = (response: any) => {
-    console.log(response);
-    console.log(response.headers['access-token']);
+    console.log(response.headers);
 
-    for (let pair of response.headers.entries()) {
-      console.log(pair[0] + ': ' + pair[1]);
-    }
+    const { accessToken } = response.headers['access-token'];
 
-    const { accessToken } = response.data;
-
-    // accessToken 설정
+    // axios 헤더에 jwt 토큰 담기
     axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
 
     // accessToken 만료하기 1분 전에 로그인 연장
     setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
+
+    // 로그인 하기 전 접속했던 페이지로 이동
   };
 
   // 회원가입 //
