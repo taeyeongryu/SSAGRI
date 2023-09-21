@@ -5,11 +5,9 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UsedProductUpdateRequest {
+public class UsedProductUpdateRequestDto {
     //아직 유보
 //    private Long userNo;
 //    private ProductCategory productCategory;

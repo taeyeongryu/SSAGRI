@@ -1,6 +1,6 @@
 package com.ssafy.ssagri.entity.chat;
 
-import com.ssafy.ssagri.domain.chatroom.dto.ChatRoomResponse;
+import com.ssafy.ssagri.domain.chatroom.dto.ChatRoomResponseDto;
 import com.ssafy.ssagri.entity.common.BaseTimeEntity;
 import com.ssafy.ssagri.entity.user.User;
 import lombok.AccessLevel;
@@ -44,8 +44,8 @@ public class ChatRoom extends BaseTimeEntity {
         this.chatUpdateDate = chatUpdateDate;
     }
 
-    public ChatRoomResponse toResponse(){
-        return ChatRoomResponse.builder()
+    public ChatRoomResponseDto toResponse(){
+        return ChatRoomResponseDto.builder()
                 .no(this.no)
                 .userANo(this.userA.getNo())
                 .userBNo(this.userB.getNo())

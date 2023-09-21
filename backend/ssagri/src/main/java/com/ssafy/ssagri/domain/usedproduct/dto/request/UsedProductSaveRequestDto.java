@@ -8,7 +8,7 @@ import lombok.*;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UsedProductSaveRequest {
+public class UsedProductSaveRequestDto {
     private Long userNo;
     private ProductCategory productCategory;
     private String title;
@@ -17,7 +17,7 @@ public class UsedProductSaveRequest {
     private SaleStatus saleStatus;
 
     @Builder
-    public UsedProductSaveRequest(Long userNo, ProductCategory productCategory, String title, String content, int price, SaleStatus saleStatus) {
+    public UsedProductSaveRequestDto(Long userNo, ProductCategory productCategory, String title, String content, int price, SaleStatus saleStatus) {
         this.userNo = userNo;
         this.productCategory = productCategory;
         this.title = title;
@@ -26,8 +26,7 @@ public class UsedProductSaveRequest {
         this.saleStatus = saleStatus;
     }
 
-    public UsedProduct toEntity(User user
-    ){
+    public UsedProduct toEntity(User user){
         UsedProduct usedProduct = UsedProduct.builder()
                 .user(user)
                 .category(this.productCategory)
@@ -35,6 +34,7 @@ public class UsedProductSaveRequest {
                 .content(this.content)
                 .price(this.price)
                 .status(this.saleStatus)
+                .region(user.getRegion())
                 .build();
         return usedProduct;
     }

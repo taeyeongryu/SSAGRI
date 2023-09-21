@@ -1,12 +1,14 @@
 package com.ssafy.ssagri.domain.usedproduct.service;
 
-import com.ssafy.ssagri.domain.usedproduct.dto.request.UsedProductSaveRequest;
-import com.ssafy.ssagri.domain.usedproduct.dto.response.UsedProductResponse;
+import com.ssafy.ssagri.domain.usedproduct.dto.request.UsedProductSaveRequestDto;
+import com.ssafy.ssagri.domain.usedproduct.dto.response.UsedProductDetailResponseDto;
+import com.ssafy.ssagri.domain.usedproduct.dto.response.UsedProductResponseDto;
 import com.ssafy.ssagri.domain.usedproduct.repository.UsedProductRepository;
 import com.ssafy.ssagri.domain.usedproductlike.repository.UsedProductLikeRepository;
-import com.ssafy.ssagri.domain.usedproductphoto.dto.UsedProductPhotoResponse;
+import com.ssafy.ssagri.domain.usedproductphoto.dto.UsedProductPhotoResponseDto;
 import com.ssafy.ssagri.domain.usedproductphoto.repository.UsedProductPhotoRepository;
 import com.ssafy.ssagri.domain.user.repository.UserRegistRepository;
+import com.ssafy.ssagri.entity.usedproduct.PhotoType;
 import com.ssafy.ssagri.entity.usedproduct.ProductCategory;
 import com.ssafy.ssagri.entity.usedproduct.UsedProduct;
 import com.ssafy.ssagri.entity.usedproduct.UsedProductPhoto;
@@ -38,9 +40,14 @@ public class UsedProductService {
     private final UserRegistRepository userRegistRepository;
     private final ImageService imageService;
 
+
+
+    /*
+    * 대표 사진이랑 본문 사진이랑 따로 받아서 저장한다.
+    * */
     @Transactional
-    public Long saveUsedProduct(UsedProductSaveRequest usedProductSaveRequest
-            , List<MultipartFile> multipartFileList)throws Exception{
+    public Long saveUsedProduct(UsedProductSaveRequestDto usedProductSaveRequest,
+           MultipartFile MultipartFileMain , List<MultipartFile> multipartFileSubList)throws Exception{
 
         Optional<User> findUser = userRegistRepository.findById(usedProductSaveRequest.getUserNo());
         User user = null;
@@ -52,14 +59,24 @@ public class UsedProductService {
         UsedProduct usedProductEntity = usedProductSaveRequest.toEntity(user);
         usedProductRepository.save(usedProductEntity);
 
-        for (MultipartFile multipartFile : multipartFileList) {
-            String link = imageService.saveImage(multipartFile);
-            UsedProductPhoto usedProductPhotoEntity = UsedProductPhoto.builder()
+        //대표 사진 저장 하는 것
+        String link = imageService.saveImage(MultipartFileMain);
+        UsedProductPhoto usedProductPhotoMain = UsedProductPhoto.builder()
+                .usedProduct(usedProductEntity)
+                .usedProductPhotoLink(link)
+                .usedProductPhotoType(PhotoType.MAIN)
+                .build();
+        usedProductPhotoRepository.save(usedProductPhotoMain);
+
+        //본문 사진 저장 하는 것
+        for (MultipartFile multipartFileSub : multipartFileSubList) {
+            link = imageService.saveImage(multipartFileSub);
+            UsedProductPhoto usedProductPhotoSub = UsedProductPhoto.builder()
                     .usedProduct(usedProductEntity)
                     .usedProductPhotoLink(link)
+                    .usedProductPhotoType(PhotoType.SUB)
                     .build();
-
-            usedProductPhotoRepository.save(usedProductPhotoEntity);
+            usedProductPhotoRepository.save(usedProductPhotoSub);
         }
         return usedProductEntity.getNo();
     }
@@ -77,18 +94,21 @@ public class UsedProductService {
         }
         return productOptional.get().getNo();
     }
-
-    public Page<UsedProductResponse> selectUsedProduct(Long userNo,ProductCategory productCategory, Region region,Pageable pageable){
+    /*
+    *중고물품 리스트 가져오는 메서드
+    *phototype이 sub 인것만 가져온다.
+     */
+    public Page<UsedProductResponseDto> selectUsedProductList(Long userNo, ProductCategory productCategory, Region region, Pageable pageable){
         Page<UsedProduct> usedProducts = usedProductRepository.selectAllUsedProduct(productCategory, region, pageable);
         List<UsedProduct> usedProductList = usedProducts.getContent();
 
-        List<UsedProductResponse> usedProductResponseList = new ArrayList<>();
+        List<UsedProductResponseDto> usedProductResponseList = new ArrayList<>();
 
         for (UsedProduct usedProduct : usedProductList) {
-            UsedProductResponse usedProductResponse = usedProduct.toResponse();
-            //사진 가져오기
-            List<UsedProductPhotoResponse> usedProductPhotoResponses = usedProductPhotoRepository.selectPhotoByProductNo(usedProduct.getNo());
-            usedProductResponse.setPhotolist(usedProductPhotoResponses);
+            UsedProductResponseDto usedProductResponse = usedProduct.toResponse();
+            //Main 사진 가져오기
+            UsedProductPhotoResponseDto usedProductPhotoResponseDto = usedProductPhotoRepository.selectMainPhotoByProductNo(usedProduct.getNo());
+            usedProductResponse.setUsedProductPhotoResponseDto(usedProductPhotoResponseDto);
 
             //유저가 이 상품 좋아하는지 알아야함.
             boolean isLike = usedProductLikeRepository.checkLikeByUserNo(userNo, usedProduct.getNo());
@@ -98,6 +118,48 @@ public class UsedProductService {
             usedProductResponseList.add(usedProductResponse);
         }
         return new PageImpl<>(usedProductResponseList, usedProducts.getPageable(), usedProducts.getTotalElements());
+    }
+
+    public Page<UsedProductResponseDto> selectUsedProductListByUser(Long userNo, Pageable pageable){
+        Page<UsedProduct> usedProducts = usedProductRepository.selectUsedProductByUserNo(userNo, pageable);
+
+        List<UsedProduct> usedProductList = usedProducts.getContent();
+
+        List<UsedProductResponseDto> usedProductResponseList = new ArrayList<>();
+
+        for (UsedProduct usedProduct : usedProductList) {
+            UsedProductResponseDto usedProductResponse = usedProduct.toResponse();
+            //Main 사진 가져오기
+            UsedProductPhotoResponseDto usedProductPhotoResponseDto = usedProductPhotoRepository.selectMainPhotoByProductNo(usedProduct.getNo());
+            usedProductResponse.setUsedProductPhotoResponseDto(usedProductPhotoResponseDto);
+
+            //유저가 이 상품 좋아하는지 알아야함.
+            boolean isLike = usedProductLikeRepository.checkLikeByUserNo(userNo, usedProduct.getNo());
+            usedProductResponse.setLike(isLike);
+
+            //리스트에 저장하기
+            usedProductResponseList.add(usedProductResponse);
+        }
+        return new PageImpl<>(usedProductResponseList, usedProducts.getPageable(), usedProducts.getTotalElements());
+    }
+
+    /*
+    * 디테일한 상품 정보 가져오는 메서드
+    * */
+    public UsedProductDetailResponseDto selectUsedProductDetail(Long userNo,Long usedProductNo){
+        Optional<UsedProduct> findUsedProduct = usedProductRepository.findById(usedProductNo);
+        UsedProduct usedProduct = null;
+        if (findUsedProduct.isPresent()) {
+            usedProduct = findUsedProduct.get();
+        }else{
+            throw new CustomException(CustomExceptionStatus.USED_PRODUCT_DOES_NOT_EXSIST);
+        }
+        UsedProductDetailResponseDto detailResponse = usedProduct.toDetailResponse(usedProduct.getUser());
+        List<UsedProductPhotoResponseDto> usedProductPhotoResponseDtoList = usedProductPhotoRepository.selectSubPhotoByProductNo(usedProductNo);
+        detailResponse.setUsedProductPhotoResponseDto(usedProductPhotoResponseDtoList);
+        boolean isLike = usedProductLikeRepository.checkLikeByUserNo(userNo,usedProductNo);
+        detailResponse.setLike(isLike);
+        return detailResponse;
     }
 
 }

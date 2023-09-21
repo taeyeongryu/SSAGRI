@@ -6,7 +6,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import javax.persistence.EntityManager;
 
 
-public class AuctionCustomRepositoryImpl implements AuctionCustomRepository{
+public class AuctionCustomRepositoryImpl implements AuctionCustomRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
@@ -16,7 +16,7 @@ public class AuctionCustomRepositoryImpl implements AuctionCustomRepository{
 
     @Override
     public void getAuctionProducts() {
-        
+
     }
 
 

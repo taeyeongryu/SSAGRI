@@ -31,10 +31,11 @@ public enum CustomExceptionStatus {
     JWT_TOKENTYPE_ERR(-1303, "TokenType Parsing중 오류가 발생했습니다."),
 
     //ChatRoom = 2xxx
-    CHATROOM_DOES_NOT_EXSIST(-2002, "존재하지 않는 채팅방입니다.");
+    CHATROOM_DOES_NOT_EXSIST(-2002, "존재하지 않는 채팅방입니다."),
 
+    //UsedProduct = 3xxx
+    USED_PRODUCT_DOES_NOT_EXSIST(-3001, "존재하지 않는 중고상품 입니다.");
 
-    ;
     private final int code;
     private final String message;
 
