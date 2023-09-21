@@ -37,7 +37,7 @@ public class AuctionProductCreate {
     private int downPrice;
 
     // 경매 상한가
-    private int upPrice;
+//    private int upPrice;
 
     // 경매 정가
     private int originPrice;
@@ -48,5 +48,5 @@ public class AuctionProductCreate {
     // 물품 분류
     private AuctionProductType type;
 
-    private LocalDateTime modifyDate;
+//    private LocalDateTime modifyDate;
 }

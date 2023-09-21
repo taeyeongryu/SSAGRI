@@ -28,7 +28,7 @@ public class AuctionProductController {
 
 
     @PostMapping(value = "/auction/regist")
-    public void allList(@RequestBody AuctionProductCreate auctionProductCreate){
+    public void registList(@RequestBody AuctionProductCreate auctionProductCreate){
         auctionProductService.setAuctionProduct(auctionProductCreate);
         // response 나중에 처리
     }

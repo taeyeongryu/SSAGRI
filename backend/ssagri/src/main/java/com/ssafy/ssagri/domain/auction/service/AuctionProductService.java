@@ -73,7 +73,7 @@ public class AuctionProductService {
         AuctionProduct auctionProduct = AuctionProduct.builder()
                 .user(userRegistRepository.findByNo(auctionProductCreate.getUserNo()))
                 .name(auctionProductCreate.getName())
-                .upPrice(auctionProductCreate.getUpPrice())
+//                .upPrice(auctionProductCreate.getUpPrice())
                 .downPrice(auctionProductCreate.getDownPrice())
                 .price(auctionProductCreate.getCountPrice())
                 .startDate(auctionProductCreate.getStartDate())
