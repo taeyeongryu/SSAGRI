@@ -3,7 +3,12 @@ package com.ssafy.ssagri.domain.user.controller;
 import com.ssafy.ssagri.domain.user.service.UserLoginAndLogoutService;
 import com.ssafy.ssagri.dto.user.UserLoginDTO;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +24,7 @@ import java.io.IOException;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/user")
-@Api(tags = "로그인, 로그아웃 컨트롤러")
+@Api(tags = "[USER]로그인, 로그아웃 컨트롤러")
 public class UserLoginAndLogoutController {
 
     private final UserLoginAndLogoutService userLoginAndLogoutService;
@@ -38,7 +43,7 @@ public class UserLoginAndLogoutController {
     }
 
     //로그아웃
-    @Operation(summary = "로그아웃 기능", description = "로그아웃 시 Header에 `Access-Token`을 주어야 합니다. HttpHeaders.AUTHORIZATION로 받을 예정입니다.LOGOUT_TOKEN_ERR(-1201, \"토큰 헤더가 없거나 유효하지 않습니다.\"),\n" +
+    @Operation(summary = "로그아웃 기능", description = "로그아웃 시 Header에 `Access-Token`을 주어야 합니다. HttpHeaders.AUTHORIZATION로 받을 예정입니다. \n LOGOUT_TOKEN_ERR(-1201, \"토큰 헤더가 없거나 유효하지 않습니다.\"),\n" +
             "JWT_TOKEN_INVALID(-1302, \"유효하지 않은 토큰입니다.\"),\n" +
             "LOGOUT_IS_OK(1200, \"로그아웃이 성공적으로 이루어졌습니다.\"),\n" +
             "세 가지 경우의 결과가 나옵니다. 200OK 받으면 성공적으로 로그아웃 된 것.")

@@ -15,29 +15,33 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/user/regist")
-@Api(tags = "회원가입 및 이메일 인증 컨트롤러")
+@Api(tags = "[USER]회원가입 및 이메일 인증 컨트롤러")
 public class UserRegistController {
 
     private final UserRegistService userRegisterService;
 
 
-    @Operation(summary = "회원가입 기능", description = "UserRegistDTO를 통해 회원 가입 및 등록 진행")
+    @Operation(summary = "회원가입 기능", description = "UserRegistDTO 입력값을 통해 회원 가입 및 등록 진행. \n 성공일 경우 REGISTER_IS_OK(1000, \"성공적으로 등록하였습니다.\")발생")
     @PostMapping("/")
     public ResponseEntity<?> registUser(@RequestBody UserRegistDTO userRegistDTO) throws Exception {
         return userRegisterService.registUser(userRegistDTO);
     }
 
-    //닉네임 중복 확인
+    @Operation(summary = "닉네임 중복 확인", description = "RequestParam(\"nickname\") 입력값을 통해 닉네임 중복 확인. \n" +
+            "            \"중복일 경우 REGISTER_NICKNAME_IS_DUPLICATE(-1000, \\\"유저 닉네임이 중복됩니다.\\\") 발생(404)\\n\" +\n" +
+            "            \"성공일 경우 REGISTER_NICKNAME_IS_OK(1001, \\\"닉네임이 유효합니다.\\\") 발생(200)\\n\" +\n" +
+            "            \" ")
     @GetMapping("/check/nickname")
     public ResponseEntity<?> checkDuplicateNickname(@RequestParam("nickname")String nickname) throws CustomException {
-        log.warn("NICKNAME 컨트롤러");
         return userRegisterService.checkDuplicateNickname(nickname);
     }
 
-    //이메일 중복 확인
+    @Operation(summary = "이메일 중복 확인", description = "RequestParam(\"email\") 입력값을 통해 닉네임 중복 확인.   \n" +
+            "중복일 경우 REGISTER_EMAIL_IS_DUPLICATE(-1001, \"이메일이 중복됩니다.\") 발생\n" +
+            "성공일 경우 REGISTER_EMAIL_IS_OK(1002, \"이메일이 유효합니다.\")발생\n" +
+            " ")
     @GetMapping("/check/email")
     public ResponseEntity<?> checkDuplicateEmail(@RequestParam("email")String email) throws CustomException {
-        log.warn("EMAIL 컨트롤러");
         return userRegisterService.checkDuplicateEmail(email);
     }
 
