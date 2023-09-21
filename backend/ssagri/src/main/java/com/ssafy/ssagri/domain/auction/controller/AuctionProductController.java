@@ -21,14 +21,14 @@ public class AuctionProductController {
 
     @GetMapping(value = "/all-list")
     public List<AuctionProductAll> allList(){
-       return auctionProductService.getAuctionProducts();
+        return auctionProductService.getAuctionProducts();
 
-        }
+    }
 
 
     @PostMapping(value = "/auction/regist")
     public void allList(@RequestBody AuctionProductCreate auctionProductCreate){
-         auctionProductService.setAuctionProduct(auctionProductCreate);
+        auctionProductService.setAuctionProduct(auctionProductCreate);
         // response 나중에 처리
     }
 
