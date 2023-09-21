@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
 import static com.ssafy.ssagri.util.ResponseStatusEnum.*;
@@ -102,15 +103,15 @@ public class UserLoginAndLogoutService {
         }
     }
 
-    public ResponseEntity<?> logoutUser(String accessToken) throws CustomException {
+    public ResponseEntity<?> logoutUser(HttpServletRequest httpServletRequest) throws CustomException {
         Long userNo;
         try {
+            String accessToken = httpServletRequest.getH
             accessToken = accessToken.split(" ")[1]; //Bearer 제거
             userNo = JwtUtil.getUserNo(accessToken);
         } catch (Exception e) {
             throw new CustomException(LOGOUT_TOKEN_ERR);
         }
-        //here -> 저장 및 제거 로직 이상
 
         //Redis에 저장된 Refresh Token 제거
         redisService.deleteRefreshTokenByUserNo(userNo);

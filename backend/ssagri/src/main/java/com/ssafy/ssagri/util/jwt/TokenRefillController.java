@@ -26,7 +26,7 @@ public class TokenRefillController {
 
     //RefreshToken 받고 검증 후 새로운 AccessToken을 돌려준다.
     @GetMapping("/send/refresh")
-    @Operation(summary = "Acess-Token을 재발급합니다.", description = "해당 api로 RefreshToken ")
+    @Operation(summary = "Acess-Token을 재발급합니다.", description = "해당 api로 RefreshToken을 요청해야 합니다. HttpHeaders.AUTHORIZATION로 보내주시면 됩니다.")
     public void refillRefreshToken(HttpServletRequest request) {
         String refreshToken = request.getHeader(HttpHeaders.AUTHORIZATION);
     }
