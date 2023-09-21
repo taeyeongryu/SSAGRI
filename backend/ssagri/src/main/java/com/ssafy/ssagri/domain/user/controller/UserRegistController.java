@@ -1,7 +1,7 @@
 package com.ssafy.ssagri.domain.user.controller;
 
-import com.ssafy.ssagri.domain.user.service.UserRegisterService;
-import com.ssafy.ssagri.dto.user.UserRegisterDTO;
+import com.ssafy.ssagri.domain.user.service.UserRegistService;
+import com.ssafy.ssagri.dto.user.UserRegistDTO;
 import com.ssafy.ssagri.util.exception.CustomException;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,16 +15,16 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/user/regist")
-@Api(tags = "유저 회원가입에 사용되는 인증 로직 및 이메일 인증 관리에 사용되는 컨트롤러")
-public class UserRegisterController {
+@Api(tags = "회원가입 및 이메일 인증 컨트롤러")
+public class UserRegistController {
 
-    private final UserRegisterService userRegisterService;
+    private final UserRegistService userRegisterService;
 
 
-    //유저 회원가입 최종 등록
+    @Operation(summary = "회원가입 기능", description = "UserRegistDTO를 통해 회원 가입 및 등록 진행")
     @PostMapping("/")
-    public ResponseEntity<?> registUser(@RequestBody UserRegisterDTO userRegisterDTO) throws Exception {
-        return userRegisterService.registUser(userRegisterDTO);
+    public ResponseEntity<?> registUser(@RequestBody UserRegistDTO userRegistDTO) throws Exception {
+        return userRegisterService.registUser(userRegistDTO);
     }
 
     //닉네임 중복 확인

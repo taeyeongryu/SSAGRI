@@ -3,6 +3,9 @@ import { styled } from 'styled-components';
 import { AuctionTradeList, BottomPageSpace } from './tradeListPage.styles';
 import { AuctionSearchInput } from './tradeMainPage.styles';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+
+import axios from 'axios';
 const AuctionDiv = styled.div`
   width: 100%;
 `;
@@ -221,6 +224,29 @@ const AuctionPage = () => {
   const goAuctionCreate = () => {
     navigate('/auctionCreate');
   };
+
+  // 경매 리스트 요청
+
+  const auctionApi = axios.create({
+    // baseURL: process.env.REACT_APP_SPRING_URI,
+    headers: { 'cotent-type': 'application/json' }
+  });
+
+  const GetAuctionItemList = () => {
+    auctionApi
+      .get('/auction-product/all-list')
+      .then((res) => {
+        console.log(res, '성공');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    GetAuctionItemList();
+  }, []);
+
   return (
     <AuctionDiv>
       <AuctionBody>

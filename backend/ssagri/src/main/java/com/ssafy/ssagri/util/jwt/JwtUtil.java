@@ -27,14 +27,14 @@ public class JwtUtil {
     private final static String secretKey = "ssafy9kiB209teamSsaguriFightingssafy9kiB209teamSsaguriFightingssafy9kiB209teamSsaguriFighting";
     private static long hour = 1000 * 60 * 60L;
     private static long accessExpireTime = hour / 2; //액세스 토큰 만료시간 30분 -> 현재 테스트용으로 기한 연장
-    private static long refreshExpireTime = hour; //리프레시 토큰 만료시간 3일
+    private static long refreshExpireTime = hour * 12; //리프레시 토큰 만료시간 12시간
 
     @Operation(summary = "액세스 토큰 생성", description = "userNo 입력, payload에 추가하여 생성")
     public static String createAccessToken(Long userNo) {
         Claims claims = Jwts.claims();
         claims.put("userNo", userNo); //payload
         claims.put("tokenType", "Access");
-        String accessToken = tokenBuilder(claims);
+        String accessToken = tokenBuilder(claims, accessExpireTime);
 
         log.info("[TOKEN]AT 확인 {}",accessToken);
         return accessToken;
@@ -45,18 +45,18 @@ public class JwtUtil {
         Claims claims = Jwts.claims();
         claims.put("userNo", userNo); //payload
         claims.put("tokenType", "Refresh");
-        String refreshToken = tokenBuilder(claims);
+        String refreshToken = tokenBuilder(claims, refreshExpireTime);
 
         log.info("[TOKEN]RT 확인 {}",refreshToken);
         return refreshToken;
     }
 
     //토큰 만드는 로직
-    public static String tokenBuilder(Claims claims) {
+    public static String tokenBuilder(Claims claims, Long expireTime) {
         return Jwts.builder() // 리프레쉬 토큰을 생성
                 .setClaims(claims) // claim은 비어있음
                 .setIssuedAt(new Date(System.currentTimeMillis())) // 현재 시간
-                .setExpiration(new Date(System.currentTimeMillis() + refreshExpireTime)) // 언제까지
+                .setExpiration(new Date(System.currentTimeMillis() + expireTime)) // 언제까지
                 .signWith(SignatureAlgorithm.HS256, secretKey) // 어떤 키로 사인할지
                 .compact();
     }
@@ -92,18 +92,6 @@ public class JwtUtil {
         } catch (ExpiredJwtException e) {
             return "ERROR";
         }
-    }
-
-    @Operation(summary = "Header 토큰 파싱", description = "Http헤더에 AUTORIZATIOHN으로 온 입력값을 파싱")
-    public static String parseRawHeaderToken(HttpServletRequest request) throws CustomException {
-        String rawToken = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if(rawToken == null || !rawToken.startsWith("Bearer ")){
-            throw new CustomException(JWT_PARSING_ERR);
-        }
-        else {
-            rawToken = rawToken.split(" ")[1]; //Bearer 제거
-        }
-        return rawToken;
     }
 
 

@@ -49,6 +49,6 @@ public class JwtTestController {
 
     @GetMapping("test")
     public void testBoard() {
-        System.out.println(userLoginAndLogoutRepository.getUserNoUsingEmail("test"));
+        System.out.println("test");
     }
 }
