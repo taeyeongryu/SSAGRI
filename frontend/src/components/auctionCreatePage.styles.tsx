@@ -1,11 +1,15 @@
 import { styled } from 'styled-components';
 import { useState, useEffect } from 'react';
+// import { useRecoilValue } from 'recoil';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 //달력
 import 'react-calendar/dist/Calendar.css';
 import './calendarstyle.css';
 import Calendar from 'react-calendar';
 import moment from 'moment';
+
 const CreateDiv = styled.div`
   width: 100%;
   height: 1200px;
@@ -58,14 +62,6 @@ const CreateDiv6 = styled.div`
 `;
 const CreateDiv7 = styled.div`
   margin: 30px auto 40px;
-  width: 1000px;
-  height: 50px;
-
-  display: flex;
-  justify-content: center;
-`;
-const CreateDiv8 = styled.div`
-  margin: 0px auto;
   width: 1000px;
   height: 50px;
 
@@ -134,6 +130,26 @@ const TagBtn4 = styled.div`
   line-height: 50px;
   color: white;
 `;
+const TagBtn5 = styled.div`
+  margin: 95px 0 20px 0;
+  width: 300px;
+  height: 45px;
+  background-color: #396cfa;
+  border-radius: 10px;
+  text-align: center;
+  line-height: 45px;
+  color: white;
+`;
+
+const TagBtn6 = styled.div`
+  width: 300px;
+  height: 45px;
+  background-color: #737475;
+  border-radius: 10px;
+  text-align: center;
+  line-height: 45px;
+  color: white;
+`;
 
 const InputTag1 = styled.input`
   width: 500px;
@@ -168,7 +184,7 @@ const InputTag3 = styled.div`
   /* background-color: #555453; */
 `;
 
-const InputTag5 = styled.div`
+const InputTag5 = styled.input`
   width: 150px;
   height: 40px;
 
@@ -187,24 +203,30 @@ const Div4 = styled.div`
   display: flex;
 `;
 const Div5 = styled.div`
-  width: 300px;
+  width: 280px;
   height: 50px;
-  border: 2px solid black;
+  /* border: 2px solid black; */
+  font-size: 20px;
 `;
 const Div6 = styled.div`
   width: 100%;
   height: 400px;
   display: flex;
-  margin-top: 30px;
+  margin-top: 50px;
   justify-content: center;
   /* border: 2px solid red; */
 `;
 const Div7 = styled.div`
-  margin-right: 50px;
+  margin-right: 60px;
 `;
 const Div8 = styled.div`
   display: flex;
   margin-bottom: 10px;
+  margin-left: 10px;
+`;
+const Div9 = styled.div`
+  font-size: 40px;
+  margin-right: 50px;
 `;
 
 const SelectDiv = styled.select`
@@ -216,17 +238,12 @@ const SelectDiv = styled.select`
 `;
 
 const TextDiv = styled.div`
-  font-size: 20px;
+  font-size: 15px;
+  margin-right: 20px;
 `;
 
 const AuctionCreate = () => {
-  const [selectedDate, setSelectedDate] = useState(new Date()); // 선택된 날짜를 상태로 관리
   const value = new Date();
-  const onCalendarChange = async (value) => {
-    setSelectedDate(value); // 선택된 날짜를 상태에 반영
-
-    console.log('선택된 날짜:', formatDate(value)); // 업데이트된 값 사용
-  };
 
   const formatDate = (date) => {
     const year = date.getFullYear();
@@ -236,16 +253,79 @@ const AuctionCreate = () => {
   };
 
   const [nextPage, setNextPage] = useState(false);
-  const LocalList = ['서울', '대전', '구미', '광주', '부울경'];
+  const LocalList = ['모니터', '키보드', '마우스', '생활용품', '기타용품'];
+  // const hourList = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17];
 
-  const [itemName, setItemName] = useState('');
-  const [itemDescription, setItemDescription] = useState('');
-  const [Selected, setSelected] = useState('');
+  // 경매 물품등록 api
+  const userNo = 3; // 주최자 아이디
+  const [itemName, setItemName] = useState(''); // 상품명
+  const [itemDescription, setItemDescription] = useState(''); // 상품 설명
+  const [startTime, setStartTime] = useState(new Date()); // 경매 시작시간
+  const [endTime, setEndTime] = useState(new Date()); // 경매 마감시간
+  const [downPrice, setDownPrice] = useState(0); // 경매 하한가
+  const [originPrice, setOriginPrice] = useState(0); // 경매 정가
+  const [countPrice, setCountPrice] = useState(0); // 경매 입찰 단위
+  const [Selected, setSelected] = useState(''); // 물품분류
 
-  console.log(selectedDate, itemName, itemDescription);
+  // console.log(selectedDate, itemName, itemDescription);
 
+  const navigate = useNavigate();
+  const goAuction = () => {
+    navigate('/auction');
+  };
+
+  const onCalendarChange = async (value) => {
+    let startData = formatDate(value);
+    setStartTime(new Date(startData)); // 선택된 날짜를 상태에 반영
+  };
+  const onCalendarChange2 = async (value) => {
+    let endData = formatDate(value);
+    setEndTime(new Date(endData)); // 선택된 날짜를 상태에 반영
+  };
+
+  // 경매 생성 요청
+
+  const auctionApi = axios.create({
+    // baseURL: process.env.REACT_APP_SPRING_URI,
+    headers: { 'cotent-type': 'application/json' }
+  });
+
+  const CreateAuctionItem = () => {
+    const data = {
+      comment: itemDescription,
+      countPrice: countPrice,
+      downPrice: downPrice,
+      // endDate: endTime,
+      endDate: '2023-09-21T05:41:47.940Z',
+      modifyDate: '2023-09-21T05:41:47.940Z',
+      name: itemName,
+      originPrice: originPrice,
+      // startDate: startTime,
+      startDate: '2023-09-21T05:41:47.940Z',
+      status: 'END',
+      type: Selected,
+      upPrice: 1000,
+      userNo: userNo
+    };
+    auctionApi
+      .post('/auction-product/auction/regist', data)
+      .then((res) => {
+        console.log(res, '성공');
+      })
+      .catch((err) => {
+        console.log(err);
+        console.log(data);
+      });
+  };
+
+  //등록 2페이지로 이동
   const Checking = () => {
     setNextPage(true);
+  };
+
+  // 등록 1페이지로 돌아오기
+  const Checking2 = () => {
+    setNextPage(false);
   };
 
   const onInput1 = (e) => {
@@ -254,6 +334,18 @@ const AuctionCreate = () => {
 
   const onInput2 = (e) => {
     setItemDescription(e.target.value);
+  };
+  const onInput3 = (e) => {
+    const inputValue = parseInt(e.target.value, 10);
+    setDownPrice(inputValue);
+  };
+  const onInput4 = (e) => {
+    const inputValue2 = parseInt(e.target.value, 10);
+    setOriginPrice(inputValue2);
+  };
+  const onInput5 = (e) => {
+    const inputValue3 = parseInt(e.target.value, 10);
+    setCountPrice(inputValue3);
   };
 
   useEffect(() => {
@@ -303,14 +395,14 @@ const AuctionCreate = () => {
           </CreateDiv6>
           <CreateDiv7>
             <TagBtn3 onClick={Checking}>다음</TagBtn3>
-            <TagBtn4>취소</TagBtn4>
+            <TagBtn4 onClick={goAuction}>취소</TagBtn4>
           </CreateDiv7>
         </div>
       ) : (
         <div>
           <Div6 style={{ display: 'flex' }}>
             <Div7>
-              <TagBtn1 style={{ marginBottom: '10px' }}>경매 기간</TagBtn1>
+              <TagBtn1 style={{ marginBottom: '40px' }}>경매 기간</TagBtn1>
               <Div4>
                 <Calendar
                   onChange={onCalendarChange}
@@ -319,43 +411,53 @@ const AuctionCreate = () => {
                   formatDay={(locale, date) => moment(date).format('DD')}
                 />
                 <Calendar
-                  onChange={onCalendarChange}
+                  onChange={onCalendarChange2}
                   value={value}
                   // @ts-ignore
                   formatDay={(locale, date) => moment(date).format('DD')}
                 />
               </Div4>
-              <Div4>
+              <Div4 style={{ marginTop: '40px' }}>
                 <Div3>
+                  <SelectDiv
+                    value={Selected}
+                    onChange={(e) => setSelected(e.target.value)}
+                  >
+                    {LocalList.map((item) => (
+                      <option value={item} key={item}>
+                        {item}
+                      </option>
+                    ))}
+                  </SelectDiv>
                   <TextDiv>시작 시간</TextDiv>
-                  <Div5></Div5>
+                  <Div5>{moment(startTime).format('YYYY-MM-DD')}</Div5>
                 </Div3>
-                <Div3>--</Div3>
+                <Div9>--</Div9>
                 <Div3>
                   <TextDiv>마감시간</TextDiv>
-                  <Div5></Div5>
+                  <Div5>{moment(endTime).format('YYYY-MM-DD')}</Div5>
                 </Div3>
               </Div4>
             </Div7>
             <Div3>
               <Div8>
                 <TagBtn1>시작가</TagBtn1>
-                <InputTag5></InputTag5>
+                <InputTag5 onChange={onInput3}></InputTag5>
               </Div8>
               <Div8>
                 <TagBtn1>정가</TagBtn1>
-                <InputTag5></InputTag5>
+                <InputTag5 onChange={onInput4}></InputTag5>
               </Div8>
               <Div8>
                 <TagBtn1>입찰 단위</TagBtn1>
-                <InputTag5></InputTag5>
+                <InputTag5 onChange={onInput5}></InputTag5>
               </Div8>
+              <TagBtn5 onClick={CreateAuctionItem}>상품등록 하기</TagBtn5>
+              <TagBtn6 onClick={Checking2}>뒤로가기</TagBtn6>
             </Div3>
           </Div6>
-          <CreateDiv8>
-            <TagBtn3 onClick={Checking}>다음</TagBtn3>
-            <TagBtn4>취소</TagBtn4>
-          </CreateDiv8>
+          {/* <CreateDiv8>
+          </CreateDiv8> */}
         </div>
       )}
     </CreateDiv>

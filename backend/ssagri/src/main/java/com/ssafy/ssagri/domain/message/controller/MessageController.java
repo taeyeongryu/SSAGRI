@@ -1,8 +1,8 @@
 package com.ssafy.ssagri.domain.message.controller;
 
 
-import com.ssafy.ssagri.domain.message.dto.MessageRequest;
-import com.ssafy.ssagri.domain.message.dto.MessageResponse;
+import com.ssafy.ssagri.domain.message.dto.MessageRequestDto;
+import com.ssafy.ssagri.domain.message.dto.MessageResponseDto;
 import com.ssafy.ssagri.domain.message.service.MessageService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -25,15 +25,15 @@ public class MessageController {
     @MessageMapping("/chat/room/1")
     @SendTo("/sub/chat/room/1")
     @ApiOperation("메시지 보내는 메서드")
-    public MessageResponse sendMessage(MessageRequest messageRequest) {
+    public MessageResponseDto sendMessage(MessageRequestDto messageRequest) {
         System.out.println("messageRequest = " + messageRequest);
-        MessageResponse messageResponse = messageService.saveMessage(messageRequest);
+        MessageResponseDto messageResponse = messageService.saveMessage(messageRequest);
         return messageResponse;
     }
 
     @GetMapping("")
     @ApiOperation("chatRoomNo로 메시지 조회하는 메서드")
-    public Page<MessageResponse> selectMessage(Long roomNo, Pageable pageable){
+    public Page<MessageResponseDto> selectMessage(Long roomNo, Pageable pageable){
         return messageService.selectMessageResponse(roomNo, pageable);
     }
 }

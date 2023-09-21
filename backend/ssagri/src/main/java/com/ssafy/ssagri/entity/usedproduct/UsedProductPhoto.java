@@ -27,10 +27,14 @@ public class UsedProductPhoto {
     @Column(name = "used_product_photo_link",nullable = false)
     private String usedProductPhotoLink;
 
+    @Column(name = "used_product_photo_type",nullable = false)
+    private PhotoType  usedProductPhotoType;
+
     @Builder
-    public UsedProductPhoto(Long no, UsedProduct usedProduct, String usedProductPhotoLink) {
+    public UsedProductPhoto(Long no, UsedProduct usedProduct, String usedProductPhotoLink, PhotoType usedProductPhotoType) {
         this.no = no;
         this.usedProduct = usedProduct;
         this.usedProductPhotoLink = usedProductPhotoLink;
+        this.usedProductPhotoType = usedProductPhotoType;
     }
 }

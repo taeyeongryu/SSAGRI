@@ -138,7 +138,7 @@ const MenuBar = () => {
           top: '100%',
           left: 0,
           width: '100vw',
-          height: showOverlay ? '9vh' : 0,
+          height: showOverlay ? '40px' : 0,
           backgroundColor: '#242526',
           transition: 'height 0.7s' // 이 부분 수정
           // overflow: 'hidden'

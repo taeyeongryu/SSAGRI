@@ -2,7 +2,7 @@ package com.ssafy.ssagri.domain.user.service;
 
 import com.ssafy.ssagri.domain.user.repository.UserRegistRepository;
 import com.ssafy.ssagri.dto.user.ResponseDTO;
-import com.ssafy.ssagri.dto.user.UserRegisterDTO;
+import com.ssafy.ssagri.dto.user.UserRegistDTO;
 import com.ssafy.ssagri.entity.user.User;
 import com.ssafy.ssagri.util.exception.CustomException;
 import lombok.RequiredArgsConstructor;
@@ -20,19 +20,19 @@ import static com.ssafy.ssagri.util.exception.CustomExceptionStatus.REGISTER_NIC
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class UserRegisterService {
+public class UserRegistService {
 
     private final UserRegistRepository userRegistRepository;
 
     @Transactional
-    public ResponseEntity<ResponseDTO> registUser(UserRegisterDTO userRegisterDTO) throws Exception {
+    public ResponseEntity<ResponseDTO> registUser(UserRegistDTO userRegistDTO) throws Exception {
         userRegistRepository.save(
-                new User(userRegisterDTO.getEmail(),
-                        userRegisterDTO.getPassword(),
-                        userRegisterDTO.getNickname(),
-                        userRegisterDTO.getProfile(),
-                        userRegisterDTO.getRegions(),
-                        userRegisterDTO.getNumber()
+                new User(userRegistDTO.getEmail(),
+                        userRegistDTO.getPassword(),
+                        userRegistDTO.getNickname(),
+                        userRegistDTO.getProfile(),
+                        userRegistDTO.getRegions(),
+                        userRegistDTO.getNumber()
                         )
         );
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(REGISTER_IS_OK.getCode(), REGISTER_IS_OK.getMessage()));

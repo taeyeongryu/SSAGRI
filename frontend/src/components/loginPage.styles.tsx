@@ -376,15 +376,28 @@ const SignInAndUpComponent = () => {
   const onLoginSuccess = (response: any) => {
     console.log(response.headers);
 
-    const { accessToken } = response.headers['access-token'];
+    const accessToken = response.headers['access-token'];
+    console.log(accessToken);
 
     // axios 헤더에 jwt 토큰 담기
-    axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+    axios.defaults.headers.common['Authorization'] = accessToken;
 
     // accessToken 만료하기 1분 전에 로그인 연장
     setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
 
     // 로그인 하기 전 접속했던 페이지로 이동
+  };
+
+  // 로그아웃
+  const onLogout = () => {
+    axios
+      .get('/user/logout')
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   // 회원가입 //
@@ -710,6 +723,7 @@ const SignInAndUpComponent = () => {
             <A>비밀번호를 잊으셨나요?</A>
           </FormContent>
           <Button onClick={onLogin}>로그인</Button>
+          <Button onClick={onLogout}>로그아웃</Button>
         </Form>
       </FormContainer>
       {/* 회원가입 폼*/}
