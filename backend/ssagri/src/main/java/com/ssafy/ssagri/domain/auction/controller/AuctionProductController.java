@@ -21,6 +21,7 @@ public class AuctionProductController {
 
     @GetMapping(value = "/all-list")
     public List<AuctionProductAll> allList(){
+        System.out.println("들어왔니");
         return auctionProductService.getAuctionProducts();
 
     }

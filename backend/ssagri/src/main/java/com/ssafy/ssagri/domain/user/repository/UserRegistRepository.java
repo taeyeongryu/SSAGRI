@@ -15,6 +15,8 @@ public interface UserRegistRepository extends JpaRepository<User, Long> {
     @Query("SELECT COUNT(u) > 0 FROM User u WHERE u.email = :email")
     boolean isEmailExists(@Param("email") String email);
 
+    User findByNo(Long no);
+
 
 
 }

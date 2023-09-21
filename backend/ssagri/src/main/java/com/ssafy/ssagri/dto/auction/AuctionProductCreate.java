@@ -47,4 +47,6 @@ public class AuctionProductCreate {
 
     // 물품 분류
     private AuctionProductType type;
+
+    private LocalDateTime modifyDate;
 }
