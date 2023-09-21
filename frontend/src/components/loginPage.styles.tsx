@@ -375,6 +375,8 @@ const SignInAndUpComponent = () => {
   // 로그인 성공 시
   const onLoginSuccess = (response: any) => {
     console.log(response);
+    console.log(response.headers['access-token']);
+
     for (let pair of response.headers.entries()) {
       console.log(pair[0] + ': ' + pair[1]);
     }
