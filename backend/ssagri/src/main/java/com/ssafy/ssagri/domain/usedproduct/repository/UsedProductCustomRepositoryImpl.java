@@ -1,5 +1,6 @@
 package com.ssafy.ssagri.domain.usedproduct.repository;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -31,10 +32,18 @@ public class UsedProductCustomRepositoryImpl implements UsedProductCustomReposit
     * */
     @Override
     public Page<UsedProduct> selectAllUsedProduct(ProductCategory productCategory, Region region, Pageable pageable) {
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(usedProduct.deleteDate.isNull());
+        if (productCategory != null) {
+            builder.and(usedProduct.category.eq(productCategory));
+        }
+
+        if(region != null){
+            builder.and(usedProduct.user.region.eq(region));
+        }
+
         QueryResults<UsedProduct> usedProductQueryResults = jpaQueryFactory.selectFrom(usedProduct)
-                .where(usedProduct.deleteDate.isNull()
-                        .and(usedProduct.category.eq(productCategory))
-                        .and(usedProduct.user.region.eq(region)))
+                .where(builder)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(getOrderSpecifier(pageable))

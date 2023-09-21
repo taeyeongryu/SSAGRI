@@ -1,7 +1,5 @@
-package com.ssafy.ssagri.dto.auction;
+package com.ssafy.ssagri.domain.auction.dto;
 
-import com.querydsl.core.annotations.QueryProjection;
-import com.ssafy.ssagri.entity.auction.AuctionProductPhoto;
 import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;

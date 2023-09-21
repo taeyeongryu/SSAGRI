@@ -1,15 +1,12 @@
-package com.ssafy.ssagri.dto.auction;
+package com.ssafy.ssagri.domain.auction.dto;
 
 import com.ssafy.ssagri.entity.auction.AuctionProductType;
-import com.ssafy.ssagri.entity.auction.AuctionProductPhoto;
 
 import com.ssafy.ssagri.entity.auction.AuctionStatus;
-import com.ssafy.ssagri.entity.user.User;
 import lombok.Builder;
 import lombok.Getter;
 
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
