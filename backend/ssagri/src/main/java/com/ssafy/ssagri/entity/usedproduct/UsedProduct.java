@@ -1,5 +1,6 @@
 package com.ssafy.ssagri.entity.usedproduct;
 
+import com.ssafy.ssagri.domain.usedproduct.dto.response.UsedProductDetailResponseDto;
 import com.ssafy.ssagri.domain.usedproduct.dto.response.UsedProductResponseDto;
 import com.ssafy.ssagri.entity.common.BaseTimeEntity;
 import com.ssafy.ssagri.entity.user.Region;
@@ -44,8 +45,8 @@ public class UsedProduct extends BaseTimeEntity {
     @Column(name = "used_product_region",nullable = false)
     private Region region;
 
-    @OneToMany(mappedBy = "usedProduct",cascade = CascadeType.ALL)
-    private List<UsedProductPhoto> usedProductPhotoList = new ArrayList<>();
+//    @OneToMany(mappedBy = "usedProduct",cascade = CascadeType.ALL)
+//    private List<UsedProductPhoto> usedProductPhotoList = new ArrayList<>();
 
 
     @Builder
@@ -73,5 +74,21 @@ public class UsedProduct extends BaseTimeEntity {
                 .updateDate(this.getUpdateDate())
                 .build();
     }
-
+    public UsedProductDetailResponseDto toDetailResponse(User user){
+        return UsedProductDetailResponseDto.builder()
+                .productNo(this.no)
+                .productCategory(this.category)
+                .title(this.title)
+                .content(this.content)
+                .price(this.price)
+                .saleStatus(this.status)
+                .region(this.region)
+                .createDate(this.getCreateDate())
+                .updateDate(this.getUpdateDate())
+                .userNo(user.getNo())
+                .userNickname(user.getNickname())
+                .userProfile(user.getProfile())
+                .userTemper(user.getTemper())
+                .build();
+    };
 }

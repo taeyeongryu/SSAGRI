@@ -10,16 +10,16 @@ public class AuctionCustomRepositoryImpl
 //        implements AuctionCustomRepository
 {
 
-    private final JPAQueryFactory jpaQueryFactory;
-
-    public AuctionCustomRepositoryImpl(EntityManager entityManager) {
-        this.jpaQueryFactory = new JPAQueryFactory(entityManager);
-    }
-
-    @Override
-    public void getAuctionProducts() {
-        
-    }
+//    private final JPAQueryFactory jpaQueryFactory;
+//
+//    public AuctionCustomRepositoryImpl(EntityManager entityManager) {
+//        this.jpaQueryFactory = new JPAQueryFactory(entityManager);
+//    }
+//
+//    @Override
+//    public void getAuctionProducts() {
+//
+//    }
 
 
     // 모든 경매리스트 출력 (상품정보)

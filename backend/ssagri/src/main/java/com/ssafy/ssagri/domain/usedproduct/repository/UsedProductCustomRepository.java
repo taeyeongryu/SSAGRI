@@ -8,4 +8,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface UsedProductCustomRepository {
     Page<UsedProduct> selectAllUsedProduct(ProductCategory productCategory, Region region, Pageable pageable);
+    Page<UsedProduct> selectUsedProductByUserNo(Long userNo, Pageable pageable);
 }
