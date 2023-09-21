@@ -23,7 +23,7 @@ public class CorsConfig {
     private List<String> allowedHeader = List.of("*","Access-Token", "Refresh-Token"); //허용되는 헤더
     private List<String> allowedExposeHeader = List.of("*","Access-Token", "Refresh-Token"); //서버가 클라이언트에게 응답할 때 브라우저에서 노출되어야 하는 헤더(응답 헤더)를 지정
 
-    
+
     @Bean
     @Primary
     public CorsConfigurationSource configurationSource() {
