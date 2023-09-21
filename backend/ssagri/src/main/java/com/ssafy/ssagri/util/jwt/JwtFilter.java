@@ -1,4 +1,4 @@
-package com.ssafy.ssagri.util.filter;
+package com.ssafy.ssagri.util.jwt;
 
 import com.ssafy.ssagri.util.jwt.JwtUtil;
 import io.swagger.annotations.Api;
