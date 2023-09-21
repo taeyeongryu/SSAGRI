@@ -8,13 +8,13 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 
-public class AuctionCustomRepositoryImpl implements AuctionCustomRepository{
+public class AuctionCustomRepositoryImpl  {
 
-    private final JPAQueryFactory jpaQueryFactory;
+    //private final JPAQueryFactory jpaQueryFactory;
 
 
 
-    
+
     // 모든 경매리스트 출력 (상품정보)
    // @Override
    // public void getAuctionProducts(){

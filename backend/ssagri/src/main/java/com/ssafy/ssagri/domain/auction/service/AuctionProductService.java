@@ -48,9 +48,9 @@ public class AuctionProductService {
                      .comment(products.get(i).getComment())
                      .auctionStatus(products.get(i).getAuctionStatus())
                      .finallyPrice(products.get(i).getFinallyPrice())
-                     .modifyDate(products.get(i).getModifyDate())
-                     .type(products.get(i).getType())
-                     .originPrice(products.get(i).getOriginPrice())
+                     //.modifyDate(products.get(i).getModifyDate())
+                    // .type(products.get(i).getType())
+                     //originPrice(products.get(i).getOriginPrice())
                      .photos(auctionPhotoRepository.findByAuctionProduct(products.get(i)))
                      .build();
 
@@ -67,7 +67,7 @@ public class AuctionProductService {
     public void setAuctionProduct(AuctionProductCreate auctionProductCreate){
 
         AuctionProduct auctionProduct = AuctionProduct.builder()
-                .user(userRegistRepository.findByNo(auctionProductCreate.getUserNo()))
+               // .user(userRegistRepository.findByNo(auctionProductCreate.getUserNo()))
                 .name(auctionProductCreate.getName())
                 .upPrice(auctionProductCreate.getUpPrice())
                 .downPrice(auctionProductCreate.getDownPrice())
@@ -75,10 +75,10 @@ public class AuctionProductService {
                 .startDate(auctionProductCreate.getStartDate())
                 .endDate(auctionProductCreate.getEndDate())
                 .comment(auctionProductCreate.getComment())
-                .auctionStatus(auctionProductCreate.getStatus())
-                .modifyDate(LocalDateTime.now())
-                .originPrice(auctionProductCreate.getOriginPrice())
-                .type(auctionProductCreate.getType()).build();
+                .auctionStatus(auctionProductCreate.getStatus()).build();
+               // .modifyDate(LocalDateTime.now())
+               // .originPrice(auctionProductCreate.getOriginPrice())
+                //.type(auctionProductCreate.getType()).build();
 
 
 
