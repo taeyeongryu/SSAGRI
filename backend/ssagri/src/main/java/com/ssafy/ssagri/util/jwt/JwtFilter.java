@@ -41,7 +41,7 @@ public class JwtFilter extends OncePerRequestFilter {
             "/api/webjars/",
             "/api/v2/api-docs",
             "/api/jwt", //TEST API 주소
-            "/api/user" //로그인, 로그아웃 관련
+            "/api/user/" //로그인, 로그아웃 관련
 //            "/" //테스팅 목적으로 jwt 필터를 일시 잠금하였음
     };
 

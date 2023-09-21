@@ -30,6 +30,10 @@ public enum CustomExceptionStatus {
     JWT_TOKEN_INVALID(-1302, "유효하지 않은 토큰입니다."),
     JWT_TOKENTYPE_ERR(-1303, "TokenType Parsing중 오류가 발생했습니다."),
 
+    //JWT token refill = 1400
+    JWT_REFILL_COOKIE_NOT_EXIST(-1400, "Refresh Cookie가 존재하지 않습니다."),
+    JWT_REFILL_COOKIE_VALUE_INVALID(-1401, "쿠키 안의 토큰 값이 유효하지 않습니다."),
+    JWT_REFILL_COOKIE_REDIS_NOT_MATCHED(-1402, "쿠키는 유효하나, Redis 서버에 유저 정보가 없습니다."),
     //ChatRoom = 2xxx
     CHATROOM_DOES_NOT_EXSIST(-2002, "존재하지 않는 채팅방입니다."),
 
