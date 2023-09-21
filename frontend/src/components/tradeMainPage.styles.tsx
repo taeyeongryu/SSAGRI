@@ -4,7 +4,7 @@ import { styled } from 'styled-components';
 const TradeMainFrameDiv = styled.div`
   width: 1920px;
   height: 900px;
-  margin-top: 50px;
+  margin: 50px auto 0;
   /* border: 2px solid black; */
   display: flex;
   justify-content: center;
@@ -36,6 +36,7 @@ const TradeMain = () => {
 const TradeMainMapDiv = styled.div`
   width: 400px;
   height: 700px;
+  position: relative;
   /* border: 2px solid green; */
 `;
 
@@ -50,8 +51,8 @@ const Seoul = styled.div`
   text-align: center;
   line-height: 50px;
   position: absolute;
-  top: 270px;
-  left: 400px;
+  top: 110px;
+  left: 110px;
   box-shadow: 2px 2px 2px 1px #383838;
 
   &:hover {
@@ -69,8 +70,8 @@ const Dajeon = styled.div`
   text-align: center;
   line-height: 50px;
   position: absolute;
-  top: 450px;
-  left: 420px;
+  top: 290px;
+  left: 130px;
   box-shadow: 2px 2px 2px 1px #383838;
 
   &:hover {
@@ -88,8 +89,8 @@ const Gumi = styled.div`
   text-align: center;
   line-height: 50px;
   position: absolute;
-  top: 470px;
-  left: 530px;
+  top: 310px;
+  left: 240px;
   box-shadow: 2px 2px 2px 1px #383838;
 
   &:hover {
@@ -107,8 +108,8 @@ const Gwangju = styled.div`
   text-align: center;
   line-height: 50px;
   position: absolute;
-  top: 640px;
-  left: 340px;
+  top: 480px;
+  left: 50px;
   box-shadow: 2px 2px 2px 1px #383838;
 
   &:hover {
@@ -126,8 +127,8 @@ const Buwoolkyung = styled.div`
   text-align: center;
   line-height: 50px;
   position: absolute;
-  top: 620px;
-  left: 570px;
+  top: 460px;
+  left: 280px;
   box-shadow: 2px 2px 2px 1px #383838;
 
   &:hover {
