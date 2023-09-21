@@ -42,7 +42,8 @@ public class RedisService {
         }
     }
 
-    public Boolean keyExists(String key) {
+    public Boolean keyExists(Long userNo) {
+        String key = "RefreshToken:" + userNo;
         return redisTemplate.hasKey(key);
     }
 
