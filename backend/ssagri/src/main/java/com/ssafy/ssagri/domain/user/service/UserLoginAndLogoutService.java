@@ -106,22 +106,21 @@ public class UserLoginAndLogoutService {
         }
     }
 
-    public ResponseEntity<?> logoutUser(HttpServletRequest request, HttpServletResponse response) throws CustomException, IOException {
+    public ResponseEntity<?> logoutUser(HttpServletRequest request) throws CustomException {
         Long userNo;
-        String accessToken = null;
+        String accessToken;
+        String rawToken = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-            String rawToken = request.getHeader(HttpHeaders.AUTHORIZATION);
-            if(rawToken == null || !rawToken.startsWith("Bearer ")){
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                response.setContentType("application/json");
-                response.getWriter().write("{\"error\": \"Null or Not Bearer Token\"}");
-                throw new CustomException(LOGOUT_TOKEN_ERR);
-            }
-            else {
-                rawToken = rawToken.split(" ")[1]; //Bearer 제거
-            }
+        if(rawToken == null || !rawToken.startsWith("Bearer ")) throw new CustomException(LOGOUT_TOKEN_ERR);
+        else {
+            accessToken = rawToken.split(" ")[1]; //Bearer 제거
+        }
+
+        try {
             userNo = JwtUtil.getUserNo(accessToken);
-
+        } catch (Exception e) {
+            throw new CustomException(JWT_TOKEN_INVALID);
+        }
 
         //Redis에 저장된 Refresh Token 제거
         redisService.deleteRefreshTokenByUserNo(userNo);
