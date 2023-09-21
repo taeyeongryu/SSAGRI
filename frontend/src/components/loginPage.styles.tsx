@@ -1,5 +1,8 @@
 import { styled, keyframes } from 'styled-components';
 import { useState, useRef, useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
+import { isLoggedInAtom } from '../states/account/loginAtom';
+
 import { Avatar } from 'antd';
 import axios from 'axios';
 
@@ -41,7 +44,8 @@ const A = styled.a`
   margin: 15px 0;
 `;
 
-const Button = styled.div`
+const Button = styled.button`
+  cursor: pointer;
   border-radius: 20px;
   border: 1px solid #4786fa;
   background-color: #4786fa;
@@ -65,10 +69,16 @@ const Button = styled.div`
   &:focus {
     outline: none;
   }
+
+  &.inactive {
+    cursor: default;
+    opacity: 0.5;
+  }
 `;
 
 // 중복확인 버튼
 const DoubleCheck = styled.button`
+  cursor: pointer;
   width: 180px;
   height: 42px;
 
@@ -76,9 +86,15 @@ const DoubleCheck = styled.button`
   background-color: grey;
   color: white;
   letter-spacing: 0.5px;
+
+  &.inactive {
+    cursor: default;
+    opacity: 0.5;
+  }
 `;
 
 const Verify = styled.button`
+  cursor: pointer;
   width: 180px;
   height: 42px;
 
@@ -86,6 +102,11 @@ const Verify = styled.button`
   background-color: grey;
   color: white;
   letter-spacing: 0.5px;
+
+  &.inactive {
+    cursor: default;
+    opacity: 0.5;
+  }
 `;
 
 const Select = styled.select`
@@ -317,6 +338,55 @@ const SignInAndUpComponent = () => {
     }
   };
 
+  const onChangePassword = (e) => {
+    setSignInForm({ ...signInForm, password: e.target.value });
+  };
+
+  // 로그인 여부
+  const isLoggedIn = useRecoilValue(isLoggedInAtom);
+
+  const JWT_EXPIRY_TIME = 24 * 3600 * 1000; // 만료 시간 (24시간)
+
+  // 로그인 요청 api
+  const onLogin = () => {
+    const data = {
+      email: signInForm.email,
+      password: signInForm.password
+    };
+    axios
+      .post('/user/login/', data)
+      .then(onLoginSuccess)
+      .catch((error) => {
+        // ... 에러 처리
+        console.log(error);
+      });
+  };
+
+  const onSilentRefresh = () => {
+    axios
+      .post('/silent-refresh')
+      .then(onLoginSuccess)
+      .catch((error) => {
+        console.log(error);
+        // 로그인 실패처리
+      });
+  };
+
+  // 로그인 성공 시
+  const onLoginSuccess = (response: any) => {
+    console.log(response);
+    console.log(response.headers);
+    console.log(response.headers['Access-Token']);
+
+    const { accessToken } = response.data;
+
+    // accessToken 설정
+    axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+
+    // accessToken 만료하기 1분 전에 로그인 연장
+    setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
+  };
+
   // 회원가입 //
   const regionList = ['대전', '서울', '구미', '광주', '부울경'];
   const cardinalList = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
@@ -331,8 +401,11 @@ const SignInAndUpComponent = () => {
   });
 
   // 유효성 검증
+  const [isEmailStyle, setIsEmailStyle] = useState(false); // 유효한 이메일 형식인지
+  const [isEmailUnique, setIsEmailUnique] = useState(false); // 이메일 중복 확인 여부
   // @ts-ignore
-  const [isEmailValid, setIsEmailValid] = useState(false);
+  const [isEmailValid, setIsEmailValid] = useState(false); // 인증 완료한 이메일인지
+
   const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [isConfirmValid, setIsConfirmValid] = useState(false);
   // @ts-ignore
@@ -347,6 +420,9 @@ const SignInAndUpComponent = () => {
 
   const onChangeEmailSignUp = (e) => {
     setSignUpForm({ ...signUpForm, email: e.target.value });
+    // 값이 바뀌면 중복 확인 여부와 인증 여부를 초기화
+    setIsEmailUnique(false);
+    setIsEmailValid(false);
     // 이메일 형식 유효성 검증
     const emailRegex =
       /^[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}$/;
@@ -356,13 +432,16 @@ const SignInAndUpComponent = () => {
       if (!emailRegex.test(e.target.value)) {
         // 유효성 검증 실패
         setSignUpEmailMessage('이메일의 형식이 올바르지 않습니다!');
+        setIsEmailStyle(false);
       } else {
         // 유효성 검증 성공
         setSignUpEmailMessage('');
+        setIsEmailStyle(true);
       }
     } else {
       // 입력값이 없는 경우
       setSignUpEmailMessage('');
+      setIsEmailStyle(false);
     }
   };
 
@@ -411,37 +490,52 @@ const SignInAndUpComponent = () => {
   };
 
   const onChangeNickname = (e) => {
-    const nameRegex = /[ \{\}\[\]\/?.,;:|\)*~`!^\-_+┼<>@\#$%&\'\"\\\(\=]/gi;
-    let check = true;
+    setSignUpForm({ ...signUpForm, nickname: e.target.value });
+    setIsNicknameValid(false);
+    setNicknameMessage('');
 
-    if (nameRegex.test(e.target.value)) {
-      alert('특수문자는 입력할 수 없습니다.');
-      check = false;
+    const nameRegex = /^[A-Za-z0-9가-힣]{2,8}$/;
+
+    if (e.target.value) {
+      // 입력값이 있는 경우
+      if (!nameRegex.test(e.target.value)) {
+        // 유효성 검사 실패
+        setIsNicknameValid(false);
+        setNicknameMessage('영어 대소문자, 숫자, 한글로 2~8자리 입력해주세요');
+      } else {
+        // 유효한 경우
+        setIsNicknameValid(true);
+        setNicknameMessage('');
+      }
+    } else {
+      // 입력값이 없는 경우
+      setIsNicknameValid(false);
+      setNicknameMessage('');
     }
-
-    check && setSignUpForm({ ...signUpForm, nickname: e.target.value });
   };
 
   // 이메일 중복확인
   const doubleCheckEmail = (e) => {
     e.preventDefault();
-
-    axios
-      .post('/user/regist/check/email', {
-        params: {
-          email: signUpForm.email
-        }
-      })
-      .then(() => {
-        // 이메일이 사용가능한 경우
-        setSignUpEmailMessage('사용 가능한 이메일입니다.');
-        setIsEmailValid(true);
-      })
-      .catch(() => {
-        // 이미 등록된 이메일인 경우
-        setSignUpEmailMessage('이미 등록된 이메일입니다.');
-        setIsEmailValid(false);
-      });
+    if (signUpForm.email) {
+      axios
+        .get('/user/regist/check/email', {
+          params: {
+            email: signUpForm.email
+          }
+        })
+        .then(() => {
+          // 이메일이 사용가능한 경우
+          setSignUpEmailMessage('사용 가능한 이메일입니다.');
+          setIsEmailUnique(true);
+        })
+        .catch((err) => {
+          // 이미 등록된 이메일인 경우
+          console.log(err);
+          setSignUpEmailMessage('이미 등록된 이메일입니다.');
+          setIsEmailUnique(false);
+        });
+    }
   };
 
   // 이메일 인증번호 전송
@@ -466,25 +560,46 @@ const SignInAndUpComponent = () => {
       });
   };
 
+  // 인증번호 확인 요청
+  // const checkVerificationCode = (e) => {
+  //   e.preventDefault();
+
+  //   const data = {
+  //     number: verifyNumber
+  //   };
+
+  //   axios.post('인증번호 확인 URL')
+  //   .then((res) => { // 인증 완료
+  //     console.log(res);
+  //     setSignUpEmailMessage('인증이 완료되었습니다.')
+  //     // 인증 여부 true로 바꾼다.
+  //   }).catch((err) => { // 인증 실패
+  //     console.log(err);
+  //     // 인증 여부 false,
+  //   });
+  // };
+
   // 닉네임 중복확인
   const doubleCheckNickname = (e) => {
     e.preventDefault();
-    axios
-      .post('/user/regist/check/nickname', {
-        params: {
-          nickname: signUpForm.nickname
-        }
-      })
-      .then(() => {
-        // 닉네임이 사용가능한 경우
-        setNicknameMessage('사용 가능한 닉네임입니다.');
-        setIsNicknameValid(true);
-      })
-      .catch(() => {
-        // 이미 등록된 닉네임인 경우
-        setNicknameMessage('사용중인 닉네임입니다.');
-        setIsNicknameValid(false);
-      });
+    if (signUpForm.nickname) {
+      axios
+        .get('/user/regist/check/nickname', {
+          params: {
+            nickname: signUpForm.nickname
+          }
+        })
+        .then(() => {
+          // 닉네임이 사용가능한 경우
+          setNicknameMessage('사용 가능한 닉네임입니다.');
+          setIsNicknameValid(true);
+        })
+        .catch(() => {
+          // 이미 등록된 닉네임인 경우
+          setNicknameMessage('사용중인 닉네임입니다.');
+          setIsNicknameValid(false);
+        });
+    }
   };
 
   const onSignUp = (e) => {
@@ -512,6 +627,8 @@ const SignInAndUpComponent = () => {
 
     axios.post('SIGNUP_URL', formData, config);
   };
+
+  const [joinBtnActive, setJoinBtnActive] = useState(false);
 
   useEffect(() => {
     const signUpButton = document.getElementById('signUp');
@@ -558,6 +675,14 @@ const SignInAndUpComponent = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (isEmailValid && isPasswordValid && isConfirmValid && isNicknameValid) {
+      setJoinBtnActive(true);
+    } else {
+      setJoinBtnActive(false);
+    }
+  }, [isEmailValid, isPasswordValid, isConfirmValid, isNicknameValid]);
+
   return (
     <Container id='container' style={{ margin: 'auto' }}>
       {/* 로그인 폼*/}
@@ -577,10 +702,14 @@ const SignInAndUpComponent = () => {
               onChange={onChangeEmail}
             ></Input>
             <Label htmlFor='password'>비밀번호</Label>
-            <Input type='password'></Input>
+            <Input
+              type='password'
+              value={signInForm.password}
+              onChange={onChangePassword}
+            ></Input>
             <A>비밀번호를 잊으셨나요?</A>
           </FormContent>
-          <Button>로그인</Button>
+          <Button onClick={onLogin}>로그인</Button>
         </Form>
       </FormContainer>
       {/* 회원가입 폼*/}
@@ -607,7 +736,7 @@ const SignInAndUpComponent = () => {
             ></FileInput>
             <Label htmlFor='email'>
               <div>이메일</div>
-              {isEmailValid ? (
+              {isEmailUnique ? (
                 <ValidMsg>{signUpEmailMessage}</ValidMsg>
               ) : (
                 <InvalidMsg>{signUpEmailMessage}</InvalidMsg>
@@ -619,8 +748,31 @@ const SignInAndUpComponent = () => {
                 value={signUpForm.email}
                 onChange={onChangeEmailSignUp}
               ></Input>
-              <DoubleCheck onClick={doubleCheckEmail}>중복 확인</DoubleCheck>
-              <Verify onClick={sendEmail}>인증</Verify>
+              <DoubleCheck
+                className={'' + (!isEmailStyle && 'inactive')}
+                disabled={!isEmailStyle}
+                onClick={doubleCheckEmail}
+              >
+                중복 확인
+              </DoubleCheck>
+              <Verify
+                className={'' + (!isEmailUnique && 'inactive')}
+                disabled={!isEmailUnique}
+                onClick={sendEmail}
+              >
+                인증번호 전송
+              </Verify>
+            </div>
+            <div
+              style={{
+                display: 'flex',
+                gap: '10px',
+                alignItems: 'center',
+                justifyContent: 'end'
+              }}
+            >
+              <Input style={{ width: '102px' }} type='number'></Input>
+              <Verify style={{ width: '102px' }}>인증번호 확인</Verify>
             </div>
             <Label htmlFor='password'>
               <div>비밀번호</div>
@@ -711,7 +863,13 @@ const SignInAndUpComponent = () => {
               </InvalidMsg>
             )}
           </FormContent>
-          <Button onClick={onSignUp}>회원 가입</Button>
+          <Button
+            className={'' + (!joinBtnActive && 'inactive')}
+            disabled={!joinBtnActive}
+            onClick={onSignUp}
+          >
+            회원 가입
+          </Button>
         </Form>
       </FormContainer>
       <OverlayContainer id='overlay-container'>
