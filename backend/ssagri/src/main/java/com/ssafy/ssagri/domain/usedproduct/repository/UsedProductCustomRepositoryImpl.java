@@ -3,8 +3,10 @@ package com.ssafy.ssagri.domain.usedproduct.repository;
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
+import com.ssafy.ssagri.entity.usedproduct.ProductCategory;
 import com.ssafy.ssagri.entity.usedproduct.QUsedProduct;
 import com.ssafy.ssagri.entity.usedproduct.UsedProduct;
+import com.ssafy.ssagri.entity.user.Region;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -22,9 +24,11 @@ public class UsedProductCustomRepositoryImpl implements UsedProductCustomReposit
     }
 
     @Override
-    public Page<UsedProduct> selectAllUsedProduct(Pageable pageable) {
+    public Page<UsedProduct> selectAllUsedProduct(ProductCategory productCategory, Region region, Pageable pageable) {
         QueryResults<UsedProduct> usedProductQueryResults = jpaQueryFactory.selectFrom(usedProduct)
-                .where(usedProduct.deleteDate.isNull())
+                .where(usedProduct.deleteDate.isNull()
+                        .and(usedProduct.category.eq(productCategory))
+                        .and(usedProduct.user.region.eq(region)))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(usedProduct.no.desc())
@@ -35,4 +39,6 @@ public class UsedProductCustomRepositoryImpl implements UsedProductCustomReposit
 
         return new PageImpl<>(results, pageable, total);
     }
+
+
 }

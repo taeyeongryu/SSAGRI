@@ -17,7 +17,7 @@ public class JwtUtil {
     //Key : 추후 보안상 변경 조치 필요
     private final static String secretKey = "ssafy9kiB209teamSsaguriFightingssafy9kiB209teamSsaguriFightingssafy9kiB209teamSsaguriFighting";
     private static long hour = 1000 * 60 * 60L;
-    private static long accessExpireTime = hour * 24 * 30; //액세스 토큰 만료시간 30분 -> 현재 테스트용으로 기한 연장
+    private static long accessExpireTime = hour / 2; //액세스 토큰 만료시간 30분 -> 현재 테스트용으로 기한 연장
     private static long refreshExpireTime = hour; //리프레시 토큰 만료시간 3일
 
     //액세스 토큰 생성
@@ -66,10 +66,11 @@ public class JwtUtil {
 
     //토큰에서 유저 payLoad 값 꺼내기
     public static Long getUserNo(String token){
-        return Jwts.parser()
+        Claims claims = Jwts.parser()
                 .setSigningKey(secretKey)
                 .parseClaimsJws(token)
-                .getBody().get("userNo", Long.class);
+                .getBody();
+        return claims.get("userNo", Long.class);
     }
 
     //토큰 타입 꺼내기

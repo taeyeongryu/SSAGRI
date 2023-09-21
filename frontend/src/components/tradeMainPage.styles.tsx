@@ -452,20 +452,39 @@ const SellerLocationAndTime03 = styled.div`
   color: #929292;
 `;
 
+const SearchInput = () => {
+  return (
+    <Search01>
+      <SearchInput01
+        type='text'
+        placeholder='원하는 제품을 검색해 보세요!'
+      ></SearchInput01>
+      <SearchButton>
+        <SearchImg src='/assets/img/searchGlass-4786fa.png'></SearchImg>
+      </SearchButton>
+    </Search01>
+  );
+};
+const AuctionSearchInput = () => {
+  return (
+    <Search01>
+      <SearchInput01
+        type='text'
+        placeholder='원하는 제품을 검색해 보세요!'
+      ></SearchInput01>
+      <SearchButton>
+        <SearchImg src='/assets/img/searchGlass-4786fa.png'></SearchImg>
+      </SearchButton>
+    </Search01>
+  );
+};
+
 const TradeMainProduct = () => {
   return (
     <TradeMainProductDiv>
       <RegionAndSearch>
         <Region>지역: 서울</Region>
-        <Search01>
-          <SearchInput01
-            type='text'
-            placeholder='원하는 제품을 검색해 보세요!'
-          ></SearchInput01>
-          <SearchButton>
-            <SearchImg src='/assets/img/searchGlass-4786fa.png'></SearchImg>
-          </SearchButton>
-        </Search01>
+        <SearchInput></SearchInput>
       </RegionAndSearch>
       <RecentProductDiv>
         <RecentProductTitle>방금 등록된 상품</RecentProductTitle>
@@ -500,6 +519,7 @@ const TradeMainProduct = () => {
 
 export {
   TradeMain,
+  AuctionSearchInput,
   Search02,
   SearchInput02,
   SearchButton,

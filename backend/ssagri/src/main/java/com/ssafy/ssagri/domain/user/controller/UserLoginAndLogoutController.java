@@ -3,13 +3,12 @@ package com.ssafy.ssagri.domain.user.controller;
 import com.ssafy.ssagri.domain.user.service.UserLoginAndLogoutService;
 import com.ssafy.ssagri.domain.user.service.UserRegisterService;
 import com.ssafy.ssagri.dto.user.UserLoginDTO;
+import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 유저 로그인 및 로그아웃 컨트롤러
@@ -18,14 +17,23 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/user")
+@Api(tags = "로그인, 로그아웃 컨트롤러")
 public class UserLoginAndLogoutController {
 
     private final UserLoginAndLogoutService userLoginAndLogoutService;
 
     //로그인
-    @PostMapping("/login/")
+    @Operation(summary = "로그인 기능", description = "줘야 하는 값 : UserLoginDTO, 프론트로 넘겨주는 값 : Access-Token, Refresh-Token")
+    @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody UserLoginDTO userLoginDTO) {
         return userLoginAndLogoutService.loginUser(userLoginDTO);
+    }
+
+    //로그아웃
+    @Operation(summary = "로그아웃 기능", description = "로그아웃 시 Header에 `Access-Token`을 주어야 합니다.")
+    @GetMapping("/logout")
+    public ResponseEntity<?> logoutUser(@RequestHeader("Access-Token") String accessToken) {
+        return userLoginAndLogoutService.logoutUser(accessToken);
     }
 
 }

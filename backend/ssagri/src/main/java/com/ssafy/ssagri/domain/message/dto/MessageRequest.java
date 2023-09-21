@@ -31,13 +31,16 @@ public class MessageRequest {
                 .senderNo(this.senderNo)
                 .receiverNo(this.receiverNo)
                 .content(this.content)
+                .time(LocalDateTime.now())
                 .build();
     }
+
     public Message toEntity(){
         Message message = Message.builder()
-                .roomId(this.chatRoomNo)
-                .userId(this.senderNo)
-                .content(this.content)
+                .roomNo(chatRoomNo)
+                .senderNo(senderNo)
+                .receiverNo(receiverNo)
+                .content(content)
                 .time(LocalDateTime.now())
                 .build();
         return message;

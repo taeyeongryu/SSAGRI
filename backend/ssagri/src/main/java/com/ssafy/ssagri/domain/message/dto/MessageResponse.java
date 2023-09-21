@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MessageResponse {
@@ -12,12 +14,14 @@ public class MessageResponse {
     private Long senderNo;
     private Long receiverNo;
     private String content;
+    private LocalDateTime time;
 
     @Builder
-    public MessageResponse(Long chatRoomNo, Long senderNo, Long receiverNo, String content) {
+    public MessageResponse(Long chatRoomNo, Long senderNo, Long receiverNo, String content, LocalDateTime time) {
         this.chatRoomNo = chatRoomNo;
         this.senderNo = senderNo;
         this.receiverNo = receiverNo;
         this.content = content;
+        this.time = time;
     }
 }
