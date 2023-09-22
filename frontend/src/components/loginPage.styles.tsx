@@ -342,13 +342,28 @@ const SignInAndUpComponent = () => {
     setSignInForm({ ...signInForm, password: e.target.value });
   };
 
+  // jwt 액세스 토큰 만료되었을 때 재발급 테스트
+  const testRefill = (e) => {
+    e.preventDefault();
+
+    axios
+      .get('/jwt/refill')
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   // 로그인 여부
   // const isLoggedIn = useRecoilValue(isLoggedInAtom);
 
   const JWT_EXPIRY_TIME = 24 * 3600 * 1000; // 만료 시간 (24시간)
 
   // 로그인 요청 api
-  const onLogin = () => {
+  const onLogin = (e) => {
+    e.preventDefault();
     const data = {
       email: signInForm.email,
       password: signInForm.password
@@ -389,11 +404,16 @@ const SignInAndUpComponent = () => {
   };
 
   // 로그아웃
-  const onLogout = () => {
+  const onLogout = (e) => {
+    e.preventDefault();
     axios
       .get('/user/logout')
       .then((res) => {
         console.log(res);
+        console.log(document.cookie);
+        // axios의 헤더에 AccessToken 초기화
+        axios.defaults.headers.common['Authorization'] = '';
+        // cookie에 저장된 RefreshToken 삭제
       })
       .catch((err) => {
         console.log(err);
@@ -724,6 +744,7 @@ const SignInAndUpComponent = () => {
           </FormContent>
           <Button onClick={onLogin}>로그인</Button>
           <Button onClick={onLogout}>로그아웃</Button>
+          <Button onClick={testRefill}>토큰 재발급 테스트</Button>
         </Form>
       </FormContainer>
       {/* 회원가입 폼*/}

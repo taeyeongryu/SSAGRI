@@ -1,7 +1,5 @@
-package com.ssafy.ssagri.dto.auction;
+package com.ssafy.ssagri.domain.auction.dto;
 
-import com.querydsl.core.annotations.QueryProjection;
-import com.ssafy.ssagri.entity.auction.AuctionProductPhoto;
 import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -52,7 +50,7 @@ public class AuctionProductImageDTO {
     private int originPrice;
 
     // 경매 이미지
-    private List<AuctionProductPhoto> auctionImages;
+//    private List<> auctionImages;
 
 //    @QueryProjection
 //    public AuctionProductImageDTO (Long no, String user, String name ,int upPrice, int downPrice, int price, LocalDateTime startDate, LocalDateTime endDate,

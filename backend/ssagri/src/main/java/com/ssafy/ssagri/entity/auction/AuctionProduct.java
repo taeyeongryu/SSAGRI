@@ -10,6 +10,8 @@ import lombok.extern.apachecommons.CommonsLog;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -38,10 +40,10 @@ public class AuctionProduct extends BaseTimeEntity {
     private int price;
 
     @Column(name = "auction_product_start_date",nullable = false)
-    private String startDate;
+    private LocalDateTime startDate;
 
     @Column(name = "auction_product_end_date",nullable = false)
-    private String endDate;
+    private LocalDateTime endDate;
 
     @Column(name = "auction_product_comment")
     private String comment;
@@ -63,8 +65,11 @@ public class AuctionProduct extends BaseTimeEntity {
     @Column(name = "auction_product_origin_price")
     private int originPrice;
 
+    @OneToMany(mappedBy = "auctionProductNo", fetch = FetchType.LAZY)
+    List<AuctionProductImage> images = new ArrayList<>();
+
     @Builder
-    public AuctionProduct(LocalDateTime modifyDate ,int originPrice, AuctionProductType type,User user, String name, int upPrice, int downPrice, int price, String startDate, String endDate, String comment) {
+    public AuctionProduct(LocalDateTime modifyDate ,int originPrice, AuctionProductType type,User user, String name, int upPrice, int downPrice, int price, LocalDateTime startDate, LocalDateTime endDate, String comment) {
         this.user = user;
         this.name = name;
         this.upPrice = upPrice;
@@ -74,7 +79,6 @@ public class AuctionProduct extends BaseTimeEntity {
         this.endDate = endDate;
         this.comment = comment;
         this.auctionStatus = auctionStatus;
-
         this.originPrice = originPrice;
         this.type = type;
         this.modifyDate = modifyDate;

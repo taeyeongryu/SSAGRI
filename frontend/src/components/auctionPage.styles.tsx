@@ -1,9 +1,8 @@
 import { styled } from 'styled-components';
 
-import { AuctionTradeList, BottomPageSpace } from './tradeListPage.styles';
 import { AuctionSearchInput } from './tradeMainPage.styles';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import axios from 'axios';
 const AuctionDiv = styled.div`
@@ -95,7 +94,7 @@ const AuctionTag4 = styled.div`
 const AuctionTag5 = styled.div`
   font-size: 20px;
   position: absolute;
-  right: 250px;
+  left: 1120px;
   bottom: 0;
 `;
 const AuctionTag6 = styled.div`
@@ -195,7 +194,73 @@ const ItemCurrent2 = styled.div`
   width: 100px;
 `;
 
-const AuctionItme = () => {
+const PagingSpace = styled.div`
+  width: 50%;
+  height: 50px;
+  margin: 50px 0px;
+  /* border: 1px solid red; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+const PagingButton = styled.button`
+  width: 40px;
+  height: 40px;
+  margin: 0 2px;
+  border: 1px solid #4786fa;
+  border-radius: 5px;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &:hover {
+    /* border: 2px solid #4786fa;
+    background-color: #4786fa;
+    color: #fff; */
+    box-shadow: 1px 1px 2px 2px #757575;
+  }
+`;
+const PagingButtonText = styled.div`
+  height: 30px;
+  font-size: 20px;
+  font-weight: bold;
+`;
+
+const BottomPageSpace = ({ setCurrentPage, totalPage }) => {
+  const NextPage = (num) => {
+    setCurrentPage(num);
+    console.log(num);
+  };
+  const pageButtons: JSX.Element[] = [];
+
+  for (let pageNumber = 1; pageNumber <= totalPage; pageNumber++) {
+    pageButtons.push(
+      <PagingButton key={pageNumber} onClick={() => NextPage(pageNumber)}>
+        <PagingButtonText>{pageNumber}</PagingButtonText>
+      </PagingButton>
+    );
+  }
+
+  return (
+    <PagingSpace>
+      <PagingButton>
+        <PagingButtonText>&lt;&lt;</PagingButtonText>
+      </PagingButton>
+      <PagingButton>
+        <PagingButtonText>&lt;</PagingButtonText>
+      </PagingButton>
+      {pageButtons}
+      <PagingButton>
+        <PagingButtonText>&gt;</PagingButtonText>
+      </PagingButton>
+      <PagingButton>
+        <PagingButtonText>&gt;&gt;</PagingButtonText>
+      </PagingButton>
+    </PagingSpace>
+  );
+};
+
+const AuctionItme = (item) => {
   const navigate = useNavigate();
   const goAuctionDetail = () => {
     navigate('/auctionDetail');
@@ -206,20 +271,79 @@ const AuctionItme = () => {
       <ItemImg src='assets/img/auctionsample.PNG'></ItemImg>
 
       <ItmeDiv1>
-        <ItemTitle>제우스 랩</ItemTitle>
-        <ItemTag1>시작가 20,000</ItemTag1>
-        <ItemTag2>판매가 50,000 </ItemTag2>
+        <ItemTitle>{item.item.name}</ItemTitle>
+        <ItemTag1>시작가 {item.item.downPrice}</ItemTag1>
+        <ItemTag2>판매가 {item.item.upPrice} </ItemTag2>
       </ItmeDiv1>
-      <ItemTime1>남은시간</ItemTime1>
+      <ItemTime1>남은시간 </ItemTime1>
       <ItmeDiv2>
-        <ItemCurrent1>진행중</ItemCurrent1>
+        <ItemCurrent1>{item.item.auctionStatus}</ItemCurrent1>
         <ItemCurrent2>참여자수</ItemCurrent2>
       </ItmeDiv2>
     </AuctionItem>
   );
 };
 
+const CategoryList = styled.div`
+  width: 100%;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const CategoryItem = styled.div`
+  width: 130px;
+  height: 50px;
+  font-size: 20px;
+  text-align: center;
+  line-height: 50px;
+  &:hover {
+    color: #4786fa;
+    font-weight: bold;
+    text-decoration: underline;
+  }
+`;
+
+const AuctionTradeList = (setTypes) => {
+  const CheckType = (num) => {
+    setTypes(num);
+  };
+
+  return (
+    <CategoryList>
+      <CategoryItem onClick={() => CheckType(0)}>전체</CategoryItem>
+      <CategoryItem onClick={() => CheckType(1)}>모니터</CategoryItem>
+      <CategoryItem onClick={() => CheckType(2)}>키보드</CategoryItem>
+      <CategoryItem onClick={() => CheckType(3)}>마우스</CategoryItem>
+      <CategoryItem onClick={() => CheckType(4)}>생활용품</CategoryItem>
+      <CategoryItem onClick={() => CheckType(5)}>기타용품</CategoryItem>
+    </CategoryList>
+  );
+};
+
 const AuctionPage = () => {
+  const [itemList, setItemList] = useState([]);
+
+  const [types, setTypes] = useState(0);
+  console.log(types);
+  // const [researchItems,setResearchItems] =
+  // const researchItems = itemList.filter(item => item.type === '모니터');
+
+  // useEffect(()=>{
+  //   const filteredItems = itemList.filter(item =>{
+  //     if (item.item.type ===)
+  //   })
+  // },[types])
+
+  // 페이지 계산 로직
+  const [currentPage, setCurrentPage] = useState(1);
+  const startIndex = (currentPage - 1) * 4;
+  const endIndex = startIndex + 4;
+  const SortList = itemList.slice(startIndex, endIndex);
+
+  const totalPage = Math.ceil(itemList.length / 4);
+
   const navigate = useNavigate();
   const goAuctionCreate = () => {
     navigate('/auctionCreate');
@@ -236,7 +360,9 @@ const AuctionPage = () => {
     auctionApi
       .get('/auction-product/all-list')
       .then((res) => {
-        console.log(res, '성공');
+        console.log(res.data, '성공2');
+        setItemList(res.data);
+        // itemList.current = res.data;
       })
       .catch((err) => {
         console.log(err);
@@ -262,17 +388,20 @@ const AuctionPage = () => {
         </AuctionTag3>
         <Line2></Line2>
         <AuctionTag6>
-          <AuctionTradeList></AuctionTradeList>
+          <AuctionTradeList setTypes={setTypes}></AuctionTradeList>
           <AuctionList>
-            <AuctionItme></AuctionItme>
-            <AuctionItme></AuctionItme>
-            <AuctionItme></AuctionItme>
+            {SortList.map((item, id) => (
+              <AuctionItme key={id} item={item}></AuctionItme>
+            ))}
           </AuctionList>
           <AuctionCreateBtn onClick={goAuctionCreate}>
             경매 등록
           </AuctionCreateBtn>
           <AuctionTag4>
-            <BottomPageSpace></BottomPageSpace>
+            <BottomPageSpace
+              setCurrentPage={setCurrentPage}
+              totalPage={totalPage}
+            ></BottomPageSpace>
           </AuctionTag4>
         </AuctionTag6>
       </AuctionBody>
