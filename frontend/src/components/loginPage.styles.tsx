@@ -312,6 +312,8 @@ const SignInAndUpComponent = () => {
   };
 
   // 로그인 //
+
+  // 로그인 입력 폼
   const [signInForm, setSignInForm] = useState({
     email: '',
     password: ''
@@ -342,7 +344,7 @@ const SignInAndUpComponent = () => {
     setSignInForm({ ...signInForm, password: e.target.value });
   };
 
-  // jwt 액세스 토큰 만료되었을 때 재발급 테스트
+  // 액세스토큰 만료되었을 때 재발급 요청
   const testRefill = (e) => {
     e.preventDefault();
 
@@ -356,9 +358,10 @@ const SignInAndUpComponent = () => {
       });
   };
 
-  // 로그인 여부
+  // 로그인여부
   // const isLoggedIn = useRecoilValue(isLoggedInAtom);
 
+  // 액세스토큰 만료 시간
   const JWT_EXPIRY_TIME = 24 * 3600 * 1000; // 만료 시간 (24시간)
 
   // 로그인 요청 api
@@ -377,16 +380,6 @@ const SignInAndUpComponent = () => {
       });
   };
 
-  const onSilentRefresh = () => {
-    axios
-      .post('/silent-refresh')
-      .then(onLoginSuccess)
-      .catch((error) => {
-        console.log(error);
-        // 로그인 실패처리
-      });
-  };
-
   // 로그인 성공 시
   const onLoginSuccess = (response: any) => {
     console.log(response.headers);
@@ -397,10 +390,21 @@ const SignInAndUpComponent = () => {
     // axios 헤더에 jwt 토큰 담기
     axios.defaults.headers.common['Authorization'] = accessToken;
 
-    // accessToken 만료하기 1분 전에 로그인 연장
+    // 액세스토큰 만료하기 전에 로그인 연장
     setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
 
-    // 로그인 하기 전 접속했던 페이지로 이동
+    // 로그인 하기 전 접속했던 페이지로 이동시키기
+  };
+
+  // 페이지가 새로고침 되거나 액세스토큰이 만료되었을 때 액세스 토큰을 재발급
+  const onSilentRefresh = () => {
+    axios
+      .post('/silent-refresh')
+      .then(onLoginSuccess)
+      .catch((error) => {
+        console.log(error);
+        // 로그인 실패처리
+      });
   };
 
   // 로그아웃
@@ -414,6 +418,7 @@ const SignInAndUpComponent = () => {
         // axios의 헤더에 AccessToken 초기화
         axios.defaults.headers.common['Authorization'] = '';
         // cookie에 저장된 RefreshToken 삭제
+        // 클라이언트 측에서 불가, 서버 측에서 만료시간을 변경하는 등의 방식으로 해결
       })
       .catch((err) => {
         console.log(err);

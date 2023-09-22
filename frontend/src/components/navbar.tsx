@@ -1,6 +1,6 @@
 import { styled } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 const NavbarDiv = styled.div`
   position: absolute;
   top: 0;
@@ -172,6 +172,10 @@ const SideBar = () => {
 };
 
 const Navbar = () => {
+  // useEffect(() => {
+  //   onSilentRefresh();
+  // }, []);
+
   return (
     <NavbarDiv>
       {/* <img
