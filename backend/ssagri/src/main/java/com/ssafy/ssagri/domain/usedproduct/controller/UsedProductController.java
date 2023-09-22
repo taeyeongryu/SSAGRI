@@ -46,7 +46,12 @@ public class UsedProductController {
             , @RequestParam(name = "search", required = false) String search
             , Pageable pageable
             ) {
-        Page<UsedProductResponseDto> usedProductResponseDtos = usedProductService.selectUsedProductList(userNo, productCategory, region,search, pageable);
+        pageable.getSort().get().forEach(sort -> {
+            System.out.println("sort.getProperty() = " + sort.getProperty());
+            System.out.println("sort.getDirection() = " + sort.getDirection());
+        });
+        System.out.println("pageable.toString() = " + pageable.toString());
+        Page<UsedProductResponseDto> usedProductResponseDtos = usedProductService.selectUsedProductList(userNo, productCategory, region, search, pageable);
         return usedProductResponseDtos;
     }
     //중고 물품 디테일 가져오는 메서드 만들어야 함
