@@ -1,5 +1,6 @@
 package com.ssafy.ssagri.domain.auction.dto;
 
+import com.ssafy.ssagri.entity.auction.AuctionProductImage;
 import com.ssafy.ssagri.entity.auction.AuctionProductType;
 
 import com.ssafy.ssagri.entity.auction.AuctionStatus;
@@ -62,5 +63,5 @@ public class AuctionProductAll {
 
     // 경매 상품에 대한 이미지들
     @Builder.Default
-    private List<AuctionProductPhoto> photos = new ArrayList<>();
+    private List<AuctionProductImage> photos = new ArrayList<>();
 }

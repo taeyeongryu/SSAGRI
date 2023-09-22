@@ -48,7 +48,7 @@ public class AuctionProduct extends BaseTimeEntity {
     @Column(name = "auction_product_comment")
     private String comment;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     @Column(name = "auction_product_status",nullable = false)
     private AuctionStatus auctionStatus;
 
