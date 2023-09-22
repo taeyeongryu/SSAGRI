@@ -67,10 +67,12 @@ public class UserRegistService {
         }
     }
 
-    //Authcode 유효성과 ip가 유효한지 대조
+    //Authcode 유효성 판별
     public void checkAuthcode(String authcode) throws CustomException {
-        String keyValue = "";
-        System.out.println(redisService.authcodeExists(authcode));
-        if(keyValue == null) throw new CustomException(REDIS_GET_VALUE_FAIL);
+        if(redisService.authcodeExists(authcode)) {
+            redisService.deleteRegistAuthCode(authcode); //해당 authcode 제거
+            return;
+        }
+        throw new CustomException(REDIS_GET_VALUE_FAIL); //아닐 경우 에러 리턴
     }
 }

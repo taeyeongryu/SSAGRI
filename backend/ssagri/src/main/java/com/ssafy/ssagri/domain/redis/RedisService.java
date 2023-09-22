@@ -15,22 +15,22 @@ import java.util.concurrent.TimeUnit;
 @Service
 @RequiredArgsConstructor
 public class RedisService {
-    private final RedisTemplate<Object, Object> redisTemplate;
-    private final StringRedisTemplate stringRedisTemplate; //직렬화하여 값을 저장
+    private final StringRedisTemplate stringRedisTemplate;
+
     public void saveRefreshToken(Long userNo, String tokenValue) {
         String key = "RT" + userNo;
-        redisTemplate.opsForValue().set(key, tokenValue); //
-        redisTemplate.expire(key, 3600 * 12, TimeUnit.SECONDS);
+        stringRedisTemplate.opsForValue().set(key, tokenValue);
+        stringRedisTemplate.expire(key, 3600 * 12, TimeUnit.SECONDS);
     }
 
     public void deleteRefreshTokenByUserNo(Long userNo) {
         String key = "RT" + userNo;
-        redisTemplate.delete(key);
+        stringRedisTemplate.delete(key);
     }
 
     public Boolean keyExists(Long userNo) {
         String key = "RT" + userNo;
-        return redisTemplate.hasKey(key);
+        return stringRedisTemplate.hasKey(key);
     }
 
     public void saveRegistAuthCode(String authcode) {
@@ -39,7 +39,7 @@ public class RedisService {
     }
 
     public void deleteRegistAuthCode(String authcode){
-        redisTemplate.delete(authcode);
+        stringRedisTemplate.delete(authcode);
     }
 
     public Boolean authcodeExists(String authcode) {

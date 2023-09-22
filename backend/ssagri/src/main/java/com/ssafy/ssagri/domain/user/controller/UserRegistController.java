@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.io.UnsupportedEncodingException;
 
 import static com.ssafy.ssagri.util.ResponseStatusEnum.MAIL_SEND_IS_OK;
@@ -65,10 +66,13 @@ public class UserRegistController {
         return ResponseEntity.ok(new ResponseDTO(MAIL_SEND_IS_OK.getCode(), MAIL_SEND_IS_OK.getMessage()));
     }
 
-    @Operation(summary = "인증번호 확인", description = "")
+    @Operation(summary = "인증번호 확인", description = "인증 번호 확인 : \n" +
+            " 인증 번호 확인 후, 해당 Authcode를 키값에서 삭제한다. 에러의 경우 : REDIS_GET_VALUE_FAIL(-1600, \"redis 키값으로 value를 찾아오는 것을 실패했습니다. (입력 값 다름)\"),\n" +
+            " MAIL_SEND_IS_OK(1400, \"이메일 전송과 인증번호 등록이 성공적으로 이루어졌습니다.\"),\n")
+    @Transactional
     @PostMapping("/check/authcode-valid")
     public ResponseEntity<?> checkAuthcodeIsValid(@RequestBody String authcode) throws CustomException {
-        userRegisterService.checkAuthcode(authcode); //Authcode 유효성과 ip가 유효한지 대조
+        userRegisterService.checkAuthcode(authcode); //Authcode 맞는지 판별
         return ResponseEntity.ok(new ResponseDTO(MAIL_SEND_IS_OK.getCode(), MAIL_SEND_IS_OK.getMessage()));
     }
 
