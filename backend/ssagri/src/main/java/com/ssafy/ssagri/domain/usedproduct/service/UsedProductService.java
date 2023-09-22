@@ -99,8 +99,8 @@ public class UsedProductService {
     *중고물품 리스트 가져오는 메서드
     *phototype이 sub 인것만 가져온다.
      */
-    public Page<UsedProductResponseDto> selectUsedProductList(Long userNo, ProductCategory productCategory, Region region, Pageable pageable){
-        Page<UsedProduct> usedProducts = usedProductRepository.selectAllUsedProduct(productCategory, region, pageable);
+    public Page<UsedProductResponseDto> selectUsedProductList(Long userNo, ProductCategory productCategory, Region region,String search ,Pageable pageable){
+        Page<UsedProduct> usedProducts = usedProductRepository.selectAllUsedProduct(productCategory, region,search ,pageable);
         List<UsedProduct> usedProductList = usedProducts.getContent();
 
         List<UsedProductResponseDto> usedProductResponseList = new ArrayList<>();
@@ -153,7 +153,7 @@ public class UsedProductService {
         if (findUsedProduct.isPresent()) {
             usedProduct = findUsedProduct.get();
         }else{
-            throw new CustomException(CustomExceptionStatus.USED_PRODUCT_DOES_NOT_EXSIST);
+            throw new CustomException(CustomExceptionStatus.USED_PRODUCT_DOES_NOT_EXIST);
         }
         UsedProductDetailResponseDto detailResponse = usedProduct.toDetailResponse(usedProduct.getUser());
         List<UsedProductPhotoResponseDto> usedProductPhotoResponseDtoList = usedProductPhotoRepository.selectSubPhotoByProductNo(usedProductNo);

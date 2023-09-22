@@ -35,6 +35,7 @@ public class UsedProductSaveRequestDto {
                 .price(this.price)
                 .status(this.saleStatus)
                 .region(user.getRegion())
+                .likeCount(0)
                 .build();
         return usedProduct;
     }

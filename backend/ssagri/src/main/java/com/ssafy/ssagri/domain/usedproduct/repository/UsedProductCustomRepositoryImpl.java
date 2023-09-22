@@ -31,15 +31,20 @@ public class UsedProductCustomRepositoryImpl implements UsedProductCustomReposit
     * 카테고리,지역 설정해서 모든 중고물품 다 가져올 수 있는 메서드
     * */
     @Override
-    public Page<UsedProduct> selectAllUsedProduct(ProductCategory productCategory, Region region, Pageable pageable) {
+    public Page<UsedProduct> selectAllUsedProduct(ProductCategory productCategory, Region region,String search ,Pageable pageable) {
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(usedProduct.deleteDate.isNull());
+
         if (productCategory != null) {
             builder.and(usedProduct.category.eq(productCategory));
         }
 
         if(region != null){
             builder.and(usedProduct.user.region.eq(region));
+        }
+
+        if(search != null){
+            builder.and(usedProduct.title.contains(search));
         }
 
         QueryResults<UsedProduct> usedProductQueryResults = jpaQueryFactory.selectFrom(usedProduct)
@@ -80,12 +85,11 @@ public class UsedProductCustomRepositoryImpl implements UsedProductCustomReposit
                         return new OrderSpecifier<>(direction, usedProduct.no);
                     case "price":
                         return new OrderSpecifier<>(direction, usedProduct.price);
-//                    case "like":
-//                        return new OrderSpecifier<>(direction, usedProduct.like);
+                    case "like":
+                        return new OrderSpecifier<>(direction, usedProduct.likeCount);
                     default:
                         return null;
                 }
-
             }
         }
         return null;

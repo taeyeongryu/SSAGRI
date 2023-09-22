@@ -10,9 +10,10 @@ import com.amazonaws.services.s3.model.PutObjectResult;
 import com.ssafy.ssagri.domain.auction.repository.AuctionPhotoRepository;
 import com.ssafy.ssagri.domain.auction.repository.AuctionRepository;
 import com.ssafy.ssagri.domain.user.repository.UserRegistRepository;
-import com.ssafy.ssagri.domain.auction.dto.AuctionProductAll;
-import com.ssafy.ssagri.domain.auction.dto.AuctionProductCreate;
+import com.ssafy.ssagri.domain.auction.dto.AuctionProductAllDTO;
+import com.ssafy.ssagri.domain.auction.dto.AuctionProductCreateDTO;
 import com.ssafy.ssagri.entity.auction.AuctionProduct;
+import com.ssafy.ssagri.entity.auction.AuctionProductImage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,7 +47,7 @@ public class AuctionProductService {
 
 
     // 경매 모든 리스트 출력
-    public List<AuctionProductAll> getAuctionProducts() {
+    public List<AuctionProductAllDTO> getAuctionProducts() {
 
         System.out.println("야야야");
          List<AuctionProduct> products = auctionRepository.findAll();
@@ -54,10 +55,10 @@ public class AuctionProductService {
         System.out.println(products.size() + "야야야");
 
 
-         List<AuctionProductAll> result = new ArrayList<>();
+         List<AuctionProductAllDTO> result = new ArrayList<>();
 
          for(int i=0;i<products.size();i++){
-             AuctionProductAll auctionProductAll = AuctionProductAll.builder()
+             AuctionProductAllDTO auctionProductAllDTO = AuctionProductAllDTO.builder()
                      .no(products.get(i).getNo())
                      .userNo(products.get(i).getUser().getNo())
                      .name(products.get(i).getName())
@@ -67,15 +68,15 @@ public class AuctionProductService {
 //                     .startDate(products.get(i).getStartDate())
 //                     .endDate(products.get(i).getEndDate())
                      .comment(products.get(i).getComment())
-                     .auctionStatus(products.get(i).getAuctionStatus())
+//                     .auctionStatus(products.get(i).getAuctionStatus())
                      .finallyPrice(products.get(i).getFinallyPrice())
                      .modifyDate(products.get(i).getModifyDate())
                      .type(products.get(i).getType())
                      .originPrice(products.get(i).getOriginPrice())
-                     .photos(auctionPhotoRepository.findByAuctionProduct(products.get(i)))
+                     .photos(auctionPhotoRepository.findByAuctionProductNo(products.get(i)))
                      .build();
 
-                result.add(auctionProductAll);
+                result.add(auctionProductAllDTO);
 
          }
 
@@ -85,20 +86,20 @@ public class AuctionProductService {
 
     // 경매 상품 등록
     @Transactional
-    public void setAuctionProduct(AuctionProductCreate auctionProductCreate){
+    public void setAuctionProduct(AuctionProductCreateDTO auctionProductCreateDTO){
 
         AuctionProduct auctionProduct = AuctionProduct.builder()
-                .user(userRegistRepository.findByNo(auctionProductCreate.getUserNo()))
-                .name(auctionProductCreate.getName())
+                .user(userRegistRepository.findByNo(auctionProductCreateDTO.getUserNo()))
+                .name(auctionProductCreateDTO.getName())
 //                .upPrice(auctionProductCreate.getUpPrice())
-                .downPrice(auctionProductCreate.getDownPrice())
-                .price(auctionProductCreate.getCountPrice())
+                .downPrice(auctionProductCreateDTO.getDownPrice())
+                .price(auctionProductCreateDTO.getCountPrice())
 //                .startDate(auctionProductCreate.getStartDate())
 //                .endDate(auctionProductCreate.getEndDate())
-                .comment(auctionProductCreate.getComment())
+                .comment(auctionProductCreateDTO.getComment())
                 .modifyDate(LocalDateTime.now())
-                .originPrice(auctionProductCreate.getOriginPrice())
-                .type(auctionProductCreate.getType()).build();
+                .originPrice(auctionProductCreateDTO.getOriginPrice())
+                .type(auctionProductCreateDTO.getType()).build();
 
 
 
@@ -129,30 +130,46 @@ public class AuctionProductService {
 
             PutObjectResult result = amazonS3.putObject(request);
 
-//            User user = userRepository.findByUserNo(userNo);
+            AuctionProduct auctionProduct = auctionRepository.findByNo(no);
 
-//            user.setProfileImg(key);
+            AuctionProductImage auctionProductImage = AuctionProductImage.builder()
+                            .auctionProductNo(auctionProduct)
+                                    .imageLink(key).build();
 
-//            userRepository.save(user);
+            auctionPhotoRepository.save(auctionProductImage);
 
 
             return key;
         } catch (AmazonServiceException e) {
             // The call was transmitted successfully, but Amazon S3 couldn't process
             // it, so it returned an error response.
-//            log.error("uploadToAWS AmazonServiceException filePath={}, yyyymm={}, error={}", e.getMessage());
+            log.error("uploadToAWS AmazonServiceException filePath={}, yyyymm={}, error={}", e.getMessage());
         } catch (SdkClientException e) {
             // Amazon S3 couldn't be contacted for a response, or the client
             // couldn't parse the response from Amazon S3.
-//            log.error("uploadToAWS SdkClientException filePath={}, error={}", e.getMessage());
+            log.error("uploadToAWS SdkClientException filePath={}, error={}", e.getMessage());
         } catch (Exception e) {
             // Amazon S3 couldn't be contacted for a response, or the client
             // couldn't parse the response from Amazon S3.
-//            log.error("uploadToAWS SdkClientException filePath={}, error={}", e.getMessage());
+            log.error("uploadToAWS SdkClientException filePath={}, error={}", e.getMessage());
         }
 
         return "";
     }
+
+    // 경매 상품 이미지 업로드
+    public String auctionProductLoad(Long auctionProductNo) {
+
+        List<AuctionProductImage> list = auctionPhotoRepository.findByAuctionProductNo(auctionRepository.findByNo(auctionProductNo));
+
+//        List<AuctionProductImage> imageList = auctionauctionPhotoRepository.findByAuctionProductNo(auctionProductNo);
+//        if (user.getProfileImg() == null || user.getProfileImg().isBlank()) {
+//            throw new IllegalStateException("등록된 프로필 사진이 없습니다.");
+//        }
+//        return URL + user.getProfileImg();
+    return "hello";
+    }
+
 
 
 

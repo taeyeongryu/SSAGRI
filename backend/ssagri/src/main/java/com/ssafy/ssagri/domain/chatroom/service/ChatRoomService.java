@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.ssafy.ssagri.util.exception.CustomExceptionStatus.CHATROOM_DOES_NOT_EXSIST;
+import static com.ssafy.ssagri.util.exception.CustomExceptionStatus.CHATROOM_DOES_NOT_EXIST;
 
 @Service
 @Transactional(readOnly = true)
@@ -72,7 +72,7 @@ public class ChatRoomService {
         Optional<ChatRoom> findChatRoom = chatRoomRepository.findById(chatRoomNo);
         if (findChatRoom.isEmpty()){
             //예외처리
-            throw new CustomException(CHATROOM_DOES_NOT_EXSIST);
+            throw new CustomException(CHATROOM_DOES_NOT_EXIST);
         }else{
             return findChatRoom.get().toResponse();
         }
