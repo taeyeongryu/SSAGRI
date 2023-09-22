@@ -31,8 +31,8 @@ public class AuctionProductImage {
     private String imageLink;
 
     @Builder
-    public AuctionProductImage(AuctionProduct auctionProduct, String imageLink){
-        this.auctionProductNo = auctionProduct;
+    public AuctionProductImage(AuctionProduct auctionProductNo, String imageLink){
+        this.auctionProductNo = auctionProductNo;
         this.imageLink = imageLink;
     }
 

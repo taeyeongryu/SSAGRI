@@ -35,11 +35,19 @@ public enum CustomExceptionStatus {
     JWT_REFILL_COOKIE_VALUE_INVALID(-1401, "쿠키 안의 토큰 값이 유효하지 않습니다."),
     JWT_REFILL_COOKIE_REDIS_NOT_MATCHED(-1402, "쿠키는 유효하나, Redis 서버에 유저 정보가 없습니다."),
     JWT_REFILL_CREATE_TOKEN_ERR(-1403, "액세스 토큰 발급과정에서 문제가 발생했습니다."),
+
+    //Mail service = 15xx
+    MAIL_SEND_ERR(-1500, "메일 전송 과정 중 에러가 발생했습니다."),
+    MAIL_AUTH_SAVE_ERR(-1501, "인증번호를 Redis에 저장하는 중 에러가 발생했습니다."),
+
     //ChatRoom = 2xxx
-    CHATROOM_DOES_NOT_EXSIST(-2002, "존재하지 않는 채팅방입니다."),
+    CHATROOM_DOES_NOT_EXIST(-2002, "존재하지 않는 채팅방입니다."),
 
     //UsedProduct = 3xxx
-    USED_PRODUCT_DOES_NOT_EXSIST(-3001, "존재하지 않는 중고상품 입니다.");
+    USED_PRODUCT_DOES_NOT_EXIST(-3001, "존재하지 않는 중고상품 입니다."),
+    USED_PRODUCT_LIKE_ALREADY_EXIST(-3002, "이미 좋아한 상품 입니다."),
+    USED_PRODUCT_LIKE_DOES_NOT_EXIST(-3003,"좋아하지 않는 상품 입니다.");
+
 
     private final int code;
     private final String message;

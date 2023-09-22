@@ -80,12 +80,11 @@ public class UsedProductCustomRepositoryImpl implements UsedProductCustomReposit
                         return new OrderSpecifier<>(direction, usedProduct.no);
                     case "price":
                         return new OrderSpecifier<>(direction, usedProduct.price);
-//                    case "like":
-//                        return new OrderSpecifier<>(direction, usedProduct.like);
+                    case "like":
+                        return new OrderSpecifier<>(direction, usedProduct.likeCount);
                     default:
                         return null;
                 }
-
             }
         }
         return null;

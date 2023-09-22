@@ -17,8 +17,10 @@ public enum ResponseStatusEnum {
     LOGIN_IS_OK(1100, "해당 계정이 존재합니다. (로그인 가능)"),
     //LOGOUT = 12xx
     LOGOUT_IS_OK(1200, "로그아웃이 성공적으로 이루어졌습니다."),
-    //REFILL TOKEN
+    //REFILL TOKEN = 13xx
     REFILL_TOKEN_IS_OK(1300, "액세스 토큰 발급이 성공적으로 이루어졌습니다."),
+    //Mail send
+    MAIL_SEND_IS_OK(1400, "이메일 전송과 인증번호 등록이 성공적으로 이루어졌습니다."),
 
         ;
     private final int code;

@@ -6,6 +6,8 @@ import com.ssafy.ssagri.entity.common.BaseTimeEntity;
 import com.ssafy.ssagri.entity.user.Region;
 import com.ssafy.ssagri.entity.user.User;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -45,12 +47,14 @@ public class UsedProduct extends BaseTimeEntity {
     @Column(name = "used_product_region",nullable = false)
     private Region region;
 
-//    @OneToMany(mappedBy = "usedProduct",cascade = CascadeType.ALL)
-//    private List<UsedProductPhoto> usedProductPhotoList = new ArrayList<>();
+    @Column(name = "used_product_likeCount", nullable = false)
+    @ColumnDefault("0")
+    private int likeCount;
+
 
 
     @Builder
-    public UsedProduct(Long no, User user, ProductCategory category, String title, String content, int price, SaleStatus status, Region region) {
+    public UsedProduct(Long no, User user, ProductCategory category, String title, String content, int price, SaleStatus status, Region region, int likeCount) {
         this.no = no;
         this.user = user;
         this.category = category;
@@ -59,7 +63,11 @@ public class UsedProduct extends BaseTimeEntity {
         this.price = price;
         this.status = status;
         this.region = region;
+        this.likeCount = likeCount;
     }
+
+
+
 
 
     public UsedProductResponseDto toResponse(){
@@ -74,6 +82,7 @@ public class UsedProduct extends BaseTimeEntity {
                 .updateDate(this.getUpdateDate())
                 .build();
     }
+
     public UsedProductDetailResponseDto toDetailResponse(User user){
         return UsedProductDetailResponseDto.builder()
                 .productNo(this.no)
@@ -85,10 +94,15 @@ public class UsedProduct extends BaseTimeEntity {
                 .region(this.region)
                 .createDate(this.getCreateDate())
                 .updateDate(this.getUpdateDate())
+                .likeCount(this.likeCount)
                 .userNo(user.getNo())
                 .userNickname(user.getNickname())
                 .userProfile(user.getProfile())
                 .userTemper(user.getTemper())
                 .build();
     };
+
+    public void setLikeCount(int likeCount) {
+        this.likeCount = likeCount;
+    }
 }

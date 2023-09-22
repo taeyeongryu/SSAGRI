@@ -6,6 +6,7 @@ import com.ssafy.ssagri.domain.usedproduct.dto.response.UsedProductResponseDto;
 import com.ssafy.ssagri.domain.usedproduct.service.UsedProductService;
 import com.ssafy.ssagri.entity.usedproduct.ProductCategory;
 import com.ssafy.ssagri.entity.user.Region;
+import com.ssafy.ssagri.util.jwt.JwtUtil;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -50,6 +51,7 @@ public class UsedProductController {
         return usedProductDetailResponseDto;
     }
     @GetMapping("/user/{userNo}")
+    @ApiOperation("특정 유저가 올린 상품리스트 가져오는 메서드")
     public Page<UsedProductResponseDto> selectListByUser(@PathVariable(name = "userNo")Long userNo, Pageable pageable) {
         Page<UsedProductResponseDto> usedProductResponseDtos = usedProductService.selectUsedProductListByUser(userNo, pageable);
         return usedProductResponseDtos;
