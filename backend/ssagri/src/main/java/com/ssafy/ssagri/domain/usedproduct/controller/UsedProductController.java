@@ -51,6 +51,7 @@ public class UsedProductController {
         return usedProductDetailResponseDto;
     }
     @GetMapping("/user/{userNo}")
+    @ApiOperation("특정 유저가 올린 상품리스트 가져오는 메서드")
     public Page<UsedProductResponseDto> selectListByUser(@PathVariable(name = "userNo")Long userNo, Pageable pageable) {
         Page<UsedProductResponseDto> usedProductResponseDtos = usedProductService.selectUsedProductListByUser(userNo, pageable);
         return usedProductResponseDtos;
