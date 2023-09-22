@@ -1,5 +1,6 @@
 package com.ssafy.ssagri.domain.usedproduct.repository;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -26,17 +27,44 @@ public class UsedProductCustomRepositoryImpl implements UsedProductCustomReposit
         this.jpaQueryFactory = new JPAQueryFactory(entityManager);
     }
 
+    /*
+    * 카테고리,지역 설정해서 모든 중고물품 다 가져올 수 있는 메서드
+    * */
     @Override
     public Page<UsedProduct> selectAllUsedProduct(ProductCategory productCategory, Region region, Pageable pageable) {
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(usedProduct.deleteDate.isNull());
+        if (productCategory != null) {
+            builder.and(usedProduct.category.eq(productCategory));
+        }
+
+        if(region != null){
+            builder.and(usedProduct.user.region.eq(region));
+        }
+
         QueryResults<UsedProduct> usedProductQueryResults = jpaQueryFactory.selectFrom(usedProduct)
-                .where(usedProduct.deleteDate.isNull()
-                        .and(usedProduct.category.eq(productCategory))
-                        .and(usedProduct.user.region.eq(region)))
+                .where(builder)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(getOrderSpecifier(pageable))
                 .fetchResults();
 
+        List<UsedProduct> results = usedProductQueryResults.getResults();
+        long total = usedProductQueryResults.getTotal();
+
+        return new PageImpl<>(results, pageable, total);
+    }
+    /*
+    * 특정 유저가 등록한 중고물품 다 가져오는 메서드
+    * */
+    @Override
+    public Page<UsedProduct> selectUsedProductByUserNo(Long userNo, Pageable pageable) {
+        QueryResults<UsedProduct> usedProductQueryResults = jpaQueryFactory.selectFrom(usedProduct)
+                .where(usedProduct.deleteDate.isNull().and(usedProduct.user.no.eq(userNo)))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(getOrderSpecifier(pageable))
+                .fetchResults();
         List<UsedProduct> results = usedProductQueryResults.getResults();
         long total = usedProductQueryResults.getTotal();
 

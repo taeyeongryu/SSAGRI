@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MessageResponse {
+public class MessageResponseDto {
     private Long chatRoomNo;
     private Long senderNo;
     private Long receiverNo;
@@ -17,7 +17,7 @@ public class MessageResponse {
     private LocalDateTime time;
 
     @Builder
-    public MessageResponse(Long chatRoomNo, Long senderNo, Long receiverNo, String content, LocalDateTime time) {
+    public MessageResponseDto(Long chatRoomNo, Long senderNo, Long receiverNo, String content, LocalDateTime time) {
         this.chatRoomNo = chatRoomNo;
         this.senderNo = senderNo;
         this.receiverNo = receiverNo;

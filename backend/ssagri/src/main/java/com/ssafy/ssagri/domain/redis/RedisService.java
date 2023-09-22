@@ -1,6 +1,8 @@
 package com.ssafy.ssagri.domain.redis;
 
 import com.ssafy.ssagri.entity.user.RefreshToken;
+import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -39,4 +41,10 @@ public class RedisService {
             hashOperations.delete(key, field);
         }
     }
+
+    public Boolean keyExists(Long userNo) {
+        String key = "RefreshToken:" + userNo;
+        return redisTemplate.hasKey(key);
+    }
+
 }
