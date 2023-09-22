@@ -9,9 +9,12 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * RedisRepository가 아닌 RedisTemplate를 통한 직접 조정
+ * 로그인 시 접속 정보 저장, 인증번호 저장 등
+ * 인메모리 휘발성 정보등을 저장 및 관리
  */
 @Service
 @RequiredArgsConstructor
@@ -47,4 +50,12 @@ public class RedisService {
         return redisTemplate.hasKey(key);
     }
 
+    public void saveRegistAuthCode(String authcode) throws Exception {
+        redisTemplate.opsForValue().set(authcode, authcode); //키밸류 동일
+        redisTemplate.expire(authcode, 600, TimeUnit.SECONDS);
+    }
+
+    public void deleteRegistAuthCode(String authcode) throws Exception {
+        redisTemplate.delete(authcode);
+    }
 }

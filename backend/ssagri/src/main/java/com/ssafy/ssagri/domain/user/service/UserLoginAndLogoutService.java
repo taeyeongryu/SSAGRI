@@ -33,7 +33,6 @@ public class UserLoginAndLogoutService {
 
     private final UserLoginAndLogoutRepository userLoginAndLogoutRepository;
     private final RedisService redisService;
-//    private final UserTokenRepository userTokenRepository;
 
     /**
      * 로그인 : 해당 메서드를 중심으로 하여 모듈화된 메서드들이 동작

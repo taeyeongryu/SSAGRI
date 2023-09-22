@@ -1,8 +1,9 @@
-package com.ssafy.ssagri.util.mail.service;
+package com.ssafy.ssagri.util.mail;
 
 import com.ssafy.ssagri.entity.email.EmailSendLog;
 import com.ssafy.ssagri.entity.email.SignUpEmailLog;
 import com.ssafy.ssagri.util.exception.CustomException;
+import com.ssafy.ssagri.util.exception.CustomExceptionStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.MailException;
@@ -15,6 +16,8 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
 import java.security.SecureRandom;
+
+import static com.ssafy.ssagri.util.exception.CustomExceptionStatus.MAIL_SEND_ERR;
 
 /**
  * 이메일 서비스를 관리하고 메일 인증을 보내는 로직
@@ -43,7 +46,7 @@ public class EmailService {
         return message;
     }
 
-    private MimeMessage createMessageRegist(String to, String authCode)throws Exception{
+    private MimeMessage createMessageRegist(String to, String authCode) throws CustomException, MessagingException, UnsupportedEncodingException {
         log.info("[Mail]신규 가입 : 보내는 대상 : {}, 인증 번호 {}", to, authCode);
         MimeMessage message = javaMailSender.createMimeMessage();
         message.addRecipients(Message.RecipientType.TO, to);//보내는 대상
@@ -78,14 +81,14 @@ public class EmailService {
         return authCode;
     }
 
-    public String sendSimpleMessageRegist(String to)throws Exception {
+    public String sendSimpleMessageRegist(String to) throws CustomException, MessagingException, UnsupportedEncodingException {
         String authCode =  createKey(); // 인증코드 생성
         MimeMessage message = createMessageRegist(to, authCode); // 메시지 생성
-        try{ // 예외처리
+        try{
             javaMailSender.send(message);
-        }catch(MailException es){
-            es.printStackTrace();
-            throw new IllegalArgumentException();
+        }catch(Exception e){
+            e.printStackTrace();
+            throw new CustomException(MAIL_SEND_ERR);
         }
         return authCode;
     }
