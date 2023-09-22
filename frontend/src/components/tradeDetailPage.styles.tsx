@@ -1,13 +1,11 @@
 import { styled } from 'styled-components';
 import {
   ProductList03,
-  ProductStyle03,
-  ProductImgStyle03,
-  ProductDetailStyle03,
-  ProductName03,
-  ProductPrice03,
-  SellerLocationAndTime03
+  TradeProductItem03
 } from '../components/tradeMainPage.styles';
+import { useRef } from 'react';
+import { ProductItemType } from './type';
+import axios from 'axios';
 
 const DetailFrame = styled.div`
   width: 1920px;
@@ -239,7 +237,7 @@ const ChatImg = styled.img`
   margin-left: 5px;
 `;
 
-// 판매자 정보
+// --------- 판매자 정보 ---------
 const DetailDivSellorFrame = styled.div`
   /* border: 1px solid black; */
   width: 100%;
@@ -368,6 +366,55 @@ const DetailSellorTemperatureScale = styled.div`
   left: 0px;
 `;
 
+// ----- 판매자 정보 가져와서 화면에 보여주기 -----
+const SellorDiv = (sellorNo) => {
+  const productAndSellorInfo = useRef({});
+  const url = `/usedproduct/detail/${sellorNo}`;
+  axios.get(url).then((res) => {
+    productAndSellorInfo.current = res.data;
+  });
+  return (
+    <>
+      <DetailSellorHeader>
+        <DetailSellorHeaderText>판매자 정보</DetailSellorHeaderText>
+        <DetailSellorHeaderDetail>
+          판매자 상품 더보기 &gt;
+        </DetailSellorHeaderDetail>
+      </DetailSellorHeader>
+      <DetailSellorDiv>
+        <DetailSellorTitle>
+          <DetailSellorLeft>
+            <DetailSellorNickname>코딩왕123</DetailSellorNickname>
+            <DetailSellorTrade>판매상품 3</DetailSellorTrade>
+          </DetailSellorLeft>
+          <DetailSellorRight>
+            <DetailSellorProfile>
+              <img
+                src='/assets/img/profile.png'
+                style={{
+                  width: '80px',
+                  height: '80px'
+                }}
+              />
+            </DetailSellorProfile>
+          </DetailSellorRight>
+        </DetailSellorTitle>
+        <DetailSellorTemperatureDiv>
+          <DetailSellorTemperatureInfo>
+            <DetailSellorTemperatureText>
+              매너온도 424
+            </DetailSellorTemperatureText>
+            <DetailSellorTemperatureMax>1,000</DetailSellorTemperatureMax>
+          </DetailSellorTemperatureInfo>
+          <DetailSellorTemperatureGraph>
+            <DetailSellorTemperatureScale></DetailSellorTemperatureScale>
+          </DetailSellorTemperatureGraph>
+        </DetailSellorTemperatureDiv>
+      </DetailSellorDiv>
+    </>
+  );
+};
+
 // 상품내용 + 관련상품
 const DetailDownDiv = styled.div`
   /* border: 1px solid black; */
@@ -404,6 +451,30 @@ const CautionFooter = styled.div`
   color: #5a5a5e;
   font-weight: bold;
 `;
+
+const CautionBox = () => {
+  return (
+    <>
+      <CautionHeader>
+        <img
+          src='/assets/img/caution.png'
+          style={{ width: '30px', height: '30px' }}
+          alt='caution.png'
+        />
+        <CautionHeaderText>거래 전 주의사항 안내</CautionHeaderText>
+      </CautionHeader>
+      <CautionContent>
+        판매자가 별도의 메신저로 결제 링크를 보내거나 직거래(직접송금)을
+        <br></br>
+        유도하는 경우 사기일 가능성이 높으니 거래를 자제해 주시고
+      </CautionContent>
+      <CautionFooter>
+        싸그리 고객센터(02-123-4567) 로 신고해주시기 바랍니다.
+      </CautionFooter>
+    </>
+  );
+};
+
 // 본문 상품내용
 const DetailContentText = styled.div`
   border: 3px solid blue;
@@ -426,6 +497,7 @@ const DetailRecommendText = styled.div`
   font-size: 20px;
   font-weight: bold;
 `;
+// @ts-ignore
 const Tag = styled.div`
   font-size: 50px;
   line-height: 40px;
@@ -439,6 +511,67 @@ const Tag = styled.div`
 `;
 
 const TradeDetail = () => {
+  const sellorNo: number = 1;
+
+  // -------- 임시 데이터 --------
+  let responseList = useRef([
+    {
+      createDate: '2023-09-22T00:42:26.086Z',
+      like: true,
+      price: 130000,
+      productCategory: 'READY',
+      productNo: 2,
+      region: '지역',
+      saleStatus: 'READY',
+      title:
+        '송병훈 짱 송병훈 짱 송병훈 짱 송병훈 짱\n 송병훈 짱 송병훈 짱 송병훈 짱 송병훈 짱',
+      updateDate: '2023-09-22T00:42:26.086Z',
+      usedProductPhotoResponseDto: {
+        link: 'https://i.imgur.com/ixdlIIc.png',
+        photoNo: 0
+      }
+    },
+    {
+      createDate: '2023-09-22T00:42:26.086Z',
+      like: true,
+      price: 130000,
+      productCategory: 'READY',
+      productNo: 2,
+      region: '지역',
+      saleStatus: 'READY',
+      title:
+        '송병훈 짱 송병훈 짱 송병훈 짱 송병훈 짱\n 송병훈 짱 송병훈 짱 송병훈 짱 송병훈 짱',
+      updateDate: '2023-09-22T00:42:26.086Z',
+      usedProductPhotoResponseDto: {
+        link: 'https://i.imgur.com/ixdlIIc.png',
+        photoNo: 0
+      }
+    },
+    {
+      createDate: '2023-09-22T00:42:26.086Z',
+      like: true,
+      price: 130000,
+      productCategory: 'READY',
+      productNo: 2,
+      region: '지역',
+      saleStatus: 'READY',
+      title:
+        '송병훈 짱 송병훈 짱 송병훈 짱 송병훈 짱\n 송병훈 짱 송병훈 짱 송병훈 짱 송병훈 짱',
+      updateDate: '2023-09-22T00:42:26.086Z',
+      usedProductPhotoResponseDto: {
+        link: 'https://i.imgur.com/ixdlIIc.png',
+        photoNo: 0
+      }
+    }
+  ]);
+
+  // useEffect(() => {
+  //   const url = '';
+  //   axios.get(url).then((res) => {
+  //     console.log(res.data);
+  //     responseList.current = res.data;
+  //   });
+  // }, []);
   return (
     <DetailFrame>
       <DetailDiv>
@@ -493,47 +626,9 @@ const TradeDetail = () => {
                 </DetailDivChat>
               </DetailDivButton>
               <InfoLine></InfoLine>
+              {/* 판매자 정보 */}
               <DetailDivSellorFrame>
-                <DetailSellorHeader>
-                  <DetailSellorHeaderText>판매자 정보</DetailSellorHeaderText>
-                  <DetailSellorHeaderDetail>
-                    판매자 상품 더보기 &gt;
-                  </DetailSellorHeaderDetail>
-                </DetailSellorHeader>
-                <DetailSellorDiv>
-                  <DetailSellorTitle>
-                    <DetailSellorLeft>
-                      <DetailSellorNickname>코딩왕123</DetailSellorNickname>
-                      <DetailSellorTrade>
-                        판매상품 3 · 안전거래 2 · 후기 0
-                      </DetailSellorTrade>
-                    </DetailSellorLeft>
-                    <DetailSellorRight>
-                      <DetailSellorProfile>
-                        <img
-                          src='/assets/img/profile.png'
-                          style={{
-                            width: '80px',
-                            height: '80px'
-                          }}
-                        />
-                      </DetailSellorProfile>
-                    </DetailSellorRight>
-                  </DetailSellorTitle>
-                  <DetailSellorTemperatureDiv>
-                    <DetailSellorTemperatureInfo>
-                      <DetailSellorTemperatureText>
-                        매너온도 424
-                      </DetailSellorTemperatureText>
-                      <DetailSellorTemperatureMax>
-                        1,000
-                      </DetailSellorTemperatureMax>
-                    </DetailSellorTemperatureInfo>
-                    <DetailSellorTemperatureGraph>
-                      <DetailSellorTemperatureScale></DetailSellorTemperatureScale>
-                    </DetailSellorTemperatureGraph>
-                  </DetailSellorTemperatureDiv>
-                </DetailSellorDiv>
+                <SellorDiv sellorNo={sellorNo}></SellorDiv>
               </DetailDivSellorFrame>
             </DetailUpDivInfoFrame>
           </DetailUpDivInfo>
@@ -542,22 +637,7 @@ const TradeDetail = () => {
           <DetailContentDiv>
             {/* 주의사항 Box */}
             <DetailContentCaution>
-              <CautionHeader>
-                <img
-                  src='/assets/img/caution.png'
-                  style={{ width: '30px', height: '30px' }}
-                  alt='caution.png'
-                />
-                <CautionHeaderText>거래 전 주의사항 안내</CautionHeaderText>
-              </CautionHeader>
-              <CautionContent>
-                판매자가 별도의 메신저로 결제 링크를 보내거나 직거래(직접송금)을
-                <br></br>
-                유도하는 경우 사기일 가능성이 높으니 거래를 자제해 주시고
-              </CautionContent>
-              <CautionFooter>
-                싸그리 고객센터(02-123-4567) 로 신고해주시기 바랍니다.
-              </CautionFooter>
+              <CautionBox></CautionBox>
             </DetailContentCaution>
             {/* 본문 내용 */}
             <DetailContentText>본문내용 삽입 HTML</DetailContentText>
@@ -567,38 +647,14 @@ const TradeDetail = () => {
           <DetailRecommend>
             <DetailRecommendText>관련상품</DetailRecommendText>
             <ProductList03>
-              <Tag>&lt;</Tag>
-              <ProductStyle03>
-                <ProductImgStyle03 src='/assets/img/zeuslab.jpg'></ProductImgStyle03>
-                <ProductDetailStyle03>
-                  <ProductName03>제우스랩 포터블 모니터 Z16 Pro</ProductName03>
-                  <ProductPrice03>130,000 원</ProductPrice03>
-                  <SellerLocationAndTime03>
-                    온천2동 | 10분 전
-                  </SellerLocationAndTime03>
-                </ProductDetailStyle03>
-              </ProductStyle03>
-              <ProductStyle03>
-                <ProductImgStyle03 src='/assets/img/zeuslab.jpg'></ProductImgStyle03>
-                <ProductDetailStyle03>
-                  <ProductName03>제우스랩 포터블 모니터 Z16 Pro</ProductName03>
-                  <ProductPrice03>130,000 원</ProductPrice03>
-                  <SellerLocationAndTime03>
-                    온천2동 | 10분 전
-                  </SellerLocationAndTime03>
-                </ProductDetailStyle03>
-              </ProductStyle03>
-              <ProductStyle03>
-                <ProductImgStyle03 src='/assets/img/zeuslab.jpg'></ProductImgStyle03>
-                <ProductDetailStyle03>
-                  <ProductName03>제우스랩 포터블 모니터 Z16 Pro</ProductName03>
-                  <ProductPrice03>130,000 원</ProductPrice03>
-                  <SellerLocationAndTime03>
-                    온천2동 | 10분 전
-                  </SellerLocationAndTime03>
-                </ProductDetailStyle03>
-              </ProductStyle03>
-              <Tag>&gt;</Tag>
+              {/* <Tag>&lt;</Tag> */}
+              {/* @ts-ignore */}
+              {responseList.current.map((item: ProductItemType, id) => {
+                return (
+                  <TradeProductItem03 key={id} item={item}></TradeProductItem03>
+                );
+              })}
+              {/* <Tag>&gt;</Tag> */}
             </ProductList03>
           </DetailRecommend>
         </DetailDownDiv>

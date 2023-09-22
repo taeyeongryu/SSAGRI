@@ -2,6 +2,7 @@ package com.ssafy.ssagri.entity.auction;
 
 import com.ssafy.ssagri.entity.user.User;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -28,6 +29,12 @@ public class AuctionProductImage {
     // 경매
     @Column(name = "auction_product_photo_link",nullable = false, length = 1000)
     private String imageLink;
+
+    @Builder
+    public AuctionProductImage(AuctionProduct auctionProductNo, String imageLink){
+        this.auctionProductNo = auctionProductNo;
+        this.imageLink = imageLink;
+    }
 
 
 }

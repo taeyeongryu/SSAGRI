@@ -14,7 +14,6 @@ public enum CustomExceptionStatus {
     //Register = 1xxx
     REGISTER_NICKNAME_IS_DUPLICATE(-1000, "유저 닉네임이 중복됩니다."),
     REGISTER_EMAIL_IS_DUPLICATE(-1001, "이메일이 중복됩니다."),
-
     //LOGIN = 11xx
     LOGIN_HAVE_NO_ACCOUT(-1101, "일치하는 계정이 없습니다."),
     LOGIN_GET_TOKEN_ERROR(-1102, "토큰 발급 과정에서 문제가 발생했습니다."),
@@ -30,11 +29,28 @@ public enum CustomExceptionStatus {
     JWT_TOKEN_INVALID(-1302, "유효하지 않은 토큰입니다."),
     JWT_TOKENTYPE_ERR(-1303, "TokenType Parsing중 오류가 발생했습니다."),
 
+    //JWT token refill = 1400
+    JWT_REFILL_COOKIE_NOT_EXIST(-1400, "Refresh Cookie가 존재하지 않습니다."),
+    JWT_REFILL_COOKIE_VALUE_INVALID(-1401, "쿠키 안의 토큰 값이 유효하지 않습니다."),
+    JWT_REFILL_COOKIE_REDIS_NOT_MATCHED(-1402, "쿠키는 유효하나, Redis 서버에 유저 정보가 없습니다."),
+    JWT_REFILL_CREATE_TOKEN_ERR(-1403, "액세스 토큰 발급과정에서 문제가 발생했습니다."),
+
+    //Mail service = 15xx
+    MAIL_SEND_ERR(-1500, "메일 전송 과정 중 에러가 발생했습니다."),
+    MAIL_AUTH_SAVE_ERR(-1501, "인증번호를 Redis에 저장하는 중 에러가 발생했습니다."),
+
+    //Redis = 16xx
+    REDIS_GET_VALUE_FAIL(-1600, "redis 키값으로 value를 찾아오는 것을 실패했습니다. (입력 값 다름)"),
+
+
     //ChatRoom = 2xxx
-    CHATROOM_DOES_NOT_EXSIST(-2002, "존재하지 않는 채팅방입니다."),
+    CHATROOM_DOES_NOT_EXIST(-2002, "존재하지 않는 채팅방입니다."),
 
     //UsedProduct = 3xxx
-    USED_PRODUCT_DOES_NOT_EXSIST(-3001, "존재하지 않는 중고상품 입니다.");
+    USED_PRODUCT_DOES_NOT_EXIST(-3001, "존재하지 않는 중고상품 입니다."),
+    USED_PRODUCT_LIKE_ALREADY_EXIST(-3002, "이미 좋아한 상품 입니다."),
+    USED_PRODUCT_LIKE_DOES_NOT_EXIST(-3003,"좋아하지 않는 상품 입니다.");
+
 
     private final int code;
     private final String message;

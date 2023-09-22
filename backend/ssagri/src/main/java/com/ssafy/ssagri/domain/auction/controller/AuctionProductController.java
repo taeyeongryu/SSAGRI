@@ -1,14 +1,16 @@
 package com.ssafy.ssagri.domain.auction.controller;
 
 import com.ssafy.ssagri.domain.auction.service.AuctionProductService;
-import com.ssafy.ssagri.domain.auction.dto.AuctionProductAll;
-import com.ssafy.ssagri.domain.auction.dto.AuctionProductCreate;
+import com.ssafy.ssagri.domain.auction.dto.AuctionProductAllDTO;
+import com.ssafy.ssagri.domain.auction.dto.AuctionProductCreateDTO;
 
+import com.ssafy.ssagri.dto.etc.CustomResponseBody;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,7 +28,7 @@ public class AuctionProductController {
 
     @GetMapping(value = "/all-list")
     @ApiOperation("모든 경매 출력")
-    public List<AuctionProductAll> allList(){
+    public List<AuctionProductAllDTO> allList(){
         System.out.println("들어왔니");
         return auctionProductService.getAuctionProducts();
 
@@ -35,8 +37,8 @@ public class AuctionProductController {
 
     @PostMapping(value = "/auction/regist")
     @ApiOperation("경매 등록")
-    public void registList(@RequestBody AuctionProductCreate auctionProductCreate){
-        auctionProductService.setAuctionProduct(auctionProductCreate);
+    public void registList(@RequestBody AuctionProductCreateDTO auctionProductCreateDTO){
+        auctionProductService.setAuctionProduct(auctionProductCreateDTO);
         // response 나중에 처리
     }
 
@@ -48,5 +50,25 @@ public class AuctionProductController {
         return auctionProductService.auctionImageUploadToAWS(multipartFile, "auction" + "/" + no , no); // lesson 가 lesson/로 들어감.
 
     }
+
+    // S3 경매 상품 이미지 불러오기
+    @ApiOperation("S3 profile 불러오기")
+    @GetMapping("/profile-load/{userNo}")
+    public ResponseEntity<CustomResponseBody> profileLoad(@PathVariable Long auctionProductNo) {
+        CustomResponseBody responseBody = new CustomResponseBody<>("등록된 사진이 있습니다.");
+        try {
+            responseBody.setResult(auctionProductService.auctionProductLoad(auctionProductNo));
+        } catch (IllegalStateException i) {
+            responseBody.setResultCode(-1);
+            responseBody.setResultMsg(i.getMessage());
+            return ResponseEntity.ok().body(responseBody);
+        } catch (Exception e) {
+            responseBody.setResultCode(-2);
+            responseBody.setResultMsg(e.getMessage());
+            return ResponseEntity.ok().body(responseBody);
+        }
+        return ResponseEntity.ok().body(responseBody);
+    }
+
 
 }

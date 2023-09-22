@@ -17,7 +17,7 @@
 </div>
 
 <script>
-    let socket = new SockJS('http://localhost:5000/ws');
+    let socket = new SockJS('http://localhost:5000/ws', {}, { withCredentials: true });
     let stompClient = Stomp.over(socket);
 
     stompClient.connect({}, function(frame) {
@@ -26,6 +26,7 @@
             showMessageOutput(JSON.parse(messageOutput.body));
         });
     });
+
 
     function sendMessage() {
         let chatRoomNo = document.getElementById('chatRoomNo').value;

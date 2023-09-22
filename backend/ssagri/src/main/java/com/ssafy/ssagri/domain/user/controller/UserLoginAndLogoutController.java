@@ -3,12 +3,7 @@ package com.ssafy.ssagri.domain.user.controller;
 import com.ssafy.ssagri.domain.user.service.UserLoginAndLogoutService;
 import com.ssafy.ssagri.dto.user.UserLoginDTO;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +26,7 @@ public class UserLoginAndLogoutController {
     private final UserLoginAndLogoutService userLoginAndLogoutService;
 
     //로그인
-    @Operation(summary = "로그인 기능", description = "줘야 하는 값 : UserLoginDTO, 프론트로 넘겨주는 값 : Access-Token, Refresh-Token \n" +
+    @Operation(summary = "로그인 기능", description = "줘야 하는 값 : UserLoginDTO, 프론트로 넘겨주는 값 : Access-Token, Refresh-Token(Cookie) \n" +
             "    LOGIN_HAVE_NO_ACCOUT(-1101, \"일치하는 계정이 없습니다.\"),\n" +
             "    LOGIN_GET_TOKEN_ERROR(-1102, \"토큰 발급 과정에서 문제가 발생했습니다.\"),\n" +
             "    LOGIN_SAVE_TOKEN_ERROR(-1103, \"토큰을 Redis로 저장하는 과정에서 문제가 발생했습니다.\"),\n" +
