@@ -12,6 +12,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,5 +36,10 @@ public class MessageController {
     @ApiOperation("chatRoomNo로 메시지 조회하는 메서드")
     public Page<MessageResponseDto> selectMessage(Long roomNo, Pageable pageable){
         return messageService.selectMessageResponse(roomNo, pageable);
+    }
+
+    @PostMapping("")
+    public MessageResponseDto saveMessage(MessageRequestDto messageRequest) {
+        return messageService.saveMessage(messageRequest);
     }
 }
