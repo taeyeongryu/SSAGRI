@@ -1,5 +1,6 @@
 package com.ssafy.ssagri;
 
+import com.ssafy.ssagri.domain.user.repository.RandomFirstNameRepository;
 import com.ssafy.ssagri.util.mail.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -12,8 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TestController {
 
-    private final JavaMailSender emailSender;
-    private final EmailService emailService;
+    private final RandomFirstNameRepository randomFirstNameRepository;
 
 
     @GetMapping
@@ -23,10 +23,9 @@ public class TestController {
     }
 
 
-    @GetMapping("mail")
+    @GetMapping("test")
     public String test2() throws Exception {
-        emailService.sendSimpleMessageRegist("syhfqq1810@gmail.com");
-        return "완료";
+        return randomFirstNameRepository.getRandomName();
     }
 
 }
