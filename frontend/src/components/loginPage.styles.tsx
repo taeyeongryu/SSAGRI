@@ -6,6 +6,7 @@ import { onLogout, onLoginSuccess } from '../utils/user';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { isLoggedInAtom } from '../states/account/loginAtom';
+import base64 from 'base-64';
 
 const show = keyframes`
   0%, 49.99% {
@@ -397,6 +398,18 @@ const SignInAndUpComponent = () => {
 
   //   // axios 헤더에 jwt 토큰 담기
   //   axios.defaults.headers.common['Authorization'] = accessToken;
+
+    // userNo를 localStorage에 넣기
+    let payload = accessToken.substring(
+      accessToken.indexOf('.') + 1,
+      accessToken.lastIndexOf('.')
+    );
+    let dec = base64.decode(payload);
+    let userNo = JSON.parse(dec).userNo;
+    localStorage.setItem('userNo', userNo);
+
+    // axios 헤더에 jwt 토큰 담기
+    axios.defaults.headers.common['Authorization'] = accessToken;
 
   //   // 액세스토큰 만료하기 전에 로그인 연장
   //   setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
