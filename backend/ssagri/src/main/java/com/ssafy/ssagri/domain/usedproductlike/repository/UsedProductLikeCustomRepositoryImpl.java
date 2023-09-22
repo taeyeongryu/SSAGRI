@@ -6,6 +6,7 @@ import com.ssafy.ssagri.entity.usedproduct.QUsedProductLike;
 import com.ssafy.ssagri.entity.usedproduct.UsedProductLike;
 
 import javax.persistence.EntityManager;
+import java.util.Optional;
 
 public class UsedProductLikeCustomRepositoryImpl implements UsedProductLikeCustomRepository {
 
@@ -24,4 +25,14 @@ public class UsedProductLikeCustomRepositoryImpl implements UsedProductLikeCusto
                 .fetchOne();
         return like == null ? false : true;
     }
+
+    @Override
+    public Optional<UsedProductLike> findLikeByUserNoAndUsedProductNo(Long userNo, Long usedProductNo) {
+        UsedProductLike usedproductLike = jpaQueryFactory.selectFrom(usedProductLike)
+                .where(usedProductLike.user.no.eq(userNo).and(usedProductLike.usedProduct.no.eq(usedProductNo)))
+                .fetchOne();
+        return Optional.ofNullable(usedproductLike);
+    }
+
+
 }

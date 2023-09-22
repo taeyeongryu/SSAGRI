@@ -153,7 +153,7 @@ public class UsedProductService {
         if (findUsedProduct.isPresent()) {
             usedProduct = findUsedProduct.get();
         }else{
-            throw new CustomException(CustomExceptionStatus.USED_PRODUCT_DOES_NOT_EXSIST);
+            throw new CustomException(CustomExceptionStatus.USED_PRODUCT_DOES_NOT_EXIST);
         }
         UsedProductDetailResponseDto detailResponse = usedProduct.toDetailResponse(usedProduct.getUser());
         List<UsedProductPhotoResponseDto> usedProductPhotoResponseDtoList = usedProductPhotoRepository.selectSubPhotoByProductNo(usedProductNo);

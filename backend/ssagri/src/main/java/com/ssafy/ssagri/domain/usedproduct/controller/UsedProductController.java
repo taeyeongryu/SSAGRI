@@ -6,6 +6,7 @@ import com.ssafy.ssagri.domain.usedproduct.dto.response.UsedProductResponseDto;
 import com.ssafy.ssagri.domain.usedproduct.service.UsedProductService;
 import com.ssafy.ssagri.entity.usedproduct.ProductCategory;
 import com.ssafy.ssagri.entity.user.Region;
+import com.ssafy.ssagri.util.jwt.JwtUtil;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
