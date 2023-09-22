@@ -1,14 +1,22 @@
 package com.ssafy.ssagri.domain.user.controller;
 
 import com.ssafy.ssagri.domain.user.service.UserRegistService;
+import com.ssafy.ssagri.dto.user.ResponseDTO;
 import com.ssafy.ssagri.dto.user.UserRegistDTO;
 import com.ssafy.ssagri.util.exception.CustomException;
+import com.ssafy.ssagri.util.mail.EmailService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+
+import static com.ssafy.ssagri.util.ResponseStatusEnum.MAIL_SEND_IS_OK;
 
 
 @RestController
@@ -19,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserRegistController {
 
     private final UserRegistService userRegisterService;
+    private final EmailService emailService;
 
 
     @Operation(summary = "회원가입 기능", description = "UserRegistDTO 입력값을 통해 회원 가입 및 등록 진행. \n 성공일 경우 REGISTER_IS_OK(1000, \"성공적으로 등록하였습니다.\")발생")
@@ -45,10 +54,12 @@ public class UserRegistController {
         return userRegisterService.checkDuplicateEmail(email);
     }
 
-    //인증번호 유효 검증(개발필요)
-    @PostMapping("/check/auth-number")
-    public ResponseEntity<?> checkNumberIsCorrect(@RequestParam("email") String email) throws CustomException {
-        return userRegisterService.checkNumberIsCorrect(email);
+    @Operation(summary = "이메일 전송(인증번호 전송)", description = "")
+    @PostMapping("/check/email-invalid")
+    public ResponseEntity<?> checkNumberIsCorrect(@RequestParam("email") String email, HttpServletRequest request) throws CustomException, MessagingException, UnsupportedEncodingException {
+        String authCode = emailService.sendSimpleMessageRegist(email); //1. 해당 주소로 메일 보내기 및 인증 번호 받아옴
+        userRegisterService.saveAuthCodeToRedis(request, authCode); //2. IP + authCode를 통한 값을 생성하여 Redis에 보관(expire : 10분)
+        return ResponseEntity.ok(new ResponseDTO(MAIL_SEND_IS_OK.getCode(), MAIL_SEND_IS_OK.getMessage()));
     }
 
     //이미지 받기(개발필요)
