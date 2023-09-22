@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from 'react';
 
 const MainPage = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 100%;
   font-family: var(--font-Pretendard);
 `;
 
@@ -110,6 +110,7 @@ const ScrollTag = (scrollposition) => {
 const Page = styled.div`
   display: flex;
   overflow: hidden;
+
   /* scroll-behavior: smooth; */
 `;
 const PagesSection1 = styled.section`
@@ -257,7 +258,7 @@ const fadeOut = keyframes`
 
 const Page2_tag2 = styled.div`
   position: relative;
-  margin-top: 180px;
+  margin-top: 140px;
   font-size: 40px;
   width: 600px;
   height: 700px;
