@@ -45,6 +45,7 @@ public class BoardService {
     }
 
     // 게시판 등록
+    @Transactional
     public void regist(BoardCreateDto boardCreateDto){
         Board board = Board.builder()
                 .user(userRegistRepository.findByNo(boardCreateDto.getNo()))
