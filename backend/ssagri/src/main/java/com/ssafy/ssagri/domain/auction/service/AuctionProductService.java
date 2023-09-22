@@ -13,12 +13,17 @@ import com.ssafy.ssagri.domain.user.repository.UserRegistRepository;
 import com.ssafy.ssagri.domain.auction.dto.AuctionProductAll;
 import com.ssafy.ssagri.domain.auction.dto.AuctionProductCreate;
 import com.ssafy.ssagri.entity.auction.AuctionProduct;
+import com.ssafy.ssagri.entity.auction.AuctionProductImage;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
@@ -67,12 +72,12 @@ public class AuctionProductService {
 //                     .startDate(products.get(i).getStartDate())
 //                     .endDate(products.get(i).getEndDate())
                      .comment(products.get(i).getComment())
-                     .auctionStatus(products.get(i).getAuctionStatus())
+//                     .auctionStatus(products.get(i).getAuctionStatus())
                      .finallyPrice(products.get(i).getFinallyPrice())
                      .modifyDate(products.get(i).getModifyDate())
                      .type(products.get(i).getType())
                      .originPrice(products.get(i).getOriginPrice())
-                     .photos(auctionPhotoRepository.findByAuctionProduct(products.get(i)))
+                     .photos(auctionPhotoRepository.findByAuctionProductNo(products.get(i)))
                      .build();
 
                 result.add(auctionProductAll);
@@ -129,30 +134,51 @@ public class AuctionProductService {
 
             PutObjectResult result = amazonS3.putObject(request);
 
-//            User user = userRepository.findByUserNo(userNo);
+            AuctionProduct auctionProduct = auctionRepository.findByNo(no);
 
-//            user.setProfileImg(key);
+            AuctionProductImage auctionProductImage = AuctionProductImage.builder()
+                            .auctionProduct(auctionProduct)
+                                    .imageLink(key).build();
 
-//            userRepository.save(user);
+            auctionPhotoRepository.save(auctionProductImage);
 
 
             return key;
         } catch (AmazonServiceException e) {
             // The call was transmitted successfully, but Amazon S3 couldn't process
             // it, so it returned an error response.
-//            log.error("uploadToAWS AmazonServiceException filePath={}, yyyymm={}, error={}", e.getMessage());
+            log.error("uploadToAWS AmazonServiceException filePath={}, yyyymm={}, error={}", e.getMessage());
         } catch (SdkClientException e) {
             // Amazon S3 couldn't be contacted for a response, or the client
             // couldn't parse the response from Amazon S3.
-//            log.error("uploadToAWS SdkClientException filePath={}, error={}", e.getMessage());
+            log.error("uploadToAWS SdkClientException filePath={}, error={}", e.getMessage());
         } catch (Exception e) {
             // Amazon S3 couldn't be contacted for a response, or the client
             // couldn't parse the response from Amazon S3.
-//            log.error("uploadToAWS SdkClientException filePath={}, error={}", e.getMessage());
+            log.error("uploadToAWS SdkClientException filePath={}, error={}", e.getMessage());
         }
 
         return "";
     }
+
+    // S3 profile 불러오기
+//    @ApiOperation("S3 profile 불러오기")
+//    @GetMapping("/profile-load/{userNo}")
+//    public ResponseEntity<CustomResponseBody> profileLoad(@PathVariable Long userNo) {
+//        CustomResponseBody responseBody = new CustomResponseBody<>("등록된 사진이 있습니다.");
+//        try {
+//            responseBody.setResult(s3Service.profileLoad(userNo));
+//        } catch (IllegalStateException i) {
+//            responseBody.setResultCode(-1);
+//            responseBody.setResultMsg(i.getMessage());
+//            return ResponseEntity.ok().body(responseBody);
+//        } catch (Exception e) {
+//            responseBody.setResultCode(-2);
+//            responseBody.setResultMsg(e.getMessage());
+//            return ResponseEntity.ok().body(responseBody);
+//        }
+//        return ResponseEntity.ok().body(responseBody);
+//    }
 
 
 
