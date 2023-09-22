@@ -1,7 +1,5 @@
 import { styled, keyframes } from 'styled-components';
 import { useState, useRef, useEffect } from 'react';
-// import { useRecoilValue } from 'recoil';
-// import { isLoggedInAtom } from '../states/account/loginAtom';
 import { Avatar } from 'antd';
 import axios from 'axios';
 import { onLogout, onLoginSuccess } from '../utils/user';
