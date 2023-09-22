@@ -342,6 +342,20 @@ const SignInAndUpComponent = () => {
     setSignInForm({ ...signInForm, password: e.target.value });
   };
 
+  // jwt 액세스 토큰 만료되었을 때 재발급 테스트
+  const testRefill = (e) => {
+    e.preventDefault();
+
+    axios
+      .get('/jwt/refill')
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   // 로그인 여부
   // const isLoggedIn = useRecoilValue(isLoggedInAtom);
 
@@ -730,6 +744,7 @@ const SignInAndUpComponent = () => {
           </FormContent>
           <Button onClick={onLogin}>로그인</Button>
           <Button onClick={onLogout}>로그아웃</Button>
+          <Button onClick={testRefill}>토큰 재발급 테스트</Button>
         </Form>
       </FormContainer>
       {/* 회원가입 폼*/}
