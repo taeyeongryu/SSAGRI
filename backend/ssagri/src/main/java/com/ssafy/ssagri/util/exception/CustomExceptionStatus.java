@@ -14,7 +14,6 @@ public enum CustomExceptionStatus {
     //Register = 1xxx
     REGISTER_NICKNAME_IS_DUPLICATE(-1000, "유저 닉네임이 중복됩니다."),
     REGISTER_EMAIL_IS_DUPLICATE(-1001, "이메일이 중복됩니다."),
-
     //LOGIN = 11xx
     LOGIN_HAVE_NO_ACCOUT(-1101, "일치하는 계정이 없습니다."),
     LOGIN_GET_TOKEN_ERROR(-1102, "토큰 발급 과정에서 문제가 발생했습니다."),
@@ -39,6 +38,10 @@ public enum CustomExceptionStatus {
     //Mail service = 15xx
     MAIL_SEND_ERR(-1500, "메일 전송 과정 중 에러가 발생했습니다."),
     MAIL_AUTH_SAVE_ERR(-1501, "인증번호를 Redis에 저장하는 중 에러가 발생했습니다."),
+
+    //Redis = 16xx
+    REDIS_GET_VALUE_FAIL(-1600, "redis 키값으로 value를 찾아오는 것을 실패했습니다. (입력 값 다름)"),
+
 
     //ChatRoom = 2xxx
     CHATROOM_DOES_NOT_EXIST(-2002, "존재하지 않는 채팅방입니다."),
