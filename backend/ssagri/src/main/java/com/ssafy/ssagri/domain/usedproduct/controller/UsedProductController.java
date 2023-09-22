@@ -39,7 +39,7 @@ public class UsedProductController {
 
     @GetMapping("/{userNo}")
     @ApiOperation("중고물품 리스트 조회하는 메서드 파라미터 값으로 userNo를 넣어주면 좋아요 상태도 같이 조회")
-    @Operation(description = "category, region, size, page 넘겨주기, 정렬은 sort=likeCount,asc 같은 식으로 넘긴다.")
+    @Operation(description = "category, region, size, page 넘겨주기, 정렬은 sort=likeCount,asc 같은 식으로 넘긴다. ex) http://localhost:5000/api/usedproduct/1?sort=like,desc&page=0&size=3&search=title1")
     public Page<UsedProductResponseDto> selectList(@PathVariable(name = "userNo")Long userNo
             , @RequestParam(name = "category", required = false) ProductCategory productCategory
             , @RequestParam(name = "region", required = false) Region region
