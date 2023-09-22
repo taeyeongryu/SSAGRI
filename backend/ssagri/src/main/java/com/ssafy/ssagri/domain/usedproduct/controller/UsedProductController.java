@@ -18,6 +18,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/usedproduct")
+@CrossOrigin("*")
 public class UsedProductController {
 
     private final UsedProductService usedProductService;
