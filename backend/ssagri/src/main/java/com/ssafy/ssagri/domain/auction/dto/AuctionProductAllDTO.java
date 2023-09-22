@@ -14,7 +14,7 @@ import java.util.List;
 
 @Getter
 @Builder
-public class AuctionProductAll {
+public class AuctionProductAllDTO {
 
     // 경매 no
     private Long no;
