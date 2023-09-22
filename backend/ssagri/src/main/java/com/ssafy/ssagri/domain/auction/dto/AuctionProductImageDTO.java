@@ -50,7 +50,7 @@ public class AuctionProductImageDTO {
     private int originPrice;
 
     // 경매 이미지
-    private List<AuctionProductPhoto> auctionImages;
+//    private List<> auctionImages;
 
 //    @QueryProjection
 //    public AuctionProductImageDTO (Long no, String user, String name ,int upPrice, int downPrice, int price, LocalDateTime startDate, LocalDateTime endDate,
