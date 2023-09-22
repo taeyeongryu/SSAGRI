@@ -7,6 +7,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
 public interface MessageRepository extends MongoRepository<Message,String>{
-    @Query(value = "{'roomId' : ?0}", sort = "{'time' : -1}")
-    Page<Message> findMessagesByRoomIdOrderByTimeDesc(Long roomId, Pageable pageable);
+    @Query(value = "{'roomNo' : ?0}", sort = "{'time' : -1}")
+    Page<Message> findMessagesByRoomIdOrderByTimeDesc(Long roomNo, Pageable pageable);
 }
