@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static com.ssafy.ssagri.util.ResponseStatusEnum.REFILL_TOKEN_IS_OK;
 import static com.ssafy.ssagri.util.ResponseStatusEnum.REGISTER_NICKNAME_IS_OK;
 import static com.ssafy.ssagri.util.exception.CustomExceptionStatus.*;
 
@@ -62,12 +63,13 @@ public class TokenRefillService {
 
     public ResponseEntity<ResponseDTO> setHeaderAccessTokens(String token, Long userNo) {
         try {
-            //헤더에 담아 전송
+            //헤더 추가
             HttpHeaders headers = new HttpHeaders();
             headers.add("Access-Token", "Bearer " + JwtUtil.createRefreshToken(userNo));
-
             // 기존 ResponseEntity 객체에 HttpHeaders 추가
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(REGISTER_NICKNAME_IS_OK.getCode(), REGISTER_NICKNAME_IS_OK.getMessage()));
+            return ResponseEntity.status(HttpStatus.OK)
+                    .headers(headers)
+                    .body(new ResponseDTO(REFILL_TOKEN_IS_OK.getCode(), REFILL_TOKEN_IS_OK.getMessage()));
         } catch (Exception e) {
             throw new CustomException(JWT_REFILL_CREATE_TOKEN_ERR);
         }
