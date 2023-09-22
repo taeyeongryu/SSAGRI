@@ -1,19 +1,14 @@
 package com.ssafy.ssagri.domain.auction.dto;
 
 import com.ssafy.ssagri.entity.auction.AuctionProductType;
-import com.ssafy.ssagri.entity.auction.AuctionStatus;
-import com.ssafy.ssagri.entity.user.User;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
-
-import java.time.LocalDateTime;
 
 @Getter
 @ToString
 @Builder
-public class AuctionProductCreate {
+public class AuctionProductCreateDTO {
 
     // 경매 주최자 아이디
     private Long userNo;
