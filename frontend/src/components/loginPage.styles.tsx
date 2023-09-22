@@ -2,7 +2,7 @@ import { styled, keyframes } from 'styled-components';
 import { useState, useRef, useEffect } from 'react';
 // import { useRecoilValue } from 'recoil';
 // import { isLoggedInAtom } from '../states/account/loginAtom';
-
+import base64 from 'base-64';
 import { Avatar } from 'antd';
 import axios from 'axios';
 
@@ -379,6 +379,15 @@ const SignInAndUpComponent = () => {
 
     const accessToken = response.headers['access-token'];
     console.log(accessToken);
+
+    // userNo를 localStorage에 넣기
+    let payload = accessToken.substring(
+      accessToken.indexOf('.') + 1,
+      accessToken.lastIndexOf('.')
+    );
+    let dec = base64.decode(payload);
+    let userNo = JSON.parse(dec).userNo;
+    localStorage.setItem('userNo', userNo);
 
     // axios 헤더에 jwt 토큰 담기
     axios.defaults.headers.common['Authorization'] = accessToken;

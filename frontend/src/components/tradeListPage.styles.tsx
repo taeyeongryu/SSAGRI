@@ -1,17 +1,14 @@
 import { styled } from 'styled-components';
 import {
-  Search02,
-  SearchInput02,
-  SearchButton,
-  SearchImg,
+  SearchDiv02,
   ProductList02,
-  ProductStyle02,
-  ProductImgStyle02,
-  ProductDetailStyle02,
-  ProductName02,
-  ProductPrice02,
-  SellerLocationAndTime02
+  TradeProductItem02
 } from '../components/tradeMainPage.styles';
+// @ts-ignore
+import { useEffect, useRef } from 'react';
+// @ts-ignore
+import axios from 'axios';
+import { ProductItemType } from './type';
 
 // Header 제외 중고거래 컴포넌트
 const TradeListFrameDiv = styled.div`
@@ -95,20 +92,6 @@ const SearchOrder = styled.select`
   font-weight: bold;
 `;
 
-const SearchDiv = () => {
-  return (
-    <Search02>
-      <SearchInput02
-        type='text'
-        placeholder='원하는 제품을 검색해 보세요!'
-      ></SearchInput02>
-      <SearchButton>
-        <SearchImg src='/assets/img/searchGlass-4786fa.png'></SearchImg>
-      </SearchButton>
-    </Search02>
-  );
-};
-
 // 상품목록
 const ProductList = styled.div`
   width: 70%;
@@ -153,6 +136,50 @@ const PagingButtonText = styled.div`
 `;
 
 const TradeList = () => {
+  // -------- 임시 데이터 --------
+  let responseList = useRef([
+    {
+      createDate: '2023-09-22T00:42:26.086Z',
+      like: true,
+      price: 130000,
+      productCategory: 'READY',
+      productNo: 2,
+      region: '지역',
+      saleStatus: 'READY',
+      title:
+        '송병훈 짱 송병훈 짱 송병훈 짱 송병훈 짱\n 송병훈 짱 송병훈 짱 송병훈 짱 송병훈 짱',
+      updateDate: '2023-09-22T00:42:26.086Z',
+      usedProductPhotoResponseDto: {
+        link: 'https://i.imgur.com/ixdlIIc.png',
+        photoNo: 0
+      }
+    },
+    {
+      createDate: '2023-09-22T00:42:26.086Z',
+      like: true,
+      price: 130000,
+      productCategory: 'READY',
+      productNo: 2,
+      region: '지역',
+      saleStatus: 'READY',
+      title:
+        '송병훈 짱 송병훈 짱 송병훈 짱 송병훈 짱\n 송병훈 짱 송병훈 짱 송병훈 짱 송병훈 짱',
+      updateDate: '2023-09-22T00:42:26.086Z',
+      usedProductPhotoResponseDto: {
+        link: 'https://i.imgur.com/ixdlIIc.png',
+        photoNo: 0
+      }
+    }
+  ]);
+
+  useEffect(() => {
+    const url = '';
+    axios.get(url).then((res) => {
+      console.log(res.data);
+      responseList.current = res.data;
+    });
+  }, []);
+
   return (
     <TradeListFrameDiv>
       <TradeListDiv>
@@ -168,7 +195,7 @@ const TradeList = () => {
           </CategoryList>
         </CategorySpace>
         <SearchSpace>
-          <SearchDiv></SearchDiv>
+          <SearchDiv02></SearchDiv02>
           <SearchOrder>
             <option value='링크1'>인기순</option>
             <option value='링크1'>최신순</option>
@@ -177,37 +204,10 @@ const TradeList = () => {
         </SearchSpace>
         <ProductList>
           <ProductList02>
-            <ProductStyle02>
-              <ProductImgStyle02 src='/assets/img/zeuslab.jpg'></ProductImgStyle02>
-              <ProductDetailStyle02>
-                <ProductName02>제우스랩 포터블 모니터 Z16 Pro</ProductName02>
-                <ProductPrice02>130,000 원</ProductPrice02>
-                <SellerLocationAndTime02>
-                  온천2동 | 10분 전
-                </SellerLocationAndTime02>
-              </ProductDetailStyle02>
-            </ProductStyle02>
-            <ProductStyle02></ProductStyle02>
-            <ProductStyle02></ProductStyle02>
-            <ProductStyle02></ProductStyle02>
-
-            <ProductStyle02></ProductStyle02>
-            <ProductStyle02></ProductStyle02>
-            <ProductStyle02></ProductStyle02>
-            <ProductStyle02></ProductStyle02>
-
-            <ProductStyle02></ProductStyle02>
-            <ProductStyle02></ProductStyle02>
-            <ProductStyle02></ProductStyle02>
-            <ProductStyle02></ProductStyle02>
-
-            <ProductStyle02></ProductStyle02>
-            <ProductStyle02></ProductStyle02>
-            <ProductStyle02></ProductStyle02>
-            <ProductStyle02></ProductStyle02>
-
-            <ProductStyle02></ProductStyle02>
-            <ProductStyle02></ProductStyle02>
+            {/* @ts-ignore */}
+            {responseList.current.map((item: ProductItemType, id) => (
+              <TradeProductItem02 key={id} item={item}></TradeProductItem02>
+            ))}
           </ProductList02>
         </ProductList>
         <BottomPageSpace></BottomPageSpace>
