@@ -2,11 +2,9 @@ package com.ssafy.ssagri.domain.user.service;
 
 import com.ssafy.ssagri.domain.redis.RedisService;
 import com.ssafy.ssagri.domain.user.repository.UserLoginAndLogoutRepository;
-import com.ssafy.ssagri.domain.redis.UserTokenRepository;
 import com.ssafy.ssagri.domain.user.repository.UserRegistRepository;
 import com.ssafy.ssagri.dto.user.ResponseDTO;
 import com.ssafy.ssagri.dto.user.UserLoginDTO;
-import com.ssafy.ssagri.entity.user.RefreshToken;
 import com.ssafy.ssagri.util.exception.CustomException;
 import com.ssafy.ssagri.util.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -76,7 +74,7 @@ public class UserLoginAndLogoutService {
 
     private void saveRefreshToken(Long userNo, String refreshToken) throws CustomException{
         try {
-            redisService.saveRefreshToken(new RefreshToken(userNo, refreshToken, 3600 * 24L)); //TTL = 24Hour
+            redisService.saveRefreshToken(userNo, refreshToken);
             log.info("[토큰 저장] {} , {}", userNo, refreshToken);
         } catch (Exception e) {
             System.out.println(e.getMessage());

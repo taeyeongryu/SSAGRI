@@ -1,14 +1,10 @@
 package com.ssafy.ssagri.domain.redis;
 
-import com.ssafy.ssagri.entity.user.RefreshToken;
-import io.swagger.annotations.Api;
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -20,42 +16,33 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class RedisService {
     private final RedisTemplate<Object, Object> redisTemplate;
-
-    public void saveRefreshToken(RefreshToken refreshToken) {
-        String key = "RefreshToken:" + refreshToken.getUserNo();
-        HashOperations<Object, Object, Object> hashOperations = redisTemplate.opsForHash();
-        hashOperations.putAll(key, Map.of(
-                "userNo", refreshToken.getUserNo(),
-                "refreshToken", refreshToken.getRefreshToken(),
-                "expiration", refreshToken.getExpiration()
-        ));
+    private final StringRedisTemplate stringRedisTemplate; //직렬화하여 값을 저장
+    public void saveRefreshToken(Long userNo, String tokenValue) {
+        String key = "RT" + userNo;
+        redisTemplate.opsForValue().set(key, tokenValue); //
+        redisTemplate.expire(key, 3600 * 12, TimeUnit.SECONDS);
     }
 
-
     public void deleteRefreshTokenByUserNo(Long userNo) {
-        String key = "RefreshToken:" + userNo;
-
-        //opsForHash() 메소드를 호출하여 HashOperations 인스턴스 획득, 이 인스턴스를 통해 Hash 데이터 조작
-        HashOperations<Object, Object, Object> hashOperations = redisTemplate.opsForHash();
-        Map<Object, Object> entries = hashOperations.entries(key); //Hash에 저장된 모든 field와 값을 가져옴
-
-        //Entry를 순회하며 각 field를 삭제
-        for (Object field : entries.keySet()) {
-            hashOperations.delete(key, field);
-        }
+        String key = "RT" + userNo;
+        redisTemplate.delete(key);
     }
 
     public Boolean keyExists(Long userNo) {
-        String key = "RefreshToken:" + userNo;
+        String key = "RT" + userNo;
         return redisTemplate.hasKey(key);
     }
 
-    public void saveRegistAuthCode(String authcode) throws Exception {
-        redisTemplate.opsForValue().set(authcode, authcode); //키밸류 동일
-        redisTemplate.expire(authcode, 600, TimeUnit.SECONDS);
+    public void saveRegistAuthCode(String authcode) {
+        stringRedisTemplate.opsForValue().set(authcode, "authcode");
+        stringRedisTemplate.expire(authcode, 600, TimeUnit.SECONDS);
     }
 
-    public void deleteRegistAuthCode(String authcode) throws Exception {
+    public void deleteRegistAuthCode(String authcode){
         redisTemplate.delete(authcode);
+    }
+
+    public Boolean authcodeExists(String authcode) {
+        return stringRedisTemplate.hasKey(authcode);
     }
 }
