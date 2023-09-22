@@ -6,6 +6,7 @@ import { onLogout, onLoginSuccess } from '../utils/user';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { isLoggedInAtom } from '../states/account/loginAtom';
+// @ts-ignore
 import base64 from 'base-64';
 
 const show = keyframes`
