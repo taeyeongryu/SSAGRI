@@ -52,8 +52,8 @@ public class AuctionProductController {
     }
 
     // S3 경매 상품 이미지 불러오기
-    @ApiOperation("S3 profile 불러오기")
-    @GetMapping("/profile-load/{userNo}")
+    @ApiOperation("경매 상품 사진 불러오기")
+    @GetMapping("/load/{auctionProductNo}")
     public ResponseEntity<CustomResponseBody> profileLoad(@PathVariable Long auctionProductNo) {
         CustomResponseBody responseBody = new CustomResponseBody<>("등록된 사진이 있습니다.");
         try {
