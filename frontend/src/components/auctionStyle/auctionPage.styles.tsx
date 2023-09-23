@@ -1,6 +1,6 @@
 import { styled } from 'styled-components';
 
-import { AuctionSearchInput } from './tradeMainPage.styles';
+import { AuctionSearchInput } from '../tradeMainPage.styles';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
@@ -43,6 +43,7 @@ const Line2 = styled.hr`
     }
   }
 `;
+
 const AuctionTag1 = styled.div`
   text-align: center;
   font-size: 22px;

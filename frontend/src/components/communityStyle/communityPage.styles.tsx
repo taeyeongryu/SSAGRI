@@ -10,6 +10,7 @@ import Matter, {
   MouseConstraint,
   Runner
 } from 'matter-js';
+import { useNavigate } from 'react-router-dom';
 
 const CommunityDiv = styled.div`
   width: 100%;
@@ -92,6 +93,11 @@ const ListDiv = styled.div`
   /* border: 2px solid red; */
 `;
 
+const ListTag = styled.div`
+  font-size: 25px;
+  margin-top: 15px;
+`;
+
 const BrTag = styled.div`
   margin-top: 220px;
   width: 100%;
@@ -106,12 +112,12 @@ const MidDiv = styled.div`
 `;
 const BottomDiv = styled.div`
   width: 100%;
-  height: 800px;
-  background-color: #ebe1e1;
+  height: 1500px;
+  background-color: #eaecee;
   /* border: 2px solid black; */
 `;
 const CommuPage = styled.div`
-  margin-top: 200px;
+  margin-top: 20px;
   width: 300px;
   height: 300px;
   border: 10px;
@@ -126,13 +132,41 @@ const ImgDiv = styled.img`
   border-radius: 50px;
 `;
 
+const LifeTags = styled.div`
+  font-size: 30px;
+  margin: 100px 0 0 150px;
+  /* margin-top: 100px; */
+  width: 300px;
+  height: 100px;
+  font-weight: 600;
+  /* border: 2px solid black; */
+`;
 const LifeTag = styled.div`
   font-size: 25px;
-  margin: 250px 0 0 150px;
+
+  font-weight: 600;
+  /* border: 2px solid black; */
+`;
+const BottomTag = styled.div`
+  font-size: 25px;
+  margin: 150px auto 0;
   /* margin-top: 100px; */
-  width: 100px;
-  height: 100px;
+  width: 600px;
+  height: 70px;
   border: 2px solid black;
+  border-radius: 50px;
+  background-color: aliceblue;
+  text-align: center;
+  line-height: 70px;
+`;
+
+const CommuListDiv = styled.div`
+  margin: 10px auto;
+  width: 1200px;
+  height: 500px;
+  /* border: 2px solid black; */
+  display: flex;
+  justify-content: space-between;
 `;
 
 const CommunityMain = () => {
@@ -142,6 +176,7 @@ const CommunityMain = () => {
     triggerOnce: true, // 한 번만 트리거
     threshold: 0.5 // 50% 이상 화면에 보일 때 트리거
   });
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (inView) {
@@ -419,7 +454,10 @@ const CommunityMain = () => {
         <RightDiv>
           <CommuList>금주의 게시판 순위</CommuList>
           <ListDiv>
-            1. <CommuTag>국내야구</CommuTag>
+            1.{' '}
+            <CommuTag onClick={() => navigate('/community/1')}>
+              국내야구
+            </CommuTag>
           </ListDiv>
           <ListDiv>
             2. <CommuTag>해외축구</CommuTag>
@@ -447,13 +485,51 @@ const CommunityMain = () => {
       </MidDiv>
       <BottomDiv>
         <Div>
-          <LifeTag>남은 게시판 생명</LifeTag>
+          <LifeTags>게시판 리스트</LifeTags>
+          <CommuListDiv>
+            <Div>
+              <ListTag>국내야구 게시판</ListTag>
+              <ListTag>해외축구 게시판</ListTag>
+              <ListTag>만화 게시판</ListTag>
+              <ListTag>LG 트윈스 게시판</ListTag>
+              <ListTag>대출 게시판</ListTag>
+            </Div>
+            <Div>
+              <ListTag>국내야구 게시판</ListTag>
+              <ListTag>해외축구 게시판</ListTag>
+              <ListTag>만화 게시판</ListTag>
+              <ListTag>LG 트윈스 게시판</ListTag>
+              <ListTag>대출 게시판</ListTag>
+            </Div>
+            <Div>
+              <ListTag>국내야구 게시판</ListTag>
+              <ListTag>해외축구 게시판</ListTag>
+              <ListTag>만화 게시판</ListTag>
+              <ListTag>LG 트윈스 게시판</ListTag>
+              <ListTag>대출 게시판</ListTag>
+            </Div>
+          </CommuListDiv>
+        </Div>
+        <Div>
+          <LifeTags>남은 게시판 생명</LifeTags>
           <FlexDiv>
-            <CommuPage></CommuPage>
-            <CommuPage></CommuPage>
-            <CommuPage></CommuPage>
+            <Div>
+              <LifeTag>Top.1</LifeTag>
+              <CommuPage></CommuPage>
+            </Div>
+            <Div>
+              <LifeTag>Top.2</LifeTag>
+              <CommuPage></CommuPage>
+            </Div>
+            <Div>
+              <LifeTag>Top.3</LifeTag>
+              <CommuPage></CommuPage>
+            </Div>
           </FlexDiv>
         </Div>
+        <BottomTag onClick={() => navigate('/communityCreate')}>
+          게시판 만들러 가기
+        </BottomTag>
       </BottomDiv>
     </CommunityDiv>
   );
