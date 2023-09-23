@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
+import com.ssafy.ssagri.domain.auction.dto.Images;
 import com.ssafy.ssagri.domain.auction.repository.AuctionPhotoRepository;
 import com.ssafy.ssagri.domain.auction.repository.AuctionRepository;
 import com.ssafy.ssagri.domain.user.repository.UserRegistRepository;
@@ -60,11 +61,11 @@ public class AuctionProductService {
          for(int i=0;i<products.size();i++){
              AuctionProductAllDTO auctionProductAllDTO = AuctionProductAllDTO.builder()
                      .no(products.get(i).getNo())
-                     .userNo(products.get(i).getUser().getNo())
+                     .userNickName(products.get(i).getUser().getNickname())
                      .name(products.get(i).getName())
                      .upPrice(products.get(i).getUpPrice())
                      .downPrice(products.get(i).getDownPrice())
-                     .priceCount(products.get(i).getPrice())
+                     .priceCount(products.get(i).getPriceCount())
 //                     .startDate(products.get(i).getStartDate())
 //                     .endDate(products.get(i).getEndDate())
                      .comment(products.get(i).getComment())
@@ -73,7 +74,7 @@ public class AuctionProductService {
                      .modifyDate(products.get(i).getModifyDate())
                      .type(products.get(i).getType())
                      .originPrice(products.get(i).getOriginPrice())
-                     .photos(auctionPhotoRepository.findByAuctionProductNo(products.get(i)))
+//                     .photos(auctionPhotoRepository.findByAuctionProductNo(products.get(i)))
                      .build();
 
                 result.add(auctionProductAllDTO);
@@ -93,7 +94,7 @@ public class AuctionProductService {
                 .name(auctionProductCreateDTO.getName())
 //                .upPrice(auctionProductCreate.getUpPrice())
                 .downPrice(auctionProductCreateDTO.getDownPrice())
-                .price(auctionProductCreateDTO.getCountPrice())
+                .priceCount(auctionProductCreateDTO.getCountPrice())
 //                .startDate(auctionProductCreate.getStartDate())
 //                .endDate(auctionProductCreate.getEndDate())
                 .comment(auctionProductCreateDTO.getComment())
@@ -158,16 +159,53 @@ public class AuctionProductService {
     }
 
     // 경매 상품 이미지 업로드
-    public String auctionProductLoad(Long auctionProductNo) {
+    public List<Images> auctionProductLoad(Long auctionProductNo) {
 
         List<AuctionProductImage> list = auctionPhotoRepository.findByAuctionProductNo(auctionRepository.findByNo(auctionProductNo));
 
-//        List<AuctionProductImage> imageList = auctionauctionPhotoRepository.findByAuctionProductNo(auctionProductNo);
-//        if (user.getProfileImg() == null || user.getProfileImg().isBlank()) {
-//            throw new IllegalStateException("등록된 프로필 사진이 없습니다.");
-//        }
-//        return URL + user.getProfileImg();
-    return "hello";
+        if (list.size() == 0) {
+            throw new IllegalStateException("등록된 사진이 없습니다.");
+
+        }
+        List<Images> images = new ArrayList<>();
+
+        for(int i=0;i<list.size();i++){
+
+            Images image = Images.builder()
+                    .no(list.get(i).getNo())
+                    .auctionProductNo(list.get(i).getAuctionProductNo().getNo())
+                    .imageLink(URL + list.get(i).getImageLink()).build();
+
+            images.add(image);
+        }
+
+        return images;
+
+
+    }
+
+    // 경매 상품 상세페이지
+    public AuctionProductAllDTO auctionDetail(Long auctionProductNo){
+       AuctionProduct auctionProduct = auctionRepository.findByNo(auctionProductNo);
+
+       AuctionProductAllDTO auctionProductAllDTO =AuctionProductAllDTO.builder()
+               .no(auctionProduct.getNo())
+               .userNickName(userRegistRepository.findByNo(auctionProduct.getUser().getNo()).getNickname())
+               .name(auctionProduct.getName())
+               .upPrice(auctionProduct.getUpPrice())
+               .downPrice(auctionProduct.getDownPrice())
+               .priceCount(auctionProduct.getPriceCount())
+//               .startDate(auctionProduct.getStartDate()) // String 으로 변환해서 주기
+//               .endDate(auctionProduct.getEndDate()) String 변환해서 주기
+               .comment(auctionProduct.getComment())
+               .auctionStatus(auctionProduct.getAuctionStatus())
+               .finallyPrice(auctionProduct.getFinallyPrice())
+               .deleteDate(auctionProduct.getDeleteDate())
+               .modifyDate(auctionProduct.getModifyDate())
+               .type(auctionProduct.getType())
+               .originPrice(auctionProduct.getOriginPrice()).build();
+
+       return auctionProductAllDTO;
     }
 
 
