@@ -1,4 +1,7 @@
-import { MainPage, PageSlide } from '../components/mainPage.styles';
+import {
+  MainPage,
+  PageSlide
+} from '../../components/mainStyle/mainPage.styles';
 import { useEffect, useState } from 'react';
 
 const mainPage = () => {

@@ -1,10 +1,13 @@
 import { styled, keyframes } from 'styled-components';
 import { useState, useRef, useEffect } from 'react';
-// import { useRecoilValue } from 'recoil';
-// import { isLoggedInAtom } from '../states/account/loginAtom';
-
 import { Avatar } from 'antd';
 import axios from 'axios';
+import { onLogout, onLoginSuccess } from '../utils/user';
+import { useNavigate } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { isLoggedInAtom } from '../states/account/loginAtom';
+// @ts-ignore
+import base64 from 'base-64';
 
 const show = keyframes`
   0%, 49.99% {
@@ -282,6 +285,8 @@ const OverlayPanel = styled.div`
 //
 
 const SignInAndUpComponent = () => {
+  const navigate = useNavigate();
+
   const [image, setImage] = useState(
     'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
   );
@@ -312,6 +317,8 @@ const SignInAndUpComponent = () => {
   };
 
   // 로그인 //
+
+  // 로그인 입력 폼
   const [signInForm, setSignInForm] = useState({
     email: '',
     password: ''
@@ -342,7 +349,7 @@ const SignInAndUpComponent = () => {
     setSignInForm({ ...signInForm, password: e.target.value });
   };
 
-  // jwt 액세스 토큰 만료되었을 때 재발급 테스트
+  // 액세스토큰 만료되었을 때 재발급 요청
   const testRefill = (e) => {
     e.preventDefault();
 
@@ -350,74 +357,82 @@ const SignInAndUpComponent = () => {
       .get('/jwt/refill')
       .then((res) => {
         console.log(res);
+        const accessToken = res.headers['access-token'];
+        console.log(accessToken);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  // 로그인 여부
-  // const isLoggedIn = useRecoilValue(isLoggedInAtom);
-
-  const JWT_EXPIRY_TIME = 24 * 3600 * 1000; // 만료 시간 (24시간)
+  // 로그인여부
+  // @ts-ignore
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
 
   // 로그인 요청 api
-  const onLogin = (e) => {
+  const onLoginHandler = (e) => {
     e.preventDefault();
+
     const data = {
       email: signInForm.email,
       password: signInForm.password
     };
     axios
       .post('/user/login/', data)
-      .then(onLoginSuccess)
+      .then((res) => {
+        onLoginSuccess(res);
+        setIsLoggedIn(true);
+        navigate('/');
+      })
       .catch((error) => {
         // ... 에러 처리
         console.log(error);
       });
   };
 
-  const onSilentRefresh = () => {
-    axios
-      .post('/silent-refresh')
-      .then(onLoginSuccess)
-      .catch((error) => {
-        console.log(error);
-        // 로그인 실패처리
-      });
-  };
+  // // 로그인 성공 시
+  // const onLoginSuccess = (response: any) => {
+  //   console.log(response.headers);
 
-  // 로그인 성공 시
-  const onLoginSuccess = (response: any) => {
-    console.log(response.headers);
+  //   const accessToken = response.headers['access-token'];
+  //   console.log(accessToken);
 
-    const accessToken = response.headers['access-token'];
-    console.log(accessToken);
+  //   // axios 헤더에 jwt 토큰 담기
+  //   axios.defaults.headers.common['Authorization'] = accessToken;
+
+    // userNo를 localStorage에 넣기
+//    let payload = accessToken.substring(
+//      accessToken.indexOf('.') + 1,
+//      accessToken.lastIndexOf('.')
+//    );
+//    let dec = base64.decode(payload);
+//    let userNo = JSON.parse(dec).userNo;
+//    localStorage.setItem('userNo', userNo);
 
     // axios 헤더에 jwt 토큰 담기
-    axios.defaults.headers.common['Authorization'] = accessToken;
+//    axios.defaults.headers.common['Authorization'] = accessToken;
 
-    // accessToken 만료하기 1분 전에 로그인 연장
-    setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
+  //   // 액세스토큰 만료하기 전에 로그인 연장
+  //   setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
 
-    // 로그인 하기 전 접속했던 페이지로 이동
-  };
+  //   // 로그인 하기 전 접속했던 페이지로 이동시키기
+  // };
+
+  // // 페이지가 새로고침 되거나 액세스토큰이 만료되었을 때 액세스 토큰을 재발급
+  // const onSilentRefresh = () => {
+  //   axios
+  //     .post('/silent-refresh')
+  //     .then(onLoginSuccess)
+  //     .catch((error) => {
+  //       console.log(error);
+  //       // 로그인 실패처리
+  //     });
+  // };
 
   // 로그아웃
-  const onLogout = (e) => {
+  const onLogoutHandler = (e) => {
     e.preventDefault();
-    axios
-      .get('/user/logout')
-      .then((res) => {
-        console.log(res);
-        console.log(document.cookie);
-        // axios의 헤더에 AccessToken 초기화
-        axios.defaults.headers.common['Authorization'] = '';
-        // cookie에 저장된 RefreshToken 삭제
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    onLogout();
   };
 
   // 회원가입 //
@@ -742,8 +757,8 @@ const SignInAndUpComponent = () => {
             ></Input>
             <A>비밀번호를 잊으셨나요?</A>
           </FormContent>
-          <Button onClick={onLogin}>로그인</Button>
-          <Button onClick={onLogout}>로그아웃</Button>
+          <Button onClick={onLoginHandler}>로그인</Button>
+          <Button onClick={onLogoutHandler}>로그아웃</Button>
           <Button onClick={testRefill}>토큰 재발급 테스트</Button>
         </Form>
       </FormContainer>

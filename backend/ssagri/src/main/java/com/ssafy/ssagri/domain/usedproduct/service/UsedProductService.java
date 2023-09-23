@@ -18,6 +18,7 @@ import com.ssafy.ssagri.util.exception.CustomException;
 import com.ssafy.ssagri.util.exception.CustomExceptionStatus;
 import com.ssafy.ssagri.util.s3upload.ImageService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +34,7 @@ import java.util.Optional;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Slf4j
 public class UsedProductService {
     private final UsedProductRepository usedProductRepository;
     private final UsedProductPhotoRepository usedProductPhotoRepository;
@@ -99,13 +101,15 @@ public class UsedProductService {
     *중고물품 리스트 가져오는 메서드
     *phototype이 sub 인것만 가져온다.
      */
-    public Page<UsedProductResponseDto> selectUsedProductList(Long userNo, ProductCategory productCategory, Region region, Pageable pageable){
-        Page<UsedProduct> usedProducts = usedProductRepository.selectAllUsedProduct(productCategory, region, pageable);
-        List<UsedProduct> usedProductList = usedProducts.getContent();
 
+    public Page<UsedProductResponseDto> selectUsedProductList(Long userNo, ProductCategory productCategory, Region region,String search ,Pageable pageable){
+        Page<UsedProduct> usedProducts = usedProductRepository.selectAllUsedProduct(productCategory, region,search ,pageable);
+        List<UsedProduct> usedProductList = usedProducts.getContent();
+        log.info("db에서 가져오기 성공");
         List<UsedProductResponseDto> usedProductResponseList = new ArrayList<>();
 
         for (UsedProduct usedProduct : usedProductList) {
+
             UsedProductResponseDto usedProductResponse = usedProduct.toResponse();
             //Main 사진 가져오기
             UsedProductPhotoResponseDto usedProductPhotoResponseDto = usedProductPhotoRepository.selectMainPhotoByProductNo(usedProduct.getNo());
@@ -118,6 +122,7 @@ public class UsedProductService {
             //리스트에 저장하기
             usedProductResponseList.add(usedProductResponse);
         }
+        log.info("사진 가져오기 성공");
         return new PageImpl<>(usedProductResponseList, usedProducts.getPageable(), usedProducts.getTotalElements());
     }
 
@@ -153,7 +158,7 @@ public class UsedProductService {
         if (findUsedProduct.isPresent()) {
             usedProduct = findUsedProduct.get();
         }else{
-            throw new CustomException(CustomExceptionStatus.USED_PRODUCT_DOES_NOT_EXSIST);
+            throw new CustomException(CustomExceptionStatus.USED_PRODUCT_DOES_NOT_EXIST);
         }
         UsedProductDetailResponseDto detailResponse = usedProduct.toDetailResponse(usedProduct.getUser());
         List<UsedProductPhotoResponseDto> usedProductPhotoResponseDtoList = usedProductPhotoRepository.selectSubPhotoByProductNo(usedProductNo);

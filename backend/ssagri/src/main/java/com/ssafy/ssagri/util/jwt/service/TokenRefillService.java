@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static com.ssafy.ssagri.util.ResponseStatusEnum.REFILL_TOKEN_IS_OK;
-import static com.ssafy.ssagri.util.ResponseStatusEnum.REGISTER_NICKNAME_IS_OK;
 import static com.ssafy.ssagri.util.exception.CustomExceptionStatus.*;
 
 @Service
@@ -58,7 +57,6 @@ public class TokenRefillService {
         if(!parsedToken.equals("Valid")) throw new CustomException(JWT_REFILL_COOKIE_VALUE_INVALID); //파싱값 검증
         //유효하다면 레디스에 해당 토큰 여부 확인
         if(!redisService.keyExists(userNo)) throw new CustomException(JWT_REFILL_COOKIE_REDIS_NOT_MATCHED); //레디스 내부 값 검증
-        //여기 하다 말았음. user/logout도 검증 필요
     }
 
     public ResponseEntity<ResponseDTO> setHeaderAccessTokens(String token, Long userNo) {
