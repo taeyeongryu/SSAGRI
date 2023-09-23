@@ -6,6 +6,7 @@ import {
 import { useRef } from 'react';
 import { ProductItemType } from './type';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const DetailFrame = styled.div`
   width: 1920px;
@@ -565,6 +566,11 @@ const TradeDetail = () => {
     }
   ]);
 
+  const navigate = useNavigate();
+  const goChat = () => {
+    navigate(`/chat`);
+  };
+
   // useEffect(() => {
   //   const url = '';
   //   axios.get(url).then((res) => {
@@ -619,7 +625,7 @@ const TradeDetail = () => {
                   </HeartImgDiv>
                 </DetailDivHeart>
                 <DetailDivChat>
-                  <ChatText>구매 채팅하기</ChatText>
+                  <ChatText onClick={goChat}>구매 채팅하기</ChatText>
                   <ChatImgDiv>
                     <ChatImg src='/assets/img/chat.png'></ChatImg>
                   </ChatImgDiv>

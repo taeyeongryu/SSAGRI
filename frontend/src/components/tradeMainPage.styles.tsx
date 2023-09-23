@@ -444,9 +444,10 @@ const TradeProductItem03 = (item) => {
 
 const TradeMainProduct = (region) => {
   console.log(typeof region);
-  console.log(region);
+  console.log(typeof region.region);
+  console.log(region.region);
 
-  const userNo = localStorage.getItem('userNo');
+  // const userNo = localStorage.getItem('userNo');
   let recentData = useRef([
     {
       createDate: '2023-09-22T00:42:26.086Z',
@@ -483,19 +484,48 @@ const TradeMainProduct = (region) => {
       }
     }
   ]);
+
+  let regionText: string = '';
+
+  switch (region.region) {
+    case '서울':
+      regionText = 'SEOUL';
+      break;
+    case '대전':
+      regionText = 'DAEJEON';
+      break;
+    case '구미':
+      regionText = 'GUMI';
+      break;
+    case '광주':
+      regionText = 'GWANGJU';
+      break;
+    case '부울경':
+      regionText = 'BUG';
+      break;
+  }
+
+  console.log(regionText);
+
   // recentData
   axios
-    .get(`/usedproduct/${userNo}?region=${region.region}&offset=4&pageSize=0`)
+    .get(`/usedproduct/1?region=${regionText}&sort=no,desc&page=0&size=4`)
     .then((res) => {
       console.log(res.data);
       recentData = res.data.content;
+    })
+    .catch((err) => {
+      console.log(err);
     });
   // popularData
   axios
-    .get(`/usedproduct/${userNo}?region=${region.region}&offset=4&pageSize=0`)
+    .get(`/usedproduct/1?region=${regionText}&sort=like,desc&page=0&size=4`)
     .then((res) => {
       console.log(res.data);
       popularData = res.data.content;
+    })
+    .catch((err) => {
+      console.log(err);
     });
   // const responseApi = useRef([
   //   {
