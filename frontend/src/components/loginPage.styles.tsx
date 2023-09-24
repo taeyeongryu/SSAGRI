@@ -400,17 +400,17 @@ const SignInAndUpComponent = () => {
   //   // axios 헤더에 jwt 토큰 담기
   //   axios.defaults.headers.common['Authorization'] = accessToken;
 
-    // userNo를 localStorage에 넣기
-//    let payload = accessToken.substring(
-//      accessToken.indexOf('.') + 1,
-//      accessToken.lastIndexOf('.')
-//    );
-//    let dec = base64.decode(payload);
-//    let userNo = JSON.parse(dec).userNo;
-//    localStorage.setItem('userNo', userNo);
+  // userNo를 localStorage에 넣기
+  //    let payload = accessToken.substring(
+  //      accessToken.indexOf('.') + 1,
+  //      accessToken.lastIndexOf('.')
+  //    );
+  //    let dec = base64.decode(payload);
+  //    let userNo = JSON.parse(dec).userNo;
+  //    localStorage.setItem('userNo', userNo);
 
-    // axios 헤더에 jwt 토큰 담기
-//    axios.defaults.headers.common['Authorization'] = accessToken;
+  // axios 헤더에 jwt 토큰 담기
+  //    axios.defaults.headers.common['Authorization'] = accessToken;
 
   //   // 액세스토큰 만료하기 전에 로그인 연장
   //   setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
@@ -746,14 +746,18 @@ const SignInAndUpComponent = () => {
             </Label>
             <Input
               type='email'
-              value={signInForm.email}
+              // value={signInForm.email}
+              value={'test@test.com'}
               onChange={onChangeEmail}
+              // defaultValue='test@test.com'
             ></Input>
             <Label htmlFor='password'>비밀번호</Label>
             <Input
               type='password'
-              value={signInForm.password}
+              // value={signInForm.password}
+              value={'test'}
               onChange={onChangePassword}
+              // defaultValue='test'
             ></Input>
             <A>비밀번호를 잊으셨나요?</A>
           </FormContent>

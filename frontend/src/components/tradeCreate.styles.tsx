@@ -1,8 +1,11 @@
 import { styled } from 'styled-components';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import { useState } from 'react';
 
 const CreateAndUpdateFrame = styled.div`
   width: 1920px;
-  height: 1080px;
+  min-height: 1080px;
   margin-top: 7vh;
   /* border: 2px solid black; */
   display: flex;
@@ -121,14 +124,25 @@ const RightItemImage = styled.div`
 
 const CreateAndUpdateDivItemDown = styled.div`
   width: 100%;
-  height: 770px;
-  border: 1px solid blue;
+  border: 1px solid red;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
 const TradeCreate = () => {
+  const [data, setData] = useState<string>('');
+
+  // ClassicEditor
+  //   // Note that you do not have to specify the plugin and toolbar configuration — using defaults from the build.
+  //   .create(document.querySelector('#ckeditor') as HTMLElement)
+  //   .then((editor) => {
+  //     console.log('Editor was initialized', editor);
+  //   })
+  //   .catch((error) => {
+  //     console.error(error.stack);
+  //   });
+
   return (
     <CreateAndUpdateFrame>
       <CreateAndUpdateDiv>
@@ -157,7 +171,53 @@ const TradeCreate = () => {
               <RightItemImage>이미지 업로드</RightItemImage>
             </CreateAndUpdateDivItemUpRight>
           </CreateAndUpdateDivItemUp>
-          <CreateAndUpdateDivItemDown>에디터 삽입</CreateAndUpdateDivItemDown>
+          <CreateAndUpdateDivItemDown>
+            <div
+              id='ckeditor-div'
+              style={{ width: '100%', height: '100%', fontSize: '1rem' }}
+            >
+              <CKEditor
+                editor={ClassicEditor}
+                config={{
+                  // 여기에 config 입력
+                  toolbar: [
+                    'undo',
+                    'redo',
+                    'heading',
+                    '|',
+                    'bold',
+                    'italic',
+                    'bulletedList',
+                    'blockQuote',
+                    '|',
+                    'insertTable',
+                    'tableColumn',
+                    'tableRow',
+                    'mergeTableCells',
+                    '|',
+                    Image
+                  ],
+                  placeholder: '내용을 입력해주세요...'
+                }}
+                data={data}
+                onReady={(editor) => {
+                  // You can store the "editor" and use when it is needed.
+                  console.log('Editor is ready to use!', editor);
+                }}
+                onChange={(event, editor) => {
+                  const inputData = editor.getData();
+                  console.log({ event, editor, inputData });
+                  setData(inputData);
+                }}
+                onBlur={(_event, editor) => {
+                  console.log('Blur.', editor);
+                }}
+                onFocus={(_event, editor) => {
+                  console.log('Focus.', editor);
+                }}
+              />
+            </div>
+          </CreateAndUpdateDivItemDown>
         </CreateAndUpdateDivItem>
       </CreateAndUpdateDiv>
     </CreateAndUpdateFrame>
@@ -193,7 +253,26 @@ const TradeUpdate = () => {
               <RightItemImage>이미지 업로드</RightItemImage>
             </CreateAndUpdateDivItemUpRight>
           </CreateAndUpdateDivItemUp>
-          <CreateAndUpdateDivItemDown>에디터 삽입</CreateAndUpdateDivItemDown>
+          <CreateAndUpdateDivItemDown>
+            <CKEditor
+              editor={ClassicEditor}
+              data='<p>Hello from CKEditor&nbsp;5!</p>'
+              onReady={(editor) => {
+                // You can store the "editor" and use when it is needed.
+                console.log('Editor is ready to use!', editor);
+              }}
+              onChange={(event, editor) => {
+                const data = editor.getData();
+                console.log({ event, editor, data });
+              }}
+              onBlur={(_event, editor) => {
+                console.log('Blur.', editor);
+              }}
+              onFocus={(_event, editor) => {
+                console.log('Focus.', editor);
+              }}
+            />
+          </CreateAndUpdateDivItemDown>
         </CreateAndUpdateDivItem>
       </CreateAndUpdateDiv>
     </CreateAndUpdateFrame>
