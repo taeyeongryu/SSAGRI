@@ -10,6 +10,7 @@ import com.ssafy.ssagri.util.jwt.JwtUtil;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -23,6 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/usedproduct")
 @CrossOrigin("*")
+@Slf4j
 public class UsedProductController {
 
     private final UsedProductService usedProductService;
@@ -46,11 +48,14 @@ public class UsedProductController {
             , @RequestParam(name = "search", required = false) String search
             , Pageable pageable
             ) {
+
+        log.info("controller userNo: {}, category: {}, region: {}, search: {}", userNo, productCategory ,region ,search);
+        log.info("controller pageable: {}", pageable);
+
         pageable.getSort().get().forEach(sort -> {
-            System.out.println("sort.getProperty() = " + sort.getProperty());
-            System.out.println("sort.getDirection() = " + sort.getDirection());
+            log.info("sort.getProperty() = {}", sort.getProperty());
+            log.info("sort.getDirection() = {}", sort.getDirection());
         });
-        System.out.println("pageable.toString() = " + pageable.toString());
         Page<UsedProductResponseDto> usedProductResponseDtos = usedProductService.selectUsedProductList(userNo, productCategory, region, search, pageable);
         return usedProductResponseDtos;
     }
