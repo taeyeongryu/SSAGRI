@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ProductItemType } from './type';
 
 // Header 제외 중고거래 컴포넌트
@@ -370,9 +370,11 @@ const AuctionSearchInput = () => {
 
 const TradeProductItem01 = (item) => {
   useEffect(() => {
-    console.log(item.item.usedProductPhotoResponseDto.link);
+    // console.log(item.item.usedProductPhotoResponseDto.link);
   });
+
   const navigate = useNavigate();
+
   const goTradeDetail = (no: number) => {
     navigate(`/tradeDetail/${no}`);
   };
@@ -447,43 +449,10 @@ const TradeMainProduct = (region) => {
   console.log(typeof region.region);
   console.log(region.region);
 
-  // const userNo = localStorage.getItem('userNo');
-  let recentData = useRef([
-    {
-      createDate: '2023-09-22T00:42:26.086Z',
-      like: true,
-      price: 130000,
-      productCategory: 'READY',
-      productNo: 2,
-      region: '지역',
-      saleStatus: 'READY',
-      title:
-        '송병훈 짱 송병훈 짱 송병훈 짱 송병훈 짱\n 송병훈 짱 송병훈 짱 송병훈 짱 송병훈 짱',
-      updateDate: '2023-09-22T00:42:26.086Z',
-      usedProductPhotoResponseDto: {
-        link: 'https://i.imgur.com/ixdlIIc.png',
-        photoNo: 0
-      }
-    }
-  ]);
-  let popularData = useRef([
-    {
-      createDate: '2023-09-22T00:42:26.086Z',
-      like: true,
-      price: 130000,
-      productCategory: 'READY',
-      productNo: 2,
-      region: '지역',
-      saleStatus: 'READY',
-      title:
-        '송병훈 짱 송병훈 짱 송병훈 짱 송병훈 짱\n 송병훈 짱 송병훈 짱 송병훈 짱 송병훈 짱',
-      updateDate: '2023-09-22T00:42:26.086Z',
-      usedProductPhotoResponseDto: {
-        link: 'https://i.imgur.com/ixdlIIc.png',
-        photoNo: 0
-      }
-    }
-  ]);
+  // ★★★★★ const userNo = localStorage.getItem('userNo');
+
+  const [recentData, setRecentData] = useState([]);
+  const [popularData, setPopularData] = useState([]);
 
   let regionText: string = '';
 
@@ -506,49 +475,38 @@ const TradeMainProduct = (region) => {
   }
 
   console.log(regionText);
-
-  // recentData
-  axios
-    .get(`/usedproduct/1?region=${regionText}&sort=no,desc&page=0&size=4`)
-    .then((res) => {
-      console.log(res.data);
-      recentData = res.data.content;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  // popularData
-  axios
-    .get(`/usedproduct/1?region=${regionText}&sort=like,desc&page=0&size=4`)
-    .then((res) => {
-      console.log(res.data);
-      popularData = res.data.content;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  // const responseApi = useRef([
-  //   {
-  //     createDate: '2023-09-22T00:42:26.086Z',
-  //     like: true,
-  //     price: 130000,
-  //     productCategory: 'READY',
-  //     productNo: 2,
-  //     region: '지역',
-  //     saleStatus: 'READY',
-  //     title:
-  //       '송병훈 짱 송병훈 짱 송병훈 짱 송병훈 짱\n 송병훈 짱 송병훈 짱 송병훈 짱 송병훈 짱',
-  //     updateDate: '2023-09-22T00:42:26.086Z',
-  //     usedProductPhotoResponseDto: {
-  //       link: 'https://i.imgur.com/ixdlIIc.png',
-  //       photoNo: 0
-  //     }
-  //   }
-  // ]);
   const navigate = useNavigate();
   const goTradeList = () => {
     navigate(`/tradeList?region=${region.region}`);
   };
+
+  useEffect(() => {
+    // recentData
+    axios
+      .get(`/usedproduct/1?region=${regionText}&sort=no,desc&page=0&size=4`)
+      .then((res) => {
+        console.log('recentData');
+        // console.log(res.data.content);
+        setRecentData(res.data.content);
+        console.log(recentData);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    // popularData
+    axios
+      .get(`/usedproduct/1?region=${regionText}&sort=like,desc&page=0&size=4`)
+      .then((res) => {
+        console.log('popularData');
+        // console.log(res.data.content);
+        setPopularData(res.data.content);
+        console.log(popularData);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [regionText]);
+
   return (
     <TradeMainProductDiv>
       <RegionAndSearch>
@@ -561,8 +519,7 @@ const TradeMainProduct = (region) => {
           방금 등록된 상품
         </RecentOrPopularProductTitle>
         <ProductList01>
-          {/* @ts-ignore */}
-          {recentData.current.map((item: ProductItemType, id) => (
+          {recentData.map((item: ProductItemType, id) => (
             <TradeProductItem01 key={id} item={item}></TradeProductItem01>
           ))}
         </ProductList01>
@@ -572,8 +529,7 @@ const TradeMainProduct = (region) => {
           실시간 인기 상품
         </RecentOrPopularProductTitle>
         <ProductList01>
-          {/* @ts-ignore */}
-          {popularData.current.map((item: ProductItemType, id) => (
+          {popularData.map((item: ProductItemType, id) => (
             <TradeProductItem01 key={id} item={item}></TradeProductItem01>
           ))}
         </ProductList01>
