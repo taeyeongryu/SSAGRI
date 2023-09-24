@@ -15,6 +15,8 @@ import javax.persistence.*;
 @Table(name = "best_board")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BestBoard extends BaseTimeEntity {
+
+    // 베스트 게시판
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "best_board_no")
