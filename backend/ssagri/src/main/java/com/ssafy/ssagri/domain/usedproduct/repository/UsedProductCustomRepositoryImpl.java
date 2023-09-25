@@ -61,9 +61,9 @@ public class UsedProductCustomRepositoryImpl implements UsedProductCustomReposit
 
         return new PageImpl<>(results, pageable, total);
     }
-    /*
-    * 특정 유저가 등록한 중고물품 다 가져오는 메서드
-    * */
+    /**
+     * 특정 유저가 등록한 중고물품 다 가져오는 메서드
+     */
     @Override
     public Page<UsedProduct> selectUsedProductByUserNo(Long userNo, Pageable pageable) {
         QueryResults<UsedProduct> usedProductQueryResults = jpaQueryFactory.selectFrom(usedProduct)
