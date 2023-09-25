@@ -1,5 +1,6 @@
 package com.ssafy.ssagri.domain.user.controller;
 
+import com.ssafy.ssagri.domain.user.service.S3FileService;
 import com.ssafy.ssagri.domain.user.service.UserRegistService;
 import com.ssafy.ssagri.dto.user.ResponseDTO;
 import com.ssafy.ssagri.dto.user.UserRegistDTO;
@@ -12,10 +13,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 import static com.ssafy.ssagri.util.ResponseStatusEnum.MAIL_SEND_IS_OK;
@@ -30,7 +33,7 @@ public class UserRegistController {
 
     private final UserRegistService userRegisterService;
     private final EmailService emailService;
-
+    private final S3FileService s3FileService;
 
     @Operation(summary = "회원가입 기능", description = "UserRegistDTO 입력값을 통해 회원 가입 및 등록 진행. \n 성공일 경우 REGISTER_IS_OK(1000, \"성공적으로 등록하였습니다.\")발생")
     @PostMapping("/")
@@ -74,6 +77,13 @@ public class UserRegistController {
     public ResponseEntity<?> checkAuthcodeIsValid(@RequestBody String authcode) throws CustomException {
         userRegisterService.checkAuthcode(authcode); //Authcode 맞는지 판별
         return ResponseEntity.ok(new ResponseDTO(MAIL_SEND_IS_OK.getCode(), MAIL_SEND_IS_OK.getMessage()));
+    }
+
+    @Operation(summary = "프로필 사진 업로드", description = "MultipartFile 형태로 파일을 올려주시면 됩니다. 리턴값으로 해당 주소의 Url을 가져옵니다.")
+    @Transactional
+    @GetMapping("/upload/profile")
+    public String saveFile(HttpServletRequest request, @RequestParam("upload-file") MultipartFile multipartFile) throws IOException {
+        return s3FileService.saveFile(request, multipartFile, "profile");
     }
 
 
