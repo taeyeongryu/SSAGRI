@@ -17,5 +17,5 @@ public interface BoardRopository extends JpaRepository<Board, Long> {
 
     Board findByNo(Long no);
 
-    Page<Board> findAllByOrderByCreateDateDesc(Pageable pageable);
+    Page<Board> findAllByOrderByCreateDateAsc(Pageable pageable);
 }
