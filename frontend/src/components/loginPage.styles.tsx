@@ -594,24 +594,31 @@ const SignInAndUpComponent = () => {
       });
   };
 
-  // 인증번호 확인 요청
-  // const checkVerificationCode = (e) => {
-  //   e.preventDefault();
+  // 사용자가 입력한 이메일 인증번호
+  const [verifyCode, setVerifyCode] = useState('');
 
-  //   const data = {
-  //     number: verifyNumber
-  //   };
+  const onChangeVerifyCode = (e) => {
+    setVerifyCode(e.target.value);
+  };
 
-  //   axios.post('인증번호 확인 URL')
-  //   .then((res) => { // 인증 완료
-  //     console.log(res);
-  //     setSignUpEmailMessage('인증이 완료되었습니다.')
-  //     // 인증 여부 true로 바꾼다.
-  //   }).catch((err) => { // 인증 실패
-  //     console.log(err);
-  //     // 인증 여부 false,
-  //   });
-  // };
+  // 인증번호 확인
+  const checkVerificationCode = (e) => {
+    e.preventDefault();
+
+    axios
+      .post('/user/regist/check/authcode-valid', verifyCode)
+      .then((res) => {
+        // 인증 완료
+        console.log(res);
+        setSignUpEmailMessage('인증이 완료되었습니다.');
+        // 인증 여부 true로 바꾼다.
+      })
+      .catch((err) => {
+        // 인증 실패
+        console.log(err);
+        // 인증 여부 false,
+      });
+  };
 
   // 닉네임 중복확인
   const doubleCheckNickname = (e) => {
@@ -807,8 +814,18 @@ const SignInAndUpComponent = () => {
                 justifyContent: 'end'
               }}
             >
-              <Input style={{ width: '102px' }} type='number'></Input>
-              <Verify style={{ width: '102px' }}>인증번호 확인</Verify>
+              <Input
+                style={{ width: '102px' }}
+                type='text'
+                value={verifyCode}
+                onChange={onChangeVerifyCode}
+              ></Input>
+              <Verify
+                style={{ width: '102px' }}
+                onClick={checkVerificationCode}
+              >
+                인증번호 확인
+              </Verify>
             </div>
             <Label htmlFor='password'>
               <div>비밀번호</div>
