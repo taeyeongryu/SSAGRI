@@ -1,5 +1,14 @@
 import { styled, keyframes } from 'styled-components';
 import { useEffect, useState, useRef } from 'react';
+import Matter, {
+  World,
+  Engine,
+  Render,
+  Bodies,
+  Mouse,
+  MouseConstraint,
+  Runner
+} from 'matter-js';
 
 const MainPage = styled.div`
   width: 100%;
@@ -152,9 +161,29 @@ const Pages1_Left = styled.div`
 const Pages1_tag1 = styled.p`
   font-size: 35px;
   margin-top: 240px;
+  animation: fadein 2s ease-in-out;
+
+  @keyframes fadein {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
 `;
 const Pages1_tag2 = styled.p`
   font-size: 15px;
+  animation: fadein 2s ease-in-out;
+
+  @keyframes fadein {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
 `;
 const Pages1_Img1 = styled.img`
   width: 320px;
@@ -163,7 +192,9 @@ const Pages1_Img1 = styled.img`
   left: 280px;
   top: 300px;
   border-radius: 20px;
-  animation: moveUpDown 1s infinite alternate; /* 애니메이션 적용 */
+  animation:
+    moveUpDown 1s infinite alternate,
+    fadein 1.5s ease-in-out; /* 애니메이션 적용 */
 
   @keyframes moveUpDown {
     0% {
@@ -171,6 +202,15 @@ const Pages1_Img1 = styled.img`
     }
     100% {
       top: 59px; /* 1초에 2vh 이동 */
+    }
+  }
+
+  @keyframes fadein {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
     }
   }
 `;
@@ -195,6 +235,16 @@ const Pages1_Right = styled.div`
   }
   transform: rotate(0deg); /* 초기 회전 각도 */
   transition: transform 0.2s ease;
+  animation: fadein 4s ease-in-out;
+
+  @keyframes fadein {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
 `;
 // @ts-ignore
 const Pages1_img1 = styled.img`
@@ -475,27 +525,35 @@ const AuctionLeft = styled.div`
 const AuctionRight = styled.div`
   width: 550px;
   height: 450px;
-  border-left: 2px solid black;
+  /* border-left: 2px solid black; */
   text-align: center;
   line-height: 450px;
 `;
+
 const AuctionDiv2 = styled.div`
   margin-left: 20px;
+  margin-top: 12px;
   z-index: 2;
   /* width: 900px; */
-  width: 350px;
-  height: 450px;
+  width: 530px;
+  height: 400px;
+  border-right: 2px solid rgb(75, 82, 126, 0.2);
   /* border: 2px solid black; */
-  background-color: #f6f1f1;
+  /* background-color: #f6f1f1; */
   /* border: 2px solid black; */
   /* height: 450px; */
 `;
 const AuctionMidtag1 = styled.div`
   font-size: 27px;
-  margin-top: 70px;
+  margin-top: 50px;
+  margin-left: 20px;
+  font-weight: 600;
 `;
 const AuctionMidtag2 = styled.div`
   font-size: 27px;
+  font-weight: 600;
+  margin-top: 70px;
+  margin-left: 20px;
 `;
 const NameTag1 = styled.p`
   font-size: 100px;
@@ -508,49 +566,55 @@ const NameTag1 = styled.p`
 `;
 
 const NameTag1_2 = styled.p`
-  font-size: 22px;
+  font-size: 28px;
 `;
 const NameTag1_3 = styled.p`
-  font-size: 19px;
+  font-size: 21px;
   margin-left: 10px;
   color: rgb(0, 0, 0, 0.4);
 `;
 
 const Auctionbox = styled.div`
-  margin-left: 50px;
-  margin-top: 320px;
+  margin-left: 80px;
+  margin-top: 220px;
   width: 450px;
   height: 200px;
   // border: 2px solid black;
 `;
 
 const Auction_tuto = styled.div`
-  width: 200px;
-  height: 70px;
-  /* border: 2px solid black; */
-  font-size: 30px;
-  /* border-radius: 5px; */
+  width: 170px;
+  height: 55px;
+  border: 1px solid rgb(0, 0, 0, 0.3);
+  text-align: center;
+  line-height: 55px;
+  font-size: 25px;
+  border-radius: 10px;
   color: #f47b55;
-  /* background-color: #f47b55; */
-  margin: 20px 0 40px 140px;
+  background-color: white;
+  box-shadow: 1px 1px 1px rgb(0, 0, 0, 0.3);
+  margin: 20px 0 40px 70px;
 `;
 const Auction_btn = styled.div`
   width: 200px;
-  height: 70px;
-  /* border: 2px solid black; */
-  font-size: 30px;
-  /* border-radius: 5px; */
+  height: 60px;
+  border: 1px solid rgb(0, 0, 0, 0.3);
+  font-size: 26px;
+  background-color: white;
+  text-align: center;
+  line-height: 60px;
+  box-shadow: 1px 1px 1px rgb(0, 0, 0, 0.3);
   color: #f47b55;
-  margin: 20px 0 40px 140px;
-  /* margin: 0 auto; */
+  margin: 20px 0 40px 70px;
+  border-radius: 10px;
 `;
 
 const AuctionBorder = styled.div`
   position: absolute;
-  margin-left: 50px;
-  width: 750px;
+  margin-left: 75px;
+  width: 700px;
   height: 500px;
-  border: 30px solid red;
+  border: 30px solid #ccc8aa;
   border-radius: 20px;
   /* left: 100px; */
   z-index: 1;
@@ -560,7 +624,7 @@ const AuctionBorder2 = styled.div`
   margin-left: 50px;
   width: 750px;
   height: 500px;
-  border: 30px solid blue;
+  border: 30px solid #ccc8aa;
   border-radius: 20px;
   /* left: 100px; */
   z-index: 300;
@@ -570,10 +634,13 @@ const AuctionBorder2 = styled.div`
 const AuctionMain = styled.div`
   z-index: 2;
   display: flex;
-  border: 2px solid black;
+  border: 1px solid rgb(0, 0, 0, 0.2);
+  box-shadow: 2px 2px 2px rgb(0, 0, 0, 0.4);
+  width: 840px;
+  height: 420px;
   border-radius: 10px;
   transition: transform 0.5s;
-  background-color: #d1c7c7;
+  background-color: #fff5e0;
 `;
 const AuctionSide = styled.div`
   position: absolute;
@@ -588,6 +655,7 @@ const AuctionMid = styled.div`
   display: flex;
   align-items: center;
   margin-top: 250px;
+  margin-left: 100px;
   position: relative;
   perspective: 700px;
   z-index: 100;
@@ -599,6 +667,15 @@ const AuctionMid = styled.div`
       transform: rotateY(-5deg); /* AuctionSide를 시계방향으로 회전 */
     }
   }
+`;
+
+const TradeImg = styled.img`
+  margin-top: 30px;
+
+  width: 350px;
+  height: 350px;
+  border-radius: 10px;
+  opacity: 0.4;
 `;
 
 const Page2_section3 = () => {
@@ -623,7 +700,9 @@ const Page2_section3 = () => {
               <AuctionMidtag2>경매 시작하기</AuctionMidtag2>
               <Auction_btn>경매 입장하기</Auction_btn>
             </AuctionDiv2>
-            <AuctionRight>반응형이미지</AuctionRight>
+            <AuctionRight>
+              <TradeImg src='/assets/img/trademain.PNG'></TradeImg>
+            </AuctionRight>
           </AuctionMain>
 
           <AuctionSide>
@@ -662,73 +741,288 @@ const NameTag2 = styled.p`
   width: 400px;
 `;
 
+const TagBottom = styled.div`
+  font-size: 30px;
+  margin-top: 20px;
+  margin-left: 440px;
+`;
+
 const Commu_img = styled.div`
-  margin: 50px auto;
+  /* margin: 50px 0 400px 0; */
+  margin-left: 220px;
+  margin-top: 40px;
   /* margin: 150px 200px 0 250px; */
   width: 1000px;
   height: 500px;
-  border: 2px solid black;
+  /* border: 20px solid black; */
 `;
 
-const Circle1 = styled.div`
-  width: 50px;
-  height: 50px;
-  border-radius: 50px;
-  background-color: #00ffca;
-`;
-const Circle2 = styled.div`
-  width: 50px;
-  height: 50px;
-  border-radius: 50px;
-  transform-origin: 40% 50%;
-  background: linear-gradient(#f439d6, #f42b71); /*pink to dark pink*/
-  animation: rotate 50s linear infinite;
-`;
-const Circle3 = styled.div`
-  width: 50px;
-  height: 50px;
-  border-radius: 50px;
-  transform-origin: 40% 50%;
-  background: linear-gradient(#f439d6, #f42b71); /*pink to dark pink*/
-  animation: rotate 50s linear infinite;
-`;
-const Circle4 = styled.div`
-  width: 50px;
-  height: 50px;
-  border-radius: 50px;
-
-  background: linear-gradient(#ff6d0f, #ff2300);
-`;
-const Circle5 = styled.div`
-  width: 50px;
-  height: 50px;
-  border-radius: 50px;
-
-  background: linear-gradient(#4fe3ff, #9117ff);
-  animation: rotatePathInside 30s linear infinite;
-  @keyframes rotatePathInside {
-    0% {
-      transform: translateX(-50%) translateY(-50%) rotateZ(0deg);
-    }
-    100% {
-      transform: translateX(-50%) translateY(-50%) rotateZ(360deg);
-    }
-  }
+const CommuBottom = styled.div`
+  width: 900px;
+  height: 10px;
+  background-color: #c5c5c5;
+  margin-top: -80px;
+  margin-left: 220px;
 `;
 
 const Page2_section4 = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const totalScore = useRef<number>(0);
+
+  useEffect(() => {
+    // 2d 엔진 모델
+    const engine = Engine.create(); // 물리엔진
+    engine.world.gravity.y = -0.05;
+    // engine.world.gravity.x = -0.1;
+    const render = Render.create({
+      // 시각화
+      engine,
+      canvas: canvasRef.current!,
+      options: {
+        width: 900,
+        height: 420,
+        background: '#f4f7f9',
+        wireframes: false
+      }
+    });
+    // 이미지 변환
+    const textToImage = (text, width, height, fontsize, color) => {
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+
+      if (!ctx) {
+        // 컨텍스트가 유효하지 않으면 처리할 내용 추가
+        console.error('2D 컨텍스트를 가져올 수 없습니다.');
+        return null;
+      }
+
+      // 원 그리기
+      ctx.beginPath();
+      ctx.arc(width / 2, height / 2, width / 2, 0, Math.PI * 2);
+      ctx.fillStyle = `${color}`; // 배경 색상
+      ctx.fill();
+
+      // 텍스트 추가
+      ctx.fillStyle = 'white'; // 텍스트 색상
+      // ctx.font = '24px Arial';
+      ctx.font = `${fontsize} Arial`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(text, width / 2, height / 2);
+
+      // Canvas를 이미지로 변환
+      const img = new Image();
+      img.src = canvas.toDataURL(); // Canvas를 이미지로 변환
+
+      return img;
+    };
+
+    const textImage1 = new Image();
+    textImage1.src =
+      textToImage('자유 게시판', 320, 320, '30px', '#8ECDDD')?.src || '';
+
+    const textImage2 = new Image();
+    textImage2.src =
+      textToImage('수명 게시판', 85, 85, '14px', '#E4F1FF')?.src || '';
+    const textImage5 = new Image();
+    textImage5.src =
+      textToImage('수명2 게시판', 130, 130, '14px', '#75C2F6')?.src || '';
+    const textImage6 = new Image();
+    textImage6.src =
+      textToImage('수명3 게시판', 80, 80, '14px', '#78D6C6')?.src || '';
+    const textImage7 = new Image();
+    textImage7.src =
+      textToImage('수명4 게시판', 100, 100, '14px', '#5CD2E6')?.src || '';
+
+    const topWall = Bodies.rectangle(0, 5, 1800, 10, {
+      // x,y좌표, 바닥 너비, 바닥 높이
+      isStatic: true, // 다른 사물이 통과하지 못함
+      collisionFilter: {
+        group: -1 // 특정 그룹에 대해서만 다른 효과를 내기 위해 그룹 묶기
+      },
+      render: {
+        fillStyle: '#c5c5c5'
+      }
+    });
+
+    const leftWall = Bodies.rectangle(5, 0, 10, 990, {
+      isStatic: true, // 다른 사물이 통과하지 못함
+      collisionFilter: {
+        group: -1 // 특정 그룹에 대해서만 다른 효과를 내기 위해 그룹 묶기
+      },
+      render: {
+        fillStyle: '#c5c5c5'
+      }
+    });
+    const rightWall = Bodies.rectangle(895, 0, 10, 990, {
+      isStatic: true, // 다른 사물이 통과하지 못함
+      collisionFilter: {
+        group: -1 // 특정 그룹에 대해서만 다른 효과를 내기 위해 그룹 묶기
+      },
+      render: {
+        fillStyle: '#c5c5c5'
+      }
+    });
+
+    const group1 = Bodies.circle(250, 480, 160, {
+      label: 'user',
+      isClickable: true,
+      collisionFilter: {
+        group: 1 // 특정 그룹에 대해서만 다른 효과를 내기 위해 그룹 묶기
+      },
+      render: {
+        fillStyle: '#8ECDDD',
+        sprite: {
+          texture: textImage1.src
+        }
+
+        // visible: false
+      }
+    });
+    const group2 = Bodies.circle(410, 650, 85, {
+      label: 'user',
+      collisionFilter: {
+        group: 1 // 특정 그룹에 대해서만 다른 효과를 내기 위해 그룹 묶기
+      },
+      render: {
+        fillStyle: '#E4F1FF',
+        sprite: {
+          texture: textImage2.src
+        }
+      }
+    });
+
+    const group5 = Bodies.circle(500, 650, 130, {
+      label: 'user',
+      collisionFilter: {
+        group: 1 // 특정 그룹에 대해서만 다른 효과를 내기 위해 그룹 묶기
+      },
+      render: {
+        fillStyle: '#75C2F6',
+        sprite: {
+          texture: textImage5.src
+        }
+      }
+    });
+    const group6 = Bodies.circle(520, 600, 80, {
+      label: 'user',
+
+      render: {
+        fillStyle: '#78D6C6',
+        sprite: {
+          texture: textImage6.src
+        }
+      }
+    });
+    const group7 = Bodies.circle(400, 550, 100, {
+      label: 'user',
+
+      render: {
+        fillStyle: '#5CD2E6',
+        sprite: {
+          texture: textImage7.src
+        }
+      }
+    });
+
+    const infiniteArr = Array.from({ length: 10 }).map((_) => {
+      // 떨어지는 물체 로직
+      return Bodies.circle(Math.random() * 800, 500, 10, {
+        // x좌표, y좌표, 원반지름
+        label: 'ball',
+        restitution: 0.3, // 물체의 탄성
+        collisionFilter: {
+          group: -1
+        },
+        render: {
+          sprite: {
+            texture: '/assets/img/bubles.png',
+            xScale: 0.12,
+            yScale: 0.12
+          },
+          fillStyle: 'rgba(255, 255, 0, 0.5)'
+        }
+      });
+    });
+
+    World.add(engine.world, [
+      rightWall,
+      leftWall,
+      topWall,
+
+      group1,
+      group2,
+
+      group5,
+      group6,
+      group7
+    ]);
+
+    const runner = Runner.run(engine);
+
+    const mouse = Mouse.create(render.canvas); // 마우스객체 생성
+    const mouseConstraint = MouseConstraint.create(engine, {
+      //mouseConstraint 객체는 물리 엔진과 연결되어, 마우스 입력에 따라 물체를 조작
+      mouse
+    });
+
+    const wait = (ms: number) =>
+      new Promise<void>((resolve) => {
+        const timeout = setTimeout(() => {
+          clearTimeout(timeout);
+          resolve();
+        }, ms);
+      });
+
+    const compositeArr: Matter.Body[] = [];
+
+    const spreadBall = async (ball: Matter.Body) => {
+      //
+      compositeArr.push(ball);
+      World.add(engine.world, compositeArr);
+      await wait(2200);
+      compositeArr.pop();
+      World.remove(engine.world, compositeArr);
+    };
+
+    const event = async () => {
+      World.add(engine.world, mouseConstraint);
+      Render.run(render);
+
+      for (const ball of infiniteArr) {
+        await spreadBall(ball);
+        totalScore.current = totalScore.current + 1;
+      }
+    };
+
+    event();
+
+    return () => {
+      Runner.stop(runner);
+      Render.stop(render);
+    };
+  }, []);
   return (
     <Page2_Commu>
       <CommuDiv>
         <NameTag2>커뮤니티</NameTag2>
+        <TagBottom>자신만의 수명주기 게시판을 가꾸어 보세요.</TagBottom>
         <Commu_img>
-          asd
-          <Circle1></Circle1>
-          <Circle2></Circle2>
-          <Circle3></Circle3>
-          <Circle4></Circle4>
-          <Circle5></Circle5>
+          <div className='space-y-[1rem]'>
+            <div
+              className='relative'
+              style={{
+                width: 300,
+                height: 400
+              }}
+            >
+              <canvas ref={canvasRef} />
+            </div>
+          </div>
         </Commu_img>
+        <CommuBottom></CommuBottom>
       </CommuDiv>
     </Page2_Commu>
   );
@@ -796,7 +1090,7 @@ const Block1 = styled.div`
   /* border: 2px solid red; */
   clip-path: polygon(60% 0%, 100% 0%, 40% 100%, 0% 100%);
   /* background: #27005d; */
-  background-image: url('/assets/img/page2_clip2.PNG');
+  background-image: url('/assets/img/page2_clip3.jpg');
   background-position: 0px 0px;
   color: transparent;
   background-size: cover;
@@ -810,8 +1104,8 @@ const Block2 = styled.div`
   /* border: 2px solid red; */
   clip-path: polygon(60% 0%, 100% 0%, 40% 100%, 0% 100%);
   /* background: #27005d; */
-  background-image: url('/assets/img/page2_clip2.PNG');
-  background-position: 80px 80px;
+  background-image: url('/assets/img/page2_clip3.jpg');
+  background-position: 120px 0px;
   color: transparent;
   background-size: cover;
 `;
@@ -826,8 +1120,8 @@ const Block3 = styled.div`
   height: 42.5%;
   clip-path: polygon(60% 0%, 100% 0%, 40% 100%, 0% 100%);
   /* background: #27005d; */
-  background-image: url('/assets/img/page2_clip2.PNG');
-  background-position: 0px 0px;
+  background-image: url('/assets/img/page2_clip4.jpg');
+  background-position: 40px 40px;
   color: transparent;
   background-size: cover;
   transform: rotate(61deg);
@@ -840,8 +1134,8 @@ const Block4 = styled.div`
   height: 42.5%;
   clip-path: polygon(60% 0%, 100% 0%, 40% 100%, 0% 100%);
   /* background: #27005d; */
-  background-image: url('/assets/img/page2_clip2.PNG');
-  background-position: 80px 80px;
+  background-image: url('/assets/img/page2_clip4.jpg');
+  background-position: -50px 10px;
   color: transparent;
   background-size: cover;
   transform: rotate(61deg);

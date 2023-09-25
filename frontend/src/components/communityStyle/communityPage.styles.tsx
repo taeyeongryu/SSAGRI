@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import Matter, {
   World,
@@ -11,6 +11,7 @@ import Matter, {
   Runner
 } from 'matter-js';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const CommunityDiv = styled.div`
   width: 100%;
@@ -178,6 +179,24 @@ const CommunityMain = () => {
   });
   const navigate = useNavigate();
 
+  const [commuRank, setCommuRank] = useState([]);
+  const [commuList, setCommuList] = useState([]);
+  const [commuLife, setCommuLife] = useState([]);
+  const colorList = [
+    '#8ECDDD',
+    '#E4F1FF',
+    '#B0D9B1',
+    '#AED2FF',
+    '#75C2F6',
+    '#78D6C6',
+    '#5CD2E6'
+  ];
+
+  type CommuItem = {
+    title: string;
+    boardNo: number;
+    click: number;
+  };
   useEffect(() => {
     if (inView) {
       // inView 값이 true이면 화면에 보임
@@ -186,19 +205,41 @@ const CommunityMain = () => {
   }, [inView, ref]);
 
   useEffect(() => {
-    // 마우스 클릭 이벤트 처리
-    // Events.on(mouse, 'mousedown', (event) => {
-    //   const mousePosition = event.mouse.position;
+    const CommuApi = axios.create({
+      headers: { 'cotent-type': 'application/json' }
+    });
 
-    //   // 월드에 추가된 모든 요소를 순회하면서 클릭된 요소를 찾습니다.
-    //   for (const body of engine.world.bodies) {
-    //     if (body.isClickable && pointInBody(mousePosition, body)) {
-    //       // 클릭된 요소를 저장합니다.
-    //       setClickedElement(body);
-    //     }
-    //   }
-    // });
+    //게시판 순위 정보
+    CommuApi.get('/board/click-board-list')
+      .then((res) => {
+        setCommuRank(res.data);
+      })
+      .catch((err) => {
+        console.log('실패1', err);
+      });
 
+    // 게시판 글자 정렬 리스트
+    CommuApi.get('/board/title-board-list')
+      .then((res) => {
+        setCommuList(res.data);
+      })
+      .catch((err) => {
+        console.log('실패2', err);
+      });
+
+    // 남은 게시판 생명 Top3
+    // CommuApi.post('/auction-product/auction/regist')
+    //   .then((res) => {
+    //     console.log(res, '3번요청성공');
+    //     setCommuLife(res.data);
+    //     console.log(commuLife, '확인3');
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+  }, []);
+
+  useEffect(() => {
     const textToImage = (text, width, height, fontsize, color) => {
       const canvas = document.createElement('canvas');
       canvas.width = width;
@@ -259,7 +300,7 @@ const CommunityMain = () => {
       }
     });
 
-    const topWall = Bodies.rectangle(0, 0, 1890, 10, {
+    const topWall = Bodies.rectangle(0, 5, 1890, 10, {
       // x,y좌표, 바닥 너비, 바닥 높이
       isStatic: true, // 다른 사물이 통과하지 못함
       collisionFilter: {
@@ -270,7 +311,7 @@ const CommunityMain = () => {
       }
     });
 
-    const leftWall = Bodies.rectangle(5, 0, 10, 990, {
+    const leftWall = Bodies.rectangle(5, 0, 10, 1090, {
       isStatic: true, // 다른 사물이 통과하지 못함
       collisionFilter: {
         group: -1 // 특정 그룹에 대해서만 다른 효과를 내기 위해 그룹 묶기
@@ -279,7 +320,7 @@ const CommunityMain = () => {
         fillStyle: '#D0E7D2'
       }
     });
-    const rightWall = Bodies.rectangle(940, 0, 10, 990, {
+    const rightWall = Bodies.rectangle(940, 0, 10, 1090, {
       isStatic: true, // 다른 사물이 통과하지 못함
       collisionFilter: {
         group: -1 // 특정 그룹에 대해서만 다른 효과를 내기 위해 그룹 묶기
@@ -289,72 +330,40 @@ const CommunityMain = () => {
       }
     });
 
-    const group1 = Bodies.circle(250, 480, 160, {
-      label: 'user',
-      isClickable: true,
-      collisionFilter: {
-        group: 1 // 특정 그룹에 대해서만 다른 효과를 내기 위해 그룹 묶기
-      },
-      render: {
-        fillStyle: '#8ECDDD',
-        sprite: {
-          texture: textImage1.src
-        }
-        // visible: false
-      }
-    });
-    const group2 = Bodies.circle(410, 650, 85, {
-      label: 'user',
-      collisionFilter: {
-        group: 1 // 특정 그룹에 대해서만 다른 효과를 내기 위해 그룹 묶기
-      },
-      render: {
-        fillStyle: '#E4F1FF',
-        sprite: {
-          texture: textImage2.src
-        }
-      }
-    });
-    const group3 = Bodies.circle(470, 600, 60, {
-      label: 'user',
-      collisionFilter: {
-        group: 1 // 특정 그룹에 대해서만 다른 효과를 내기 위해 그룹 묶기
-      },
-      render: {
-        fillStyle: '#B0D9B1'
-      }
-    });
-    const group4 = Bodies.circle(400, 650, 50, {
-      label: 'user',
-      collisionFilter: {
-        group: 1 // 특정 그룹에 대해서만 다른 효과를 내기 위해 그룹 묶기
-      },
-      render: {
-        fillStyle: '#AED2FF'
-      }
-    });
-    const group5 = Bodies.circle(500, 650, 130, {
-      label: 'user',
-      collisionFilter: {
-        group: 1 // 특정 그룹에 대해서만 다른 효과를 내기 위해 그룹 묶기
-      },
-      render: {
-        fillStyle: '#75C2F6'
-      }
-    });
-    const group6 = Bodies.circle(520, 600, 80, {
-      label: 'user',
+    const groups = commuRank.map((item: CommuItem, index) => {
+      // 각 group의 일부 속성을 랜덤으로 설정
+      const x = 400 + Math.random() * 100; // x 좌표를 랜덤으로 설정
+      const y = 480 + Math.random() * 100; // y 좌표를 랜덤으로 설정 (480에서 580 사이의 값)
+      const radius = 80 + item.click; // 반지름을 랜덤으로 설정 (80에서 160 사이의 값)
+      const fontSize = '24px'; // 폰트 크기 (고정값)
 
-      render: {
-        fillStyle: '#78D6C6'
-      }
-    });
-    const group7 = Bodies.circle(400, 550, 100, {
-      label: 'user',
+      // 텍스트 생성
+      const textImage = new Image();
+      textImage.src =
+        textToImage(
+          item.title,
+          radius * 2,
+          radius * 2,
+          fontSize,
+          colorList[index]
+        )?.src || '';
 
-      render: {
-        fillStyle: '#5CD2E6'
-      }
+      // group 생성
+      const group = Bodies.circle(x, y, radius, {
+        label: 'user',
+        isClickable: true,
+        collisionFilter: {
+          group: 1
+        },
+        render: {
+          fillStyle: '#8ECDDD',
+          sprite: {
+            texture: textImage.src
+          }
+        }
+      });
+
+      return group;
     });
 
     const infiniteArr = Array.from({ length: 10 }).map((_) => {
@@ -377,18 +386,7 @@ const CommunityMain = () => {
       });
     });
 
-    World.add(engine.world, [
-      rightWall,
-      leftWall,
-      topWall,
-      group1,
-      group2,
-      group3,
-      group4,
-      group5,
-      group6,
-      group7
-    ]);
+    World.add(engine.world, [rightWall, leftWall, topWall, ...groups]);
 
     const runner = Runner.run(engine);
 
@@ -433,7 +431,7 @@ const CommunityMain = () => {
       Runner.stop(runner);
       Render.stop(render);
     };
-  }, []);
+  }, [commuRank]);
 
   return (
     <CommunityDiv>
@@ -453,24 +451,14 @@ const CommunityMain = () => {
         </LeftDiv>
         <RightDiv>
           <CommuList>금주의 게시판 순위</CommuList>
-          <ListDiv>
-            1.{' '}
-            <CommuTag onClick={() => navigate('/community/1')}>
-              국내야구
-            </CommuTag>
-          </ListDiv>
-          <ListDiv>
-            2. <CommuTag>해외축구</CommuTag>
-          </ListDiv>
-          <ListDiv>
-            3. <CommuTag>만화</CommuTag>
-          </ListDiv>
-          <ListDiv>
-            4. <CommuTag>LG 트윈스</CommuTag>
-          </ListDiv>
-          <ListDiv>
-            5. <CommuTag>대출</CommuTag>
-          </ListDiv>
+          {commuRank.slice(0, 5).map((item: CommuItem, id) => (
+            <ListDiv key={id}>
+              {id + 1}.
+              <CommuTag onClick={() => navigate(`/community/${id}`)}>
+                {item.title}
+              </CommuTag>
+            </ListDiv>
+          ))}
         </RightDiv>
       </FlexDiv>
       <BrTag></BrTag>
@@ -488,25 +476,19 @@ const CommunityMain = () => {
           <LifeTags>게시판 리스트</LifeTags>
           <CommuListDiv>
             <Div>
-              <ListTag>국내야구 게시판</ListTag>
-              <ListTag>해외축구 게시판</ListTag>
-              <ListTag>만화 게시판</ListTag>
-              <ListTag>LG 트윈스 게시판</ListTag>
-              <ListTag>대출 게시판</ListTag>
+              {commuList.slice(0, 7).map((item: CommuItem, id) => (
+                <ListTag key={id}>{item.title}</ListTag>
+              ))}
             </Div>
             <Div>
-              <ListTag>국내야구 게시판</ListTag>
-              <ListTag>해외축구 게시판</ListTag>
-              <ListTag>만화 게시판</ListTag>
-              <ListTag>LG 트윈스 게시판</ListTag>
-              <ListTag>대출 게시판</ListTag>
+              {commuList.slice(7, 14).map((item: CommuItem, id) => (
+                <ListTag key={id}>{item.title}</ListTag>
+              ))}
             </Div>
             <Div>
-              <ListTag>국내야구 게시판</ListTag>
-              <ListTag>해외축구 게시판</ListTag>
-              <ListTag>만화 게시판</ListTag>
-              <ListTag>LG 트윈스 게시판</ListTag>
-              <ListTag>대출 게시판</ListTag>
+              {commuList.slice(14, 21).map((item: CommuItem, id) => (
+                <ListTag key={id}>{item.title}</ListTag>
+              ))}
             </Div>
           </CommuListDiv>
         </Div>
