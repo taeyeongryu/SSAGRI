@@ -195,7 +195,7 @@ const TradeCreate = () => {
                     'tableRow',
                     'mergeTableCells',
                     '|',
-                    Image
+                    'Image'
                   ],
                   placeholder: '내용을 입력해주세요...'
                 }}
