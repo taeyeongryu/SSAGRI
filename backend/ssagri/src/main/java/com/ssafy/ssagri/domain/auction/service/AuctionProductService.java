@@ -80,7 +80,7 @@ public class AuctionProductService {
                      .build();
 
                 result.add(auctionProductAllDTO);
-git 
+
          }
 
          return result;
