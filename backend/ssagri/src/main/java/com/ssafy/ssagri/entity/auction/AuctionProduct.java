@@ -18,50 +18,70 @@ import java.util.List;
 @Table(name = "auction_product")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AuctionProduct extends BaseTimeEntity {
+
+    //경매 상품 no
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "auction_product_no")
     private Long no;
 
+
+    // 경매 개최자
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_no",nullable = false)
     private User user;
 
+    // 경매 상품 이름
     @Column(name = "auction_product_name",nullable = false)
     private String name;
 
+    // 경매 상한가
     @Column(name = "auction_product_up_price",nullable = false)
     private int upPrice;
 
+    // 경매 하한가
     @Column(name = "auction_product_down_price",nullable = false)
     private int downPrice;
 
-    @Column(name = "auction_product_price",nullable = false)
-    private int price;
+    // 경매 입찰 단위
+    @Column(name = "auction_product_price_count",nullable = false)
+    private int priceCount;
 
+    // 경매 시작시간
     @Column(name = "auction_product_start_date",nullable = false)
     private LocalDateTime startDate;
 
+    // 경매 마감시간
     @Column(name = "auction_product_end_date",nullable = false)
     private LocalDateTime endDate;
 
+    // 경매 삭제시간
+    @Column(name = "auction_product_delete_date")
+    private LocalDateTime deleteDate;
+
+    // 경매 설명
     @Column(name = "auction_product_comment")
     private String comment;
 
-    @Enumerated(EnumType.ORDINAL)
+    // 경매 상태
+    @Enumerated(EnumType.STRING)
     @Column(name = "auction_product_status",nullable = false)
     private AuctionStatus auctionStatus;
 
+    // 경매 입찰가
     @Column(name = "auction_product_finally_price")
     private int finallyPrice;
 
+    // 경매 수정시간
     @Column(name = "auction_product_modify_date")
     private LocalDateTime modifyDate;
 
+    // 경매 분류 (모니터, 키보드 ,,,)
     @Enumerated(EnumType.STRING)
     @Column(name = "auction_product_type")
     private AuctionProductType type;
 
+    // 경매 정가
     @Column(name = "auction_product_origin_price")
     private int originPrice;
 
@@ -69,18 +89,20 @@ public class AuctionProduct extends BaseTimeEntity {
     List<AuctionProductImage> images = new ArrayList<>();
 
     @Builder
-    public AuctionProduct(LocalDateTime modifyDate ,int originPrice, AuctionProductType type,User user, String name, int upPrice, int downPrice, int price, LocalDateTime startDate, LocalDateTime endDate, String comment) {
+    public AuctionProduct(int finallyPrice, AuctionStatus auctionStatus, LocalDateTime deleteDate, LocalDateTime modifyDate ,int originPrice, AuctionProductType type,User user, String name, int upPrice, int downPrice, int priceCount, LocalDateTime startDate, LocalDateTime endDate, String comment) {
         this.user = user;
         this.name = name;
         this.upPrice = upPrice;
         this.downPrice = downPrice;
-        this.price = price;
+        this.priceCount = priceCount;
         this.startDate = startDate;
+        this.deleteDate = deleteDate;
         this.endDate = endDate;
         this.comment = comment;
         this.auctionStatus = auctionStatus;
         this.originPrice = originPrice;
         this.type = type;
         this.modifyDate = modifyDate;
+        this.finallyPrice =finallyPrice;
         }
 }

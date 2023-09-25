@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-import static com.ssafy.ssagri.util.ResponseStatusEnum.REGISTER_NICKNAME_IS_OK;
+import static com.ssafy.ssagri.util.ResponseStatusEnum.REGIST_NICKNAME_IS_OK;
 
 /**
  * Access 토큰 재발급용 컨트롤러입니다.

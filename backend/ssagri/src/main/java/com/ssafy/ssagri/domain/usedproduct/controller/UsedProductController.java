@@ -39,14 +39,19 @@ public class UsedProductController {
 
     @GetMapping("/{userNo}")
     @ApiOperation("중고물품 리스트 조회하는 메서드 파라미터 값으로 userNo를 넣어주면 좋아요 상태도 같이 조회")
-    @Operation(description = "category, region, size, page 넘겨주기, 정렬은 sort=likeCount,asc 같은 식으로 넘긴다.")
+    @Operation(description = "category, region, size, page 넘겨주기, 정렬은 sort=likeCount,asc 같은 식으로 넘긴다. ex) http://localhost:5000/api/usedproduct/1?sort=like,desc&page=0&size=3&search=title1")
     public Page<UsedProductResponseDto> selectList(@PathVariable(name = "userNo")Long userNo
             , @RequestParam(name = "category", required = false) ProductCategory productCategory
             , @RequestParam(name = "region", required = false) Region region
             , @RequestParam(name = "search", required = false) String search
             , Pageable pageable
             ) {
-        Page<UsedProductResponseDto> usedProductResponseDtos = usedProductService.selectUsedProductList(userNo, productCategory, region,search, pageable);
+        pageable.getSort().get().forEach(sort -> {
+            System.out.println("sort.getProperty() = " + sort.getProperty());
+            System.out.println("sort.getDirection() = " + sort.getDirection());
+        });
+        System.out.println("pageable.toString() = " + pageable.toString());
+        Page<UsedProductResponseDto> usedProductResponseDtos = usedProductService.selectUsedProductList(userNo, productCategory, region, search, pageable);
         return usedProductResponseDtos;
     }
     //중고 물품 디테일 가져오는 메서드 만들어야 함
