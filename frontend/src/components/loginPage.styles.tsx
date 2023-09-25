@@ -548,8 +548,10 @@ const SignInAndUpComponent = () => {
 
     console.log(signUpForm.email);
     axios
-      .post('/user/regist/send-email', {
-        email: signUpForm.email
+      .get('/user/regist/send-email', {
+        params: {
+          email: signUpForm.email
+        }
       })
       .then((res) => {
         // 메일 전송 성공
