@@ -59,7 +59,7 @@ public class UserRegistController {
     @Operation(summary = "이메일 전송(인증번호 전송)", description = "1. 메일번호를 RequrestParam으로 받음 -> 해당 메일로 인증번호 전송 : MAIL_SEND_ERR(-1500, \"메일 전송 과정 중 에러가 발생했습니다.\"),\n" +
             "2. -> BE 서버에서는 해당 인증 번호를 Redis 메모리에 저장(expired 기간 10분 등) : MAIL_AUTH_SAVE_ERR(-1501, \"인증번호를 Redis에 저장하는 중 에러가 발생했습니다.\")\n" +
             "\t: 이때 저장은 해당 유저의 인증번호(key) : IP(value)로 하여 여러 사용자가 하나의 인증번호를 돌려쓰지 못하게 함.")
-    @PostMapping("/send-email")
+    @GetMapping("/send-email")
     public ResponseEntity<?> sendAuthcodeToEmail(@RequestParam("email") String email, HttpServletRequest request) throws CustomException, MessagingException, UnsupportedEncodingException {
         String authCode = emailService.sendSimpleMessageRegist(email); //1. 해당 주소로 인증번호 포함된 메일 전송
         userRegisterService.saveAuthCodeToRedis(authCode); //2. authCode 값을 생성 Redis에 보관(expire : 10분)
