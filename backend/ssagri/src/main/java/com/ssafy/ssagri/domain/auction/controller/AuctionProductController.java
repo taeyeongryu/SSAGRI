@@ -51,6 +51,8 @@ public class AuctionProductController {
 
     }
 
+
+
     // S3 경매 상품 이미지 불러오기
     @ApiOperation("경매 상품 사진 불러오기")
     @GetMapping("/load/{auctionProductNo}")
