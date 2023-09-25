@@ -349,22 +349,6 @@ const SignInAndUpComponent = () => {
     setSignInForm({ ...signInForm, password: e.target.value });
   };
 
-  // 액세스토큰 만료되었을 때 재발급 요청
-  const testRefill = (e) => {
-    e.preventDefault();
-
-    axios
-      .get('/jwt/refill')
-      .then((res) => {
-        console.log(res);
-        const accessToken = res.headers['access-token'];
-        console.log(accessToken);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   // 로그인여부
   // @ts-ignore
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
@@ -397,9 +381,6 @@ const SignInAndUpComponent = () => {
   //   const accessToken = response.headers['access-token'];
   //   console.log(accessToken);
 
-  //   // axios 헤더에 jwt 토큰 담기
-  //   axios.defaults.headers.common['Authorization'] = accessToken;
-
   // userNo를 localStorage에 넣기
   //    let payload = accessToken.substring(
   //      accessToken.indexOf('.') + 1,
@@ -408,25 +389,6 @@ const SignInAndUpComponent = () => {
   //    let dec = base64.decode(payload);
   //    let userNo = JSON.parse(dec).userNo;
   //    localStorage.setItem('userNo', userNo);
-
-  // axios 헤더에 jwt 토큰 담기
-  //    axios.defaults.headers.common['Authorization'] = accessToken;
-
-  //   // 액세스토큰 만료하기 전에 로그인 연장
-  //   setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
-
-  //   // 로그인 하기 전 접속했던 페이지로 이동시키기
-  // };
-
-  // // 페이지가 새로고침 되거나 액세스토큰이 만료되었을 때 액세스 토큰을 재발급
-  // const onSilentRefresh = () => {
-  //   axios
-  //     .post('/silent-refresh')
-  //     .then(onLoginSuccess)
-  //     .catch((error) => {
-  //       console.log(error);
-  //       // 로그인 실패처리
-  //     });
   // };
 
   // 회원가입 //
@@ -442,12 +404,12 @@ const SignInAndUpComponent = () => {
     nickname: ''
   });
 
-  // 유효성 검증
   const [isEmailStyle, setIsEmailStyle] = useState(false); // 유효한 이메일 형식인지
   const [isEmailUnique, setIsEmailUnique] = useState(false); // 이메일 중복 확인 여부
+
+  // 회원가입에 필요한 입력요소들 유효성 검사
   // @ts-ignore
   const [isEmailValid, setIsEmailValid] = useState(false); // 인증 완료한 이메일인지
-
   const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [isConfirmValid, setIsConfirmValid] = useState(false);
   // @ts-ignore
@@ -583,14 +545,11 @@ const SignInAndUpComponent = () => {
   // 이메일 인증번호 전송
   const sendEmail = (e) => {
     e.preventDefault();
-    // @ts-ignore
-    const data = {
-      email: signUpForm.email
-    };
 
+    console.log(signUpForm.email);
     axios
-      .post('/sendEmail', {
-        headers: { 'Content-Type': 'application/json' }
+      .post('/user/regist/send-email', {
+        email: signUpForm.email
       })
       .then((res) => {
         // 메일 전송 성공
@@ -618,6 +577,7 @@ const SignInAndUpComponent = () => {
       .then((res) => {
         // 인증 완료
         console.log(res);
+        setIsEmailValid(true);
         setSignUpEmailMessage('인증이 완료되었습니다.');
         // 인증 여부 true로 바꾼다.
       })
@@ -674,7 +634,7 @@ const SignInAndUpComponent = () => {
       }
     };
 
-    axios.post('SIGNUP_URL', formData, config);
+    axios.post('/user/regist', formData, config);
   };
 
   const [joinBtnActive, setJoinBtnActive] = useState(false);

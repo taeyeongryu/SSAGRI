@@ -92,6 +92,7 @@ const MenuBar = () => {
   const goLogout = () => {
     onLogout();
     setIsLoggedIn(false);
+    localStorage.removeItem('isLoggedIn');
   };
 
   const goLogin = () => {
@@ -112,11 +113,11 @@ const MenuBar = () => {
 
   useEffect(() => {
     console.log('로그인 여부 바뀜');
+    console.log(isLoggedIn);
   }, [isLoggedIn]);
 
   return (
     <MenuDiv>
-      {isLoggedIn}
       {isLoggedIn ? (
         <MenuName
           onClick={goLogout}

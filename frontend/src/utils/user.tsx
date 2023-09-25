@@ -20,10 +20,10 @@ const onLoginSuccess = (response: any) => {
 // silent Refresh
 // 액세스 토큰이 만료되었을 때, 새로고침 되었을 때 사용
 const onSilentRefresh = () => {
-  console.log('silent refresh 실행됨');
   axios
     .get('/jwt/refill')
     .then((res) => {
+      console.log('silent refresh, 새로운 액세스 토큰 발급');
       // 리프레시 토큰이 유효 [ STATUS 200 ]
       // 새로운 액세스 토큰 발급
       onLoginSuccess(res);
