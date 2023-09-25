@@ -8,10 +8,13 @@ import com.ssafy.ssagri.domain.board.dto.BoardDto;
 import com.ssafy.ssagri.domain.board.dto.BoardWriteDto;
 import com.ssafy.ssagri.domain.board.repository.BoardRopository;
 import com.ssafy.ssagri.domain.board.service.BoardService;
+import com.ssafy.ssagri.domain.usedproduct.dto.response.UsedProductResponseDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,13 +42,11 @@ public class BoardController {
         return boardService.boardTitleList();
     }
 
-    // 모든 게시판 출력
-    @GetMapping(value = "/all-list")
+    @GetMapping("/all-list")
     @ApiOperation("모든 게시판 출력")
-    public List<BoardDto> allList() {
-
-        return boardService.boardList();
-
+    public Page<BoardDto> allList(Pageable pageable) {
+        Page<BoardDto> BoardDtos = boardService.boardList(pageable);
+        return BoardDtos;
     }
 
     // 게시판 등록
@@ -64,4 +65,6 @@ public class BoardController {
 
 
     }
+
+
 }

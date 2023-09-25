@@ -13,7 +13,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,8 +70,10 @@ public class BoardService {
     }
 
     // 게시판 모두 출력
-    public List<BoardDto> boardList(){
-        List<Board> boardlist = boardRopository.findAll();
+    public Page<BoardDto> boardList(Pageable pageable){
+        Page<Board> allboardlist = boardRopository.findAllByOrderByCreateDateDesc(pageable);
+
+        List<Board> boardlist = allboardlist.getContent();
 
         List<BoardDto> result = new ArrayList<>();
 
@@ -85,7 +89,7 @@ public class BoardService {
             result.add(boardDto);
         }
 
-        return result;
+        return new PageImpl<>(result, allboardlist.getPageable(), allboardlist.getTotalElements());
     }
 
     // 게시판 등록
@@ -105,9 +109,6 @@ public class BoardService {
 
     }
 
-<<<<<<< HEAD
-    //
-=======
     // 게시글 등록
     @Transactional
     public void boardWrite(BoardWriteDto boardWriteDto){
@@ -136,6 +137,4 @@ public class BoardService {
 //
 //        return result;
 //    }
-
->>>>>>> 165a76e6211b191b2523a0fe73503103451099b0
 }
