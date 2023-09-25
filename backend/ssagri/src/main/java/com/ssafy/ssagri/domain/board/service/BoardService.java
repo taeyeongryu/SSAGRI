@@ -6,7 +6,7 @@ import com.ssafy.ssagri.domain.board.dto.BoardDto;
 import com.ssafy.ssagri.domain.board.dto.BoardWriteDto;
 import com.ssafy.ssagri.domain.board.repository.BoardListRepository;
 import com.ssafy.ssagri.domain.board.repository.BoardRopository;
-import com.ssafy.ssagri.domain.user.repository.UserRegistRepository;
+import com.ssafy.ssagri.domain.user.repository.UserRegistAndModifyRepository;
 import com.ssafy.ssagri.entity.board.Board;
 import com.ssafy.ssagri.entity.board.BoardList;
 import lombok.RequiredArgsConstructor;

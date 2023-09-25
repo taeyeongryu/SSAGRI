@@ -10,7 +10,7 @@ import com.amazonaws.services.s3.model.PutObjectResult;
 import com.ssafy.ssagri.domain.auction.dto.Images;
 import com.ssafy.ssagri.domain.auction.repository.AuctionPhotoRepository;
 import com.ssafy.ssagri.domain.auction.repository.AuctionRepository;
-import com.ssafy.ssagri.domain.user.repository.UserRegistRepository;
+import com.ssafy.ssagri.domain.user.repository.UserRegistAndModifyRepository;
 import com.ssafy.ssagri.domain.auction.dto.AuctionProductAllDTO;
 import com.ssafy.ssagri.domain.auction.dto.AuctionProductCreateDTO;
 import com.ssafy.ssagri.entity.auction.AuctionProduct;
@@ -45,7 +45,7 @@ public class AuctionProductService {
     @Qualifier("s3")
     private final AmazonS3 amazonS3;
     private final AuctionRepository auctionRepository;
-    private final UserRegistRepository userRegistRepository;
+    private final UserRegistAndModifyRepository userRegistRepository;
     private final AuctionPhotoRepository auctionPhotoRepository;
 
 

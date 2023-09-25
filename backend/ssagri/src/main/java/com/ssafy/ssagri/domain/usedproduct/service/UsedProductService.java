@@ -7,7 +7,7 @@ import com.ssafy.ssagri.domain.usedproduct.repository.UsedProductRepository;
 import com.ssafy.ssagri.domain.usedproductlike.repository.UsedProductLikeRepository;
 import com.ssafy.ssagri.domain.usedproductphoto.dto.UsedProductPhotoResponseDto;
 import com.ssafy.ssagri.domain.usedproductphoto.repository.UsedProductPhotoRepository;
-import com.ssafy.ssagri.domain.user.repository.UserRegistRepository;
+import com.ssafy.ssagri.domain.user.repository.UserRegistAndModifyRepository;
 import com.ssafy.ssagri.entity.usedproduct.PhotoType;
 import com.ssafy.ssagri.entity.usedproduct.ProductCategory;
 import com.ssafy.ssagri.entity.usedproduct.UsedProduct;
@@ -39,7 +39,7 @@ public class UsedProductService {
     private final UsedProductRepository usedProductRepository;
     private final UsedProductPhotoRepository usedProductPhotoRepository;
     private final UsedProductLikeRepository usedProductLikeRepository;
-    private final UserRegistRepository userRegistRepository;
+    private final UserRegistAndModifyRepository userRegistRepository;
     private final ImageService imageService;
 
 
