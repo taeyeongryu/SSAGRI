@@ -3,11 +3,10 @@ package com.ssafy.ssagri.domain.board.service;
 import com.ssafy.ssagri.domain.board.dto.BoardCreateDto;
 import com.ssafy.ssagri.domain.board.dto.BoardDto;
 import com.ssafy.ssagri.domain.board.repository.BoardRopository;
-import com.ssafy.ssagri.domain.user.repository.UserRegistRepository;
+import com.ssafy.ssagri.domain.user.repository.UserRegistAndModifyRepository;
 import com.ssafy.ssagri.entity.board.Board;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +20,7 @@ import java.util.List;
 public class BoardService {
 
     final private BoardRopository boardRopository;
-    final private UserRegistRepository userRegistRepository;
+    final private UserRegistAndModifyRepository userRegistRepository;
 
     // 게시판 모두 출력
     public List<BoardDto> boardList(){
