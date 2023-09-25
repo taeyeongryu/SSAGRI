@@ -30,7 +30,7 @@ import java.util.List;
 public class BoardService {
 
     final private BoardRopository boardRopository;
-    final private UserRegistRepository userRegistRepository;
+    final private UserRegistAndModifyRepository userRegistAndModifyRepository;
     final private BoardListRepository boardListRepository;
 
     // 조회수로 오름차순한 게시판이름이랑 조회수 출력
@@ -96,7 +96,7 @@ public class BoardService {
     @Transactional
     public void boardregist(BoardCreateDto boardCreateDto){
         Board board = Board.builder()
-                .user(userRegistRepository.findByNo(boardCreateDto.getNo()))
+                .user(userRegistAndModifyRepository.findByNo(boardCreateDto.getNo()))
                 .title(boardCreateDto.getTitle())
 //                .boardColor(boardCreateDto.getColor())
                 .boardClick(0)
@@ -113,7 +113,7 @@ public class BoardService {
     @Transactional
     public void boardWrite(BoardWriteDto boardWriteDto){
         BoardList boardList = BoardList.builder()
-                .user(userRegistRepository.findByNo(boardWriteDto.getUserNo()))
+                .user(userRegistAndModifyRepository.findByNo(boardWriteDto.getUserNo()))
                 .board(boardRopository.findByNo(boardWriteDto.getBoardNo()))
                 .title(boardWriteDto.getTitle())
                 .allowComment(boardWriteDto.getAllowComment())
