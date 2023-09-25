@@ -121,6 +121,12 @@ public class BoardService {
                 .content(boardWriteDto.getContents())
                 .like(0).build();
 
+        Board board = Board.builder()
+                        .boardLife(boardRopository.findByNo(boardWriteDto.getBoardNo())
+                                .getBoardLife().plusHours(1)).build();
+
+        boardRopository.save(board);
+
         boardListRepository.save(boardList);
 
     }
