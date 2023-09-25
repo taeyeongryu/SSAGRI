@@ -1,9 +1,6 @@
 package com.ssafy.ssagri.domain.board.service;
 
-import com.ssafy.ssagri.domain.board.dto.BoardClickDto;
-import com.ssafy.ssagri.domain.board.dto.BoardCreateDto;
-import com.ssafy.ssagri.domain.board.dto.BoardDto;
-import com.ssafy.ssagri.domain.board.dto.BoardWriteDto;
+import com.ssafy.ssagri.domain.board.dto.*;
 import com.ssafy.ssagri.domain.board.repository.BoardListRepository;
 import com.ssafy.ssagri.domain.board.repository.BoardRopository;
 import com.ssafy.ssagri.domain.user.repository.UserRegistAndModifyRepository;
@@ -71,7 +68,7 @@ public class BoardService {
 
     // 게시판 모두 출력
     public Page<BoardDto> boardList(Pageable pageable){
-        Page<Board> allboardlist = boardRopository.findAllByOrderByCreateDateDesc(pageable);
+        Page<Board> allboardlist = boardRopository.findAllByOrderByCreateDateAsc(pageable);
 
         List<Board> boardlist = allboardlist.getContent();
 
@@ -109,6 +106,18 @@ public class BoardService {
 
     }
 
+    // 게시판 클릭 시 조회수 증가
+    public void boardClick(Long boardNo){
+        Board board1 = boardRopository.findByNo(boardNo);
+
+        Board board = Board.builder()
+                .boardClick(board1.getBoardClick()+1).build();
+
+        boardRopository.save(board);
+
+
+    }
+
     // 게시글 등록
     @Transactional
     public void boardWrite(BoardWriteDto boardWriteDto){
@@ -132,15 +141,29 @@ public class BoardService {
     }
 
     // 게시글 모두 출력
-//    public Page<BoardListRes> boardList(){
-//
-//        PageRequest pageRequest = PageRequest.of(0,5);
-//
-//        Page<BoardList> boardwritelist = boardListRepository.findAll(pageRequest);
-//
-//
-//        boardwritelist.map(B::new);
-//
-//        return result;
-//    }
+    public Page<BoardListDto> boardWriteList(Pageable pageable){
+
+        Page<BoardList> allBoardWriteList = boardListRepository.findAllByOrderByCreateDateAsc(pageable);
+
+        List<BoardList> boardWriteList = allBoardWriteList.getContent();
+
+        List<BoardListDto> result = new ArrayList<>();
+
+        for(int i=0;i<boardWriteList.size();i++){
+            BoardListDto boardListDto = BoardListDto.builder()
+                    .no(boardWriteList.get(i).getNo())
+                    .user(boardWriteList.get(i).getUser().getNo())
+                    .boardName(boardWriteList.get(i).getBoard().getTitle())
+                    .boardLife(boardWriteList.get(i).getBoard().getBoardLife())
+                    .title(boardWriteList.get(i).getTitle())
+                    .view(boardWriteList.get(i).getView())
+                    .like(boardWriteList.get(i).getLike())
+                    .allowComment(boardWriteList.get(i).isAllowComment())
+                    .content(boardWriteList.get(i).getContent()).build();
+
+            result.add(boardListDto);
+        }
+
+        return new PageImpl<>(result, allBoardWriteList.getPageable(), allBoardWriteList.getTotalElements());
+    }
 }
