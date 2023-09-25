@@ -2,10 +2,7 @@ package com.ssafy.ssagri.domain.board.controller;
 
 import com.ssafy.ssagri.domain.auction.dto.AuctionProductAllDTO;
 import com.ssafy.ssagri.domain.auction.repository.AuctionCustomRepository;
-import com.ssafy.ssagri.domain.board.dto.BoardClickDto;
-import com.ssafy.ssagri.domain.board.dto.BoardCreateDto;
-import com.ssafy.ssagri.domain.board.dto.BoardDto;
-import com.ssafy.ssagri.domain.board.dto.BoardWriteDto;
+import com.ssafy.ssagri.domain.board.dto.*;
 import com.ssafy.ssagri.domain.board.repository.BoardRopository;
 import com.ssafy.ssagri.domain.board.service.BoardService;
 import com.ssafy.ssagri.domain.usedproduct.dto.response.UsedProductResponseDto;
@@ -63,8 +60,34 @@ public class BoardController {
     public void boardWrite(@RequestBody BoardWriteDto boardWriteDto) {
         boardService.boardWrite(boardWriteDto);
 
-
     }
+
+    // 게시판 클릭시 조회수 증가
+    @GetMapping(value = "/board/click/{boardNo}")
+    @ApiOperation("게시판 클릭 시 조회수 증가")
+    public void boardClick(@PathVariable("boardNo") Long boardNo){
+        boardService.boardClick(boardNo);
+    }
+
+
+    // 모든 게시글 출력
+    @GetMapping("/all-write-list")
+    @ApiOperation("모든 게시글 출력")
+    public Page<BoardListDto> allWriteList(Pageable pageable) {
+        Page<BoardListDto> BoardListDtos = boardService.boardWriteList(pageable);
+        return BoardListDtos;
+    }
+
+    // 게시글에 좋아요 누르기
+
+
+    // 하나의 게시글에 댓글달기
+//    @PostMapping("/write/comment")
+//    @ApiOperation("하나의 게시글에 댓글달기")
+//    public
+
+
+
 
 
 }
