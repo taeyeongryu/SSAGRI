@@ -360,6 +360,7 @@ const AuctionPage = () => {
   });
 
   const GetAuctionItemList = () => {
+    console.log(isLoggedIn);
     auctionApi
       .get('/auction-product/all-list')
       .then((res) => {
