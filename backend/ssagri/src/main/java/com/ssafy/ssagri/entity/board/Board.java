@@ -1,5 +1,6 @@
 package com.ssafy.ssagri.entity.board;
 
+import com.ssafy.ssagri.entity.auction.AuctionProductImage;
 import com.ssafy.ssagri.entity.common.BaseTimeEntity;
 import com.ssafy.ssagri.entity.user.User;
 import lombok.AccessLevel;
@@ -10,6 +11,8 @@ import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -53,9 +56,16 @@ public class Board extends BaseTimeEntity {
     @ColumnDefault("1")
     private boolean allowDelete;
 
+    // 생명주기
+    @Column(name = "board_life",nullable = false)
+    private LocalDateTime boardLife;
+
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
+    List<BoardList> boardWrites = new ArrayList<>();
+
 
     @Builder
-    public Board(User user, String title, String showName, boolean allowDelete, String boardColor, int boardClick, LocalDateTime createTime) {
+    public Board(User user, String title, String showName, boolean allowDelete, LocalDateTime boardLife, int boardClick, LocalDateTime createTime) {
         this.user = user;
         this.title = title;
         this.showName = showName;
@@ -63,5 +73,6 @@ public class Board extends BaseTimeEntity {
 //        this.boardColor = boardColor;
         this.boardClick = boardClick;
         this.createTime = createTime;
+        this.boardLife = boardLife;
     }
 }
