@@ -2,21 +2,48 @@ import { styled } from 'styled-components';
 import {
   SearchDiv02,
   ProductList02,
-  TradeProductItem02
+  TradeProductItem02,
+  TradeMainMap
 } from '../components/tradeMainPage.styles';
 // @ts-ignore
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 // @ts-ignore
 import axios from 'axios';
 import { ProductItemType } from './type';
+import { useNavigate } from 'react-router-dom';
 
 // Header 제외 중고거래 컴포넌트
 const TradeListFrameDiv = styled.div`
   width: 1920px;
-  /* height: 100vh; */
-  margin-top: 7vh;
+  height: 900px;
+  margin: 50px auto 0;
   /* border: 2px solid black; */
   display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const TradeListAllDiv = styled.div`
+  width: 70%;
+  height: 80%;
+  /* border: 1px solid blue; */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const TradeListLeftDiv = styled.div`
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const TradeListRightDiv = styled.div`
+  width: 910px;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 `;
@@ -35,7 +62,7 @@ const TradeListDiv = styled.div`
 const CategorySpace = styled.div`
   width: 800px;
   height: 140px;
-  margin-top: 50px;
+  margin-top: 0px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -45,11 +72,11 @@ const CategorySpace = styled.div`
 
 const CategoryName = styled.div`
   width: 300px;
-  height: 70px;
+  height: 60px;
   font-size: 36px;
   text-decoration: underline;
   text-align: center;
-  line-height: 70px;
+  line-height: 60px;
 `;
 
 const CategoryList = styled.div`
@@ -75,9 +102,9 @@ const CategoryItem = styled.div`
 
 const SearchSpace = styled.div`
   width: 800px;
-  margin: 30px 0px;
+  margin: 20px 0px;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
   /* border: 1px solid green; */
 `;
@@ -94,7 +121,8 @@ const SearchOrder = styled.select`
 
 // 상품목록
 const ProductList = styled.div`
-  width: 70%;
+  width: 840px;
+  min-height: 520px;
   /* border: 1px solid red; */
   display: flex;
   justify-content: center;
@@ -103,9 +131,9 @@ const ProductList = styled.div`
 
 // 페이징
 const PagingSpace = styled.div`
-  width: 50%;
+  max-width: 80%;
   height: 50px;
-  margin: 50px 0px;
+  margin: 0px 0px;
   /* border: 1px solid red; */
   display: flex;
   justify-content: center;
@@ -135,87 +163,233 @@ const PagingButtonText = styled.div`
   font-weight: bold;
 `;
 
-const TradeList = () => {
-  // -------- 임시 데이터 --------
-  let responseList = useRef([
-    {
-      createDate: '2023-09-22T00:42:26.086Z',
-      like: true,
-      price: 130000,
-      productCategory: 'READY',
-      productNo: 2,
-      region: '지역',
-      saleStatus: 'READY',
-      title:
-        '송병훈 짱 송병훈 짱 송병훈 짱 송병훈 짱\n 송병훈 짱 송병훈 짱 송병훈 짱 송병훈 짱',
-      updateDate: '2023-09-22T00:42:26.086Z',
-      usedProductPhotoResponseDto: {
-        link: 'https://i.imgur.com/ixdlIIc.png',
-        photoNo: 0
-      }
-    },
-    {
-      createDate: '2023-09-22T00:42:26.086Z',
-      like: true,
-      price: 130000,
-      productCategory: 'READY',
-      productNo: 2,
-      region: '지역',
-      saleStatus: 'READY',
-      title:
-        '송병훈 짱 송병훈 짱 송병훈 짱 송병훈 짱\n 송병훈 짱 송병훈 짱 송병훈 짱 송병훈 짱',
-      updateDate: '2023-09-22T00:42:26.086Z',
-      usedProductPhotoResponseDto: {
-        link: 'https://i.imgur.com/ixdlIIc.png',
-        photoNo: 0
-      }
-    }
-  ]);
+const ProductListSearch = ({ regionText, category, search, setSearch }) => {
+  // region 데이터를 받아왔으므로, axios 호출을 하여 List를 얻어온다.
+  const [responseList, setResponseList] = useState([]);
 
   useEffect(() => {
-    const url = '';
-    axios.get(url).then((res) => {
-      console.log(res.data);
-      responseList.current = res.data;
-    });
-  }, []);
+    search = search === null ? '' : search;
+    setSearch(search);
+    axios
+      .get(
+        `usedproduct/1?region=${regionText}&category=${category}&search=${search}&sort=like,desc&page=0&size=8`
+      )
+      .then((res) => {
+        setResponseList(res.data.content);
+        console.log('responseList: ', responseList);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [regionText, category, search]);
+
+  return (
+    <>
+      <ProductList02>
+        {responseList.map((item: ProductItemType, id) => (
+          <TradeProductItem02 key={id} item={item}></TradeProductItem02>
+        ))}
+      </ProductList02>
+    </>
+  );
+};
+
+// region이 넘어왔을 때, region이 변경되었을 때 API를 호출시켜보자.
+const TradeList = () => {
+  // 먼저 region이 변경될 때마다 URI가 변경될 것이다.
+  // 그러므로 URI에서 region 데이터를 가져온다.
+  const [region, setRegion] = useState(
+    new URLSearchParams(window.location.search).get('region')
+  );
+  // 검색어를 통해 검색했을 때의 데이터를 반환해보자.
+  const [search, setSearch] = useState(
+    new URLSearchParams(window.location.search).get('search')
+  );
+  // 이제 지역 뿐만 아니라, 카테고리나 검색어나 정렬 순서까지 들어왔을 때를 생각해보자
+  const [category, setCategory] = useState('');
+  const categoryList = ['', 'MONITER', 'KEYBOARD', 'MOUSE', 'LIFE', 'ETC'];
+  // @ts-ignore
+  const [order, setOrder] = useState('');
+
+  console.log('search: ', search);
+
+  let regionText = '';
+  // 요청을 보낼 때, 한글을 영어로 바꾸어야 BackEnd에서 인식한다.
+  if (region === '서울' || region === 'SEOUL') {
+    regionText = 'SEOUL';
+  } else if (region === '대전' || region === 'DAEJEON') {
+    regionText = 'DAEJEON';
+  } else if (region === '구미' || region === 'GUMI') {
+    regionText = 'GUMI';
+  } else if (region === '광주' || region === 'GWANGJU') {
+    regionText = 'GWANGJU';
+  } else if (region === '부울경' || region === 'BUG') {
+    regionText = 'BUG';
+  }
+
+  // console.log('QueryString region: ', regionText);
+
+  // 지역 리스트를 선언하여, 맵에서 지역을 클릭할 때마다 region이 변경되도록 한다.
+  const regionList = ['SEOUL', 'DAEJEON', 'GUMI', 'GWANGJU', 'BUG'];
+
+  // 맵에서 지역을 클릭할 때마다 region이 변경되면,
+  // 이를 인식하여 새로운 리스트를 가져와야 한다.
+  // 가장 쉬운 방법은, 지금 List 페이지를 다시 호출하여 렌더링하는 것이다.
+  // region에 의해서는 처음 한 번만 렌더링 할 것이므로, 두번째 인자를 []로 둔다.
+  useEffect(() => {
+    console.log('regionText: ', regionText);
+    console.log('category: ', category);
+
+    let selectedCategory: any = document.querySelector('#allCategory');
+    selectedCategory.style.color = '#4786fa';
+    selectedCategory.style.fontWeight = 'bold';
+    selectedCategory.style.textDecoration = 'underline';
+
+    let tradeListInput: any = document.querySelector('#trade-list-input');
+    tradeListInput.value = '';
+
+    goTradeList(regionText, search);
+  }, [region]);
+
+  useEffect(() => {
+    console.log('regionText: ', regionText);
+    console.log('category: ', category);
+    goTradeListWithCategory(regionText, category);
+  }, [category]);
+
+  const navigate = useNavigate();
+  const goTradeList = (region, search) => {
+    navigate(`/tradeList?region=${region}&search=${search}`);
+  };
+  const goTradeListWithCategory = (region, category) => {
+    navigate(`/tradeList?region=${region}&category=${category}`);
+  };
 
   return (
     <TradeListFrameDiv>
-      <TradeListDiv>
-        <CategorySpace>
-          <CategoryName>카테고리</CategoryName>
-          <CategoryList>
-            <CategoryItem>전체</CategoryItem>
-            <CategoryItem>모니터</CategoryItem>
-            <CategoryItem>키보드</CategoryItem>
-            <CategoryItem>마우스</CategoryItem>
-            <CategoryItem>생활용품</CategoryItem>
-            <CategoryItem>기타용품</CategoryItem>
-          </CategoryList>
-        </CategorySpace>
-        <SearchSpace>
-          <SearchDiv02></SearchDiv02>
-          <SearchOrder>
-            <option value='링크1'>인기순</option>
-            <option value='링크1'>최신순</option>
-            <option value='링크2'>가격순</option>
-          </SearchOrder>
-        </SearchSpace>
-        <ProductList>
-          <ProductList02>
-            {/* @ts-ignore */}
-            {responseList.current.map((item: ProductItemType, id) => (
-              <TradeProductItem02 key={id} item={item}></TradeProductItem02>
-            ))}
-          </ProductList02>
-        </ProductList>
-        <BottomPageSpace></BottomPageSpace>
-      </TradeListDiv>
+      <TradeListAllDiv>
+        <TradeListLeftDiv>
+          <TradeMainMap
+            isList={true}
+            setRegion={setRegion}
+            setSearch={setSearch}
+            setCategory={setCategory}
+            regionList={regionList}
+          ></TradeMainMap>
+        </TradeListLeftDiv>
+        <TradeListRightDiv>
+          <TradeListDiv>
+            <CategorySpace>
+              <CategoryName>카테고리</CategoryName>
+              <TradeListCategory
+                setCategory={setCategory}
+                categoryList={categoryList}
+              ></TradeListCategory>
+            </CategorySpace>
+            <SearchSpace>
+              <SearchDiv02
+                regionText={regionText}
+                category={category}
+                search={search}
+                setSearch={setSearch}
+              ></SearchDiv02>
+              <SearchOrder>
+                <option value='like'>인기순</option>
+                <option value='no'>최신순</option>
+                <option value='price'>가격순</option>
+              </SearchOrder>
+            </SearchSpace>
+            <ProductList>
+              {/* 상품 목록이 보이는 컴포넌트 */}
+              <ProductListSearch
+                regionText={regionText}
+                category={category}
+                search={search}
+                setSearch={setSearch}
+              ></ProductListSearch>
+            </ProductList>
+            <BottomPageSpace></BottomPageSpace>
+          </TradeListDiv>
+        </TradeListRightDiv>
+      </TradeListAllDiv>
     </TradeListFrameDiv>
   );
 };
 
+const TradeListCategory = ({ setCategory, categoryList }) => {
+  const changeCategory = (num: number) => {
+    setCategory(categoryList[num]);
+    let selectedCategory: any;
+    if (num == 0) {
+      selectedCategory = document.querySelector('#allCategory');
+    } else if (num == 1) {
+      selectedCategory = document.querySelector('#moniter');
+    } else if (num == 2) {
+      selectedCategory = document.querySelector('#keyboard');
+    } else if (num == 3) {
+      selectedCategory = document.querySelector('#mouse');
+    } else if (num == 4) {
+      selectedCategory = document.querySelector('#life');
+    } else if (num == 5) {
+      selectedCategory = document.querySelector('#etc');
+    }
+    let allCategory = document.querySelectorAll('.category');
+    allCategory.forEach((category: any) => {
+      category.style.color = '#000';
+      category.style.fontWeight = 'normal';
+      category.style.textDecoration = 'none';
+    });
+    selectedCategory.style.color = '#4786fa';
+    selectedCategory.style.fontWeight = 'bold';
+    selectedCategory.style.textDecoration = 'underline';
+  };
+  return (
+    <CategoryList>
+      <CategoryItem
+        id='allCategory'
+        className='category'
+        onClick={() => changeCategory(0)}
+      >
+        전체
+      </CategoryItem>
+      <CategoryItem
+        id='moniter'
+        className='category'
+        onClick={() => changeCategory(1)}
+      >
+        모니터
+      </CategoryItem>
+      <CategoryItem
+        id='keyboard'
+        className='category'
+        onClick={() => changeCategory(2)}
+      >
+        키보드
+      </CategoryItem>
+      <CategoryItem
+        id='mouse'
+        className='category'
+        onClick={() => changeCategory(3)}
+      >
+        마우스
+      </CategoryItem>
+      <CategoryItem
+        id='life'
+        className='category'
+        onClick={() => changeCategory(4)}
+      >
+        생활용품
+      </CategoryItem>
+      <CategoryItem
+        id='etc'
+        className='category'
+        onClick={() => changeCategory(5)}
+      >
+        기타용품
+      </CategoryItem>
+    </CategoryList>
+  );
+};
 const AuctionTradeList = () => {
   return (
     <CategoryList>

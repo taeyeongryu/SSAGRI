@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import ClassicEditor from '../ckeditor';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import { useState } from 'react';
 
@@ -133,16 +133,6 @@ const CreateAndUpdateDivItemDown = styled.div`
 const TradeCreate = () => {
   const [data, setData] = useState<string>('');
 
-  // ClassicEditor
-  //   // Note that you do not have to specify the plugin and toolbar configuration — using defaults from the build.
-  //   .create(document.querySelector('#ckeditor') as HTMLElement)
-  //   .then((editor) => {
-  //     console.log('Editor was initialized', editor);
-  //   })
-  //   .catch((error) => {
-  //     console.error(error.stack);
-  //   });
-
   return (
     <CreateAndUpdateFrame>
       <CreateAndUpdateDiv>
@@ -183,20 +173,21 @@ const TradeCreate = () => {
                   toolbar: [
                     'undo',
                     'redo',
+                    '|',
                     'heading',
                     '|',
                     'bold',
                     'italic',
-                    'bulletedList',
-                    'blockQuote',
-                    '|',
-                    'insertTable',
-                    'tableColumn',
-                    'tableRow',
-                    'mergeTableCells',
-                    '|',
-                    'Image'
+                    // '|',
+                    // 'bulletedList',
+                    // 'numberedList',
+                    // 'blockQuote',
+                    '|'
+                    // 'link',
+                    // 'insertTable',
+                    // 'imageUpload'
                   ],
+                  language: 'ko',
                   placeholder: '내용을 입력해주세요...'
                 }}
                 data={data}
@@ -225,6 +216,7 @@ const TradeCreate = () => {
 };
 
 const TradeUpdate = () => {
+  const [data, setData] = useState<string>('');
   return (
     <CreateAndUpdateFrame>
       <CreateAndUpdateDiv>
@@ -256,14 +248,37 @@ const TradeUpdate = () => {
           <CreateAndUpdateDivItemDown>
             <CKEditor
               editor={ClassicEditor}
-              data='<p>Hello from CKEditor&nbsp;5!</p>'
+              config={{
+                // 여기에 config 입력
+                toolbar: [
+                  'undo',
+                  'redo',
+                  '|',
+                  'heading',
+                  '|',
+                  'bold',
+                  'italic',
+                  // '|',
+                  // 'bulletedList',
+                  // 'numberedList',
+                  // 'blockQuote',
+                  '|'
+                  // 'link',
+                  // 'insertTable',
+                  // 'imageUpload'
+                ],
+                language: 'ko',
+                placeholder: '내용을 입력해주세요...'
+              }}
+              data={data}
               onReady={(editor) => {
                 // You can store the "editor" and use when it is needed.
                 console.log('Editor is ready to use!', editor);
               }}
               onChange={(event, editor) => {
-                const data = editor.getData();
-                console.log({ event, editor, data });
+                const inputData = editor.getData();
+                console.log({ event, editor, inputData });
+                setData(inputData);
               }}
               onBlur={(_event, editor) => {
                 console.log('Blur.', editor);

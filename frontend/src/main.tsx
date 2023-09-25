@@ -7,12 +7,13 @@ import axios from 'axios';
 
 // ClassicEditor
 //   // Note that you do not have to specify the plugin and toolbar configuration — using defaults from the build.
-//   .create(document.querySelector('#ckeditor-div') as HTMLElement)
+//   .create(document.querySelector('#ckeditor-div') as HTMLElement, {})
 //   .then((editor) => {
 //     console.log('Editor was initialized', editor);
 //   })
+//   // @ts-ignore
 //   .catch((error) => {
-//     console.error(error.stack);
+//     // console.error(error.stack);
 //   });
 
 // axios 설정
