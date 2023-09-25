@@ -17,7 +17,7 @@ import axios from 'axios';
 //   });
 
 // axios 설정
-// axios.defaults.baseURL = 'http://localhost:5000/api';
+// axios.defaults.baseURL = 'http://localhost:5000/api'; // 로컬 테스트 URL
 axios.defaults.baseURL = 'https://j9b209.p.ssafy.io/api';
 axios.defaults.withCredentials = true; // refreshToken cookie를 주고받기 위함
 

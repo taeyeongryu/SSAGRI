@@ -2,7 +2,6 @@ package com.ssafy.ssagri.domain.user.service;
 
 import com.ssafy.ssagri.domain.redis.RedisService;
 import com.ssafy.ssagri.domain.user.repository.UserLoginAndLogoutRepository;
-import com.ssafy.ssagri.domain.user.repository.UserRegistRepository;
 import com.ssafy.ssagri.dto.user.ResponseDTO;
 import com.ssafy.ssagri.dto.user.UserLoginDTO;
 import com.ssafy.ssagri.util.exception.CustomException;
@@ -18,8 +17,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-
-import java.io.IOException;
 
 import static com.ssafy.ssagri.util.ResponseStatusEnum.*;
 import static com.ssafy.ssagri.util.exception.CustomExceptionStatus.*;

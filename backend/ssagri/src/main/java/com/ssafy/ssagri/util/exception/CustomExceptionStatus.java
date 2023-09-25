@@ -42,7 +42,12 @@ public enum CustomExceptionStatus {
     //Redis = 16xx
     REDIS_GET_VALUE_FAIL(-1600, "redis 키값으로 value를 찾아오는 것을 실패했습니다. (입력 값 다름)"),
 
+    //file = 17xx
+    FILE_UPLOAD_FAIL(-1700, "파일 업로드 과정에서 문제가 발생했습니다."),
+    FILE_DOWNLOAD_FAIL(-1701, "파일 다운로드 과정에서 문제가 발생했습니다."),
 
+    //mypage = 18xx
+    MYPAGE_PROFILE_FAIL(-1800, "마이페이지 프로필 갱신에 실패했습니다"),
     //ChatRoom = 2xxx
     CHATROOM_DOES_NOT_EXIST(-2002, "존재하지 않는 채팅방입니다."),
 

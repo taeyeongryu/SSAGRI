@@ -10,13 +10,14 @@ import com.amazonaws.services.s3.model.PutObjectResult;
 import com.ssafy.ssagri.domain.auction.dto.Images;
 import com.ssafy.ssagri.domain.auction.repository.AuctionPhotoRepository;
 import com.ssafy.ssagri.domain.auction.repository.AuctionRepository;
-import com.ssafy.ssagri.domain.user.repository.UserRegistRepository;
+import com.ssafy.ssagri.domain.user.repository.UserRegistAndModifyRepository;
 import com.ssafy.ssagri.domain.auction.dto.AuctionProductAllDTO;
 import com.ssafy.ssagri.domain.auction.dto.AuctionProductCreateDTO;
 import com.ssafy.ssagri.entity.auction.AuctionProduct;
 import com.ssafy.ssagri.entity.auction.AuctionProductImage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
@@ -41,9 +42,10 @@ public class AuctionProductService {
     @Value("${s3.learnershigh.url}")
     private String URL;
 
+    @Qualifier("s3")
     private final AmazonS3 amazonS3;
     private final AuctionRepository auctionRepository;
-    private final UserRegistRepository userRegistRepository;
+    private final UserRegistAndModifyRepository userRegistRepository;
     private final AuctionPhotoRepository auctionPhotoRepository;
 
 
