@@ -414,6 +414,7 @@ const SignInAndUpComponent = () => {
   const [isConfirmValid, setIsConfirmValid] = useState(false);
   // @ts-ignore
   const [isNicknameValid, setIsNicknameValid] = useState(false);
+  const [isNicknameUnique, setIsNicknameUnique] = useState(false);
 
   // 인증번호 확인 창 보이는 여부
   const [showVerify, setShowVerify] = useState(false);
@@ -578,10 +579,13 @@ const SignInAndUpComponent = () => {
   // 인증번호 확인
   const checkVerificationCode = (e) => {
     e.preventDefault();
+    console.log(verifyCode);
 
     axios
-      .post('/user/regist/check/authcode-valid', {
-        authcode: verifyCode
+      .get('/user/regist/check/authcode-valid', {
+        params: {
+          authcode: verifyCode
+        }
       })
       .then((res) => {
         // 인증 완료
@@ -611,12 +615,12 @@ const SignInAndUpComponent = () => {
         .then(() => {
           // 닉네임이 사용가능한 경우
           setNicknameMessage('사용 가능한 닉네임입니다.');
-          setIsNicknameValid(true);
+          setIsNicknameUnique(true);
         })
         .catch(() => {
           // 이미 등록된 닉네임인 경우
           setNicknameMessage('사용중인 닉네임입니다.');
-          setIsNicknameValid(false);
+          setIsNicknameUnique(false);
         });
     }
   };
@@ -695,12 +699,12 @@ const SignInAndUpComponent = () => {
   }, []);
 
   useEffect(() => {
-    if (isEmailValid && isPasswordValid && isConfirmValid && isNicknameValid) {
+    if (isEmailValid && isPasswordValid && isConfirmValid && isNicknameUnique) {
       setJoinBtnActive(true);
     } else {
       setJoinBtnActive(false);
     }
-  }, [isEmailValid, isPasswordValid, isConfirmValid, isNicknameValid]);
+  }, [isEmailValid, isPasswordValid, isConfirmValid, isNicknameUnique]);
 
   return (
     <Container id='container' style={{ margin: 'auto' }}>
