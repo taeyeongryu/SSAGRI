@@ -8,10 +8,8 @@ import com.ssafy.ssagri.entity.board.Board;
 import com.ssafy.ssagri.entity.board.BoardList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -107,6 +105,7 @@ public class BoardService {
     }
 
     // 게시판 클릭 시 조회수 증가
+    @Transactional
     public void boardClick(Long boardNo){
         Board board1 = boardRopository.findByNo(boardNo);
 
@@ -135,6 +134,18 @@ public class BoardService {
                                 .getBoardLife().plusHours(1)).build();
 
         boardRopository.save(board);
+
+        boardListRepository.save(boardList);
+
+    }
+
+    // 게시글에 좋아요 누르기
+    @Transactional
+    public void writeLike(Long writeNo){
+        BoardList boardList1 = boardListRepository.findByNo(writeNo);
+
+        BoardList boardList = BoardList.builder()
+                .like(boardList1.getLike()+1).build();
 
         boardListRepository.save(boardList);
 

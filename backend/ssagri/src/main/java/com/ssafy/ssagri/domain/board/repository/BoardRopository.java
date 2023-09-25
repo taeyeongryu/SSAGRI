@@ -1,6 +1,5 @@
 package com.ssafy.ssagri.domain.board.repository;
 
-import com.ssafy.ssagri.domain.board.dto.BoardDto;
 import com.ssafy.ssagri.entity.board.Board;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
