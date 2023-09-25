@@ -73,7 +73,7 @@ public class JwtUtil {
         }
     }
 
-    @Operation(summary = "payload 파싱", description = "토큰 받아 userNo 파싱하기")
+    @Operation(summary = "payload 파싱", description = "액세스 토큰 받아 userNo 파싱하기")
     public static Long getUserNo(String token){
         Claims claims = Jwts.parser()
                 .setSigningKey(secretKey)

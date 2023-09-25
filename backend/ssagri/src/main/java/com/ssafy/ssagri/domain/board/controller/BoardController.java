@@ -5,6 +5,7 @@ import com.ssafy.ssagri.domain.auction.repository.AuctionCustomRepository;
 import com.ssafy.ssagri.domain.board.dto.BoardClickDto;
 import com.ssafy.ssagri.domain.board.dto.BoardCreateDto;
 import com.ssafy.ssagri.domain.board.dto.BoardDto;
+import com.ssafy.ssagri.domain.board.dto.BoardWriteDto;
 import com.ssafy.ssagri.domain.board.repository.BoardRopository;
 import com.ssafy.ssagri.domain.board.service.BoardService;
 import io.swagger.annotations.Api;
@@ -27,21 +28,21 @@ public class BoardController {
     // 조회수로 오름차순한 게시판이름이랑 조회수 출력
     @GetMapping("/click-board-list")
     @ApiOperation("조회수로 오름차순한 게시판이름이랑 조회수 출력")
-    public List<BoardClickDto> boardClickList(){
+    public List<BoardClickDto> boardClickList() {
         return boardService.boardClickList();
     }
 
     // 타이틀로 오름차순한 게시판 리스트출력
     @GetMapping("/title-board-list")
     @ApiOperation("이름으로 오름차순한 게시판 리스트출력")
-    public List<BoardClickDto> boardTitleList(){
+    public List<BoardClickDto> boardTitleList() {
         return boardService.boardTitleList();
     }
 
     // 모든 게시판 출력
     @GetMapping(value = "/all-list")
     @ApiOperation("모든 게시판 출력")
-    public List<BoardDto> allList(){
+    public List<BoardDto> allList() {
 
         return boardService.boardList();
 
@@ -50,13 +51,17 @@ public class BoardController {
     // 게시판 등록
     @PostMapping(value = "/regist")
     @ApiOperation("게시판 등록")
-    public void boardregist(@RequestBody BoardCreateDto boardCreateDto){
+    public void boardregist(@RequestBody BoardCreateDto boardCreateDto) {
         boardService.boardregist(boardCreateDto);
 
     }
 
-    // 게시글 등록
-
+    // 게시판에 글 쓰기
+    @PostMapping(value = "/write")
+    @ApiOperation("게시판에 글 쓰기")
+    public void boardWrite(@RequestBody BoardWriteDto boardWriteDto) {
+        boardService.boardWrite(boardWriteDto);
 
 
     }
+}

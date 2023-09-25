@@ -3,12 +3,17 @@ package com.ssafy.ssagri.domain.board.service;
 import com.ssafy.ssagri.domain.board.dto.BoardClickDto;
 import com.ssafy.ssagri.domain.board.dto.BoardCreateDto;
 import com.ssafy.ssagri.domain.board.dto.BoardDto;
+import com.ssafy.ssagri.domain.board.dto.BoardWriteDto;
+import com.ssafy.ssagri.domain.board.repository.BoardListRepository;
 import com.ssafy.ssagri.domain.board.repository.BoardRopository;
 import com.ssafy.ssagri.domain.user.repository.UserRegistRepository;
 import com.ssafy.ssagri.entity.board.Board;
+import com.ssafy.ssagri.entity.board.BoardList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +29,7 @@ public class BoardService {
 
     final private BoardRopository boardRopository;
     final private UserRegistRepository userRegistRepository;
+    final private BoardListRepository boardListRepository;
 
     // 조회수로 오름차순한 게시판이름이랑 조회수 출력
     public List<BoardClickDto> boardClickList(){
@@ -99,5 +105,37 @@ public class BoardService {
 
     }
 
+<<<<<<< HEAD
     //
+=======
+    // 게시글 등록
+    @Transactional
+    public void boardWrite(BoardWriteDto boardWriteDto){
+        BoardList boardList = BoardList.builder()
+                .user(userRegistRepository.findByNo(boardWriteDto.getUserNo()))
+                .board(boardRopository.findByNo(boardWriteDto.getBoardNo()))
+                .title(boardWriteDto.getTitle())
+                .allowComment(boardWriteDto.getAllowComment())
+                .view(0)
+                .content(boardWriteDto.getContents())
+                .like(0).build();
+
+        boardListRepository.save(boardList);
+
+    }
+
+    // 게시글 모두 출력
+//    public Page<BoardListRes> boardList(){
+//
+//        PageRequest pageRequest = PageRequest.of(0,5);
+//
+//        Page<BoardList> boardwritelist = boardListRepository.findAll(pageRequest);
+//
+//
+//        boardwritelist.map(B::new);
+//
+//        return result;
+//    }
+
+>>>>>>> 165a76e6211b191b2523a0fe73503103451099b0
 }
