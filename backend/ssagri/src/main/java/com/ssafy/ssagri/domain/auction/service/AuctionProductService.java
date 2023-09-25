@@ -42,7 +42,7 @@ public class AuctionProductService {
     @Value("${s3.learnershigh.url}")
     private String URL;
 
-//    @Qualifier("s3")
+    @Qualifier("s3")
     private final AmazonS3 amazonS3;
     private final AuctionRepository auctionRepository;
     private final UserRegistAndModifyRepository userRegistRepository;
@@ -80,7 +80,7 @@ public class AuctionProductService {
                      .build();
 
                 result.add(auctionProductAllDTO);
-
+git 
          }
 
          return result;
