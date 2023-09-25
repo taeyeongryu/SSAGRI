@@ -415,6 +415,9 @@ const SignInAndUpComponent = () => {
   // @ts-ignore
   const [isNicknameValid, setIsNicknameValid] = useState(false);
 
+  // 인증번호 확인 창 보이는 여부
+  const [showVerify, setShowVerify] = useState(false);
+
   // 안내 메시지
   const [signUpEmailMessage, setSignUpEmailMessage] = useState('');
   const [signUpPasswordMessage, setSignUpPasswordMessage] = useState('');
@@ -555,10 +558,12 @@ const SignInAndUpComponent = () => {
       })
       .then((res) => {
         // 메일 전송 성공
+        setShowVerify(true);
         console.log(res);
       })
       .catch((err) => {
         // 메일 전송 실패
+        setShowVerify(false);
         console.log(err);
       });
   };
@@ -575,18 +580,21 @@ const SignInAndUpComponent = () => {
     e.preventDefault();
 
     axios
-      .post('/user/regist/check/authcode-valid', verifyCode)
+      .post('/user/regist/check/authcode-valid', {
+        authcode: verifyCode
+      })
       .then((res) => {
         // 인증 완료
         console.log(res);
+        // 이메일 인증 여부 true로 바꾼다.
         setIsEmailValid(true);
         setSignUpEmailMessage('인증이 완료되었습니다.');
-        // 인증 여부 true로 바꾼다.
       })
       .catch((err) => {
         // 인증 실패
         console.log(err);
-        // 인증 여부 false,
+        // 이메일 인증 여부 false
+        setIsEmailValid(false);
       });
   };
 
@@ -774,27 +782,29 @@ const SignInAndUpComponent = () => {
                 인증번호 전송
               </Verify>
             </div>
-            <div
-              style={{
-                display: 'flex',
-                gap: '10px',
-                alignItems: 'center',
-                justifyContent: 'end'
-              }}
-            >
-              <Input
-                style={{ width: '102px' }}
-                type='text'
-                value={verifyCode}
-                onChange={onChangeVerifyCode}
-              ></Input>
-              <Verify
-                style={{ width: '102px' }}
-                onClick={checkVerificationCode}
+            {showVerify ? (
+              <div
+                style={{
+                  display: 'flex',
+                  gap: '10px',
+                  alignItems: 'center',
+                  justifyContent: 'end'
+                }}
               >
-                인증번호 확인
-              </Verify>
-            </div>
+                <Input
+                  style={{ width: '102px' }}
+                  type='text'
+                  value={verifyCode}
+                  onChange={onChangeVerifyCode}
+                ></Input>
+                <Verify
+                  style={{ width: '102px' }}
+                  onClick={checkVerificationCode}
+                >
+                  인증번호 확인
+                </Verify>
+              </div>
+            ) : null}
             <Label htmlFor='password'>
               <div>비밀번호</div>
               {isPasswordValid ? (
