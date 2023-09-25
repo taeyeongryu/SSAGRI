@@ -17,6 +17,7 @@ import com.ssafy.ssagri.entity.auction.AuctionProduct;
 import com.ssafy.ssagri.entity.auction.AuctionProductImage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
@@ -41,6 +42,7 @@ public class AuctionProductService {
     @Value("${s3.learnershigh.url}")
     private String URL;
 
+    @Qualifier("s3")
     private final AmazonS3 amazonS3;
     private final AuctionRepository auctionRepository;
     private final UserRegistRepository userRegistRepository;

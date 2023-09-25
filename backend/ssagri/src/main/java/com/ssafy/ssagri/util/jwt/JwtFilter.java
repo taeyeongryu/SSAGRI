@@ -42,6 +42,7 @@ public class JwtFilter extends OncePerRequestFilter {
             "/api/v2/api-docs",
             "/api/jwt", //TEST API 주소
             "/api/user/", //로그인, 로그아웃 관련
+            "/api/file/", //파일 업로드 관련
             "/api/test" //테스팅 환경
     };
 
