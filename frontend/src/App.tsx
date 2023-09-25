@@ -25,6 +25,7 @@ import { useRecoilState } from 'recoil';
 import { isLoggedInAtom } from './states/account/loginAtom';
 
 const App = () => {
+  // @ts-ignore
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
 
   useEffect(() => {

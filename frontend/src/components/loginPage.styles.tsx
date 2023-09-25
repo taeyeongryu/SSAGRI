@@ -2,7 +2,7 @@ import { styled, keyframes } from 'styled-components';
 import { useState, useRef, useEffect } from 'react';
 import { Avatar } from 'antd';
 import axios from 'axios';
-import { onLogout, onLoginSuccess } from '../utils/user';
+import { onLoginSuccess } from '../utils/user';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { isLoggedInAtom } from '../states/account/loginAtom';
