@@ -400,17 +400,17 @@ const SignInAndUpComponent = () => {
   //   // axios 헤더에 jwt 토큰 담기
   //   axios.defaults.headers.common['Authorization'] = accessToken;
 
-    // userNo를 localStorage에 넣기
-//    let payload = accessToken.substring(
-//      accessToken.indexOf('.') + 1,
-//      accessToken.lastIndexOf('.')
-//    );
-//    let dec = base64.decode(payload);
-//    let userNo = JSON.parse(dec).userNo;
-//    localStorage.setItem('userNo', userNo);
+  // userNo를 localStorage에 넣기
+  //    let payload = accessToken.substring(
+  //      accessToken.indexOf('.') + 1,
+  //      accessToken.lastIndexOf('.')
+  //    );
+  //    let dec = base64.decode(payload);
+  //    let userNo = JSON.parse(dec).userNo;
+  //    localStorage.setItem('userNo', userNo);
 
-    // axios 헤더에 jwt 토큰 담기
-//    axios.defaults.headers.common['Authorization'] = accessToken;
+  // axios 헤더에 jwt 토큰 담기
+  //    axios.defaults.headers.common['Authorization'] = accessToken;
 
   //   // 액세스토큰 만료하기 전에 로그인 연장
   //   setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
@@ -428,12 +428,6 @@ const SignInAndUpComponent = () => {
   //       // 로그인 실패처리
   //     });
   // };
-
-  // 로그아웃
-  const onLogoutHandler = (e) => {
-    e.preventDefault();
-    onLogout();
-  };
 
   // 회원가입 //
   const regionList = ['대전', '서울', '구미', '광주', '부울경'];
@@ -765,8 +759,6 @@ const SignInAndUpComponent = () => {
             <A>비밀번호를 잊으셨나요?</A>
           </FormContent>
           <Button onClick={onLoginHandler}>로그인</Button>
-          <Button onClick={onLogoutHandler}>로그아웃</Button>
-          <Button onClick={testRefill}>토큰 재발급 테스트</Button>
         </Form>
       </FormContainer>
       {/* 회원가입 폼*/}

@@ -6,6 +6,9 @@ const JWT_EXPIRY_TIME = 24 * 3600 * 1000; // 만료 시간 (24시간)
 // 로그인 성공
 const onLoginSuccess = (response: any) => {
   console.log('로그인 성공!');
+  // 로컬 스토리지에 로그인 여부 저장 (새로고침 시 날아가는 것 때문)
+  localStorage.setItem('isLoggedIn', 'true');
+
   const accessToken = response.headers['access-token'];
   // axios 헤더에 jwt 토큰 담기
   axios.defaults.headers.common['Authorization'] = accessToken;
@@ -38,6 +41,8 @@ const onLogout = () => {
       console.log(res);
       // axios의 헤더에 AccessToken 초기화
       delete axios.defaults.headers.common['Authorization'];
+      // 로컬스토리지 로그인여부 삭제
+      localStorage.removeItem('isLoggedIn');
       // cookie에 저장된 RefreshToken 삭제
       // 클라이언트 측에서 불가, 서버 측에서 만료시간을 변경하는 등의 방식으로 해결
     })
