@@ -5,6 +5,7 @@ import com.ssafy.ssagri.domain.auction.repository.AuctionCustomRepository;
 import com.ssafy.ssagri.domain.board.dto.BoardClickDto;
 import com.ssafy.ssagri.domain.board.dto.BoardCreateDto;
 import com.ssafy.ssagri.domain.board.dto.BoardDto;
+import com.ssafy.ssagri.domain.board.dto.BoardWriteDto;
 import com.ssafy.ssagri.domain.board.repository.BoardRopository;
 import com.ssafy.ssagri.domain.board.service.BoardService;
 import io.swagger.annotations.Api;
@@ -52,6 +53,14 @@ public class BoardController {
     @ApiOperation("게시판 등록")
     public void boardregist(@RequestBody BoardCreateDto boardCreateDto){
         boardService.boardregist(boardCreateDto);
+
+    }
+
+    // 게시판에 글 쓰기
+    @PostMapping(value = "/write")
+    @ApiOperation("게시판에 글 쓰기")
+    public void boardWrite(@RequestBody BoardWriteDto boardWriteDto){
+        boardService.boardWrite(boardWriteDto);
 
     }
 
