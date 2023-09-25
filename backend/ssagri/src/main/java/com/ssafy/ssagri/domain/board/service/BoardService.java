@@ -92,9 +92,12 @@ public class BoardService {
                 .boardClick(0)
                 .showName(boardCreateDto.getWho())
                 .createTime(LocalDateTime.now())
+                .boardLife(LocalDateTime.now().plusDays(7))
                 .allowDelete(false).build();
 
         boardRopository.save(board);
 
     }
+
+    //
 }

@@ -53,9 +53,13 @@ public class Board extends BaseTimeEntity {
     @ColumnDefault("1")
     private boolean allowDelete;
 
+    // 게시판 생명 주기
+    @Column(name = "board_life",nullable = false)
+    private LocalDateTime boardLife;
+
 
     @Builder
-    public Board(User user, String title, String showName, boolean allowDelete, String boardColor, int boardClick, LocalDateTime createTime) {
+    public Board(User user, String title, String showName, boolean allowDelete, LocalDateTime boardLife , int boardClick, LocalDateTime createTime) {
         this.user = user;
         this.title = title;
         this.showName = showName;
@@ -63,5 +67,6 @@ public class Board extends BaseTimeEntity {
 //        this.boardColor = boardColor;
         this.boardClick = boardClick;
         this.createTime = createTime;
+        this.boardLife =boardLife;
     }
 }

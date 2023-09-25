@@ -55,5 +55,8 @@ public class BoardController {
 
     }
 
+    // 게시글 등록
+
+
 
     }
