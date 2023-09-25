@@ -297,6 +297,7 @@ const SignInAndUpComponent = () => {
   const onChange = (e) => {
     if (e.target.files[0]) {
       setProfile(e.target.files[0]);
+      console.log(e.target.files[0]);
     } else {
       // 업로드 취소할 시
       setProfile(null);
@@ -625,8 +626,25 @@ const SignInAndUpComponent = () => {
     }
   };
 
+  // 지역 필터링
+  const regionFormat = (region: string) => {
+    if (region === '서울') {
+      return 'SEOUL';
+    } else if (region === '구미') {
+      return 'GUMI';
+    } else if (region === '광주') {
+      return 'GWANGJU';
+    } else if (region === '부울경') {
+      return 'BUG';
+    } else {
+      return 'DAEJEON';
+    }
+  };
+
+  // 회원가입 요청
   const onSignUp = (e) => {
     e.preventDefault();
+
     const formData = new FormData();
     // 프로필 사진 추가
     // @ts-ignore
@@ -634,7 +652,7 @@ const SignInAndUpComponent = () => {
     // 필드 입력값 추가
     formData.append('email', signUpForm.email); // 이메일
     formData.append('password', signUpForm.password); // 비밀번호
-    formData.append('regions', signUpForm.region); // 지역
+    formData.append('regions', regionFormat(signUpForm.region)); // 지역
     formData.append('number', signUpForm.cardinalNumber); // 기수
     formData.append('nickname', signUpForm.nickname); // 닉네임
 
