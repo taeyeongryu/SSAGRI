@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 import axios from 'axios';
+import { useRecoilValue } from 'recoil';
+import { isLoggedInAtom } from '../../states/account/loginAtom';
 const AuctionDiv = styled.div`
   width: 100%;
 `;
@@ -370,9 +372,13 @@ const AuctionPage = () => {
       });
   };
 
+  const isLoggedIn = useRecoilValue(isLoggedInAtom);
+
   useEffect(() => {
-    GetAuctionItemList();
-  }, []);
+    if (isLoggedIn) {
+      GetAuctionItemList();
+    }
+  }, [isLoggedIn]);
 
   return (
     <AuctionDiv>

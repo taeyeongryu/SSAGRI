@@ -15,37 +15,49 @@ import javax.persistence.*;
 @Table(name = "board_list")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BoardList extends BaseTimeEntity {
+
+    // 글 no
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "board_list_no")
     private Long no;
 
+
+    // 글을 쓰는 사람 no
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_list_writer_no",nullable = false)
     private User user;
 
+    // 게시판 no
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_no",nullable = false)
     private Board board;
 
+    // 글 제목
     @Column(name = "board_list_title",nullable = false, length = 55)
     private String title;
 
-    @Column(name = "board_list_show_name",nullable = false)
-    @ColumnDefault("true")
-    private boolean showName;
+//     // 댓글 작성
+//    @Column(name = "board_list_show_name",nullable = false)
+//    @ColumnDefault("true")
+//    private boolean showName;
 
+    // 댓글 작성
     @Column(name = "board_list_allow_comment",nullable = false)
+    @ColumnDefault("true")
     private boolean allowComment;
 
+    // 조회수
     @Column(name = "board_list_view",nullable = false)
     @ColumnDefault("0")
     private int view;
 
+    // 글 내용
     @Lob
     @Column(name = "board_list_content",nullable = false)
     private String content;
 
+    // 글 좋아요 수
     @Column(name = "board_list_like",nullable = false)
     @ColumnDefault("0")
     private int like;
@@ -56,7 +68,7 @@ public class BoardList extends BaseTimeEntity {
         this.user = user;
         this.board = board;
         this.title = title;
-        this.showName = showName;
+//        this.showName = showName;
         this.allowComment = allowComment;
         this.view = view;
         this.content = content;
