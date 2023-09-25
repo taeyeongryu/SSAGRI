@@ -1,7 +1,12 @@
 import { styled } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { onSilentRefresh } from '../utils/user';
+import { onLogout, onSilentRefresh } from '../utils/user';
+
+// 로그인 여부
+import { useRecoilState } from 'recoil';
+import { isLoggedInAtom } from '../states/account/loginAtom';
+// 로그아웃
 
 const NavbarDiv = styled.div`
   position: absolute;
@@ -69,6 +74,8 @@ const Title = () => {
 };
 
 const MenuBar = () => {
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
+
   const navigate = useNavigate();
 
   const [showOverlay, setShowOverlay] = useState(false);
@@ -80,6 +87,11 @@ const MenuBar = () => {
   // MenuName에서 마우스를 떠남 이벤트 핸들러
   const handleMouseLeave = () => {
     setShowOverlay(false);
+  };
+
+  const goLogout = () => {
+    onLogout();
+    setIsLoggedIn(false);
   };
 
   const goLogin = () => {
@@ -97,15 +109,32 @@ const MenuBar = () => {
   const goCommu = () => {
     navigate('/community');
   };
+
+  useEffect(() => {
+    console.log('로그인 여부 바뀜');
+  }, [isLoggedIn]);
+
   return (
     <MenuDiv>
-      <MenuName
-        onClick={goLogin}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      >
-        로그인
-      </MenuName>
+      {isLoggedIn}
+      {isLoggedIn ? (
+        <MenuName
+          onClick={goLogout}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          로그아웃
+        </MenuName>
+      ) : (
+        <MenuName
+          onClick={goLogin}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          로그인
+        </MenuName>
+      )}
+
       <MenuName
         onClick={goMain}
         onMouseEnter={handleMouseEnter}
