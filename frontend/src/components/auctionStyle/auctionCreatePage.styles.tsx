@@ -272,7 +272,39 @@ const AuctionCreate = () => {
 
   // console.log(selectedDate, itemName, itemDescription);
 
+  // 사진 업로드
   const photoInput = useRef();
+
+  const [images, setImages] = useState<string[]>([]);
+  const [uploadImage, setUploadImage] = useState([]); // 업로드할 사진 파일들
+
+  const addImage = (e) => {
+    const nowSelectedImageList = e.target.files; // 한번에 받은 이미지리스트
+    const nowImageList = [...uploadImage];
+
+    if (!nowSelectedImageList[0]) return;
+    if (nowImageList.length + nowSelectedImageList.length > 10) {
+      return alert('최대 10개의 사진만 첨부할 수 있습니다.');
+    }
+    const readAndPreview = (file: any) => {
+      if (/\.(jpe?g|png|gif)$/i.test(file.name)) {
+        const reader = new FileReader();
+        reader.onload = () =>
+          setImages((prev) => [...prev, reader.result as string]);
+        reader.readAsDataURL(file);
+      }
+    };
+    if (nowSelectedImageList) {
+      [].forEach.call(nowSelectedImageList, readAndPreview);
+    }
+
+    for (let i = 0; i < nowSelectedImageList.length; i++) {
+      // @ts-ignore
+      nowImageList.push(nowSelectedImageList[i]);
+    }
+    setUploadImage(nowImageList);
+    console.log(nowImageList);
+  };
 
   const navigate = useNavigate();
   const goAuction = () => {
@@ -406,12 +438,26 @@ const AuctionCreate = () => {
               </div>
               <input
                 type='file'
-                accept='image/jpg, image/jped, image/png'
+                accept='image/jpg, image/jpeg, image/png'
                 multiple
                 // @ts-ignore
                 ref={photoInput}
                 style={{ display: 'none' }}
+                onChange={addImage}
               />
+              <div style={{ display: 'flex' }} className='preview'>
+                {images.map((url, index) => {
+                  return (
+                    <div>
+                      <img
+                        style={{ width: '200px' }}
+                        src={url}
+                        key={index}
+                      ></img>
+                    </div>
+                  );
+                })}
+              </div>
             </InputTag3>
           </CreateDiv6>
           <CreateDiv7>
