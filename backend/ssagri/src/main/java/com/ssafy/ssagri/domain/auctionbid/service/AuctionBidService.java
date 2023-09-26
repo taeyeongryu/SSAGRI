@@ -4,6 +4,7 @@ import com.ssafy.ssagri.domain.auction.repository.AuctionRepository;
 import com.ssafy.ssagri.domain.auctionbid.dto.AuctionBidSaveRequestDto;
 import com.ssafy.ssagri.domain.auctionbid.dto.AuctionBidSelectResponseDto;
 import com.ssafy.ssagri.domain.auctionbid.repository.AuctionBidRepository;
+import com.ssafy.ssagri.domain.notification.NotificationService;
 import com.ssafy.ssagri.domain.user.repository.UserRegistAndModifyRepository;
 import com.ssafy.ssagri.entity.auction.AuctionBid;
 import com.ssafy.ssagri.entity.auction.AuctionProduct;
@@ -32,11 +33,12 @@ public class AuctionBidService {
     private final AuctionBidRepository auctionBidRepository;
     private final UserRegistAndModifyRepository userRegistAndModifyRepository;
     private final AuctionRepository auctionRepository;
+    private final NotificationService notificationService;
 
-    //SseEmitter Map
-    //String에 User 정보가 들어가야 함
-    private final Map<String, SseEmitter> sseEmitterMap = new ConcurrentHashMap<>();
 
+    /*
+    * 새롭게 입찰하는 메서드
+    * */
     @Transactional
     public Long save(AuctionBidSaveRequestDto auctionBidSaveRequestDto){
         log.info("AuctionBidService save");
@@ -67,7 +69,8 @@ public class AuctionBidService {
                 .build();
         auctionBidRepository.save(auctionBid);
 
-        //여기에 SSE 이벤트 추가해 줘야 함 private 메서드 만들고 호출하기
+        //이 Auction에 입찰했던 사람들한테 메시지 보내주기
+        notificationService.sendMessageToBidder(auctionProduct.getNo(),user.getNickname(),auctionBidSaveRequestDto.getAuctionBidPrice());
 
         return auctionBid.getNo();
     }
