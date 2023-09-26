@@ -28,6 +28,7 @@ public class UsedProductPhoto {
     private String usedProductPhotoLink;
 
     @Column(name = "used_product_photo_type",nullable = false)
+    @Enumerated(EnumType.STRING)
     private PhotoType  usedProductPhotoType;
 
     @Builder
