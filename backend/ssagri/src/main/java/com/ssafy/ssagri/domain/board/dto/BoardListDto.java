@@ -15,7 +15,7 @@ public class BoardListDto {
     private Long no;
 
     // 글을 쓰는 사람 no
-    private Long user;
+    private String user;
 
     // 게시판 no
     private String boardName;
