@@ -13,6 +13,9 @@ public enum CustomExceptionStatus {
     //ETC = 0xxx
     UTIL_ERR(-0100, "util 서비스 제공 도중 에러가 발생했습니다."),
 
+    //Oauth
+    OAUTH_USERINFO_PARSING_ERR(-900,"액세스 토큰 요청 후 유저 값 파싱 도중 문제가 발생했습니다."),
+
     //Register = 1xxx
     REGISTER_NICKNAME_IS_DUPLICATE(-1000, "유저 닉네임이 중복됩니다."),
     REGISTER_EMAIL_IS_DUPLICATE(-1001, "이메일이 중복됩니다."),
