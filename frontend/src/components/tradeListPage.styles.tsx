@@ -166,7 +166,26 @@ const PagingButtonText = styled.div`
 const ProductListSearch = ({ regionText, category, search, setSearch }) => {
   // region 데이터를 받아왔으므로, axios 호출을 하여 List를 얻어온다.
   const [responseList, setResponseList] = useState([]);
-  const [response, setResponse] = useState([]);
+  const [response, setResponse] = useState({});
+  const [number, setNumber] = useState<number>(0);
+
+  useEffect(() => {
+    search = search === null ? '' : search;
+    setSearch(search);
+    axios
+      .get(
+        `usedproduct/1?region=${regionText}&category=${category}&search=${search}&sort=like,desc&page=0&size=8`
+      )
+      .then((res) => {
+        setResponseList(res.data.content);
+        console.log('responseList: ', responseList);
+        setResponse(res.data);
+        console.log('response', response);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   useEffect(() => {
     search = search === null ? '' : search;
@@ -186,6 +205,22 @@ const ProductListSearch = ({ regionText, category, search, setSearch }) => {
       });
   }, [regionText, category, search]);
 
+  useEffect(() => {
+    axios
+      .get(
+        `usedproduct/1?region=${regionText}&category=${category}&search=${search}&sort=like,desc&page=${number}&size=8`
+      )
+      .then((res) => {
+        setResponseList(res.data.content);
+        console.log('responseList: ', responseList);
+        setResponse(res.data);
+        console.log('response', response);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [number]);
+
   return (
     <div
       style={{
@@ -201,7 +236,10 @@ const ProductListSearch = ({ regionText, category, search, setSearch }) => {
           <TradeProductItem02 key={id} item={item}></TradeProductItem02>
         ))}
       </ProductList02>
-      <BottomPageSpace response={response}></BottomPageSpace>
+      <BottomPageSpace
+        response={response}
+        setNumber={setNumber}
+      ></BottomPageSpace>
     </div>
   );
 };
@@ -417,38 +455,53 @@ const AuctionTradeList = () => {
   );
 };
 
-const BottomPageSpace = (response) => {
-  console.log('BottomPageSpace', response.response);
+const BottomPageSpace = ({ response, setNumber }) => {
+  console.log('BottomPageSpace', response);
   const totalPages = response.response.totalPages;
+
+  const changePage = (num: number) => {
+    console.log('changePage num: ', num);
+    setNumber(num);
+  };
 
   const rendering = () => {
     const result: any = [];
+    if (!response.response.first) {
+      result.push(
+        <PagingButton>
+          <PagingButtonText>&lt;&lt;</PagingButtonText>
+        </PagingButton>
+      );
+      result.push(
+        <PagingButton>
+          <PagingButtonText>&lt;</PagingButtonText>
+        </PagingButton>
+      );
+    }
+
     for (let i = 1; i <= totalPages; i++) {
       result.push(
-        <PagingButton key={i}>
+        <PagingButton key={i} onClick={() => changePage(i)}>
           <PagingButtonText>{i}</PagingButtonText>
+        </PagingButton>
+      );
+    }
+
+    if (!response.response.last) {
+      result.push(
+        <PagingButton>
+          <PagingButtonText>&gt;</PagingButtonText>
+        </PagingButton>
+      );
+      result.push(
+        <PagingButton>
+          <PagingButtonText>&gt;&gt;</PagingButtonText>
         </PagingButton>
       );
     }
     return result;
   };
 
-  return (
-    <PagingSpace>
-      <PagingButton>
-        <PagingButtonText>&lt;&lt;</PagingButtonText>
-      </PagingButton>
-      <PagingButton>
-        <PagingButtonText>&lt;</PagingButtonText>
-      </PagingButton>
-      {rendering()}
-      <PagingButton>
-        <PagingButtonText>&gt;</PagingButtonText>
-      </PagingButton>
-      <PagingButton>
-        <PagingButtonText>&gt;&gt;</PagingButtonText>
-      </PagingButton>
-    </PagingSpace>
-  );
+  return <PagingSpace>{rendering()}</PagingSpace>;
 };
 export { TradeList, AuctionTradeList, BottomPageSpace };

@@ -388,7 +388,7 @@ const SellerLocationAndTime03 = styled(SellerLocationAndTime01)`
   margin-top: 2px;
 `;
 
-const SearchDiv01 = (regionText) => {
+const SearchDiv01 = (regionText: any) => {
   const [search, setSearch] = useState<string>('');
   // console.log('TradeMain의 region 변화', regionText);
   const navigate = useNavigate();
