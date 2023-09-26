@@ -465,11 +465,20 @@ const BottomPageSpace = ({ response, setNumber }) => {
     setNumber(num - 1);
   };
 
+  const changeFirstPage = () => {
+    setNumber(0);
+  };
+
+  const changeLastPage = (num: number) => {
+    console.log('changePage num: ', num);
+    setNumber(num - 1);
+  };
+
   const rendering = () => {
     const result: any = [];
     if (!response.first) {
       result.push(
-        <PagingButton>
+        <PagingButton onClick={changeFirstPage}>
           <PagingButtonText>&lt;&lt;</PagingButtonText>
         </PagingButton>
       );
