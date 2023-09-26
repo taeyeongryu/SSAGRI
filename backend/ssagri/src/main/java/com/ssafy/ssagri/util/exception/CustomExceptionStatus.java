@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum CustomExceptionStatus {
+    //ETC = 0xxx
+    UTIL_ERR(-0100, "util 서비스 제공 도중 에러가 발생했습니다."),
 
     //Register = 1xxx
     REGISTER_NICKNAME_IS_DUPLICATE(-1000, "유저 닉네임이 중복됩니다."),

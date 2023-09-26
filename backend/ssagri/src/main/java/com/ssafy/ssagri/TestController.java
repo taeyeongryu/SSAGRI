@@ -4,6 +4,7 @@ import com.ssafy.ssagri.domain.user.repository.RandomFirstNameRepository;
 import com.ssafy.ssagri.util.mail.EmailService;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -15,6 +16,11 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 public class TestController {
 
+    @Value("${kakao.restapi.key}")
+    private String REST_API_KEY;
+
+    @Value("${kakao.redirect.key}")
+    private String REDIRECT_URI;
 
     @GetMapping
     public String test() {
@@ -22,10 +28,11 @@ public class TestController {
         return "TEST API 호출입니다.";
     }
 
-    @PostMapping("file")
-    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
-
-        return new ResponseEntity<>("업로드 성공", HttpStatus.OK);
+    @GetMapping("oauth")
+    public String test2() {
+        System.out.println("TEST");
+        return "https://kauth.kakao.com/oauth/authorize?client_id=" + REST_API_KEY + "&redirect_uri=" + REDIRECT_URI + "&response_type=code";
     }
+
 
 }
