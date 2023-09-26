@@ -21,7 +21,7 @@ public class AuctionBid extends BaseTimeEntity {
     private Long no;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "auction_product_bid_no",nullable = false)
+    @JoinColumn(name = "auction_product_bidder_no",nullable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
