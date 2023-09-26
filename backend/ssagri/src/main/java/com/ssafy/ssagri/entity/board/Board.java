@@ -44,8 +44,8 @@ public class Board extends BaseTimeEntity {
     private String boardColor;
 
     // 게시판 생성 시간
-    @Column(name = "board_create_time", nullable = true)
-    private LocalDateTime createTime;
+//    @Column(name = "board_create_time", nullable = true)
+//    private LocalDateTime createTime;
 
     // 게시판 익명 여부
     @Column(name = "board_show_name",nullable = false)
@@ -65,14 +65,16 @@ public class Board extends BaseTimeEntity {
 
 
     @Builder
-    public Board(User user, String title, String showName, boolean allowDelete, LocalDateTime boardLife, int boardClick, LocalDateTime createTime) {
+    public Board(User user, String title, String showName, boolean allowDelete, LocalDateTime boardLife, int boardClick, LocalDateTime deleteTime
+    , LocalDateTime createTime) {
         this.user = user;
         this.title = title;
         this.showName = showName;
         this.allowDelete = allowDelete;
 //        this.boardColor = boardColor;
         this.boardClick = boardClick;
-        this.createTime = createTime;
         this.boardLife = boardLife;
+        this.setDeleteDate(deleteTime);
+        this.setCreateDate(createTime);
     }
 }

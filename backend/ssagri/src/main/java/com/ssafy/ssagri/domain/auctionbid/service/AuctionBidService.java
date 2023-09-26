@@ -38,7 +38,7 @@ public class AuctionBidService {
     private final Map<String, SseEmitter> sseEmitterMap = new ConcurrentHashMap<>();
 
     @Transactional
-    public void save(AuctionBidSaveRequestDto auctionBidSaveRequestDto){
+    public Long save(AuctionBidSaveRequestDto auctionBidSaveRequestDto){
         log.info("AuctionBidService save");
         log.info("auctionBidSaveRequestDto = {}",auctionBidSaveRequestDto);
         //User, AuctionProduct 조회한다.
@@ -69,7 +69,7 @@ public class AuctionBidService {
 
         //여기에 SSE 이벤트 추가해 줘야 함 private 메서드 만들고 호출하기
 
-
+        return auctionBid.getNo();
     }
 
     public List<AuctionBidSelectResponseDto> selectAuctionBid(Long auctionProductNo){
