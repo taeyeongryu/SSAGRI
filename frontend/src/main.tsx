@@ -19,7 +19,11 @@ import axios from 'axios';
 // axios 설정
 axios.defaults.baseURL = 'http://localhost:5000/api'; // 로컬 테스트 URL
 <<<<<<< HEAD
+<<<<<<< HEAD
 /* axios.defaults.baseURL = 'https://j9b209.p.ssafy.io/api'; */
+=======
+// axios.defaults.baseURL = 'https://j9b209.p.ssafy.io/api';
+>>>>>>> 41bc406d203bc1bb36b205a0f0abafdea5bd0d72
 =======
 // axios.defaults.baseURL = 'https://j9b209.p.ssafy.io/api';
 >>>>>>> 41bc406d203bc1bb36b205a0f0abafdea5bd0d72
