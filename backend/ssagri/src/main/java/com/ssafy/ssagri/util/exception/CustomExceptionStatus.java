@@ -44,7 +44,13 @@ public enum CustomExceptionStatus {
 
     //file = 17xx
     FILE_UPLOAD_FAIL(-1700, "파일 업로드 과정에서 문제가 발생했습니다."),
-    FILE_DOWNLOAD_FAIL(-1700, "파일 다운로드 과정에서 문제가 발생했습니다."),
+    FILE_DOWNLOAD_FAIL(-1701, "파일 다운로드 과정에서 문제가 발생했습니다."),
+
+    //mypage = 18xx
+    MYPAGE_PROFILE_FAIL(-1800, "마이페이지 프로필 갱신에 실패했습니다"),
+
+    //Auction = 19xx
+    AUCTION_PRODUCT_DOES_NOT_EXIST(-1900, "존재하지 않는 경매 상품입니다."),
 
     //ChatRoom = 2xxx
     CHATROOM_DOES_NOT_EXIST(-2002, "존재하지 않는 채팅방입니다."),
@@ -53,6 +59,8 @@ public enum CustomExceptionStatus {
     USED_PRODUCT_DOES_NOT_EXIST(-3001, "존재하지 않는 중고상품 입니다."),
     USED_PRODUCT_LIKE_ALREADY_EXIST(-3002, "이미 좋아한 상품 입니다."),
     USED_PRODUCT_LIKE_DOES_NOT_EXIST(-3003,"좋아하지 않는 상품 입니다.");
+
+
 
 
     private final int code;

@@ -1,19 +1,16 @@
 package com.ssafy.ssagri.domain.board.service;
 
-import com.ssafy.ssagri.domain.board.dto.BoardClickDto;
-import com.ssafy.ssagri.domain.board.dto.BoardCreateDto;
-import com.ssafy.ssagri.domain.board.dto.BoardDto;
-import com.ssafy.ssagri.domain.board.dto.BoardWriteDto;
+import com.ssafy.ssagri.domain.board.dto.*;
 import com.ssafy.ssagri.domain.board.repository.BoardListRepository;
 import com.ssafy.ssagri.domain.board.repository.BoardRopository;
-import com.ssafy.ssagri.domain.user.repository.UserRegistRepository;
+import com.ssafy.ssagri.domain.user.repository.UserRegistAndModifyRepository;
 import com.ssafy.ssagri.entity.board.Board;
 import com.ssafy.ssagri.entity.board.BoardList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +25,7 @@ import java.util.List;
 public class BoardService {
 
     final private BoardRopository boardRopository;
-    final private UserRegistRepository userRegistRepository;
+    final private UserRegistAndModifyRepository userRegistAndModifyRepository;
     final private BoardListRepository boardListRepository;
 
     // 조회수로 오름차순한 게시판이름이랑 조회수 출력
@@ -68,8 +65,10 @@ public class BoardService {
     }
 
     // 게시판 모두 출력
-    public List<BoardDto> boardList(){
-        List<Board> boardlist = boardRopository.findAll();
+    public Page<BoardDto> boardList(Pageable pageable){
+        Page<Board> allboardlist = boardRopository.findAllByOrderByCreateDateAsc(pageable);
+
+        List<Board> boardlist = allboardlist.getContent();
 
         List<BoardDto> result = new ArrayList<>();
 
@@ -85,14 +84,14 @@ public class BoardService {
             result.add(boardDto);
         }
 
-        return result;
+        return new PageImpl<>(result, allboardlist.getPageable(), allboardlist.getTotalElements());
     }
 
     // 게시판 등록
     @Transactional
     public void boardregist(BoardCreateDto boardCreateDto){
         Board board = Board.builder()
-                .user(userRegistRepository.findByNo(boardCreateDto.getNo()))
+                .user(userRegistAndModifyRepository.findByNo(boardCreateDto.getNo()))
                 .title(boardCreateDto.getTitle())
 //                .boardColor(boardCreateDto.getColor())
                 .boardClick(0)
@@ -105,11 +104,24 @@ public class BoardService {
 
     }
 
+    // 게시판 클릭 시 조회수 증가
+    @Transactional
+    public void boardClick(Long boardNo){
+        Board board1 = boardRopository.findByNo(boardNo);
+
+        Board board = Board.builder()
+                .boardClick(board1.getBoardClick()+1).build();
+
+        boardRopository.save(board);
+
+
+    }
+
     // 게시글 등록
     @Transactional
     public void boardWrite(BoardWriteDto boardWriteDto){
         BoardList boardList = BoardList.builder()
-                .user(userRegistRepository.findByNo(boardWriteDto.getUserNo()))
+                .user(userRegistAndModifyRepository.findByNo(boardWriteDto.getUserNo()))
                 .board(boardRopository.findByNo(boardWriteDto.getBoardNo()))
                 .title(boardWriteDto.getTitle())
                 .allowComment(boardWriteDto.getAllowComment())
@@ -117,21 +129,52 @@ public class BoardService {
                 .content(boardWriteDto.getContents())
                 .like(0).build();
 
+        Board board = Board.builder()
+                        .boardLife(boardRopository.findByNo(boardWriteDto.getBoardNo())
+                                .getBoardLife().plusHours(1)).build();
+
+        boardRopository.save(board);
+
+        boardListRepository.save(boardList);
+
+    }
+
+    // 게시글에 좋아요 누르기
+    @Transactional
+    public void writeLike(Long writeNo){
+        BoardList boardList1 = boardListRepository.findByNo(writeNo);
+
+        BoardList boardList = BoardList.builder()
+                .like(boardList1.getLike()+1).build();
+
         boardListRepository.save(boardList);
 
     }
 
     // 게시글 모두 출력
-//    public Page<BoardListRes> boardList(){
-//
-//        PageRequest pageRequest = PageRequest.of(0,5);
-//
-//        Page<BoardList> boardwritelist = boardListRepository.findAll(pageRequest);
-//
-//
-//        boardwritelist.map(B::new);
-//
-//        return result;
-//    }
+    public Page<BoardListDto> boardWriteList(Pageable pageable){
 
+        Page<BoardList> allBoardWriteList = boardListRepository.findAllByOrderByCreateDateAsc(pageable);
+
+        List<BoardList> boardWriteList = allBoardWriteList.getContent();
+
+        List<BoardListDto> result = new ArrayList<>();
+
+        for(int i=0;i<boardWriteList.size();i++){
+            BoardListDto boardListDto = BoardListDto.builder()
+                    .no(boardWriteList.get(i).getNo())
+                    .user(boardWriteList.get(i).getUser().getNo())
+                    .boardName(boardWriteList.get(i).getBoard().getTitle())
+                    .boardLife(boardWriteList.get(i).getBoard().getBoardLife())
+                    .title(boardWriteList.get(i).getTitle())
+                    .view(boardWriteList.get(i).getView())
+                    .like(boardWriteList.get(i).getLike())
+                    .allowComment(boardWriteList.get(i).isAllowComment())
+                    .content(boardWriteList.get(i).getContent()).build();
+
+            result.add(boardListDto);
+        }
+
+        return new PageImpl<>(result, allBoardWriteList.getPageable(), allBoardWriteList.getTotalElements());
+    }
 }

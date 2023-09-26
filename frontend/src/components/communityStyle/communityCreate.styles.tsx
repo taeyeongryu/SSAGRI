@@ -1,5 +1,7 @@
 import { styled } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import axios from 'axios';
 const Div = styled.div``;
 const TopTag = styled.div`
   font-size: 30px;
@@ -78,11 +80,58 @@ const MidDiv = styled.div`
   margin-left: 130px;
 `;
 
+const InputCheckbox = styled.input``;
+
 const CommuCreate = () => {
+  const [commuTitle, setCommuTitle] = useState('');
+  const [commuContent, setCommuContent] = useState('');
+  const [anony, setAnony] = useState('false');
+
+  const [clickCount, setClickCount] = useState(0);
+
   const navigate = useNavigate();
+
   const CreateCommu = () => {
-    alert('CreateCommu');
+    const CommuApi = axios.create({
+      headers: { 'cotent-type': 'application/json' }
+    });
+    const data = {
+      comment: commuContent,
+      no: 1,
+      title: commuTitle,
+      who: anony
+    };
+
+    //게시판 순위 정보
+    CommuApi.post('/board/regist', data)
+      .then((res) => {
+        console.log(res.data, '1번요청성공');
+      })
+      .catch((err) => {
+        console.log('실패1', err);
+        console.log('실패1', commuContent, commuTitle, anony);
+        console.log('실패1', data);
+      });
     navigate('/community');
+  };
+
+  const onInput1 = (e) => {
+    setCommuTitle(e.target.value);
+    console.log(e.target.value);
+  };
+  const onInput2 = (e) => {
+    setCommuContent(e.target.value);
+    console.log(e.target.value);
+  };
+  const onInput3 = () => {
+    setClickCount((prevCount) => prevCount + 1);
+    if (clickCount % 2 === 0) {
+      setAnony('익명');
+      console.log(anony);
+    } else {
+      setAnony('실명');
+      console.log(anony);
+    }
   };
 
   return (
@@ -92,7 +141,7 @@ const CommuCreate = () => {
       <TopFlexDiv>
         <Div>
           <TagTitle>게시판 제목</TagTitle>
-          <InputTag1></InputTag1>
+          <InputTag1 onChange={onInput1}></InputTag1>
         </Div>
         <Div>
           <TagTitle>게시판 색상</TagTitle>
@@ -101,9 +150,10 @@ const CommuCreate = () => {
       </TopFlexDiv>
       <MidDiv>
         <TagTitle>게시판 설명</TagTitle>
-        <InputTag3></InputTag3>
+        <InputTag3 onChange={onInput2}></InputTag3>
         <TagTitle>익명 여부</TagTitle>
-        <InputTag2></InputTag2>
+        <InputCheckbox type='checkbox' onChange={onInput3}></InputCheckbox>
+        {anony}
         <TagTitle>예상 게시판 이미지 미리보기</TagTitle>
         <InputTag2></InputTag2>
       </MidDiv>

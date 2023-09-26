@@ -10,6 +10,7 @@ import com.ssafy.ssagri.util.jwt.JwtUtil;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -23,6 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/usedproduct")
 @CrossOrigin("*")
+@Slf4j
 public class UsedProductController {
 
     private final UsedProductService usedProductService;
