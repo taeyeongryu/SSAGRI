@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
-@Api("기타 유틸 컨트롤러")
+@Api(tags = "기타 유틸 컨트롤러")
 @RestController
 @RequiredArgsConstructor
 @Slf4j
