@@ -6,8 +6,6 @@ import { onLoginSuccess } from '../utils/user';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { isLoggedInAtom } from '../states/account/loginAtom';
-// @ts-ignore
-import base64 from 'base-64';
 
 const show = keyframes`
   0%, 49.99% {
@@ -282,8 +280,6 @@ const OverlayPanel = styled.div`
   }
 `;
 
-//
-
 const SignInAndUpComponent = () => {
   const navigate = useNavigate();
 
@@ -293,6 +289,8 @@ const SignInAndUpComponent = () => {
   // @ts-ignore
   const [profile, setProfile] = useState(null);
   const fileInput = useRef(null);
+
+  const [profileImgUrl, setProfileImgUrl] = useState('');
 
   // 프로필 사진 등록
   const onChange = (e) => {
@@ -306,7 +304,9 @@ const SignInAndUpComponent = () => {
       axios
         .post(`/user/regist/upload/profile`, formData2)
         .then((res) => {
-          console.log(res);
+          console.log('이미지 URL: ', res.data);
+          // 이미지 URL 저장후 회원가입 시에 사용
+          setProfileImgUrl(res.data);
         })
         .catch((err) => {
           console.log(err);
@@ -389,12 +389,6 @@ const SignInAndUpComponent = () => {
   };
 
   // // 로그인 성공 시
-  // const onLoginSuccess = (response: any) => {
-  //   console.log(response.headers);
-
-  //   const accessToken = response.headers['access-token'];
-  //   console.log(accessToken);
-
   // userNo를 localStorage에 넣기
   //    let payload = accessToken.substring(
   //      accessToken.indexOf('.') + 1,
@@ -658,28 +652,39 @@ const SignInAndUpComponent = () => {
   const onSignUp = (e) => {
     e.preventDefault();
 
-    const formData = new FormData();
-    // 프로필 사진 url 추가
-    // @ts-ignore
-    formData.append('profile', profileImgUrl);
-    // 필드 입력값 추가
-    formData.append('email', signUpForm.email); // 이메일
-    formData.append('password', signUpForm.password); // 비밀번호
-    formData.append('regions', regionFormat(signUpForm.region)); // 지역
-    formData.append('number', signUpForm.cardinalNumber); // 기수
-    formData.append('nickname', signUpForm.nickname); // 닉네임
-
-    for (let key of formData.keys()) {
-      console.log(`${key}: ${formData.get(key)}`);
-    }
-
-    const config = {
-      headers: {
-        'content-type': 'multipart/form-data'
-      }
+    const data = {
+      profile: profileImgUrl,
+      email: signUpForm.email,
+      password: signUpForm.password,
+      regions: regionFormat(signUpForm.region),
+      number: parseInt(signUpForm.cardinalNumber),
+      nickname: signUpForm.nickname
     };
 
-    axios.post('/user/regist', formData, config);
+    // const formData = new FormData();
+    // // 프로필 사진 url 추가
+    // // @ts-ignore
+    // formData.append('profile', profileImgUrl);
+    // // 필드 입력값 추가
+    // formData.append('email', signUpForm.email); // 이메일
+    // formData.append('password', signUpForm.password); // 비밀번호
+    // formData.append('regions', regionFormat(signUpForm.region)); // 지역
+    // // @ts-ignore
+    // formData.append('number', signUpForm.cardinalNumber); // 기수
+    // formData.append('nickname', signUpForm.nickname); // 닉네임
+
+    // for (let key of formData.keys()) {
+    //   console.log(`${key}: ${formData.get(key)}`);
+    // }
+
+    // const config = {
+    //   headers: {
+    //     'content-type': 'multipart/form-data'
+    //   }
+    // };
+    console.log(typeof data.number);
+
+    axios.post('/user/regist', data);
   };
 
   const [joinBtnActive, setJoinBtnActive] = useState(false);
