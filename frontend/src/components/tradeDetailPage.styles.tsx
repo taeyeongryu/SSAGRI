@@ -606,10 +606,10 @@ const TradeDetail = () => {
     navigate(`/chat`);
   };
 
-  // ★★★★★ const userNo = localStorage.getItem('userNo'); 아래 1에 userNo가 삽입되어야 함
+  const userNo = localStorage.getItem('userNo');
 
   useEffect(() => {
-    const url = `/usedproduct/detail/1?usedProductNo=${productNo}`;
+    const url = `/usedproduct/detail/${userNo}?usedProductNo=${productNo}`;
     axios
       .get(url)
       .then((res) => {

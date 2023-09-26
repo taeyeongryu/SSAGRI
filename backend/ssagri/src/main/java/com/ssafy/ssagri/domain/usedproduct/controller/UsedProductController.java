@@ -33,7 +33,7 @@ public class UsedProductController {
 
     @PostMapping("")
     @ApiOperation("formdata로 사진, UsedProductSaveRequest 넘겨줘야 함")
-    public ResponseEntity<Long> save(@RequestPart UsedProductSaveRequestDto usedProductSaveRequest, @RequestPart("s3uploadMain") MultipartFile multipartFileMain, @RequestPart("s3uploadSub") List<MultipartFile> multipartFileSubList)throws Exception {
+    public ResponseEntity<Long> save(@RequestPart UsedProductSaveRequestDto usedProductSaveRequest, @RequestPart("s3uploadMain") MultipartFile multipartFileMain, @RequestPart(name = "s3uploadSub", required = false) List<MultipartFile> multipartFileSubList)throws Exception {
         System.out.println("usedProductSaveRequest = " + usedProductSaveRequest);
 
         Long id = usedProductService.saveUsedProduct(usedProductSaveRequest,multipartFileMain,multipartFileSubList);

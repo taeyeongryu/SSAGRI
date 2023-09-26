@@ -93,7 +93,7 @@ public class AuctionProductService {
 
     // 경매 상품 등록
     @Transactional
-    public void setAuctionProduct(AuctionProductCreateDTO auctionProductCreateDTO){
+    public Long setAuctionProduct(AuctionProductCreateDTO auctionProductCreateDTO){
 
         String startDate1 = auctionProductCreateDTO.getStartDate();
 
@@ -120,7 +120,9 @@ public class AuctionProductService {
 
 
 
-            auctionRepository.save(auctionProduct);
+            AuctionProduct auctionProduct1 = auctionRepository.save(auctionProduct);
+
+            return auctionProduct1.getNo();
     }
 
     // 경매상품 추가시 사진을 DB와 S3에 모두 저장
