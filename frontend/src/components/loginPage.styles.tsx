@@ -701,9 +701,15 @@ const SignInAndUpComponent = () => {
     //     'content-type': 'multipart/form-data'
     //   }
     // };
-    console.log(typeof data.number);
 
-    axios.post('/user/regist', data);
+    axios
+      .post('/user/regist/', data)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const [joinBtnActive, setJoinBtnActive] = useState(false);
