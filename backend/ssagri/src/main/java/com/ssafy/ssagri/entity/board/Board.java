@@ -65,16 +65,22 @@ public class Board extends BaseTimeEntity {
 
 
     @Builder
-    public Board(User user, String title, String showName, boolean allowDelete, LocalDateTime boardLife, int boardClick, LocalDateTime deleteTime
+    public Board(User user, String title, String showName, LocalDateTime boardLife, int boardClick, LocalDateTime deleteTime
     , LocalDateTime createTime) {
         this.user = user;
         this.title = title;
         this.showName = showName;
-        this.allowDelete = allowDelete;
-//        this.boardColor = boardColor;
         this.boardClick = boardClick;
         this.boardLife = boardLife;
         this.setDeleteDate(deleteTime);
         this.setCreateDate(createTime);
+    }
+
+    public void click(){
+        this.boardClick+=1;
+    }
+
+    public void delete(){
+        this.setDeleteDate(LocalDateTime.now());
     }
 }
