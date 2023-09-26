@@ -50,7 +50,8 @@ public class OauthController {
     @Operation(summary = "로그인 결과값 가져오기", description = "KAKAO 로그인 시 해당 API로 리다이렉팅됩니다. \n" +
             "일부러 호출할 필요는 없습니다.(카카오 로그인 시 자동 리다이렉팅)\n" +
             "1. 인가된 코드를 바탕으로 유효한 토큰을 받아옵니다.\n" +
-            "2. 토큰 내부의 엑세스 토큰으로 유저 정보를 요청한 뒤, 이를 파싱 후 핵심 정보만 가져옵니다. \n")
+            "2. 토큰 내부의 엑세스 토큰으로 유저 정보를 요청한 뒤, 이를 파싱 후 핵심 정보만 가져옵니다. \n" +
+            "결과적으로 nickname, profile, email의 세 가지 정보를 리턴합니다.")
     public String[] getToken(@RequestParam("code") String code) {
         String accessToken = oauthService.getToken(code); //2. 토큰 받기
         return oauthService.getUserInfo(accessToken); //3. 유저 정보를 추가 요청 후 파싱

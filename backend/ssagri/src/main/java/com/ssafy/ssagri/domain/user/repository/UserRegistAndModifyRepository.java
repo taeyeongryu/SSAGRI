@@ -26,4 +26,6 @@ public interface UserRegistAndModifyRepository extends JpaRepository<User, Long>
     @Query("update User u SET u.profile = :newProfile WHERE u.no = :userNo")
     void updateImage(@Param("newProfile") String newProfile, @Param("userNo") Long userNo);
 
+    @Query("SELECT COUNT(u) > 0 FROM User u WHERE u.no = :userNo and u.userCreateType = 'NORMAL'")
+    boolean UserTypeIsNormal(@Param("userNo") Long userNo);
 }

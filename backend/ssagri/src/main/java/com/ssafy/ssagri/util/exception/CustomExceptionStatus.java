@@ -54,6 +54,7 @@ public enum CustomExceptionStatus {
 
     //mypage = 18xx
     MYPAGE_PROFILE_FAIL(-1800, "마이페이지 프로필 갱신에 실패했습니다"),
+    MYPAGE_PASSWORD_FAIL(-1801, "패스워드를 바꿀 수 있는 유저가 아닙니다(Not NORMAL)"),
 
     //Auction = 19xx
     AUCTION_PRODUCT_DOES_NOT_EXIST(-1900, "존재하지 않는 경매 상품입니다."),
