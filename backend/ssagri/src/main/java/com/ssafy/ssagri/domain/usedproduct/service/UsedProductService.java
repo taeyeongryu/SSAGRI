@@ -93,7 +93,7 @@ public class UsedProductService {
         //없는 중고 물품이면
         //예외 처리
         else {
-
+            new CustomException(CustomExceptionStatus.USED_PRODUCT_DOES_NOT_EXIST);
         }
         return productOptional.get().getNo();
     }
