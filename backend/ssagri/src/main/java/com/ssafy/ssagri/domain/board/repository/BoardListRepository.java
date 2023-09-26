@@ -9,7 +9,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface BoardListRepository extends JpaRepository<BoardList, Long> {
-    Page<BoardList> findAllByOrderByCreateDateAsc(Pageable pageable);
+    Page<BoardList> findAllByBoardOrderByCreateDateAsc(Board board,Pageable pageable);
+
+
 
     BoardList findByNo(Long no);
 
