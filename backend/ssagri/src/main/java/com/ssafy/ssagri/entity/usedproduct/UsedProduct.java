@@ -44,6 +44,7 @@ public class UsedProduct extends BaseTimeEntity {
     @Column(name = "used_product_status",nullable = false)
     private SaleStatus status;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "used_product_region",nullable = false)
     private Region region;
 
