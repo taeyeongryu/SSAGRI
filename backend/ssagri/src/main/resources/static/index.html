@@ -17,7 +17,7 @@
 </div>
 
 <script>
-    let socket = new SockJS('http://localhost:5000/ws', {}, { withCredentials: true });
+    let socket = new SockJS('http://localhost:5000/api/ws', {}, { withCredentials: true });
     let stompClient = Stomp.over(socket);
 
     stompClient.connect({}, function(frame) {

@@ -1,5 +1,8 @@
 import { styled } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { useState } from 'react';
+
 const Div = styled.div``;
 const TopTag = styled.div`
   font-size: 30px;
@@ -40,7 +43,7 @@ const InputTag1 = styled(InputTag)`
   margin-top: 20px;
   margin-left: 3px;
 `;
-const InputTag2 = styled(InputTag)`
+const InputTag2 = styled.input`
   width: 100px;
   height: 45px;
   margin-top: 20px;
@@ -80,9 +83,50 @@ const MidDiv = styled.div`
 
 const BoardCreateMain = () => {
   const navigate = useNavigate();
-  const CreateBoard = () => {
-    console.log('생성중');
+  const [content, setContent] = useState('');
+  const [title, setTitle] = useState('');
+  const [accept, setAcceopt] = useState(false);
+  const [clickCount, setClickCount] = useState(0);
+  const onInput1 = (e) => {
+    setTitle(e.target.value);
   };
+
+  const onInput2 = (e) => {
+    setContent(e.target.value);
+  };
+  const onInput3 = () => {
+    setClickCount((prevCount) => prevCount + 1);
+    if (clickCount % 2 === 0) {
+      setAcceopt(true);
+    } else {
+      setAcceopt(false);
+    }
+  };
+
+  const CreateBoard = () => {
+    const BoardApi = axios.create({
+      headers: { 'cotent-type': 'application/json' }
+    });
+    const data = {
+      allowComment: accept, // 댓글 허용여부 true ,false
+      boardNo: 1, // 게시판 번호
+      contents: content, // 내용
+      title: title, // 제목
+      userNo: 1 // 로그인유저
+    };
+
+    //게시판 순위 정보
+    BoardApi.post('/board/write', data)
+      .then((res) => {
+        console.log(res.data, '1번요청성공');
+      })
+      .catch((err) => {
+        console.log('실패1', err);
+        console.log('실패1', data);
+      });
+    navigate('/community');
+  };
+
   return (
     <Div style={{ width: '100vh', margin: '100px auto' }}>
       <TopTag>게시글 신규 등록</TopTag>
@@ -90,14 +134,14 @@ const BoardCreateMain = () => {
       <TopFlexDiv>
         <Div>
           <TagTitle>게시글 제목</TagTitle>
-          <InputTag1></InputTag1>
+          <InputTag1 onChange={onInput1}></InputTag1>
         </Div>
       </TopFlexDiv>
       <MidDiv>
         <TagTitle>게시글 내용</TagTitle>
-        <InputTag3></InputTag3>
+        <InputTag3 onChange={onInput2}></InputTag3>
         <TagTitle>댓글 허용 여부</TagTitle>
-        <InputTag2></InputTag2>
+        <InputTag2 type='checkbox' onChange={onInput3}></InputTag2>
       </MidDiv>
 
       <BottomFlexDiv>
