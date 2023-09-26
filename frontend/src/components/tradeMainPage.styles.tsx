@@ -327,6 +327,7 @@ const ProductStyle01 = styled.div`
   height: 240px;
   border: 2px solid #4786fa;
   border-radius: 20px;
+  position: relative;
   margin: 0 15px;
   display: flex;
   flex-direction: column;
@@ -342,6 +343,13 @@ const ProductImgStyle01 = styled.img`
   height: 130px;
   /* border: 1px solid black; */
   border-radius: 10px;
+`;
+const ProductLike01 = styled.div`
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  top: 7px;
+  right: 10px;
 `;
 const ProductDetailStyle01 = styled.div`
   width: 160px;
@@ -386,6 +394,7 @@ const ProductStyle02 = styled(ProductStyle01)`
   margin: 10px 20px;
 `;
 const ProductImgStyle02 = styled(ProductImgStyle01)``;
+const ProductLike02 = styled(ProductLike01)``;
 const ProductDetailStyle02 = styled(ProductDetailStyle01)`
   width: 150px;
 `;
@@ -414,6 +423,10 @@ const ProductStyle03 = styled(ProductStyle01)`
 const ProductImgStyle03 = styled(ProductImgStyle01)`
   width: 100px;
   height: 100px;
+`;
+const ProductLike03 = styled(ProductLike01)`
+  top: 6px;
+  right: 6px;
 `;
 const ProductDetailStyle03 = styled(ProductDetailStyle01)`
   height: 80px;
@@ -499,10 +512,16 @@ const TradeProductItem01 = (item) => {
     // console.log(item.item.usedProductPhotoResponseDto.link);
   });
 
+  let productLike: string = '';
+  if (item.item.like) {
+    productLike = '/assets/img/heartColor.png';
+  } else {
+    productLike = '/assets/img/heartWhite.png';
+  }
+
   // --- 지역 데이터는 도시가 아니라, "동" 단위로 가져와야 한다.
 
   const navigate = useNavigate();
-
   const goTradeDetail = (no: number) => {
     navigate(`/tradeDetail/${no}`);
   };
@@ -512,6 +531,16 @@ const TradeProductItem01 = (item) => {
         // src={item.usedProductPhotoResponseDto.link}
         src={item.item.usedProductPhotoResponseDto.link}
       ></ProductImgStyle01>
+      <ProductLike01>
+        <img
+          src={productLike}
+          style={{
+            width: '100%',
+            height: '100%'
+          }}
+          alt='like'
+        />
+      </ProductLike01>
       <ProductDetailStyle01>
         <ProductName01>{item.item.title}</ProductName01>
         <ProductPrice01>{item.item.price} 원</ProductPrice01>
@@ -523,11 +552,20 @@ const TradeProductItem01 = (item) => {
   );
 };
 const TradeProductItem02 = (item) => {
+  // console.log('item : ', item);
+  // console.log('item.item : ', item.item);
+
+  let productLike: string = '';
+  if (item.item.like) {
+    productLike = '/assets/img/heartColor.png';
+  } else {
+    productLike = '/assets/img/heartWhite.png';
+  }
+
   const navigate = useNavigate();
   const goTradeDetail = (no: number) => {
     navigate(`/tradeDetail/${no}`);
   };
-
   // --- 지역 데이터는 도시가 아니라, "동" 단위로 가져와야 한다.
 
   return (
@@ -536,6 +574,16 @@ const TradeProductItem02 = (item) => {
         // src={item.usedProductPhotoResponseDto.link}
         src={item.item.usedProductPhotoResponseDto.link}
       ></ProductImgStyle02>
+      <ProductLike02>
+        <img
+          src={productLike}
+          style={{
+            width: '100%',
+            height: '100%'
+          }}
+          alt='like'
+        />
+      </ProductLike02>
       <ProductDetailStyle02>
         <ProductName02>{item.item.title}</ProductName02>
         <ProductPrice02>{item.item.price} 원</ProductPrice02>
@@ -547,9 +595,17 @@ const TradeProductItem02 = (item) => {
   );
 };
 const TradeProductItem03 = (item) => {
+  let productLike: string = '';
+  if (item.item.like) {
+    productLike = '/assets/img/heartColor.png';
+  } else {
+    productLike = '/assets/img/heartWhite.png';
+  }
+
   useEffect(() => {
-    console.log(item.item.usedProductPhotoResponseDto.link);
+    // console.log(item.item.usedProductPhotoResponseDto.link);
   });
+
   const navigate = useNavigate();
   const goTradeDetail = (no: number) => {
     navigate(`/tradeDetail/${no}`);
@@ -563,6 +619,16 @@ const TradeProductItem03 = (item) => {
         // src={item.usedProductPhotoResponseDto.link}
         src={item.item.usedProductPhotoResponseDto.link}
       ></ProductImgStyle03>
+      <ProductLike03>
+        <img
+          src={productLike}
+          style={{
+            width: '100%',
+            height: '100%'
+          }}
+          alt='like'
+        />
+      </ProductLike03>
       <ProductDetailStyle03>
         <ProductName03>{item.item.title}</ProductName03>
         <ProductPrice03>{item.item.price} 원</ProductPrice03>
@@ -605,7 +671,7 @@ const TradeMainProduct = (region) => {
   // console.log(regionText);
   const navigate = useNavigate();
   const goTradeList = (regionText) => {
-    console.log('change Page to List', regionText);
+    // console.log('change Page to List', regionText);
     navigate(`/tradeList?region=${regionText}`);
   };
 
