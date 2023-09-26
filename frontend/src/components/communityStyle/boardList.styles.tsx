@@ -1,5 +1,7 @@
 import { styled } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const DetailDiv = styled.div`
   width: 100%;
@@ -118,8 +120,37 @@ const Alarm = styled.div`
 const BoardMain = () => {
   const navigate = useNavigate();
   const GoBoard = () => {
-    navigate('/community/1/Detail');
+    navigate(`/community/${urlparam}/Detail`);
   };
+  const [urlparam, setUrlparam] = useState(0);
+  const [boardList, setBoardList] = useState([]);
+  console.log(boardList);
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    for (const param of searchParams) {
+      const paramName = param[0];
+      console.log(paramName);
+      const paramValue = parseInt(param[1], 10);
+      setUrlparam(paramValue);
+    }
+    const BoardListApi = axios.create({
+      headers: { 'cotent-type': 'application/json' }
+    });
+    //유저 id정보 요청
+    BoardListApi.get('/board/all-write-list')
+      .then((res) => {
+        setBoardList(res.data);
+        console.log('데이터 확인@@@@@@@@@@@@@', res.data);
+      })
+      .catch((err) => {
+        console.log('실패1', err);
+      });
+  }, []);
+  // const boardInfo1 = boardList[0];
+  // const boardInfo2 = boardList[1];
+  // const boardInfo3 = boardList[2];
+  // const boardInfo4 = boardList[3];
+  // const boardInfo5 = boardList[4];
   return (
     <DetailDiv>
       <TopTitle>질문게시판</TopTitle>
@@ -129,11 +160,19 @@ const BoardMain = () => {
       <LineDiv></LineDiv>
       <FlexDiv>
         <LeftDiv>
-          <CreateDiv onClick={() => navigate('/community/1/Create')}>
+          <CreateDiv
+            onClick={() =>
+              navigate(`/community/${urlparam}/Create?boardNo=${urlparam}`)
+            }
+          >
             글 생성
           </CreateDiv>
-          <CommuBody1 onClick={GoBoard}>닉네임</CommuBody1>
-          <CommuBody2 onClick={GoBoard}></CommuBody2>
+          <CommuBody1 onClick={GoBoard}>
+            {/* 닉네임 {boardInfo1 ? boardInfo1.title : ''} */}
+          </CommuBody1>
+          <CommuBody2 onClick={GoBoard}>
+            {/* {boardInfo2 ? boardInfo2.title : ''} */}
+          </CommuBody2>
         </LeftDiv>
         <RightDiv>
           <CommuBody3></CommuBody3>

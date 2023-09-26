@@ -53,6 +53,16 @@ const TradeMainMapDiv = styled.div`
   height: 700px;
   position: relative;
   /* border: 2px solid green; */
+  animation: fadein 1s ease-in-out;
+
+  @keyframes fadein {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
 `;
 // -------- 지역 동그라미 CSS --------
 const Seoul = styled.div`
@@ -187,6 +197,16 @@ const RegionAndSearch = styled.div`
   justify-content: space-between;
   align-items: center;
   line-height: 60px;
+  animation: fadein 2s ease-in-out;
+
+  @keyframes fadein {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
 `;
 
 const Region = styled.div`
@@ -214,6 +234,16 @@ const SearchRegion = styled.div`
   box-shadow: 2px 2px 2px 1px #929292;
   &:hover {
     box-shadow: 2px 2px 3px 3px #757575;
+  }
+  animation: fadein 5s ease-in-out;
+
+  @keyframes fadein {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
   }
 `;
 
@@ -263,6 +293,16 @@ const RecentOrPopularProductDiv = styled.div`
   width: 900px;
   height: 320px;
   /* border: 2px solid green; */
+  animation: fadein 2.5s ease-in-out;
+
+  @keyframes fadein {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
 `;
 const RecentOrPopularProductTitle = styled.div`
   width: 200px;
