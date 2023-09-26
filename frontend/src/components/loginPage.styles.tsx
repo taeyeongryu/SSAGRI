@@ -294,10 +294,23 @@ const SignInAndUpComponent = () => {
   const [profile, setProfile] = useState(null);
   const fileInput = useRef(null);
 
+  // 프로필 사진 등록
   const onChange = (e) => {
     if (e.target.files[0]) {
       setProfile(e.target.files[0]);
-      console.log(e.target.files[0]);
+      const formData2 = new FormData();
+
+      const uploadFile = e.target.files[0];
+      formData2.append('upload-file', uploadFile);
+
+      axios
+        .post(`/user/regist/upload/profile`, formData2)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
       // 업로드 취소할 시
       setProfile(null);
@@ -646,9 +659,9 @@ const SignInAndUpComponent = () => {
     e.preventDefault();
 
     const formData = new FormData();
-    // 프로필 사진 추가
+    // 프로필 사진 url 추가
     // @ts-ignore
-    formData.append('profile', profile);
+    formData.append('profile', profileImgUrl);
     // 필드 입력값 추가
     formData.append('email', signUpForm.email); // 이메일
     formData.append('password', signUpForm.password); // 비밀번호
