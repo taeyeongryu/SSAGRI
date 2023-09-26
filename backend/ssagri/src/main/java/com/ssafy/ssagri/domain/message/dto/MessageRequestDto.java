@@ -25,21 +25,13 @@ public class MessageRequestDto {
         this.content = content;
     }
 
-    public MessageResponseDto toResponse(){
-        return MessageResponseDto.builder()
-                .chatRoomNo(this.chatRoomNo)
-                .senderNo(this.senderNo)
-                .receiverNo(this.receiverNo)
-                .content(this.content)
-                .time(LocalDateTime.now())
-                .build();
-    }
-
-    public Message toEntity(){
+    public Message toEntity(String senderNickName, String receiverNickName){
         Message message = Message.builder()
                 .roomNo(chatRoomNo)
                 .senderNo(senderNo)
+                .senderNickName(senderNickName)
                 .receiverNo(receiverNo)
+                .receiverNickName(receiverNickName)
                 .content(content)
                 .time(LocalDateTime.now())
                 .build();

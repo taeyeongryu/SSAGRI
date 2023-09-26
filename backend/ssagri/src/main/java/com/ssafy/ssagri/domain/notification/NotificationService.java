@@ -89,6 +89,7 @@ public class NotificationService {
         }
     }
 
+    //Test Method
     public void sendMessageTest(){
         for (Long userNo : sseEmitterMap.keySet()) {
             try {
