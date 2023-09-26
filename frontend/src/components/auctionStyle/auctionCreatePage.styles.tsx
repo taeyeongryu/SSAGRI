@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 // import { useRecoilValue } from 'recoil';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -151,6 +151,7 @@ const TagBtn6 = styled.div`
   color: white;
 `;
 
+// 상품명
 const InputTag1 = styled.input`
   width: 500px;
   height: 45px;
@@ -161,6 +162,7 @@ const InputTag1 = styled.input`
   border: 1px solid rgb(0, 0, 0, 0.3);
   box-shadow: 2px 2px rgb(0, 0, 0, 0.3);
 `;
+// 상품 설명
 const InputTag2 = styled.input`
   width: 980px;
   height: 200px;
@@ -172,6 +174,7 @@ const InputTag2 = styled.input`
   margin-left: 3px;
   /* background-color: #555453; */
 `;
+// 상품 이미지
 const InputTag3 = styled.div`
   width: 980px;
   height: 150px;
@@ -257,7 +260,7 @@ const AuctionCreate = () => {
   // const hourList = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17];
 
   // 경매 물품등록 api
-  const userNo = 3; // 주최자 아이디
+  const userNo = localStorage.getItem('userNo'); // 주최자 아이디
   const [itemName, setItemName] = useState(''); // 상품명
   const [itemDescription, setItemDescription] = useState(''); // 상품 설명
   const [startTime, setStartTime] = useState(new Date()); // 경매 시작시간
@@ -268,6 +271,8 @@ const AuctionCreate = () => {
   const [Selected, setSelected] = useState(''); // 물품분류
 
   // console.log(selectedDate, itemName, itemDescription);
+
+  const photoInput = useRef();
 
   const navigate = useNavigate();
   const goAuction = () => {
@@ -284,7 +289,6 @@ const AuctionCreate = () => {
   };
 
   // 경매 생성 요청
-
   const auctionApi = axios.create({
     // baseURL: process.env.REACT_APP_SPRING_URI,
     headers: { 'cotent-type': 'application/json' }
@@ -391,7 +395,24 @@ const AuctionCreate = () => {
           </CreateDiv5>
           <CreateDiv6>
             <TagBtn1>이미지</TagBtn1>
-            <InputTag3></InputTag3>
+            <InputTag3 className='addPhoto'>
+              <div
+                onClick={() => {
+                  // @ts-ignore
+                  photoInput.current.click();
+                }}
+              >
+                이미지 등록 버튼
+              </div>
+              <input
+                type='file'
+                accept='image/jpg, image/jped, image/png'
+                multiple
+                // @ts-ignore
+                ref={photoInput}
+                style={{ display: 'none' }}
+              />
+            </InputTag3>
           </CreateDiv6>
           <CreateDiv7>
             <TagBtn3 onClick={Checking}>다음</TagBtn3>

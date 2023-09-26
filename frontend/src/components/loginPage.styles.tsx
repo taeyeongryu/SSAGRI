@@ -287,31 +287,27 @@ const SignInAndUpComponent = () => {
   const [image, setImage] = useState(
     'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
   );
+
+  // 프로필 사진 관련
   // @ts-ignore
   const [profile, setProfile] = useState(null);
   const fileInput = useRef(null);
 
   const [profileImgUrl, setProfileImgUrl] = useState('');
 
+  const formData = new FormData(); // 사진 담아서 전달할 데이터
+
   // 프로필 사진 등록
   const onChange = (e) => {
     if (e.target.files[0]) {
       setProfile(e.target.files[0]);
-      const formData2 = new FormData();
 
       const uploadFile = e.target.files[0];
-      formData2.append('upload-file', uploadFile);
+      formData.append('upload-file', uploadFile);
 
-      axios
-        .post(`/user/regist/upload/profile`, formData2)
-        .then((res) => {
-          console.log('이미지 URL: ', res.data);
-          // 이미지 URL 저장후 회원가입 시에 사용
-          setProfileImgUrl(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      for (let image of formData.entries()) {
+        console.log(image);
+      }
     } else {
       // 업로드 취소할 시
       setProfile(null);
@@ -329,6 +325,22 @@ const SignInAndUpComponent = () => {
       }
     };
     reader.readAsDataURL(e.target.files[0]);
+  };
+
+  // 회원가입 시 프로필 사진 등록 요청
+  const uploadProfile = async () => {
+    try {
+      // @ts-ignore
+      formData.append('upload-file', profile);
+      const response = await axios.post(
+        `/user/regist/upload/profile`,
+        formData
+      );
+      setProfileImgUrl(response.data);
+      return response.data;
+    } catch (error) {
+      console.error('프로필 이미지 업로드 실패: ', error);
+    }
   };
 
   // 로그인 //
@@ -555,7 +567,6 @@ const SignInAndUpComponent = () => {
   const sendEmail = (e) => {
     e.preventDefault();
 
-    console.log(signUpForm.email);
     axios
       .get('/user/regist/send-email', {
         params: {
@@ -584,7 +595,6 @@ const SignInAndUpComponent = () => {
   // 인증번호 확인
   const checkVerificationCode = (e) => {
     e.preventDefault();
-    console.log(verifyCode);
 
     axios
       .get('/user/regist/check/authcode-valid', {
@@ -646,11 +656,9 @@ const SignInAndUpComponent = () => {
   };
 
   // 회원가입 요청
-  const onSignUp = (e) => {
-    e.preventDefault();
-
+  const signUpUser = async (profileImageUrl) => {
     const data = {
-      profile: profileImgUrl,
+      profile: profileImageUrl,
       email: signUpForm.email,
       password: signUpForm.password,
       regions: regionFormat(signUpForm.region),
@@ -658,36 +666,30 @@ const SignInAndUpComponent = () => {
       nickname: signUpForm.nickname
     };
 
-    // const formData = new FormData();
-    // // 프로필 사진 url 추가
-    // // @ts-ignore
-    // formData.append('profile', profileImgUrl);
-    // // 필드 입력값 추가
-    // formData.append('email', signUpForm.email); // 이메일
-    // formData.append('password', signUpForm.password); // 비밀번호
-    // formData.append('regions', regionFormat(signUpForm.region)); // 지역
-    // // @ts-ignore
-    // formData.append('number', signUpForm.cardinalNumber); // 기수
-    // formData.append('nickname', signUpForm.nickname); // 닉네임
+    try {
+      const response = await axios.post(`/user/regist/`, data);
+      return response;
+    } catch (error) {
+      console.error('회원가입 실패: ', error);
+      throw error;
+    }
+  };
 
-    // for (let key of formData.keys()) {
-    //   console.log(`${key}: ${formData.get(key)}`);
-    // }
+  // 회원가입 버튼 클릭시
+  const onSignUp = async (e) => {
+    e.preventDefault();
 
-    // const config = {
-    //   headers: {
-    //     'content-type': 'multipart/form-data'
-    //   }
-    // };
+    try {
+      // 프로필 사진 이미지 경로 반환받아 profileImgUrl에 저장
+      const profileImageUrl = await uploadProfile();
+      // 반환받은 이미지 URL을 활용해 회원가입 요청
+      const response = await signUpUser(profileImageUrl);
 
-    axios
-      .post('/user/regist/', data)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      console.log('회원가입 성공: ', response);
+      navigate('/login');
+    } catch (error) {
+      console.error('회원가입 실패: ', error);
+    }
   };
 
   const [joinBtnActive, setJoinBtnActive] = useState(false);
@@ -793,6 +795,7 @@ const SignInAndUpComponent = () => {
                 fileInput.current.click();
               }}
             ></Avatar>
+            <img style={{ width: '200px' }} src={profileImgUrl} />
             <FileInput
               type='file'
               accept='image/jpg, image/png, image/jpeg'
