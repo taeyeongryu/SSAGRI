@@ -657,13 +657,18 @@ const SignInAndUpComponent = () => {
 
   // 회원가입 요청
   const signUpUser = async (profileImageUrl) => {
+    const now = new Date();
+    console.log(now);
+
     const data = {
       profile: profileImageUrl,
       email: signUpForm.email,
       password: signUpForm.password,
       regions: regionFormat(signUpForm.region),
       number: parseInt(signUpForm.cardinalNumber),
-      nickname: signUpForm.nickname
+      nickname: signUpForm.nickname,
+      userCreateType: 'NORMAL', // 'NORMAL', 'KAKAO'
+      userCreateDate: now
     };
 
     try {
