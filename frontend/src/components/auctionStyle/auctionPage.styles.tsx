@@ -1,12 +1,13 @@
 import { styled } from 'styled-components';
 
 import { AuctionSearchInput } from '../tradeMainPage.styles';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 import axios from 'axios';
 import { useRecoilValue } from 'recoil';
 import { isLoggedInAtom } from '../../states/account/loginAtom';
+
 const AuctionDiv = styled.div`
   width: 100%;
 `;
@@ -330,6 +331,10 @@ const AuctionPage = () => {
 
   const [types, setTypes] = useState(0);
   console.log(types);
+
+  // 로그인하고 다시 돌아오기 위해 현재 경로 저장
+  const { pathname } = useLocation();
+
   // const [researchItems,setResearchItems] =
   // const researchItems = itemList.filter(item => item.type === '모니터');
 
@@ -378,6 +383,9 @@ const AuctionPage = () => {
   useEffect(() => {
     if (isLoggedIn) {
       GetAuctionItemList();
+    } else {
+      alert('로그인이 필요한 페이지입니다.');
+      navigate('/login', { state: pathname });
     }
   }, [isLoggedIn]);
 

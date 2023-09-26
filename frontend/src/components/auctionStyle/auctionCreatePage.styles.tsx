@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 // import { useRecoilValue } from 'recoil';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -151,6 +151,7 @@ const TagBtn6 = styled.div`
   color: white;
 `;
 
+// 상품명
 const InputTag1 = styled.input`
   width: 500px;
   height: 45px;
@@ -161,6 +162,7 @@ const InputTag1 = styled.input`
   border: 1px solid rgb(0, 0, 0, 0.3);
   box-shadow: 2px 2px rgb(0, 0, 0, 0.3);
 `;
+// 상품 설명
 const InputTag2 = styled.input`
   width: 980px;
   height: 200px;
@@ -172,6 +174,7 @@ const InputTag2 = styled.input`
   margin-left: 3px;
   /* background-color: #555453; */
 `;
+// 상품 이미지
 const InputTag3 = styled.div`
   width: 980px;
   height: 150px;
@@ -257,7 +260,7 @@ const AuctionCreate = () => {
   // const hourList = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17];
 
   // 경매 물품등록 api
-  const userNo = 3; // 주최자 아이디
+  const userNo = localStorage.getItem('userNo'); // 주최자 아이디
   const [itemName, setItemName] = useState(''); // 상품명
   const [itemDescription, setItemDescription] = useState(''); // 상품 설명
   const [startTime, setStartTime] = useState(new Date()); // 경매 시작시간
@@ -268,6 +271,40 @@ const AuctionCreate = () => {
   const [Selected, setSelected] = useState(''); // 물품분류
 
   // console.log(selectedDate, itemName, itemDescription);
+
+  // 사진 업로드
+  const photoInput = useRef();
+
+  const [images, setImages] = useState<string[]>([]);
+  const [uploadImage, setUploadImage] = useState([]); // 업로드할 사진 파일들
+
+  const addImage = (e) => {
+    const nowSelectedImageList = e.target.files; // 한번에 받은 이미지리스트
+    const nowImageList = [...uploadImage];
+
+    if (!nowSelectedImageList[0]) return;
+    if (nowImageList.length + nowSelectedImageList.length > 10) {
+      return alert('최대 10개의 사진만 첨부할 수 있습니다.');
+    }
+    const readAndPreview = (file: any) => {
+      if (/\.(jpe?g|png|gif)$/i.test(file.name)) {
+        const reader = new FileReader();
+        reader.onload = () =>
+          setImages((prev) => [...prev, reader.result as string]);
+        reader.readAsDataURL(file);
+      }
+    };
+    if (nowSelectedImageList) {
+      [].forEach.call(nowSelectedImageList, readAndPreview);
+    }
+
+    for (let i = 0; i < nowSelectedImageList.length; i++) {
+      // @ts-ignore
+      nowImageList.push(nowSelectedImageList[i]);
+    }
+    setUploadImage(nowImageList);
+    console.log(nowImageList);
+  };
 
   const navigate = useNavigate();
   const goAuction = () => {
@@ -284,7 +321,6 @@ const AuctionCreate = () => {
   };
 
   // 경매 생성 요청
-
   const auctionApi = axios.create({
     // baseURL: process.env.REACT_APP_SPRING_URI,
     headers: { 'cotent-type': 'application/json' }
@@ -391,7 +427,38 @@ const AuctionCreate = () => {
           </CreateDiv5>
           <CreateDiv6>
             <TagBtn1>이미지</TagBtn1>
-            <InputTag3></InputTag3>
+            <InputTag3 className='addPhoto'>
+              <div
+                onClick={() => {
+                  // @ts-ignore
+                  photoInput.current.click();
+                }}
+              >
+                이미지 등록 버튼
+              </div>
+              <input
+                type='file'
+                accept='image/jpg, image/jpeg, image/png'
+                multiple
+                // @ts-ignore
+                ref={photoInput}
+                style={{ display: 'none' }}
+                onChange={addImage}
+              />
+              <div style={{ display: 'flex' }} className='preview'>
+                {images.map((url, index) => {
+                  return (
+                    <div>
+                      <img
+                        style={{ width: '200px' }}
+                        src={url}
+                        key={index}
+                      ></img>
+                    </div>
+                  );
+                })}
+              </div>
+            </InputTag3>
           </CreateDiv6>
           <CreateDiv7>
             <TagBtn3 onClick={Checking}>다음</TagBtn3>

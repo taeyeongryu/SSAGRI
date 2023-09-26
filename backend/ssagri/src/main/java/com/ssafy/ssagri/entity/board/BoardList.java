@@ -78,4 +78,8 @@ public class BoardList extends BaseTimeEntity {
         this.setDeleteDate(deleteDate);
         this.setUpdateDate(modifyDate);
     }
+
+    public void like(){
+        this.like += 1;
+    }
 }

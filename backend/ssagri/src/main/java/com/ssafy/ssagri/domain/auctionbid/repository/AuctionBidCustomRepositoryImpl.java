@@ -22,5 +22,6 @@ public class AuctionBidCustomRepositoryImpl implements AuctionBidCustomRepositor
                 .where(auctionBid.auctionProduct.no.eq(auctionProductNo))
                 .orderBy(auctionBid.price.desc(),auctionBid.no.desc()).fetch();
         return findAuctionBidList;
+
     }
 }
