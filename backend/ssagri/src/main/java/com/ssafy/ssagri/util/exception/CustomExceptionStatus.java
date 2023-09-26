@@ -56,6 +56,7 @@ public enum CustomExceptionStatus {
 
     //Auction = 19xx
     AUCTION_PRODUCT_DOES_NOT_EXIST(-1900, "존재하지 않는 경매 상품입니다."),
+    AUCTION_BID_DOES_NOT_EXIST(-1901,"존재하지 않는 입찰입니다."),
 
     //ChatRoom = 2xxx
     CHATROOM_DOES_NOT_EXIST(-2002, "존재하지 않는 채팅방입니다."),

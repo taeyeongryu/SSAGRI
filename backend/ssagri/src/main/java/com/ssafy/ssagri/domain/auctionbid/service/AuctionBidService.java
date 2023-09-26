@@ -3,6 +3,7 @@ package com.ssafy.ssagri.domain.auctionbid.service;
 import com.ssafy.ssagri.domain.auction.repository.AuctionRepository;
 import com.ssafy.ssagri.domain.auctionbid.dto.AuctionBidSaveRequestDto;
 import com.ssafy.ssagri.domain.auctionbid.dto.AuctionBidSelectResponseDto;
+import com.ssafy.ssagri.domain.auctionbid.dto.AuctionBidSocketRequestDto;
 import com.ssafy.ssagri.domain.auctionbid.repository.AuctionBidRepository;
 import com.ssafy.ssagri.domain.notification.NotificationService;
 import com.ssafy.ssagri.domain.user.repository.UserRegistAndModifyRepository;
@@ -92,4 +93,9 @@ public class AuctionBidService {
         return auctionBidResponseDtoList;
     }
 
+    public AuctionBidSelectResponseDto changeResponseDto(AuctionBidSocketRequestDto auctionBidSocketRequestDto) {
+        AuctionBid auctionBid = auctionBidRepository.findById(auctionBidSocketRequestDto.getAuctionBidNo())
+                .orElseThrow(()->new CustomException(CustomExceptionStatus.AUCTION_BID_DOES_NOT_EXIST));
+        return auctionBid.toResponse();
+    }
 }
