@@ -181,7 +181,8 @@ const CommunityMain = () => {
 
   const [commuRank, setCommuRank] = useState([]);
   const [commuList, setCommuList] = useState([]);
-  const [commuLife, setCommuLife] = useState([]);
+
+  // const [commuLife, setCommuLife] = useState([]);
   const colorList = [
     '#8ECDDD',
     '#E4F1FF',
