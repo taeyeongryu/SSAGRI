@@ -20,7 +20,21 @@ import AuctionDetailPage from './pages/auctionPage/auctionDetailPage';
 import AuctionCreatePage from './pages/auctionPage/auctionCreatePage';
 import Navbar from './components/navbar';
 
+import { useEffect } from 'react';
+import { useRecoilState } from 'recoil';
+import { isLoggedInAtom } from './states/account/loginAtom';
+
 const App = () => {
+  // @ts-ignore
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
+
+  useEffect(() => {
+    const storedIsLoggedIn = localStorage.getItem('isLoggedIn');
+    if (storedIsLoggedIn === 'true') {
+      setIsLoggedIn(true);
+    }
+  }, [setIsLoggedIn]);
+
   return (
     <div>
       <Navbar></Navbar>

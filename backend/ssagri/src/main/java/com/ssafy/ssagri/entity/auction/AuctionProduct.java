@@ -65,7 +65,7 @@ public class AuctionProduct extends BaseTimeEntity {
 
     // 경매 상태
     @Enumerated(EnumType.STRING)
-    @Column(name = "auction_product_status",nullable = false)
+    @Column(name = "auction_product_status")
     private AuctionStatus auctionStatus;
 
     // 경매 입찰가

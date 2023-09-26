@@ -2,7 +2,7 @@ import { styled, keyframes } from 'styled-components';
 import { useState, useRef, useEffect } from 'react';
 import { Avatar } from 'antd';
 import axios from 'axios';
-import { onLogout, onLoginSuccess } from '../utils/user';
+import { onLoginSuccess } from '../utils/user';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { isLoggedInAtom } from '../states/account/loginAtom';
@@ -349,22 +349,6 @@ const SignInAndUpComponent = () => {
     setSignInForm({ ...signInForm, password: e.target.value });
   };
 
-  // 액세스토큰 만료되었을 때 재발급 요청
-  const testRefill = (e) => {
-    e.preventDefault();
-
-    axios
-      .get('/jwt/refill')
-      .then((res) => {
-        console.log(res);
-        const accessToken = res.headers['access-token'];
-        console.log(accessToken);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   // 로그인여부
   // @ts-ignore
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
@@ -397,9 +381,6 @@ const SignInAndUpComponent = () => {
   //   const accessToken = response.headers['access-token'];
   //   console.log(accessToken);
 
-  //   // axios 헤더에 jwt 토큰 담기
-  //   axios.defaults.headers.common['Authorization'] = accessToken;
-
   // userNo를 localStorage에 넣기
   //    let payload = accessToken.substring(
   //      accessToken.indexOf('.') + 1,
@@ -429,12 +410,6 @@ const SignInAndUpComponent = () => {
   //     });
   // };
 
-  // 로그아웃
-  const onLogoutHandler = (e) => {
-    e.preventDefault();
-    onLogout();
-  };
-
   // 회원가입 //
   const regionList = ['대전', '서울', '구미', '광주', '부울경'];
   const cardinalList = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
@@ -448,16 +423,19 @@ const SignInAndUpComponent = () => {
     nickname: ''
   });
 
-  // 유효성 검증
   const [isEmailStyle, setIsEmailStyle] = useState(false); // 유효한 이메일 형식인지
   const [isEmailUnique, setIsEmailUnique] = useState(false); // 이메일 중복 확인 여부
+
+  // 회원가입에 필요한 입력요소들 유효성 검사
   // @ts-ignore
   const [isEmailValid, setIsEmailValid] = useState(false); // 인증 완료한 이메일인지
-
   const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [isConfirmValid, setIsConfirmValid] = useState(false);
   // @ts-ignore
   const [isNicknameValid, setIsNicknameValid] = useState(false);
+
+  // 인증번호 확인 창 보이는 여부
+  const [showVerify, setShowVerify] = useState(false);
 
   // 안내 메시지
   const [signUpEmailMessage, setSignUpEmailMessage] = useState('');
@@ -589,43 +567,55 @@ const SignInAndUpComponent = () => {
   // 이메일 인증번호 전송
   const sendEmail = (e) => {
     e.preventDefault();
-    // @ts-ignore
-    const data = {
-      email: signUpForm.email
-    };
 
+    console.log(signUpForm.email);
     axios
-      .post('/sendEmail', {
-        headers: { 'Content-Type': 'application/json' }
+      .get('/user/regist/send-email', {
+        params: {
+          email: signUpForm.email
+        }
       })
       .then((res) => {
         // 메일 전송 성공
+        setShowVerify(true);
         console.log(res);
       })
       .catch((err) => {
         // 메일 전송 실패
+        setShowVerify(false);
         console.log(err);
       });
   };
 
-  // 인증번호 확인 요청
-  // const checkVerificationCode = (e) => {
-  //   e.preventDefault();
+  // 사용자가 입력한 이메일 인증번호
+  const [verifyCode, setVerifyCode] = useState('');
 
-  //   const data = {
-  //     number: verifyNumber
-  //   };
+  const onChangeVerifyCode = (e) => {
+    setVerifyCode(e.target.value);
+  };
 
-  //   axios.post('인증번호 확인 URL')
-  //   .then((res) => { // 인증 완료
-  //     console.log(res);
-  //     setSignUpEmailMessage('인증이 완료되었습니다.')
-  //     // 인증 여부 true로 바꾼다.
-  //   }).catch((err) => { // 인증 실패
-  //     console.log(err);
-  //     // 인증 여부 false,
-  //   });
-  // };
+  // 인증번호 확인
+  const checkVerificationCode = (e) => {
+    e.preventDefault();
+
+    axios
+      .post('/user/regist/check/authcode-valid', {
+        authcode: verifyCode
+      })
+      .then((res) => {
+        // 인증 완료
+        console.log(res);
+        // 이메일 인증 여부 true로 바꾼다.
+        setIsEmailValid(true);
+        setSignUpEmailMessage('인증이 완료되었습니다.');
+      })
+      .catch((err) => {
+        // 인증 실패
+        console.log(err);
+        // 이메일 인증 여부 false
+        setIsEmailValid(false);
+      });
+  };
 
   // 닉네임 중복확인
   const doubleCheckNickname = (e) => {
@@ -673,7 +663,7 @@ const SignInAndUpComponent = () => {
       }
     };
 
-    axios.post('SIGNUP_URL', formData, config);
+    axios.post('/user/regist', formData, config);
   };
 
   const [joinBtnActive, setJoinBtnActive] = useState(false);
@@ -762,8 +752,6 @@ const SignInAndUpComponent = () => {
             <A>비밀번호를 잊으셨나요?</A>
           </FormContent>
           <Button onClick={onLoginHandler}>로그인</Button>
-          <Button onClick={onLogoutHandler}>로그아웃</Button>
-          <Button onClick={testRefill}>토큰 재발급 테스트</Button>
         </Form>
       </FormContainer>
       {/* 회원가입 폼*/}
@@ -817,17 +805,29 @@ const SignInAndUpComponent = () => {
                 인증번호 전송
               </Verify>
             </div>
-            <div
-              style={{
-                display: 'flex',
-                gap: '10px',
-                alignItems: 'center',
-                justifyContent: 'end'
-              }}
-            >
-              <Input style={{ width: '102px' }} type='number'></Input>
-              <Verify style={{ width: '102px' }}>인증번호 확인</Verify>
-            </div>
+            {showVerify ? (
+              <div
+                style={{
+                  display: 'flex',
+                  gap: '10px',
+                  alignItems: 'center',
+                  justifyContent: 'end'
+                }}
+              >
+                <Input
+                  style={{ width: '102px' }}
+                  type='text'
+                  value={verifyCode}
+                  onChange={onChangeVerifyCode}
+                ></Input>
+                <Verify
+                  style={{ width: '102px' }}
+                  onClick={checkVerificationCode}
+                >
+                  인증번호 확인
+                </Verify>
+              </div>
+            ) : null}
             <Label htmlFor='password'>
               <div>비밀번호</div>
               {isPasswordValid ? (
