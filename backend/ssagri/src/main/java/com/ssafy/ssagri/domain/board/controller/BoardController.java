@@ -80,6 +80,13 @@ public class BoardController {
 
     }
 
+    // 생명 주기 제일 적은 게시판 Top3
+    @GetMapping(value = "/board-life")
+    @ApiOperation("생명 주기 제일 적은 게시판 Top3")
+    public List<BoardDto> boardLifeTop3(){
+        return boardService.boardLife();
+    }
+
 
 
     // 하나의 게시글에 댓글달기
