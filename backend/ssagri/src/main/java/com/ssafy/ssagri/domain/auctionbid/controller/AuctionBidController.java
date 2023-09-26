@@ -7,6 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,13 +23,14 @@ public class AuctionBidController {
 
     @PostMapping("")
     @ApiOperation("경매 상품에 입찰하는 메서드")
-    public void saveAuctionBid(AuctionBidSaveRequestDto auctionBidSaveRequestDto){
-        auctionBidService.save(auctionBidSaveRequestDto);
+    public ResponseEntity<Long> saveAuctionBid(AuctionBidSaveRequestDto auctionBidSaveRequestDto){
+        Long bidNo = auctionBidService.save(auctionBidSaveRequestDto);
+        return ResponseEntity.ok(bidNo);
     }
 
     @GetMapping("/{auctionProductNo}")
     @ApiOperation("경매 상품 입찰 내역 조회하는 메서드")
-    public List<AuctionBidSelectResponseDto> selectAuctionBid(@PathVariable(name = "auctionProductNo") Long auctionProductNo){
-        return auctionBidService.selectAuctionBid(auctionProductNo);
+    public ResponseEntity<List<AuctionBidSelectResponseDto>> selectAuctionBid(@PathVariable(name = "auctionProductNo") Long auctionProductNo){
+        return ResponseEntity.ok(auctionBidService.selectAuctionBid(auctionProductNo));
     }
 }
