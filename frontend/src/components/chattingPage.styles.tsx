@@ -4,19 +4,30 @@ const ChatFrame = styled.div`
   width: 1920px;
   height: 890px;
   margin-top: 7vh;
+  /* background-color: rgb(0, 0, 0, 0.3); */
   /* border: 2px solid black; */
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
+// const ChatImgLeft = styled.div`
+//   width: 16%;
+// `;
+// const ChatImgRight = styled.div`
+//   width: 16%;
+// `;
+
 const ChatDiv = styled.div`
-  width: 70%;
+  width: 68%;
   height: 80%;
+  background-color: #fff;
+  border-radius: 20px;
   /* border: 2px solid blue; */
   display: flex;
   justify-content: center;
   align-items: center;
+  box-shadow: 2px 2px 3px 3px #cccccc;
 `;
 // 채팅 목록
 const ChatLeft = styled.div`
@@ -26,6 +37,7 @@ const ChatLeft = styled.div`
 // 내 닉네임, 안읽은 메세지만 보기
 const ChatHeader = styled.div`
   border: 1px solid #4786fa;
+  border-top-left-radius: 20px;
   width: 460px;
   height: 70px;
   display: flex;
@@ -56,6 +68,7 @@ const ChatUnRead = styled.div`
 const ChatList = styled.div`
   border-top: 1px solid #4786fa;
   border-bottom: 1px solid #4786fa;
+  border-bottom-left-radius: 20px;
   width: 460px;
   height: 642px;
   font-size: 30px;
@@ -154,6 +167,8 @@ const ChatUnReadNumber = styled.div`
 // ---------------- 우측 채팅창 ----------------
 const ChatContentFrame = styled.div`
   border: 1px solid #4786fa;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
   width: 65%;
   height: 100%;
   font-size: 30px;
@@ -298,6 +313,7 @@ const ChatMessageTyping = styled.div`
   width: 100%;
   height: 138px;
   background-color: #f1fafb;
+  border-bottom-right-radius: 20px;
   /* border-bottom: 1px solid #4786fa; */
   display: flex;
   justify-content: center;
@@ -365,6 +381,18 @@ const ChatButton = styled.button`
 const Chatting = () => {
   return (
     <ChatFrame>
+      {/* <ChatImgLeft>
+        <img
+          src='/assets/img/chatLeft.png'
+          style={{
+            width: '100%',
+            height: '100%',
+            zIndex: '10',
+            opacity: '0.4'
+          }}
+        ></img>
+      </ChatImgLeft> */}
+
       <ChatDiv>
         {/* 채팅 목록 */}
         <ChatLeft>
@@ -628,6 +656,17 @@ const Chatting = () => {
           </ChatMessageTyping>
         </ChatContentFrame>
       </ChatDiv>
+      {/* <ChatImgRight>
+        <img
+          src='/assets/img/chatRight.png'
+          style={{
+            width: '100%',
+            height: '100%',
+            zIndex: '1',
+            opacity: '0.4'
+          }}
+        ></img>
+      </ChatImgRight> */}
     </ChatFrame>
   );
 };
