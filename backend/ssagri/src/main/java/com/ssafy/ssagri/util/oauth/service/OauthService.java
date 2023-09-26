@@ -94,4 +94,8 @@ public class OauthService {
             throw new CustomException(OAUTH_USERINFO_PARSING_ERR);
         }
     }
+
+    public String getKakaoLoginPage() {
+        return "https://kauth.kakao.com/oauth/authorize?client_id=" + REST_API_KEY + "&redirect_uri=" + REDIRECT_URI + "&response_type=code";
+    }
 }

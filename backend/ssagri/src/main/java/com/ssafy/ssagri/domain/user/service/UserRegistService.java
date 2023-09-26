@@ -33,7 +33,9 @@ public class UserRegistService {
                         userRegistDTO.getNickname(),
                         userRegistDTO.getProfile(),
                         userRegistDTO.getRegions(),
-                        userRegistDTO.getNumber()
+                        userRegistDTO.getNumber(),
+                        userRegistDTO.getUserCreateType(),
+                        userRegistDTO.getUserCreateDate()
                         )
         );
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(REGIST_IS_OK.getCode(), REGIST_IS_OK.getMessage()));
