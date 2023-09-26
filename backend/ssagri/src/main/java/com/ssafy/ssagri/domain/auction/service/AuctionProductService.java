@@ -78,7 +78,7 @@ public class AuctionProductService {
                      .comment(products.get(i).getComment())
 //                     .auctionStatus(products.get(i).getAuctionStatus())
                      .finallyPrice(products.get(i).getFinallyPrice())
-                     .modifyDate(products.get(i).getModifyDate())
+                     .createDate(products.get(i).getCreateDate())
                      .type(products.get(i).getType())
                      .originPrice(products.get(i).getOriginPrice())
                      .build();
@@ -114,7 +114,7 @@ public class AuctionProductService {
                 .startDate(startDate)
                 .endDate(endDate)
                 .comment(auctionProductCreateDTO.getComment())
-                .modifyDate(LocalDateTime.now())
+                .createTime(LocalDateTime.now())
                 .originPrice(auctionProductCreateDTO.getOriginPrice())
                 .type(auctionProductCreateDTO.getType()).build();
 
@@ -221,7 +221,7 @@ public class AuctionProductService {
                .auctionStatus(auctionProduct.getAuctionStatus())
                .finallyPrice(auctionProduct.getFinallyPrice())
                .deleteDate(auctionProduct.getDeleteDate())
-               .modifyDate(auctionProduct.getModifyDate())
+               .createDate(auctionProduct.getCreateDate())
                .type(auctionProduct.getType())
                .originPrice(auctionProduct.getOriginPrice()).build();
 

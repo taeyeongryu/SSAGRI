@@ -34,6 +34,7 @@ public class BoardController {
         return boardService.boardTitleList();
     }
 
+    // 모든 게시판 출력
     @GetMapping("/all-list")
     @ApiOperation("모든 게시판 출력")
     public Page<BoardDto> allList(Pageable pageable) {
@@ -64,6 +65,14 @@ public class BoardController {
         boardService.boardClick(boardNo);
     }
 
+    // 게시판 삭제
+    @GetMapping(value = "/board/delete/{boardNo}")
+    @ApiOperation("게시판 삭제")
+    public void boardDelete(@PathVariable("boardNo") Long boardNo){
+        boardService.boardDelete(boardNo);
+    }
+
+
 
     // 모든 게시글 출력
     @GetMapping("/all-write-list")
@@ -77,7 +86,7 @@ public class BoardController {
     @GetMapping(value = "/write-like/{writeno}")
     @ApiOperation("게시글 좋아요 누르기")
     public void boardWriteLike(@PathVariable("writeno") Long writeNo){
-
+        boardService.writeLike(writeNo);
     }
 
     // 생명 주기 제일 적은 게시판 Top3
@@ -90,9 +99,13 @@ public class BoardController {
 
 
     // 하나의 게시글에 댓글달기
-//    @PostMapping("/write/comment")
-//    @ApiOperation("하나의 게시글에 댓글달기")
-//    public
+    @PostMapping("/write/comment")
+    @ApiOperation("하나의 게시글에 댓글달기")
+    public void writeComment(@RequestBody BoardWriteCommentDto boardWriteCommentDto){
+        boardService.writeComment(boardWriteCommentDto);
+    }
+
+
 
 
 
