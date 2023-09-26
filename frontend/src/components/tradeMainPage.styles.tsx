@@ -539,8 +539,6 @@ const TradeMainProduct = (region) => {
   // console.log(typeof region.region);
   // console.log(region.region);
 
-  // ★★★★★ const userNo = sessionStorage.getItem('userNo');
-
   const [recentData, setRecentData] = useState([]);
   const [popularData, setPopularData] = useState([]);
 
@@ -571,10 +569,14 @@ const TradeMainProduct = (region) => {
     navigate(`/tradeList?region=${regionText}`);
   };
 
+  const userNo = localStorage.getItem('userNo');
+
   useEffect(() => {
     // recentData
     axios
-      .get(`/usedproduct/1?region=${regionText}&sort=no,desc&page=0&size=4`)
+      .get(
+        `/usedproduct/${userNo}?region=${regionText}&sort=no,desc&page=0&size=4`
+      )
       .then((res) => {
         // console.log('recentData');
         // console.log(res.data.content);
@@ -586,7 +588,9 @@ const TradeMainProduct = (region) => {
       });
     // popularData
     axios
-      .get(`/usedproduct/1?region=${regionText}&sort=like,desc&page=0&size=4`)
+      .get(
+        `/usedproduct/${userNo}?region=${regionText}&sort=like,desc&page=0&size=4`
+      )
       .then((res) => {
         // console.log('popularData');
         // console.log(res.data.content);

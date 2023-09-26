@@ -168,13 +168,14 @@ const ProductListSearch = ({ regionText, category, search, setSearch }) => {
   const [responseList, setResponseList] = useState([]);
   const [response, setResponse] = useState({});
   const [number, setNumber] = useState<number>(0);
+  const userNo = localStorage.getItem('userNo');
 
   useEffect(() => {
     search = search === null ? '' : search;
     setSearch(search);
     axios
       .get(
-        `usedproduct/1?region=${regionText}&category=${category}&search=${search}&sort=like,desc&page=0&size=8`
+        `usedproduct/${userNo}?region=${regionText}&category=${category}&search=${search}&sort=like,desc&page=0&size=8`
       )
       .then((res) => {
         setResponseList(res.data.content);
@@ -192,7 +193,7 @@ const ProductListSearch = ({ regionText, category, search, setSearch }) => {
     setSearch(search);
     axios
       .get(
-        `usedproduct/1?region=${regionText}&category=${category}&search=${search}&sort=like,desc&page=0&size=8`
+        `usedproduct/${userNo}?region=${regionText}&category=${category}&search=${search}&sort=like,desc&page=0&size=8`
       )
       .then((res) => {
         setResponseList(res.data.content);
@@ -208,7 +209,7 @@ const ProductListSearch = ({ regionText, category, search, setSearch }) => {
   useEffect(() => {
     axios
       .get(
-        `usedproduct/1?region=${regionText}&category=${category}&search=${search}&sort=like,desc&page=${number}&size=8`
+        `usedproduct/${userNo}?region=${regionText}&category=${category}&search=${search}&sort=like,desc&page=${number}&size=8`
       )
       .then((res) => {
         setResponseList(res.data.content);
@@ -457,16 +458,16 @@ const AuctionTradeList = () => {
 
 const BottomPageSpace = ({ response, setNumber }) => {
   console.log('BottomPageSpace', response);
-  const totalPages = response.response.totalPages;
+  const totalPages = response.totalPages;
 
   const changePage = (num: number) => {
     console.log('changePage num: ', num);
-    setNumber(num);
+    setNumber(num - 1);
   };
 
   const rendering = () => {
     const result: any = [];
-    if (!response.response.first) {
+    if (!response.first) {
       result.push(
         <PagingButton>
           <PagingButtonText>&lt;&lt;</PagingButtonText>
@@ -487,7 +488,7 @@ const BottomPageSpace = ({ response, setNumber }) => {
       );
     }
 
-    if (!response.response.last) {
+    if (!response.last) {
       result.push(
         <PagingButton>
           <PagingButtonText>&gt;</PagingButtonText>
