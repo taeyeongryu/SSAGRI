@@ -623,6 +623,7 @@ const SignInAndUpComponent = () => {
   //   };
 
   // 인증번호 확인
+  // @ts-ignore
   const checkVerificationCode = (e, verifyCode) => {
     e.preventDefault();
     console.log(verifyCode);
