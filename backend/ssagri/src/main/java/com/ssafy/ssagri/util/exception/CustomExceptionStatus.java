@@ -58,7 +58,11 @@ public enum CustomExceptionStatus {
     //UsedProduct = 3xxx
     USED_PRODUCT_DOES_NOT_EXIST(-3001, "존재하지 않는 중고상품 입니다."),
     USED_PRODUCT_LIKE_ALREADY_EXIST(-3002, "이미 좋아한 상품 입니다."),
-    USED_PRODUCT_LIKE_DOES_NOT_EXIST(-3003,"좋아하지 않는 상품 입니다.");
+    USED_PRODUCT_LIKE_DOES_NOT_EXIST(-3003,"좋아하지 않는 상품 입니다."),
+
+    //SseEmitter = 31xx
+    SSEEMITTER_CAN_NOT_CREATE(-3100,"SseEmitter 가 생성되지 않았습니다."),
+    SSEEMITTER_DOES_NOT_EXIST(-3101,"존재하지 않는 SseEmitter 입니다.");
 
 
 
