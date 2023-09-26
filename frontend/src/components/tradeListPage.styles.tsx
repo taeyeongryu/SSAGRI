@@ -163,7 +163,13 @@ const PagingButtonText = styled.div`
   font-weight: bold;
 `;
 
-const ProductListSearch = ({ regionText, category, search, setSearch }) => {
+const ProductListSearch = ({
+  regionText,
+  category,
+  search,
+  setSearch,
+  order
+}) => {
   // region 데이터를 받아왔으므로, axios 호출을 하여 List를 얻어온다.
   const [responseList, setResponseList] = useState([]);
   const [response, setResponse] = useState({});
@@ -173,15 +179,19 @@ const ProductListSearch = ({ regionText, category, search, setSearch }) => {
   useEffect(() => {
     search = search === null ? '' : search;
     setSearch(search);
+    let url = '';
+    if (order === 'price') {
+      url = `usedproduct/${userNo}?region=${regionText}&category=${category}&search=${search}&sort=${order},asc&page=0&size=8`;
+    } else {
+      url = `usedproduct/${userNo}?region=${regionText}&category=${category}&search=${search}&sort=${order},desc&page=0&size=8`;
+    }
     axios
-      .get(
-        `usedproduct/${userNo}?region=${regionText}&category=${category}&search=${search}&sort=like,desc&page=0&size=8`
-      )
+      .get(url)
       .then((res) => {
         setResponseList(res.data.content);
-        console.log('responseList: ', responseList);
+        // console.log('responseList: ', responseList);
         setResponse(res.data);
-        console.log('response', response);
+        // console.log('response', response);
       })
       .catch((err) => {
         console.log(err);
@@ -191,15 +201,19 @@ const ProductListSearch = ({ regionText, category, search, setSearch }) => {
   useEffect(() => {
     search = search === null ? '' : search;
     setSearch(search);
+    let url = '';
+    if (order === 'price') {
+      url = `usedproduct/${userNo}?region=${regionText}&category=${category}&search=${search}&sort=${order},asc&page=0&size=8`;
+    } else {
+      url = `usedproduct/${userNo}?region=${regionText}&category=${category}&search=${search}&sort=${order},desc&page=0&size=8`;
+    }
     axios
-      .get(
-        `usedproduct/${userNo}?region=${regionText}&category=${category}&search=${search}&sort=like,desc&page=0&size=8`
-      )
+      .get(url)
       .then((res) => {
         setResponseList(res.data.content);
-        console.log('responseList: ', responseList);
+        // console.log('responseList: ', responseList);
         setResponse(res.data);
-        console.log('response', response);
+        // console.log('response', response);
       })
       .catch((err) => {
         console.log(err);
@@ -207,20 +221,44 @@ const ProductListSearch = ({ regionText, category, search, setSearch }) => {
   }, [regionText, category, search]);
 
   useEffect(() => {
+    let url = '';
+    if (order === 'price') {
+      url = `usedproduct/${userNo}?region=${regionText}&category=${category}&search=${search}&sort=${order},asc&page=${number}&size=8`;
+    } else {
+      url = `usedproduct/${userNo}?region=${regionText}&category=${category}&search=${search}&sort=${order},desc&page=${number}&size=8`;
+    }
     axios
-      .get(
-        `usedproduct/${userNo}?region=${regionText}&category=${category}&search=${search}&sort=like,desc&page=${number}&size=8`
-      )
+      .get(url)
       .then((res) => {
         setResponseList(res.data.content);
-        console.log('responseList: ', responseList);
+        // console.log('responseList: ', responseList);
         setResponse(res.data);
-        console.log('response', response);
+        // console.log('response', response);
       })
       .catch((err) => {
         console.log(err);
       });
   }, [number]);
+
+  useEffect(() => {
+    let url = '';
+    if (order === 'price') {
+      url = `usedproduct/${userNo}?region=${regionText}&category=${category}&search=${search}&sort=${order},asc&page=0&size=8`;
+    } else {
+      url = `usedproduct/${userNo}?region=${regionText}&category=${category}&search=${search}&sort=${order},desc&page=0&size=8`;
+    }
+    axios
+      .get(url)
+      .then((res) => {
+        setResponseList(res.data.content);
+        // console.log('responseList: ', responseList);
+        setResponse(res.data);
+        // console.log('response', response);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [order]);
 
   return (
     <div
@@ -259,10 +297,9 @@ const TradeList = () => {
   // 이제 지역 뿐만 아니라, 카테고리나 검색어나 정렬 순서까지 들어왔을 때를 생각해보자
   const [category, setCategory] = useState('');
   const categoryList = ['', 'MONITER', 'KEYBOARD', 'MOUSE', 'LIFE', 'ETC'];
-  // @ts-ignore
   const [order, setOrder] = useState('');
 
-  console.log('search: ', search);
+  // console.log('search: ', search);
 
   let regionText = '';
   // 요청을 보낼 때, 한글을 영어로 바꾸어야 BackEnd에서 인식한다.
@@ -288,9 +325,9 @@ const TradeList = () => {
   // 가장 쉬운 방법은, 지금 List 페이지를 다시 호출하여 렌더링하는 것이다.
   // region에 의해서는 처음 한 번만 렌더링 할 것이므로, 두번째 인자를 []로 둔다.
   useEffect(() => {
-    console.log('regionText: ', regionText);
-    console.log('category: ', category);
-    console.log('search: ', search);
+    // console.log('regionText: ', regionText);
+    // console.log('category: ', category);
+    // console.log('search: ', search);
 
     let selectedCategory: any = document.querySelector('#allCategory');
     selectedCategory.style.color = '#4786fa';
@@ -304,19 +341,33 @@ const TradeList = () => {
   }, [region]);
 
   useEffect(() => {
-    console.log('regionText: ', regionText);
-    console.log('category: ', category);
+    // console.log('regionText: ', regionText);
+    // console.log('category: ', category);
     goTradeListWithCategory(regionText, category);
   }, [category]);
+
+  useEffect(() => {
+    // console.log('regionText: ', regionText);
+    // console.log('category: ', category);
+    // console.log('order: ', order);
+    goTradeListWithCategory(regionText, category);
+  }, [order]);
 
   const navigate = useNavigate();
   const goTradeList = (region: string, search: any) => {
     navigate(`/tradeList?region=${region}&search=${search}`);
   };
+
   const goTradeListWithCategory = (region: string, category: string) => {
-    navigate(
-      `/tradeList?region=${region}&category=${category}&search=${search}`
-    );
+    if (order !== 'price') {
+      navigate(
+        `/tradeList?region=${region}&category=${category}&search=${search}&sort=${order},desc&page=0&size=8`
+      );
+    } else {
+      navigate(
+        `/tradeList?region=${region}&category=${category}&search=${search}&sort=${order},asc&page=0&size=8`
+      );
+    }
   };
 
   return (
@@ -347,7 +398,7 @@ const TradeList = () => {
                 search={search}
                 setSearch={setSearch}
               ></SearchDiv02>
-              <SearchOrder>
+              <SearchOrder onChange={(e) => setOrder(e.target.value)}>
                 <option value='like'>인기순</option>
                 <option value='no'>최신순</option>
                 <option value='price'>가격순</option>
@@ -359,6 +410,7 @@ const TradeList = () => {
                 regionText={regionText}
                 category={category}
                 search={search}
+                order={order}
                 setSearch={setSearch}
               ></ProductListSearch>
             </ProductList>
@@ -457,33 +509,78 @@ const AuctionTradeList = () => {
 };
 
 const BottomPageSpace = ({ response, setNumber }) => {
-  console.log('BottomPageSpace', response);
-  const totalPages = response.totalPages;
+  // console.log('BottomPageSpace', response);
+  const totalPages: number = response.totalPages;
+  const currentPage = response.number + 1;
+
+  let pageNumbers: any = document.querySelectorAll('.pageNumbers');
+  if (pageNumbers) {
+    pageNumbers.forEach((element: any) => {
+      element.style.color = '#000';
+      element.style.backgroundColor = '#fff';
+      element.style.boxShadow = 'none';
+    });
+  }
+
+  let currentNumber: any = document.querySelector('#pageNumber' + currentPage);
+  if (currentNumber) {
+    currentNumber.style.color = '#fff';
+    currentNumber.style.backgroundColor = '#4786fa';
+    currentNumber.style.boxShadow = '1px 1px 2px 2px #929292';
+  }
 
   const changePage = (num: number) => {
-    console.log('changePage num: ', num);
+    // console.log('changePage num: ', num);
     setNumber(num - 1);
+  };
+
+  const changeOneMinus = () => {
+    setNumber(currentPage - 2);
+  };
+
+  const changeOnePlus = () => {
+    setNumber(currentPage);
   };
 
   const changeFirstPage = () => {
     setNumber(0);
   };
 
-  const changeLastPage = (num: number) => {
-    console.log('changePage num: ', num);
-    setNumber(num - 1);
+  const changeLastPage = () => {
+    setNumber(totalPages - 1);
   };
 
   const rendering = () => {
     const result: any = [];
-    if (!response.first) {
+    if (response.first) {
+      result.push(
+        <PagingButton
+          style={{
+            color: 'rgb(0,0,0,0.3)',
+            borderColor: 'rgb(0,0,0,0.3)'
+          }}
+        >
+          <PagingButtonText>&lt;&lt;</PagingButtonText>
+        </PagingButton>
+      );
+      result.push(
+        <PagingButton
+          style={{
+            color: 'rgb(0,0,0,0.3)',
+            borderColor: 'rgb(0,0,0,0.3)'
+          }}
+        >
+          <PagingButtonText>&lt;</PagingButtonText>
+        </PagingButton>
+      );
+    } else {
       result.push(
         <PagingButton onClick={changeFirstPage}>
           <PagingButtonText>&lt;&lt;</PagingButtonText>
         </PagingButton>
       );
       result.push(
-        <PagingButton>
+        <PagingButton onClick={changeOneMinus}>
           <PagingButtonText>&lt;</PagingButtonText>
         </PagingButton>
       );
@@ -491,20 +588,46 @@ const BottomPageSpace = ({ response, setNumber }) => {
 
     for (let i = 1; i <= totalPages; i++) {
       result.push(
-        <PagingButton key={i} onClick={() => changePage(i)}>
+        <PagingButton
+          id={'pageNumber' + i}
+          className='pageNumbers'
+          key={i}
+          onClick={() => changePage(i)}
+        >
           <PagingButtonText>{i}</PagingButtonText>
         </PagingButton>
       );
     }
 
-    if (!response.last) {
+    if (response.last) {
       result.push(
-        <PagingButton>
+        <PagingButton
+          style={{
+            color: 'rgb(0,0,0,0.3)',
+            borderColor: 'rgb(0,0,0,0.3)'
+          }}
+        >
           <PagingButtonText>&gt;</PagingButtonText>
         </PagingButton>
       );
       result.push(
-        <PagingButton>
+        <PagingButton
+          style={{
+            color: 'rgb(0,0,0,0.3)',
+            borderColor: 'rgb(0,0,0,0.3)'
+          }}
+        >
+          <PagingButtonText>&gt;&gt;</PagingButtonText>
+        </PagingButton>
+      );
+    } else {
+      result.push(
+        <PagingButton onClick={changeOnePlus}>
+          <PagingButtonText>&gt;</PagingButtonText>
+        </PagingButton>
+      );
+      result.push(
+        <PagingButton onClick={changeLastPage}>
           <PagingButtonText>&gt;&gt;</PagingButtonText>
         </PagingButton>
       );
