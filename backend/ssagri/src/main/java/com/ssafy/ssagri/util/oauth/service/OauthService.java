@@ -84,9 +84,6 @@ public class OauthService {
             String profileImageUrl = jsonNode.path("properties").path("profile_image").asText();
             String email = jsonNode.path("kakao_account").path("email").asText();
 
-            System.out.println("Nickname: " + nickname);
-            System.out.println("Profile Image URL: " + profileImageUrl);
-            System.out.println("Email: " + email);
             return new String[]{nickname, profileImageUrl, email};
 
         } catch (Exception e) {
