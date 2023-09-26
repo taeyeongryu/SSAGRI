@@ -397,6 +397,25 @@ const SignInAndUpComponent = () => {
   //    let dec = base64.decode(payload);
   //    let userNo = JSON.parse(dec).userNo;
   //    localStorage.setItem('userNo', userNo);
+
+  // axios 헤더에 jwt 토큰 담기
+  //    axios.defaults.headers.common['Authorization'] = accessToken;
+
+  //   // 액세스토큰 만료하기 전에 로그인 연장
+  //   setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
+
+  //   // 로그인 하기 전 접속했던 페이지로 이동시키기
+  // };
+
+  // // 페이지가 새로고침 되거나 액세스토큰이 만료되었을 때 액세스 토큰을 재발급
+  // const onSilentRefresh = () => {
+  //   axios
+  //     .post('/silent-refresh')
+  //     .then(onLoginSuccess)
+  //     .catch((error) => {
+  //       console.log(error);
+  //       // 로그인 실패처리
+  //     });
   // };
 
   // 회원가입 //
@@ -758,13 +777,17 @@ const SignInAndUpComponent = () => {
             <Input
               type='email'
               value={signInForm.email}
+              // value={'test@test.com'}
               onChange={onChangeEmail}
+              // defaultValue='test@test.com'
             ></Input>
             <Label htmlFor='password'>비밀번호</Label>
             <Input
               type='password'
               value={signInForm.password}
+              // value={'test'}
               onChange={onChangePassword}
+              // defaultValue='test'
             ></Input>
             <A>비밀번호를 잊으셨나요?</A>
           </FormContent>

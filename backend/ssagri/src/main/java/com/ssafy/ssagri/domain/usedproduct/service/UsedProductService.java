@@ -103,9 +103,14 @@ public class UsedProductService {
      */
 
     public Page<UsedProductResponseDto> selectUsedProductList(Long userNo, ProductCategory productCategory, Region region,String search ,Pageable pageable){
+
+        log.info("UsedProductService userNo: {}, category: {}, region: {}, search: {}", userNo, productCategory ,region ,search);
+
         Page<UsedProduct> usedProducts = usedProductRepository.selectAllUsedProduct(productCategory, region,search ,pageable);
         List<UsedProduct> usedProductList = usedProducts.getContent();
-        log.info("db에서 가져오기 성공");
+
+        log.info("UsedProductService usedProducts: {}", usedProducts);
+
         List<UsedProductResponseDto> usedProductResponseList = new ArrayList<>();
 
         for (UsedProduct usedProduct : usedProductList) {
@@ -122,7 +127,9 @@ public class UsedProductService {
             //리스트에 저장하기
             usedProductResponseList.add(usedProductResponse);
         }
-        log.info("사진 가져오기 성공");
+
+        log.info("UsedProductService usedProductResponseList : {}", usedProductResponseList);
+
         return new PageImpl<>(usedProductResponseList, usedProducts.getPageable(), usedProducts.getTotalElements());
     }
 

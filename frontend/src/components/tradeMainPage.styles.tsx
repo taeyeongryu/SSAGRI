@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ProductItemType } from './type';
 
 // Header 제외 중고거래 컴포넌트
@@ -35,7 +35,10 @@ const TradeMain = () => {
     <TradeMainFrameDiv>
       <TradeMainDiv>
         <TradeMainMap
+          isList={false}
           setRegion={setRegion}
+          setSearch={null}
+          setCategory={null}
           regionList={regionList}
         ></TradeMainMap>
         <TradeMainProduct region={region}></TradeMainProduct>
@@ -89,9 +92,53 @@ const Buwoolkyung = styled(Seoul)`
   left: 280px;
 `;
 
-const TradeMainMap = ({ setRegion, regionList }) => {
+export const TradeMainMap = ({
+  isList,
+  setRegion,
+  setSearch,
+  setCategory,
+  regionList
+}) => {
+  const navigate = useNavigate();
+  const mapGoTradeList = (region) => {
+    setSearch('');
+    setCategory('');
+    navigate(`/tradeList?region=${region}`);
+  };
   const changeRegion = (num: number) => {
     setRegion(regionList[num]);
+    let selectedRegion: any;
+    if (num == 0) {
+      selectedRegion = document.querySelector('#seoul');
+    } else if (num == 1) {
+      selectedRegion = document.querySelector('#dajeon');
+    } else if (num == 2) {
+      selectedRegion = document.querySelector('#gumi');
+    } else if (num == 3) {
+      selectedRegion = document.querySelector('#gwangju');
+    } else if (num == 4) {
+      selectedRegion = document.querySelector('#buwoolkyung');
+    }
+    let allRegions = document.querySelectorAll('.region');
+    allRegions.forEach((region: any) => {
+      region.style.backgroundColor = '#adc4ff';
+    });
+    selectedRegion.style.backgroundColor = '#ff5353';
+    let allCategory = document.querySelectorAll('.category');
+    allCategory.forEach((category: any) => {
+      category.style.color = '#000';
+      category.style.fontWeight = 'normal';
+      category.style.textDecoration = 'none';
+    });
+    let selectedCategory: any = document.querySelector('#allCategory');
+    if (selectedCategory) {
+      selectedCategory.style.color = '#4786fa';
+      selectedCategory.style.fontWeight = 'bold';
+      selectedCategory.style.textDecoration = 'underline';
+    }
+    if (isList) {
+      mapGoTradeList(regionList[num]);
+    }
   };
   return (
     <TradeMainMapDiv>
@@ -100,11 +147,25 @@ const TradeMainMap = ({ setRegion, regionList }) => {
         alt=''
         style={{ width: '100%', height: '100%' }}
       />
-      <Seoul onClick={() => changeRegion(0)}>서울</Seoul>
-      <Dajeon onClick={() => changeRegion(1)}>대전</Dajeon>
-      <Gumi onClick={() => changeRegion(2)}>구미</Gumi>
-      <Gwangju onClick={() => changeRegion(3)}>광주</Gwangju>
-      <Buwoolkyung onClick={() => changeRegion(4)}>부울경</Buwoolkyung>
+      <Seoul id='seoul' className='region' onClick={() => changeRegion(0)}>
+        서울
+      </Seoul>
+      <Dajeon id='dajeon' className='region' onClick={() => changeRegion(1)}>
+        대전
+      </Dajeon>
+      <Gumi id='gumi' className='region' onClick={() => changeRegion(2)}>
+        구미
+      </Gumi>
+      <Gwangju id='gwangju' className='region' onClick={() => changeRegion(3)}>
+        광주
+      </Gwangju>
+      <Buwoolkyung
+        id='buwoolkyung'
+        className='region'
+        onClick={() => changeRegion(4)}
+      >
+        부울경
+      </Buwoolkyung>
     </TradeMainMapDiv>
   );
 };
@@ -113,12 +174,11 @@ const TradeMainMap = ({ setRegion, regionList }) => {
 const TradeMainProductDiv = styled.div`
   width: 910px;
   height: 100%;
-
   /* border: 2px solid red; */
 `;
 
 const RegionAndSearch = styled.div`
-  width: 910px;
+  width: 860px;
   height: 60px;
   /* border: 2px solid blue; */
   margin-bottom: 30px;
@@ -141,14 +201,14 @@ const Region = styled.div`
 `;
 
 const SearchRegion = styled.div`
-  width: 100px;
+  width: 130px;
   height: 40px;
   border: 1px solid #4786fa;
   border-radius: 10px;
-  margin-right: 25px;
   text-align: center;
   line-height: 40px;
-  font-size: 16px;
+  font-size: 18px;
+  font-weight: bold;
   background-color: #4786fa;
   color: #fff;
   box-shadow: 2px 2px 2px 1px #929292;
@@ -328,25 +388,51 @@ const SellerLocationAndTime03 = styled(SellerLocationAndTime01)`
   margin-top: 2px;
 `;
 
-const SearchDiv01 = () => {
+const SearchDiv01 = (regionText) => {
+  const [search, setSearch] = useState<string>('');
+  // console.log('TradeMain의 region 변화', regionText);
+  const navigate = useNavigate();
+  const goTradeList = (search: string) => {
+    navigate(`/tradeList?region=${regionText.region}&search=${search}`);
+  };
+
   return (
     <Search01>
       <SearchInput01
         type='text'
         placeholder='원하는 제품을 검색해 보세요!'
+        onChange={(e) => setSearch(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            goTradeList(search);
+          }
+        }}
       ></SearchInput01>
-      <SearchButton>
+      <SearchButton onClick={() => goTradeList(search)}>
         <SearchImg src='/assets/img/searchGlass-4786fa.png'></SearchImg>
       </SearchButton>
     </Search01>
   );
 };
-const SearchDiv02 = () => {
+const SearchDiv02 = ({ regionText, category, search, setSearch }) => {
+  const navigate = useNavigate();
+  const goTradeList = (search: string) => {
+    navigate(
+      `/tradeList?region=${regionText}&category=${category}&search=${search}`
+    );
+  };
   return (
     <Search02>
       <SearchInput02
+        id='trade-list-input'
         type='text'
         placeholder='원하는 제품을 검색해 보세요!'
+        onChange={(e) => setSearch(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            goTradeList(search);
+          }
+        }}
       ></SearchInput02>
       <SearchButton>
         <SearchImg src='/assets/img/searchGlass-4786fa.png'></SearchImg>
@@ -370,9 +456,13 @@ const AuctionSearchInput = () => {
 
 const TradeProductItem01 = (item) => {
   useEffect(() => {
-    console.log(item.item.usedProductPhotoResponseDto.link);
+    // console.log(item.item.usedProductPhotoResponseDto.link);
   });
+
+  // --- 지역 데이터는 도시가 아니라, "동" 단위로 가져와야 한다.
+
   const navigate = useNavigate();
+
   const goTradeDetail = (no: number) => {
     navigate(`/tradeDetail/${no}`);
   };
@@ -392,15 +482,14 @@ const TradeProductItem01 = (item) => {
     </ProductStyle01>
   );
 };
-
 const TradeProductItem02 = (item) => {
-  useEffect(() => {
-    console.log(item.item.usedProductPhotoResponseDto.link);
-  });
   const navigate = useNavigate();
   const goTradeDetail = (no: number) => {
     navigate(`/tradeDetail/${no}`);
   };
+
+  // --- 지역 데이터는 도시가 아니라, "동" 단위로 가져와야 한다.
+
   return (
     <ProductStyle02 onClick={() => goTradeDetail(item.item.productNo)}>
       <ProductImgStyle02
@@ -425,6 +514,9 @@ const TradeProductItem03 = (item) => {
   const goTradeDetail = (no: number) => {
     navigate(`/tradeDetail/${no}`);
   };
+
+  // --- 지역 데이터는 도시가 아니라, "동" 단위로 가져와야 한다.
+
   return (
     <ProductStyle03 onClick={() => goTradeDetail(item.item.productNo)}>
       <ProductImgStyle03
@@ -443,107 +535,94 @@ const TradeProductItem03 = (item) => {
 };
 
 const TradeMainProduct = (region) => {
-  console.log(typeof region);
-  console.log(region);
+  // console.log(typeof region);
+  // console.log(typeof region.region);
+  // console.log(region.region);
 
-  const userNo = localStorage.getItem('userNo');
-  let recentData = useRef([
-    {
-      createDate: '2023-09-22T00:42:26.086Z',
-      like: true,
-      price: 130000,
-      productCategory: 'READY',
-      productNo: 2,
-      region: '지역',
-      saleStatus: 'READY',
-      title:
-        '송병훈 짱 송병훈 짱 송병훈 짱 송병훈 짱\n 송병훈 짱 송병훈 짱 송병훈 짱 송병훈 짱',
-      updateDate: '2023-09-22T00:42:26.086Z',
-      usedProductPhotoResponseDto: {
-        link: 'https://i.imgur.com/ixdlIIc.png',
-        photoNo: 0
-      }
-    }
-  ]);
-  let popularData = useRef([
-    {
-      createDate: '2023-09-22T00:42:26.086Z',
-      like: true,
-      price: 130000,
-      productCategory: 'READY',
-      productNo: 2,
-      region: '지역',
-      saleStatus: 'READY',
-      title:
-        '송병훈 짱 송병훈 짱 송병훈 짱 송병훈 짱\n 송병훈 짱 송병훈 짱 송병훈 짱 송병훈 짱',
-      updateDate: '2023-09-22T00:42:26.086Z',
-      usedProductPhotoResponseDto: {
-        link: 'https://i.imgur.com/ixdlIIc.png',
-        photoNo: 0
-      }
-    }
-  ]);
-  // recentData
-  axios
-    .get(`/usedproduct/${userNo}?region=${region.region}&offset=4&pageSize=0`)
-    .then((res) => {
-      console.log(res.data);
-      recentData = res.data.content;
-    });
-  // popularData
-  axios
-    .get(`/usedproduct/${userNo}?region=${region.region}&offset=4&pageSize=0`)
-    .then((res) => {
-      console.log(res.data);
-      popularData = res.data.content;
-    });
-  // const responseApi = useRef([
-  //   {
-  //     createDate: '2023-09-22T00:42:26.086Z',
-  //     like: true,
-  //     price: 130000,
-  //     productCategory: 'READY',
-  //     productNo: 2,
-  //     region: '지역',
-  //     saleStatus: 'READY',
-  //     title:
-  //       '송병훈 짱 송병훈 짱 송병훈 짱 송병훈 짱\n 송병훈 짱 송병훈 짱 송병훈 짱 송병훈 짱',
-  //     updateDate: '2023-09-22T00:42:26.086Z',
-  //     usedProductPhotoResponseDto: {
-  //       link: 'https://i.imgur.com/ixdlIIc.png',
-  //       photoNo: 0
-  //     }
-  //   }
-  // ]);
+  // ★★★★★ const userNo = sessionStorage.getItem('userNo');
+
+  const [recentData, setRecentData] = useState([]);
+  const [popularData, setPopularData] = useState([]);
+
+  let regionText: string = '';
+
+  switch (region.region) {
+    case '서울':
+      regionText = 'SEOUL';
+      break;
+    case '대전':
+      regionText = 'DAEJEON';
+      break;
+    case '구미':
+      regionText = 'GUMI';
+      break;
+    case '광주':
+      regionText = 'GWANGJU';
+      break;
+    case '부울경':
+      regionText = 'BUG';
+      break;
+  }
+
+  // console.log(regionText);
   const navigate = useNavigate();
-  const goTradeList = () => {
-    navigate(`/tradeList?region=${region.region}`);
+  const goTradeList = (regionText) => {
+    console.log('change Page to List', regionText);
+    navigate(`/tradeList?region=${regionText}`);
   };
+
+  useEffect(() => {
+    // recentData
+    axios
+      .get(`/usedproduct/1?region=${regionText}&sort=no,desc&page=0&size=4`)
+      .then((res) => {
+        // console.log('recentData');
+        // console.log(res.data.content);
+        setRecentData(res.data.content);
+        // console.log(recentData);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    // popularData
+    axios
+      .get(`/usedproduct/1?region=${regionText}&sort=like,desc&page=0&size=4`)
+      .then((res) => {
+        // console.log('popularData');
+        // console.log(res.data.content);
+        setPopularData(res.data.content);
+        // console.log(popularData);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [regionText]);
+
   return (
     <TradeMainProductDiv>
       <RegionAndSearch>
         <Region>지역: {region.region} </Region>
-        <SearchRegion onClick={goTradeList}>검색</SearchRegion>
-        <SearchDiv01></SearchDiv01>
+        <SearchRegion onClick={() => goTradeList(regionText)}>
+          지역 물품 목록
+        </SearchRegion>
+        <SearchDiv01 region={region.region}></SearchDiv01>
       </RegionAndSearch>
       <RecentOrPopularProductDiv>
         <RecentOrPopularProductTitle>
-          방금 등록된 상품
+          방금 등록된 물품
         </RecentOrPopularProductTitle>
         <ProductList01>
-          {/* @ts-ignore */}
-          {recentData.current.map((item: ProductItemType, id) => (
+          {recentData.map((item: ProductItemType, id) => (
             <TradeProductItem01 key={id} item={item}></TradeProductItem01>
           ))}
         </ProductList01>
       </RecentOrPopularProductDiv>
       <RecentOrPopularProductDiv>
         <RecentOrPopularProductTitle>
-          실시간 인기 상품
+          실시간 인기 물품
         </RecentOrPopularProductTitle>
         <ProductList01>
-          {/* @ts-ignore */}
-          {popularData.current.map((item: ProductItemType, id) => (
+          {popularData.map((item: ProductItemType, id) => (
             <TradeProductItem01 key={id} item={item}></TradeProductItem01>
           ))}
         </ProductList01>
