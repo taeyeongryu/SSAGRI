@@ -133,7 +133,7 @@ const ProductList = styled.div`
 const PagingSpace = styled.div`
   max-width: 80%;
   height: 50px;
-  margin: 0px 0px;
+  margin: 10px 0px;
   /* border: 1px solid red; */
   display: flex;
   justify-content: center;
@@ -166,6 +166,7 @@ const PagingButtonText = styled.div`
 const ProductListSearch = ({ regionText, category, search, setSearch }) => {
   // region 데이터를 받아왔으므로, axios 호출을 하여 List를 얻어온다.
   const [responseList, setResponseList] = useState([]);
+  const [response, setResponse] = useState([]);
 
   useEffect(() => {
     search = search === null ? '' : search;
@@ -177,6 +178,8 @@ const ProductListSearch = ({ regionText, category, search, setSearch }) => {
       .then((res) => {
         setResponseList(res.data.content);
         console.log('responseList: ', responseList);
+        setResponse(res.data);
+        console.log('response', response);
       })
       .catch((err) => {
         console.log(err);
@@ -184,13 +187,22 @@ const ProductListSearch = ({ regionText, category, search, setSearch }) => {
   }, [regionText, category, search]);
 
   return (
-    <>
-      <ProductList02>
+    <div
+      style={{
+        width: '840px',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+      }}
+    >
+      <ProductList02 style={{ height: '520px' }}>
         {responseList.map((item: ProductItemType, id) => (
           <TradeProductItem02 key={id} item={item}></TradeProductItem02>
         ))}
       </ProductList02>
-    </>
+      <BottomPageSpace response={response}></BottomPageSpace>
+    </div>
   );
 };
 
@@ -239,6 +251,7 @@ const TradeList = () => {
   useEffect(() => {
     console.log('regionText: ', regionText);
     console.log('category: ', category);
+    console.log('search: ', search);
 
     let selectedCategory: any = document.querySelector('#allCategory');
     selectedCategory.style.color = '#4786fa';
@@ -258,11 +271,13 @@ const TradeList = () => {
   }, [category]);
 
   const navigate = useNavigate();
-  const goTradeList = (region, search) => {
+  const goTradeList = (region: string, search: any) => {
     navigate(`/tradeList?region=${region}&search=${search}`);
   };
-  const goTradeListWithCategory = (region, category) => {
-    navigate(`/tradeList?region=${region}&category=${category}`);
+  const goTradeListWithCategory = (region: string, category: string) => {
+    navigate(
+      `/tradeList?region=${region}&category=${category}&search=${search}`
+    );
   };
 
   return (
@@ -308,7 +323,6 @@ const TradeList = () => {
                 setSearch={setSearch}
               ></ProductListSearch>
             </ProductList>
-            <BottomPageSpace></BottomPageSpace>
           </TradeListDiv>
         </TradeListRightDiv>
       </TradeListAllDiv>
@@ -403,7 +417,22 @@ const AuctionTradeList = () => {
   );
 };
 
-const BottomPageSpace = () => {
+const BottomPageSpace = (response) => {
+  console.log('BottomPageSpace', response.response);
+  const totalPages = response.response.totalPages;
+
+  const rendering = () => {
+    const result: any = [];
+    for (let i = 1; i <= totalPages; i++) {
+      result.push(
+        <PagingButton key={i}>
+          <PagingButtonText>{i}</PagingButtonText>
+        </PagingButton>
+      );
+    }
+    return result;
+  };
+
   return (
     <PagingSpace>
       <PagingButton>
@@ -412,36 +441,7 @@ const BottomPageSpace = () => {
       <PagingButton>
         <PagingButtonText>&lt;</PagingButtonText>
       </PagingButton>
-      <PagingButton>
-        <PagingButtonText>1</PagingButtonText>
-      </PagingButton>
-      <PagingButton>
-        <PagingButtonText>2</PagingButtonText>
-      </PagingButton>
-      <PagingButton>
-        <PagingButtonText>3</PagingButtonText>
-      </PagingButton>
-      <PagingButton>
-        <PagingButtonText>4</PagingButtonText>
-      </PagingButton>
-      <PagingButton>
-        <PagingButtonText>5</PagingButtonText>
-      </PagingButton>
-      <PagingButton>
-        <PagingButtonText>6</PagingButtonText>
-      </PagingButton>
-      <PagingButton>
-        <PagingButtonText>7</PagingButtonText>
-      </PagingButton>
-      <PagingButton>
-        <PagingButtonText>8</PagingButtonText>
-      </PagingButton>
-      <PagingButton>
-        <PagingButtonText>9</PagingButtonText>
-      </PagingButton>
-      <PagingButton>
-        <PagingButtonText>10</PagingButtonText>
-      </PagingButton>
+      {rendering()}
       <PagingButton>
         <PagingButtonText>&gt;</PagingButtonText>
       </PagingButton>

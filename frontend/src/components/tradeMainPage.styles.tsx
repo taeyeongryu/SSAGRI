@@ -131,9 +131,11 @@ export const TradeMainMap = ({
       category.style.textDecoration = 'none';
     });
     let selectedCategory: any = document.querySelector('#allCategory');
-    selectedCategory.style.color = '#4786fa';
-    selectedCategory.style.fontWeight = 'bold';
-    selectedCategory.style.textDecoration = 'underline';
+    if (selectedCategory) {
+      selectedCategory.style.color = '#4786fa';
+      selectedCategory.style.fontWeight = 'bold';
+      selectedCategory.style.textDecoration = 'underline';
+    }
     if (isList) {
       mapGoTradeList(regionList[num]);
     }

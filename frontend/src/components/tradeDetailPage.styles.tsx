@@ -635,7 +635,7 @@ const TradeDetail = () => {
         <DetailUpDiv>
           <DetailUpDivImage>
             <img
-              src='/assets/img/zeuslab.jpg'
+              src={productDetail.current.usedProductPhotoResponseDto.link}
               style={{
                 width: '600px',
                 height: '600px'
