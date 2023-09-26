@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Avatar } from 'antd';
 import axios from 'axios';
 import { onLoginSuccess } from '../utils/user';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { isLoggedInAtom } from '../states/account/loginAtom';
 
@@ -282,6 +282,7 @@ const OverlayPanel = styled.div`
 
 const SignInAndUpComponent = () => {
   const navigate = useNavigate();
+  const { state } = useLocation();
 
   const [image, setImage] = useState(
     'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
@@ -370,6 +371,7 @@ const SignInAndUpComponent = () => {
   // 로그인 요청 api
   const onLoginHandler = (e) => {
     e.preventDefault();
+    console.log(state);
 
     const data = {
       email: signInForm.email,
@@ -380,43 +382,19 @@ const SignInAndUpComponent = () => {
       .then((res) => {
         onLoginSuccess(res);
         setIsLoggedIn(true);
-        navigate('/');
+
+        // 이전 경로가 있다면 로그인 성공 후 그 경로로 다시 이동
+        if (state) {
+          navigate(state);
+        } else {
+          navigate('/'); // 메인페이지
+        }
       })
       .catch((error) => {
         // ... 에러 처리
         console.log(error);
       });
   };
-
-  // // 로그인 성공 시
-  // userNo를 localStorage에 넣기
-  //    let payload = accessToken.substring(
-  //      accessToken.indexOf('.') + 1,
-  //      accessToken.lastIndexOf('.')
-  //    );
-  //    let dec = base64.decode(payload);
-  //    let userNo = JSON.parse(dec).userNo;
-  //    localStorage.setItem('userNo', userNo);
-
-  // axios 헤더에 jwt 토큰 담기
-  //    axios.defaults.headers.common['Authorization'] = accessToken;
-
-  //   // 액세스토큰 만료하기 전에 로그인 연장
-  //   setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
-
-  //   // 로그인 하기 전 접속했던 페이지로 이동시키기
-  // };
-
-  // // 페이지가 새로고침 되거나 액세스토큰이 만료되었을 때 액세스 토큰을 재발급
-  // const onSilentRefresh = () => {
-  //   axios
-  //     .post('/silent-refresh')
-  //     .then(onLoginSuccess)
-  //     .catch((error) => {
-  //       console.log(error);
-  //       // 로그인 실패처리
-  //     });
-  // };
 
   // 회원가입 //
   const regionList = ['대전', '서울', '구미', '광주', '부울경'];
