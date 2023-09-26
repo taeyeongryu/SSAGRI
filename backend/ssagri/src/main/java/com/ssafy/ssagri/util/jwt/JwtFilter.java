@@ -36,11 +36,14 @@ public class JwtFilter extends OncePerRequestFilter {
 
     //필터링 거치지 않는 API endpoint,, 테스트용
     private String[] allowedURI = new String[] {
+            //Swagger
             "/api/swagger-ui/",
             "/api/swagger-resources",
             "/api/webjars/",
             "/api/v2/api-docs",
-            "/api/jwt", //TEST API 주소
+
+            "/api/oauth", //Oauth(kakao API)
+            "/api/jwt", //jwt 요청
             "/api/user/", //로그인, 로그아웃 관련
             "/api/file/", //파일 업로드 관련
             "/api/test" //테스팅 환경
