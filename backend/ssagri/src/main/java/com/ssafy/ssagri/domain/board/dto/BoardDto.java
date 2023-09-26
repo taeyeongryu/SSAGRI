@@ -29,4 +29,7 @@ public class BoardDto {
     // 게시판 삭제 여부
     private boolean allowDelete;
 
+    // 게시판 생명 주기
+    private String boardLife;
+
 }

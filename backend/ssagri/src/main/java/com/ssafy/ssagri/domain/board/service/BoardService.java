@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -176,5 +177,30 @@ public class BoardService {
         }
 
         return new PageImpl<>(result, allBoardWriteList.getPageable(), allBoardWriteList.getTotalElements());
+    }
+
+    // 생명주기 가장 짧은 Top3 뽑기
+    public List<BoardDto> boardLife(){
+
+        List<Board> boardList = boardRopository.findTop3ByOrderByBoardLifeAsc();
+
+        List<BoardDto> result = new ArrayList<>();
+
+        for(int i=0;i<boardList.size();i++){
+
+            String boardLife = boardList.get(i).getBoardLife().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"));
+
+            BoardDto boardDto = BoardDto.builder()
+                    .no(boardList.get(i).getNo())
+                    .user(boardList.get(i).getUser().getNickname())
+                    .title(boardList.get(i).getTitle())
+                    .boardClick(boardList.get(i).getBoardClick())
+                    .showName(boardList.get(i).getShowName())
+                    .boardLife(boardLife)
+                    .allowDelete(boardList.get(i).isAllowDelete()).build();
+
+            result.add(boardDto);
+        }
+        return result;
     }
 }
