@@ -6,8 +6,6 @@ import { onLoginSuccess } from '../utils/user';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { isLoggedInAtom } from '../states/account/loginAtom';
-// @ts-ignore
-import base64 from 'base-64';
 
 const show = keyframes`
   0%, 49.99% {
@@ -282,8 +280,6 @@ const OverlayPanel = styled.div`
   }
 `;
 
-//
-
 const SignInAndUpComponent = () => {
   const navigate = useNavigate();
 
@@ -294,9 +290,27 @@ const SignInAndUpComponent = () => {
   const [profile, setProfile] = useState(null);
   const fileInput = useRef(null);
 
+  const [profileImgUrl, setProfileImgUrl] = useState('');
+
+  // 프로필 사진 등록
   const onChange = (e) => {
     if (e.target.files[0]) {
       setProfile(e.target.files[0]);
+      const formData2 = new FormData();
+
+      const uploadFile = e.target.files[0];
+      formData2.append('upload-file', uploadFile);
+
+      axios
+        .post(`/user/regist/upload/profile`, formData2)
+        .then((res) => {
+          console.log('이미지 URL: ', res.data);
+          // 이미지 URL 저장후 회원가입 시에 사용
+          setProfileImgUrl(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
       // 업로드 취소할 시
       setProfile(null);
@@ -375,12 +389,6 @@ const SignInAndUpComponent = () => {
   };
 
   // // 로그인 성공 시
-  // const onLoginSuccess = (response: any) => {
-  //   console.log(response.headers);
-
-  //   const accessToken = response.headers['access-token'];
-  //   console.log(accessToken);
-
   // userNo를 localStorage에 넣기
   //    let payload = accessToken.substring(
   //      accessToken.indexOf('.') + 1,
@@ -389,6 +397,25 @@ const SignInAndUpComponent = () => {
   //    let dec = base64.decode(payload);
   //    let userNo = JSON.parse(dec).userNo;
   //    localStorage.setItem('userNo', userNo);
+
+  // axios 헤더에 jwt 토큰 담기
+  //    axios.defaults.headers.common['Authorization'] = accessToken;
+
+  //   // 액세스토큰 만료하기 전에 로그인 연장
+  //   setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
+
+  //   // 로그인 하기 전 접속했던 페이지로 이동시키기
+  // };
+
+  // // 페이지가 새로고침 되거나 액세스토큰이 만료되었을 때 액세스 토큰을 재발급
+  // const onSilentRefresh = () => {
+  //   axios
+  //     .post('/silent-refresh')
+  //     .then(onLoginSuccess)
+  //     .catch((error) => {
+  //       console.log(error);
+  //       // 로그인 실패처리
+  //     });
   // };
 
   // 회원가입 //
@@ -414,6 +441,7 @@ const SignInAndUpComponent = () => {
   const [isConfirmValid, setIsConfirmValid] = useState(false);
   // @ts-ignore
   const [isNicknameValid, setIsNicknameValid] = useState(false);
+  const [isNicknameUnique, setIsNicknameUnique] = useState(false);
 
   // 인증번호 확인 창 보이는 여부
   const [showVerify, setShowVerify] = useState(false);
@@ -578,10 +606,13 @@ const SignInAndUpComponent = () => {
   // 인증번호 확인
   const checkVerificationCode = (e) => {
     e.preventDefault();
+    console.log(verifyCode);
 
     axios
-      .post('/user/regist/check/authcode-valid', {
-        authcode: verifyCode
+      .get('/user/regist/check/authcode-valid', {
+        params: {
+          authcode: verifyCode
+        }
       })
       .then((res) => {
         // 인증 완료
@@ -611,40 +642,74 @@ const SignInAndUpComponent = () => {
         .then(() => {
           // 닉네임이 사용가능한 경우
           setNicknameMessage('사용 가능한 닉네임입니다.');
-          setIsNicknameValid(true);
+          setIsNicknameUnique(true);
         })
         .catch(() => {
           // 이미 등록된 닉네임인 경우
           setNicknameMessage('사용중인 닉네임입니다.');
-          setIsNicknameValid(false);
+          setIsNicknameUnique(false);
         });
     }
   };
 
+  // 지역 필터링
+  const regionFormat = (region: string) => {
+    if (region === '서울') {
+      return 'SEOUL';
+    } else if (region === '구미') {
+      return 'GUMI';
+    } else if (region === '광주') {
+      return 'GWANGJU';
+    } else if (region === '부울경') {
+      return 'BUG';
+    } else {
+      return 'DAEJEON';
+    }
+  };
+
+  // 회원가입 요청
   const onSignUp = (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    // 프로필 사진 추가
-    // @ts-ignore
-    formData.append('profile', profile);
-    // 필드 입력값 추가
-    formData.append('email', signUpForm.email); // 이메일
-    formData.append('password', signUpForm.password); // 비밀번호
-    formData.append('regions', signUpForm.region); // 지역
-    formData.append('number', signUpForm.cardinalNumber); // 기수
-    formData.append('nickname', signUpForm.nickname); // 닉네임
 
-    for (let key of formData.keys()) {
-      console.log(`${key}: ${formData.get(key)}`);
-    }
-
-    const config = {
-      headers: {
-        'content-type': 'multipart/form-data'
-      }
+    const data = {
+      profile: profileImgUrl,
+      email: signUpForm.email,
+      password: signUpForm.password,
+      regions: regionFormat(signUpForm.region),
+      number: parseInt(signUpForm.cardinalNumber),
+      nickname: signUpForm.nickname
     };
 
-    axios.post('/user/regist', formData, config);
+    // const formData = new FormData();
+    // // 프로필 사진 url 추가
+    // // @ts-ignore
+    // formData.append('profile', profileImgUrl);
+    // // 필드 입력값 추가
+    // formData.append('email', signUpForm.email); // 이메일
+    // formData.append('password', signUpForm.password); // 비밀번호
+    // formData.append('regions', regionFormat(signUpForm.region)); // 지역
+    // // @ts-ignore
+    // formData.append('number', signUpForm.cardinalNumber); // 기수
+    // formData.append('nickname', signUpForm.nickname); // 닉네임
+
+    // for (let key of formData.keys()) {
+    //   console.log(`${key}: ${formData.get(key)}`);
+    // }
+
+    // const config = {
+    //   headers: {
+    //     'content-type': 'multipart/form-data'
+    //   }
+    // };
+
+    axios
+      .post('/user/regist/', data)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const [joinBtnActive, setJoinBtnActive] = useState(false);
@@ -695,12 +760,12 @@ const SignInAndUpComponent = () => {
   }, []);
 
   useEffect(() => {
-    if (isEmailValid && isPasswordValid && isConfirmValid && isNicknameValid) {
+    if (isEmailValid && isPasswordValid && isConfirmValid && isNicknameUnique) {
       setJoinBtnActive(true);
     } else {
       setJoinBtnActive(false);
     }
-  }, [isEmailValid, isPasswordValid, isConfirmValid, isNicknameValid]);
+  }, [isEmailValid, isPasswordValid, isConfirmValid, isNicknameUnique]);
 
   return (
     <Container id='container' style={{ margin: 'auto' }}>
@@ -718,13 +783,17 @@ const SignInAndUpComponent = () => {
             <Input
               type='email'
               value={signInForm.email}
+              // value={'test@test.com'}
               onChange={onChangeEmail}
+              // defaultValue='test@test.com'
             ></Input>
             <Label htmlFor='password'>비밀번호</Label>
             <Input
               type='password'
               value={signInForm.password}
+              // value={'test'}
               onChange={onChangePassword}
+              // defaultValue='test'
             ></Input>
             <A>비밀번호를 잊으셨나요?</A>
           </FormContent>

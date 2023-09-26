@@ -53,8 +53,10 @@ const App = () => {
         <Route path='/tradeUpdate' element={<TradeUpdatePage />} />
         {/* 중고거래 상세 페이지 */}
         <Route path='/tradeDetail/:no' element={<TradeDetailPage />} />
-        {/* 중고거래 상세 페이지 */}
+        {/* 채팅 화면 페이지 */}
         <Route path='/chat' element={<ChattingPage />} />
+        {/* 채팅 연결 페이지 */}
+        {/* <Route path='/doChat' element={<DoChatPage />} /> */}
         {/* 경매 페이지 */}
         <Route path='/auction' element={<AuctionPage />} />
         {/* 경매 생성 페이지 */}

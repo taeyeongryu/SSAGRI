@@ -8,15 +8,14 @@ import com.ssafy.ssagri.entity.board.Board;
 import com.ssafy.ssagri.entity.board.BoardList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -107,6 +106,7 @@ public class BoardService {
     }
 
     // 게시판 클릭 시 조회수 증가
+    @Transactional
     public void boardClick(Long boardNo){
         Board board1 = boardRopository.findByNo(boardNo);
 
@@ -140,6 +140,18 @@ public class BoardService {
 
     }
 
+    // 게시글에 좋아요 누르기
+    @Transactional
+    public void writeLike(Long writeNo){
+        BoardList boardList1 = boardListRepository.findByNo(writeNo);
+
+        BoardList boardList = BoardList.builder()
+                .like(boardList1.getLike()+1).build();
+
+        boardListRepository.save(boardList);
+
+    }
+
     // 게시글 모두 출력
     public Page<BoardListDto> boardWriteList(Pageable pageable){
 
@@ -165,5 +177,30 @@ public class BoardService {
         }
 
         return new PageImpl<>(result, allBoardWriteList.getPageable(), allBoardWriteList.getTotalElements());
+    }
+
+    // 생명주기 가장 짧은 Top3 뽑기
+    public List<BoardDto> boardLife(){
+
+        List<Board> boardList = boardRopository.findTop3ByOrderByBoardLifeAsc();
+
+        List<BoardDto> result = new ArrayList<>();
+
+        for(int i=0;i<boardList.size();i++){
+
+            String boardLife = boardList.get(i).getBoardLife().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"));
+
+            BoardDto boardDto = BoardDto.builder()
+                    .no(boardList.get(i).getNo())
+                    .user(boardList.get(i).getUser().getNickname())
+                    .title(boardList.get(i).getTitle())
+                    .boardClick(boardList.get(i).getBoardClick())
+                    .showName(boardList.get(i).getShowName())
+                    .boardLife(boardLife)
+                    .allowDelete(boardList.get(i).isAllowDelete()).build();
+
+            result.add(boardDto);
+        }
+        return result;
     }
 }

@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -52,15 +53,19 @@ public class AuctionProductService {
     // 경매 모든 리스트 출력
     public List<AuctionProductAllDTO> getAuctionProducts() {
 
-        System.out.println("야야야");
-         List<AuctionProduct> products = auctionRepository.findAll();
 
-        System.out.println(products.size() + "야야야");
+         List<AuctionProduct> products = auctionRepository.findAll();
 
 
          List<AuctionProductAllDTO> result = new ArrayList<>();
 
+
          for(int i=0;i<products.size();i++){
+
+         String startDate = products.get(i).getStartDate().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"));
+
+         String endDate = products.get(i).getEndDate().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"));
+
              AuctionProductAllDTO auctionProductAllDTO = AuctionProductAllDTO.builder()
                      .no(products.get(i).getNo())
                      .userNickName(products.get(i).getUser().getNickname())
@@ -68,15 +73,14 @@ public class AuctionProductService {
                      .upPrice(products.get(i).getUpPrice())
                      .downPrice(products.get(i).getDownPrice())
                      .priceCount(products.get(i).getPriceCount())
-//                     .startDate(products.get(i).getStartDate())
-//                     .endDate(products.get(i).getEndDate())
+                     .startDate(startDate)
+                     .endDate(endDate)
                      .comment(products.get(i).getComment())
 //                     .auctionStatus(products.get(i).getAuctionStatus())
                      .finallyPrice(products.get(i).getFinallyPrice())
                      .modifyDate(products.get(i).getModifyDate())
                      .type(products.get(i).getType())
                      .originPrice(products.get(i).getOriginPrice())
-//                     .photos(auctionPhotoRepository.findByAuctionProductNo(products.get(i)))
                      .build();
 
                 result.add(auctionProductAllDTO);
@@ -91,14 +95,24 @@ public class AuctionProductService {
     @Transactional
     public void setAuctionProduct(AuctionProductCreateDTO auctionProductCreateDTO){
 
+        String startDate1 = auctionProductCreateDTO.getStartDate();
+
+        String endDate1 = auctionProductCreateDTO.getEndDate();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초");
+
+        LocalDateTime startDate = LocalDateTime.parse(startDate1, formatter);
+        LocalDateTime endDate = LocalDateTime.parse(endDate1, formatter);
+
+
         AuctionProduct auctionProduct = AuctionProduct.builder()
                 .user(userRegistRepository.findByNo(auctionProductCreateDTO.getUserNo()))
                 .name(auctionProductCreateDTO.getName())
 //                .upPrice(auctionProductCreate.getUpPrice())
                 .downPrice(auctionProductCreateDTO.getDownPrice())
                 .priceCount(auctionProductCreateDTO.getCountPrice())
-//                .startDate(auctionProductCreate.getStartDate())
-//                .endDate(auctionProductCreate.getEndDate())
+                .startDate(startDate)
+                .endDate(endDate)
                 .comment(auctionProductCreateDTO.getComment())
                 .modifyDate(LocalDateTime.now())
                 .originPrice(auctionProductCreateDTO.getOriginPrice())
@@ -190,6 +204,10 @@ public class AuctionProductService {
     public AuctionProductAllDTO auctionDetail(Long auctionProductNo){
        AuctionProduct auctionProduct = auctionRepository.findByNo(auctionProductNo);
 
+        String startDate = auctionProduct.getStartDate().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"));
+
+        String endDate = auctionProduct.getEndDate().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"));
+
        AuctionProductAllDTO auctionProductAllDTO =AuctionProductAllDTO.builder()
                .no(auctionProduct.getNo())
                .userNickName(userRegistRepository.findByNo(auctionProduct.getUser().getNo()).getNickname())
@@ -197,8 +215,8 @@ public class AuctionProductService {
                .upPrice(auctionProduct.getUpPrice())
                .downPrice(auctionProduct.getDownPrice())
                .priceCount(auctionProduct.getPriceCount())
-//               .startDate(auctionProduct.getStartDate()) // String 으로 변환해서 주기
-//               .endDate(auctionProduct.getEndDate()) String 변환해서 주기
+               .startDate(startDate) // String 으로 변환해서 주기
+               .endDate(endDate)
                .comment(auctionProduct.getComment())
                .auctionStatus(auctionProduct.getAuctionStatus())
                .finallyPrice(auctionProduct.getFinallyPrice())

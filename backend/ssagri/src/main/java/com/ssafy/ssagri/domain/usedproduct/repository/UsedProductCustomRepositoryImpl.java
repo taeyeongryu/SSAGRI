@@ -11,6 +11,7 @@ import com.ssafy.ssagri.entity.usedproduct.ProductCategory;
 import com.ssafy.ssagri.entity.usedproduct.QUsedProduct;
 import com.ssafy.ssagri.entity.usedproduct.UsedProduct;
 import com.ssafy.ssagri.entity.user.Region;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +21,7 @@ import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class UsedProductCustomRepositoryImpl implements UsedProductCustomRepository{
     private final JPAQueryFactory jpaQueryFactory;
 
@@ -34,6 +36,10 @@ public class UsedProductCustomRepositoryImpl implements UsedProductCustomReposit
     * */
     @Override
     public Page<UsedProduct> selectAllUsedProduct(ProductCategory productCategory, Region region,String search ,Pageable pageable) {
+
+        log.info("UsedProductRepository category: {}, region: {}, search: {}", productCategory, region, search);
+        log.info("UsedProductRepository pageable: {}", pageable);
+
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(usedProduct.deleteDate.isNull());
 
@@ -42,7 +48,7 @@ public class UsedProductCustomRepositoryImpl implements UsedProductCustomReposit
         }
 
         if(region != null){
-            builder.and(usedProduct.user.region.eq(region));
+            builder.and(usedProduct.region.eq(region));
         }
 
         if(search != null){
@@ -57,6 +63,7 @@ public class UsedProductCustomRepositoryImpl implements UsedProductCustomReposit
                 .fetchResults();
 
         List<UsedProduct> results = usedProductQueryResults.getResults();
+        log.info("UsedProductRepository results: {}", results);
         long total = usedProductQueryResults.getTotal();
 
         return new PageImpl<>(results, pageable, total);

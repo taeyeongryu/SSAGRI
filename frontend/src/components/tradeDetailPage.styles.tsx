@@ -3,9 +3,10 @@ import {
   ProductList03,
   TradeProductItem03
 } from '../components/tradeMainPage.styles';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ProductItemType } from './type';
 import axios from 'axios';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const DetailFrame = styled.div`
   width: 1920px;
@@ -367,12 +368,9 @@ const DetailSellorTemperatureScale = styled.div`
 `;
 
 // ----- 판매자 정보 가져와서 화면에 보여주기 -----
-const SellorDiv = (sellorNo) => {
-  const productAndSellorInfo = useRef({});
-  const url = `/usedproduct/detail/${sellorNo}`;
-  axios.get(url).then((res) => {
-    productAndSellorInfo.current = res.data;
-  });
+const SellorDiv = (sellorInfo) => {
+  console.log('SellorDiv', sellorInfo.sellorInfo);
+
   return (
     <>
       <DetailSellorHeader>
@@ -384,13 +382,17 @@ const SellorDiv = (sellorNo) => {
       <DetailSellorDiv>
         <DetailSellorTitle>
           <DetailSellorLeft>
-            <DetailSellorNickname>코딩왕123</DetailSellorNickname>
+            <DetailSellorNickname>
+              {sellorInfo.sellorInfo.sellorNickname != null
+                ? sellorInfo.sellorInfo.sellorNickname
+                : '닉네임'}
+            </DetailSellorNickname>
             <DetailSellorTrade>판매상품 3</DetailSellorTrade>
           </DetailSellorLeft>
           <DetailSellorRight>
             <DetailSellorProfile>
               <img
-                src='/assets/img/profile.png'
+                src={sellorInfo.sellorInfo.sellorProfile}
                 style={{
                   width: '80px',
                   height: '80px'
@@ -402,7 +404,7 @@ const SellorDiv = (sellorNo) => {
         <DetailSellorTemperatureDiv>
           <DetailSellorTemperatureInfo>
             <DetailSellorTemperatureText>
-              매너온도 424
+              매너온도 {sellorInfo.sellorInfo.sellorTemper}
             </DetailSellorTemperatureText>
             <DetailSellorTemperatureMax>1,000</DetailSellorTemperatureMax>
           </DetailSellorTemperatureInfo>
@@ -510,10 +512,44 @@ const Tag = styled.div`
   }
 `;
 
-const TradeDetail = () => {
-  const sellorNo: number = 1;
+// type Sellor = {
+//   sellorNickname: string;
+//   sellorNo: number;
+//   sellorProfile: string;
+//   sellorTemper: number;
+// };
 
-  // -------- 임시 데이터 --------
+const TradeDetail = () => {
+  // 물품, 판매자 정보 저장 예정
+  const productDetail = useRef({
+    content: 'string',
+    createDate: '2023-09-22T00:42:26.086Z',
+    like: true,
+    likeCount: 0,
+    price: 130000,
+    productCategory: 'READY',
+    productNo: 2,
+    region: '지역',
+    saleStatus: 'READY',
+    title:
+      '송병훈 짱 송병훈 짱 송병훈 짱 송병훈 짱\n 송병훈 짱 송병훈 짱 송병훈 짱 송병훈 짱',
+    updateDate: '2023-09-22T00:42:26.086Z',
+    usedProductPhotoResponseDto: {
+      link: 'https://i.imgur.com/ixdlIIc.png',
+      photoNo: 0
+    },
+    userNickname: 'string',
+    userNo: 0,
+    userProfile: 'string',
+    userTemper: 0
+  });
+  // URI에서 물품번호 가져오기
+  const productNo = useParams().no;
+  console.log(productNo, 'Detail');
+  // 판매자 정보 저장
+  const [sellorInfo, setSellorInfo] = useState({});
+
+  // 관련 추천 상품 리스트
   let responseList = useRef([
     {
       createDate: '2023-09-22T00:42:26.086Z',
@@ -565,20 +601,41 @@ const TradeDetail = () => {
     }
   ]);
 
-  // useEffect(() => {
-  //   const url = '';
-  //   axios.get(url).then((res) => {
-  //     console.log(res.data);
-  //     responseList.current = res.data;
-  //   });
-  // }, []);
+  const navigate = useNavigate();
+  const goChat = () => {
+    navigate(`/chat`);
+  };
+
+  // ★★★★★ const userNo = localStorage.getItem('userNo'); 아래 1에 userNo가 삽입되어야 함
+
+  useEffect(() => {
+    const url = `/usedproduct/detail/1?usedProductNo=${productNo}`;
+    axios
+      .get(url)
+      .then((res) => {
+        console.log('check Detail', res);
+        productDetail.current = res.data;
+        console.log('check productDetail.current', productDetail.current);
+        setSellorInfo({
+          sellorNickname: res.data.userNickname,
+          sellorNo: res.data.userNo,
+          sellorProfile: res.data.userProfile,
+          sellorTemper: res.data.userTemper
+        });
+        console.log('check sellorInfo', sellorInfo);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <DetailFrame>
       <DetailDiv>
         <DetailUpDiv>
           <DetailUpDivImage>
             <img
-              src='/assets/img/zeuslab.jpg'
+              src={productDetail.current.usedProductPhotoResponseDto.link}
               style={{
                 width: '600px',
                 height: '600px'
@@ -588,19 +645,22 @@ const TradeDetail = () => {
           <DetailUpDivInfo>
             <DetailUpDivInfoFrame>
               <DetailDivInfoCategory>
-                카테고리 &gt; <div style={{ color: '#000' }}>&nbsp;모니터</div>
+                카테고리 &gt;{' '}
+                <div style={{ color: '#000' }}>
+                  &nbsp;{productDetail.current.productCategory}
+                </div>
               </DetailDivInfoCategory>
               <DetailDivInfoName>
                 <DetailDivInfoNameText>
                   {/* 30자 제한을 둬야 화면에 깔끔하게 나온다 */}
-                  제우스랩 포터블 모니터 Z16 Pro
+                  {productDetail.current.title}
                 </DetailDivInfoNameText>
                 <DetailDivInfoShareButton>
                   <DetailDivInfoShare src='/assets/img/share.png'></DetailDivInfoShare>
                 </DetailDivInfoShareButton>
               </DetailDivInfoName>
               <DetailDivInfoPrice>
-                <RegularPrice>130,000</RegularPrice>
+                <RegularPrice>{productDetail.current.price}</RegularPrice>
                 <RegularPriceWon>원</RegularPriceWon>
                 <CostText>정가</CostText>
                 <Cost>160,000</Cost>
@@ -608,7 +668,7 @@ const TradeDetail = () => {
               </DetailDivInfoPrice>
               <InfoLine></InfoLine>
               <DetailDivInfoEtc>
-                온천2동 · 2시간 전 · 조회 25 · 찜 0
+                {productDetail.current.region} · 2시간 전 · 조회 25 · 찜 0
               </DetailDivInfoEtc>
               <InfoLine></InfoLine>
               <DetailDivButton>
@@ -619,7 +679,7 @@ const TradeDetail = () => {
                   </HeartImgDiv>
                 </DetailDivHeart>
                 <DetailDivChat>
-                  <ChatText>구매 채팅하기</ChatText>
+                  <ChatText onClick={goChat}>구매 채팅하기</ChatText>
                   <ChatImgDiv>
                     <ChatImg src='/assets/img/chat.png'></ChatImg>
                   </ChatImgDiv>
@@ -628,7 +688,7 @@ const TradeDetail = () => {
               <InfoLine></InfoLine>
               {/* 판매자 정보 */}
               <DetailDivSellorFrame>
-                <SellorDiv sellorNo={sellorNo}></SellorDiv>
+                <SellorDiv sellorInfo={sellorInfo}></SellorDiv>
               </DetailDivSellorFrame>
             </DetailUpDivInfoFrame>
           </DetailUpDivInfo>
@@ -640,7 +700,9 @@ const TradeDetail = () => {
               <CautionBox></CautionBox>
             </DetailContentCaution>
             {/* 본문 내용 */}
-            <DetailContentText>본문내용 삽입 HTML</DetailContentText>
+            <DetailContentText>
+              {productDetail.current.content}
+            </DetailContentText>
           </DetailContentDiv>
           <InfoLine></InfoLine>
           {/* 관련 추천상품 */}

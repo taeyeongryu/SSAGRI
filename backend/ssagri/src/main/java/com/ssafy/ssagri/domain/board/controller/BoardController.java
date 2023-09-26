@@ -1,14 +1,9 @@
 package com.ssafy.ssagri.domain.board.controller;
 
-import com.ssafy.ssagri.domain.auction.dto.AuctionProductAllDTO;
-import com.ssafy.ssagri.domain.auction.repository.AuctionCustomRepository;
 import com.ssafy.ssagri.domain.board.dto.*;
-import com.ssafy.ssagri.domain.board.repository.BoardRopository;
 import com.ssafy.ssagri.domain.board.service.BoardService;
-import com.ssafy.ssagri.domain.usedproduct.dto.response.UsedProductResponseDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -79,6 +74,19 @@ public class BoardController {
     }
 
     // 게시글에 좋아요 누르기
+    @GetMapping(value = "/write-like/{writeno}")
+    @ApiOperation("게시글 좋아요 누르기")
+    public void boardWriteLike(@PathVariable("writeno") Long writeNo){
+
+    }
+
+    // 생명 주기 제일 적은 게시판 Top3
+    @GetMapping(value = "/board-life")
+    @ApiOperation("생명 주기 제일 적은 게시판 Top3")
+    public List<BoardDto> boardLifeTop3(){
+        return boardService.boardLife();
+    }
+
 
 
     // 하나의 게시글에 댓글달기
