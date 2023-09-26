@@ -82,8 +82,9 @@ public class UserRegistController {
 
     @Operation(summary = "프로필 사진 업로드", description = "MultipartFile 형태로 파일을 올려주시면 됩니다. 리턴값으로 해당 주소의 Url을 가져옵니다.")
     @Transactional
-    @GetMapping("/upload/profile")
+    @PostMapping("/upload/profile")
     public String saveFile(HttpServletRequest request, @RequestParam("upload-file") MultipartFile multipartFile) throws IOException {
+        log.warn("테스트 {}", multipartFile);
         return s3FileService.saveFile(request, multipartFile, "profile");
     }
 
