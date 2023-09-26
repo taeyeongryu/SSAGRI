@@ -132,6 +132,8 @@ const CreateAndUpdateDivItemDown = styled.div`
 
 const TradeCreate = () => {
   const [data, setData] = useState<string>('');
+  const userNo = localStorage.getItem('userNo');
+  console.log('userNo', userNo);
 
   return (
     <CreateAndUpdateFrame>
