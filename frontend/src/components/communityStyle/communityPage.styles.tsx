@@ -182,7 +182,7 @@ const CommunityMain = () => {
   const [commuRank, setCommuRank] = useState([]);
   const [commuList, setCommuList] = useState([]);
 
-  // const [commuLife, setCommuLife] = useState([]);
+  const [commuLife, setCommuLife] = useState([]);
   const colorList = [
     '#8ECDDD',
     '#E4F1FF',
@@ -214,6 +214,7 @@ const CommunityMain = () => {
     CommuApi.get('/board/click-board-list')
       .then((res) => {
         setCommuRank(res.data);
+        console.log(res, '12131');
       })
       .catch((err) => {
         console.log('실패1', err);
@@ -229,15 +230,15 @@ const CommunityMain = () => {
       });
 
     // 남은 게시판 생명 Top3
-    // CommuApi.post('/auction-product/auction/regist')
-    //   .then((res) => {
-    //     console.log(res, '3번요청성공');
-    //     setCommuLife(res.data);
-    //     console.log(commuLife, '확인3');
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    CommuApi.get('/board/board-life')
+      .then((res) => {
+        console.log(res, '3번요청성공');
+        setCommuLife(res.data);
+        console.log(commuLife, '확인3');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   useEffect(() => {
@@ -455,7 +456,11 @@ const CommunityMain = () => {
           {commuRank.slice(0, 5).map((item: CommuItem, id) => (
             <ListDiv key={id}>
               {id + 1}.
-              <CommuTag onClick={() => navigate(`/community/${id}`)}>
+              <CommuTag
+                onClick={() =>
+                  navigate(`/community/${item.boardNo}?boardNo=${item.boardNo}`)
+                }
+              >
                 {item.title}
               </CommuTag>
             </ListDiv>
@@ -496,18 +501,12 @@ const CommunityMain = () => {
         <Div>
           <LifeTags>남은 게시판 생명</LifeTags>
           <FlexDiv>
-            <Div>
-              <LifeTag>Top.1</LifeTag>
-              <CommuPage></CommuPage>
-            </Div>
-            <Div>
-              <LifeTag>Top.2</LifeTag>
-              <CommuPage></CommuPage>
-            </Div>
-            <Div>
-              <LifeTag>Top.3</LifeTag>
-              <CommuPage></CommuPage>
-            </Div>
+            {commuLife.map((item: CommuItem, id) => (
+              <div>
+                <LifeTag>Top.{id + 1}</LifeTag>
+                <CommuPage key={id}>{item.title}</CommuPage>
+              </div>
+            ))}
           </FlexDiv>
         </Div>
         <BottomTag onClick={() => navigate('/communityCreate')}>

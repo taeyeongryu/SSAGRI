@@ -68,11 +68,11 @@ const App = () => {
         {/* 커뮤티니 생성 */}
         <Route path='/communityCreate' element={<CommunityCreatePage />} />
         {/* 커뮤티니 게시판 페이지 */}
-        <Route path='/community/:num' element={<BoardListPage />} />
+        <Route path='/community/:no' element={<BoardListPage />} />
         {/* 커뮤티니 게시판 생성 */}
-        <Route path='/community/:num/Create' element={<BoardCreatePage />} />
+        <Route path='/community/:no/Create' element={<BoardCreatePage />} />
         {/* 커뮤티니 게시판 디테일 페이지 */}
-        <Route path='/community/:num/Detail' element={<BoardDetailPage />} />
+        <Route path='/community/:no/Detail/' element={<BoardDetailPage />} />
       </Routes>
     </div>
   );

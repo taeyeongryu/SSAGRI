@@ -9,6 +9,7 @@ import Matter, {
   MouseConstraint,
   Runner
 } from 'matter-js';
+import { useNavigate } from 'react-router-dom';
 
 const MainPage = styled.div`
   width: 100%;
@@ -21,9 +22,43 @@ const Scrollbar = styled.div`
   margin: 90vh 25vw;
   width: 50vw;
   height: 6px;
-  border: 1px solid rgb(73, 147, 250, 0.7);
+  /* border: 1px solid rgb(73, 147, 250, 0.7);
+  border: 1px solid #f94c10; */
   border-radius: 1px;
   z-index: 20;
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 6px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgb(73, 147, 250, 0.2),
+      transparent
+    );
+    top: 0;
+  }
+
+  &::before {
+    left: -10px;
+    animation: wave-animation 2s linear infinite;
+  }
+
+  &::after {
+    left: 10px;
+    animation: wave-animation 2s linear infinite reverse;
+  }
+
+  @keyframes wave-animation {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(20px);
+    }
+  }
 `;
 
 const Scroller = styled.div`
@@ -33,6 +68,7 @@ const Scroller = styled.div`
   height: 100%;
   width: 100%;
   background: rgba(23, 206, 219, 1);
+  background: #f94c10;
   clip-path: polygon(0% 0%, 10px 0%, 10px 100%, 0% 100%);
   transition: all 0.2s;
 `;
@@ -44,26 +80,61 @@ const ScrollTagDiv = styled.div`
   color: rgb(0, 0, 0, 0.5);
 `;
 const ScrollTag = (scrollposition) => {
+  const scrollContainer: HTMLElement | null =
+    document.querySelector('.page-container');
+  const handleHomeClick = () => {
+    if (scrollContainer) {
+      scrollContainer.scrollLeft = 0;
+      scrollposition.current = 0;
+    }
+  };
+
+  const handleTradeClick = () => {
+    if (scrollContainer) {
+      scrollContainer.scrollLeft = 4300;
+      scrollposition.current = 3;
+    }
+  };
+  const handleAuctionClick = () => {
+    if (scrollContainer) {
+      scrollContainer.scrollLeft = 7000;
+      scrollposition.current = 4;
+    }
+  };
+  const handleCommuClick = () => {
+    if (scrollContainer) {
+      scrollContainer.scrollLeft = 9150;
+      scrollposition.current = 5;
+    }
+  };
+  const handleServeClick = () => {
+    if (scrollContainer) {
+      scrollContainer.scrollLeft = 11000;
+      scrollposition.current = 6;
+    }
+  };
   return (
     <ScrollTagDiv>
       {/* <span style={HomeStyle}>Home</span> */}
       <span
         style={{
-          marginRight: '90px',
+          marginRight: '130px',
           color:
             scrollposition.scrollposition === 1
-              ? 'orange'
+              ? '#f94c10'
               : 'rgba(0, 0, 0, 0.5)'
         }}
+        onClick={handleHomeClick}
       >
         Home
       </span>
       <span
         style={{
-          marginRight: '100px',
+          marginRight: '110px',
+          width: '50px',
           color:
             scrollposition.scrollposition === 2
-              ? 'orange'
+              ? '#f94c10'
               : 'rgba(0, 0, 0, 0.5)'
         }}
       >
@@ -71,34 +142,41 @@ const ScrollTag = (scrollposition) => {
       </span>
       <span
         style={{
-          marginRight: '125px',
+          marginRight: '100px',
+          width: '100px',
+
           color:
             scrollposition.scrollposition === 3
-              ? 'orange'
+              ? '#f94c10'
               : 'rgba(0, 0, 0, 0.5)'
         }}
+        onClick={handleTradeClick}
       >
         중고거래
       </span>
       <span
         style={{
-          marginRight: '155px',
+          marginRight: '105px',
+          width: '70px',
           color:
             scrollposition.scrollposition === 4
-              ? 'orange'
+              ? '#f94c10'
               : 'rgba(0, 0, 0, 0.5)'
         }}
+        onClick={handleAuctionClick}
       >
         경매
       </span>
       <span
         style={{
-          marginRight: '100px',
+          marginRight: '95px',
+          width: '100px',
           color:
             scrollposition.scrollposition === 5
-              ? 'orange'
+              ? '#f94c10'
               : 'rgba(0, 0, 0, 0.5)'
         }}
+        onClick={handleCommuClick}
       >
         커뮤니티
       </span>
@@ -106,9 +184,10 @@ const ScrollTag = (scrollposition) => {
         style={{
           color:
             scrollposition.scrollposition === 6
-              ? 'orange'
+              ? '#f94c10'
               : 'rgba(0, 0, 0, 0.5)'
         }}
+        onClick={handleServeClick}
       >
         Service
       </span>
@@ -159,10 +238,10 @@ const Pages1_Left = styled.div`
 `;
 
 const Pages1_tag1 = styled.p`
-  font-size: 35px;
+  font-size: 38px;
   margin-top: 240px;
   animation: fadein 2s ease-in-out;
-
+  font-weight: 600;
   @keyframes fadein {
     0% {
       opacity: 0;
@@ -173,9 +252,10 @@ const Pages1_tag1 = styled.p`
   }
 `;
 const Pages1_tag2 = styled.p`
-  font-size: 15px;
+  margin-left: 5px;
+  font-size: 18px;
   animation: fadein 2s ease-in-out;
-
+  /* font-weight: 600; */
   @keyframes fadein {
     0% {
       opacity: 0;
@@ -273,19 +353,22 @@ const Pages2 = styled.div`
 `;
 
 const Page2_tag1 = styled.div`
+  position: relative;
   font-family: var(--font-Pretendard);
   /* font-family: var(--font-googleNanumPen); */
-  margin-top: 530px;
+  margin-top: 400px;
   margin-right: 200px;
   font-size: 45px;
   width: 800px;
   height: 200px;
   /* border: 2px solid red; */
   background-image: url('/assets/img/page2_clip2.PNG');
+  background-position: 0px 60px;
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
   z-index: 20;
+  font-weight: 600;
 `;
 
 const fadeIn = keyframes`
@@ -323,6 +406,16 @@ const Page2_tag2 = styled.div`
   overflow: hidden;
 `;
 
+const GifImage = styled.img`
+  width: 350px;
+  height: 170px;
+  position: absolute;
+  top: -130px;
+  left: 640px;
+  z-index: 300;
+  border-radius: 100px;
+`;
+
 const Page2_img1 = styled.img`
   position: absolute;
   top: 0px;
@@ -338,11 +431,23 @@ const Page2_img1 = styled.img`
 const Page2_img2 = styled.img`
   position: absolute;
   top: 250px;
-  left: 20px;
+  left: 220px;
   /* margin-top: 250px; */
   font-size: 40px;
   width: 340px;
   height: 370px;
+  /* border: 2px solid red; */
+  margin-right: 300px;
+  border-radius: 10px;
+`;
+const Page2_img3 = styled.img`
+  position: absolute;
+  top: 350px;
+  left: -10px;
+  /* margin-top: 250px; */
+  font-size: 40px;
+  width: 240px;
+  height: 270px;
   /* border: 2px solid red; */
   margin-right: 300px;
   border-radius: 10px;
@@ -353,10 +458,10 @@ const Page2_img2 = styled.img`
 const Page2_colorbox = styled.div`
   margin-left: 150px;
   font-size: 40px;
-  width: 2300px;
+  width: 2700px;
   height: 100vh;
   /* border: 2px solid red; */
-  clip-path: polygon(24% 0%, 100% 0%, 100% 100%, 0% 100%);
+  clip-path: polygon(16% 0%, 100% 0%, 90% 100%, 0% 100%);
   background: #27005d;
   /* overflow: hidden; */
   position: relative;
@@ -379,8 +484,9 @@ const Trade_box1 = styled.div`
 `;
 const Trade_box2 = styled.div`
   position: absolute;
+
   top: -100px;
-  left: 1300px;
+  left: 1400px;
   /* margin-top: 100px; */
   width: 500px;
   height: 700px;
@@ -392,13 +498,19 @@ const NameTag0 = styled.p`
   width: 700px;
   color: white;
   z-index: 30;
+  background-image: url('/assets/img/page2_clip2.PNG');
+  background-position: 110px 30px;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  background-size: cover;
+  font-weight: 600;
   /* border: 2px solid black; */
 `;
 const TradeBackground = styled.div`
   width: 100%;
   height: 100%;
   clip-path: polygon(55% 0%, 100% 0%, 45% 100%, 0% 100%);
-  background-image: url('/assets/img/page3_clip3.jpeg');
   background-size: cover;
 `;
 
@@ -414,7 +526,8 @@ const NameTag0_2 = styled.div`
   color: white;
   border: 2px solid black;
   margin: 0;
-  /* background-image: url('/assets/img/page3_clip3.jpeg'); */
+  background-image: url('/assets/img/tests.jpg');
+  background-position: -40px 40px;
   transform: rotate(-50deg);
 
   background-size: cover;
@@ -427,12 +540,11 @@ const NameTag0_3 = styled.div`
   width: 530px;
   height: 750px;
   clip-path: polygon(55% 0%, 100% 0%, 45% 100%, 0% 100%);
-  /* width: 700px; */
-  /* background-color: red; */
   color: white;
   border: 2px solid black;
   margin: 0;
-  background-image: url('/assets/img/page3_clip3.jpeg');
+  background-image: url('/assets/img/tests.jpg');
+  background-position: 0px 0px;
   transform: rotate(-50deg);
   color: transparent;
   background-size: cover;
@@ -442,15 +554,21 @@ const Trade_btn = styled.div`
   width: 220px;
   height: 70px;
   border: 2px solid black;
-  margin-left: 110px;
-  margin-top: 120px;
+  margin-left: 70px;
+  margin-top: 150px;
   font-size: 25px;
   background-color: #8ecddd;
-  background-color: #8ecddd;
+  background-color: #f94c10;
   color: white;
   line-height: 70px;
   text-align: center;
   border-radius: 10px;
+  transition: background-color 0.3s ease; /* 호버 효과를 부드럽게 만들기 위한 트랜지션 */
+
+  &:hover {
+    background-color: #6faabb; /* 호버 시 변경될 배경색 */
+    cursor: pointer; /* 호버 시 커서 모양 변경 (선택 사항) */
+  }
 `;
 
 const Page2_section2 = ({
@@ -458,6 +576,7 @@ const Page2_section2 = ({
   fadepages3Tag1,
   fadepages3Tag2
 }) => {
+  const navigate = useNavigate();
   return (
     <Page2_colorbox>
       <TradeDiv>
@@ -469,7 +588,13 @@ const Page2_section2 = ({
           }}
         >
           <NameTag0>중고거래</NameTag0>
-          <Trade_btn>거래하러가기</Trade_btn>
+          <Trade_btn
+            onClick={() => {
+              navigate('/tradeMain');
+            }}
+          >
+            거래하러가기
+          </Trade_btn>
         </Trade_box1>
         <Trade_box2
           className='Pages3_tag2'
@@ -507,7 +632,7 @@ const Page2_section2 = ({
 // 섹션3번 -경매
 
 const Page2_Auction = styled.div`
-  width: 1820px;
+  width: 2020px;
   height: 100vh;
   /* border: 5px solid black; */
 `;
@@ -563,6 +688,7 @@ const NameTag1 = styled.p`
   -webkit-background-clip: text;
   color: transparent;
   background-size: cover;
+  font-weight: 600;
 `;
 
 const NameTag1_2 = styled.p`
@@ -594,6 +720,12 @@ const Auction_tuto = styled.div`
   background-color: white;
   box-shadow: 1px 1px 1px rgb(0, 0, 0, 0.3);
   margin: 20px 0 40px 70px;
+  transition: background-color 0.3s ease; /* 호버 효과를 부드럽게 만들기 위한 트랜지션 */
+
+  &:hover {
+    background-color: #e9e9e9; /* 호버 시 변경될 배경색 */
+    cursor: pointer; /* 호버 시 커서 모양 변경 (선택 사항) */
+  }
 `;
 const Auction_btn = styled.div`
   width: 200px;
@@ -607,6 +739,12 @@ const Auction_btn = styled.div`
   color: #f47b55;
   margin: 20px 0 40px 70px;
   border-radius: 10px;
+  transition: background-color 0.3s ease; /* 호버 효과를 부드럽게 만들기 위한 트랜지션 */
+
+  &:hover {
+    background-color: #e9e9e9; /* 호버 시 변경될 배경색 */
+    cursor: pointer; /* 호버 시 커서 모양 변경 (선택 사항) */
+  }
 `;
 
 const AuctionBorder = styled.div`
@@ -614,7 +752,7 @@ const AuctionBorder = styled.div`
   margin-left: 75px;
   width: 700px;
   height: 500px;
-  border: 30px solid #ccc8aa;
+  border: 30px solid rgb(191, 136, 69, 0.8);
   border-radius: 20px;
   /* left: 100px; */
   z-index: 1;
@@ -624,7 +762,7 @@ const AuctionBorder2 = styled.div`
   margin-left: 50px;
   width: 750px;
   height: 500px;
-  border: 30px solid #ccc8aa;
+  border: 30px solid rgb(191, 136, 69, 0.8);
   border-radius: 20px;
   /* left: 100px; */
   z-index: 300;
@@ -640,7 +778,8 @@ const AuctionMain = styled.div`
   height: 420px;
   border-radius: 10px;
   transition: transform 0.5s;
-  background-color: #fff5e0;
+  /* background-color: #e7c17f; */
+  background: linear-gradient(to bottom, #f2ddb6, #e7c17f);
 `;
 const AuctionSide = styled.div`
   position: absolute;
@@ -674,15 +813,22 @@ const TradeImg = styled.img`
 
   width: 350px;
   height: 350px;
-  border-radius: 10px;
+  border-radius: 130px;
   opacity: 0.4;
 `;
 
-const Page2_section3 = () => {
+const Page2_section3 = ({ fadepages4Tag1, fadepages4Tag2 }) => {
+  const navigate = useNavigate();
   return (
     <Page2_Auction>
       <AuctionDiv>
-        <AuctionLeft>
+        <AuctionLeft
+          className='Pages4_tag1'
+          style={{
+            opacity: fadepages4Tag1 / 100,
+            transition: 'opacity 1.5s ease'
+          }}
+        >
           <NameTag1>경매</NameTag1>
           <Auctionbox>
             <NameTag1_2>이번주의 경매 리스트.</NameTag1_2>
@@ -692,16 +838,28 @@ const Page2_section3 = () => {
             </NameTag1_3>
           </Auctionbox>
         </AuctionLeft>
-        <AuctionMid>
+        <AuctionMid
+          className='Pages4_tag2'
+          style={{
+            opacity: fadepages4Tag2 / 100,
+            transition: 'opacity 1.5s ease'
+          }}
+        >
           <AuctionMain>
             <AuctionDiv2>
               <AuctionMidtag1>경매 가이드</AuctionMidtag1>
               <Auction_tuto>튜토리얼</Auction_tuto>
               <AuctionMidtag2>경매 시작하기</AuctionMidtag2>
-              <Auction_btn>경매 입장하기</Auction_btn>
+              <Auction_btn
+                onClick={() => {
+                  navigate('/auction');
+                }}
+              >
+                경매 입장하기
+              </Auction_btn>
             </AuctionDiv2>
             <AuctionRight>
-              <TradeImg src='/assets/img/trademain.PNG'></TradeImg>
+              <TradeImg src='/assets/img/trade.png'></TradeImg>
             </AuctionRight>
           </AuctionMain>
 
@@ -718,8 +876,10 @@ const Page2_section3 = () => {
 // 섹션3번 -커뮤니티
 
 const Page2_Commu = styled.div`
-  width: 2020px;
+  width: 2820px;
   height: 100vh;
+  background-color: aliceblue;
+  clip-path: polygon(11% 0%, 100% 0%, 100% 100%, 0% 100%);
   /* border: 5px solid black; */
 `;
 
@@ -733,8 +893,8 @@ const CommuDiv = styled.div`
 
 const NameTag2 = styled.p`
   text-align: center;
-  margin: 0 auto;
-
+  margin-left: 570px;
+  font-weight: 600;
   /* border: 2px solid red; */
   margin-top: 150px;
   font-size: 70px;
@@ -743,13 +903,18 @@ const NameTag2 = styled.p`
 
 const TagBottom = styled.div`
   font-size: 30px;
-  margin-top: 20px;
-  margin-left: 440px;
+  margin-top: 10px;
+  margin-left: 510px;
+`;
+
+const Tagcolor = styled.span`
+  color: #ffc107;
+  font-weight: 600;
 `;
 
 const Commu_img = styled.div`
   /* margin: 50px 0 400px 0; */
-  margin-left: 220px;
+  margin-left: 300px;
   margin-top: 40px;
   /* margin: 150px 200px 0 250px; */
   width: 1000px;
@@ -762,10 +927,10 @@ const CommuBottom = styled.div`
   height: 10px;
   background-color: #c5c5c5;
   margin-top: -80px;
-  margin-left: 220px;
+  margin-left: 300px;
 `;
 
-const Page2_section4 = () => {
+const Page2_section4 = ({ fadepages5Tag1 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const totalScore = useRef<number>(0);
 
@@ -927,7 +1092,7 @@ const Page2_section4 = () => {
       }
     });
 
-    const infiniteArr = Array.from({ length: 10 }).map((_) => {
+    const infiniteArr = Array.from({ length: 100 }).map((_) => {
       // 떨어지는 물체 로직
       return Bodies.circle(Math.random() * 800, 500, 10, {
         // x좌표, y좌표, 원반지름
@@ -1005,10 +1170,18 @@ const Page2_section4 = () => {
     };
   }, []);
   return (
-    <Page2_Commu>
+    <Page2_Commu
+      className='Pages5_tag1'
+      style={{
+        opacity: fadepages5Tag1 / 100,
+        transition: 'opacity 1s ease'
+      }}
+    >
       <CommuDiv>
         <NameTag2>커뮤니티</NameTag2>
-        <TagBottom>자신만의 수명주기 게시판을 가꾸어 보세요.</TagBottom>
+        <TagBottom>
+          자신만의 <Tagcolor>수명주기 게시판</Tagcolor>을 가꾸어 보세요.
+        </TagBottom>
         <Commu_img>
           <div className='space-y-[1rem]'>
             <div
@@ -1032,16 +1205,22 @@ const Page2_section4 = () => {
 
 const Page2_SQL = styled.div`
   position: relative;
-  width: 2700px;
+  margin-left: -600px;
+  width: 2100px;
   height: 100vh;
   /* border: 5px solid black; */
 `;
 
 const NameTag3 = styled.p`
   position: absolute;
-  top: 50px;
-  left: 430px;
-  font-size: 80px;
+  top: 90px;
+  left: 120px;
+  font-size: 90px;
+  font-weight: 600;
+`;
+
+const NameColor = styled.span`
+  color: #f94c10;
 `;
 
 const Page2_colorbox2 = styled.div`
@@ -1049,17 +1228,53 @@ const Page2_colorbox2 = styled.div`
   width: 2900px;
   height: 100vh;
   /* border: 2px solid red; */
-  clip-path: polygon(33% 0%, 100% 0%, 100% 100%, 0% 100%);
+  clip-path: polygon(12% 0%, 100% 0%, 100% 100%, 0% 100%);
   background: #cccaca;
   /* overflow: hidden; */
   position: relative;
 `;
 
-const Page2_section5 = () => {
+const Serve = styled.img`
+  margin-right: 70px;
+  width: 330px;
+  height: 260px;
+  border-radius: 5px;
+  background-color: white;
+`;
+
+const ServeDiv = styled.div`
+  margin-left: 350px;
+  margin-top: 40px;
+  position: absolute;
+  display: flex;
+  top: 430px;
+  left: 180px;
+  /* width: 600px; */
+`;
+const Page2_section5 = ({ fadepages6Tag1, fadepages6Tag2 }) => {
   return (
     <Page2_SQL>
       <Page2_colorbox2></Page2_colorbox2>
-      <NameTag3>Service</NameTag3>
+      <NameTag3
+        className='Pages6_tag1'
+        style={{
+          opacity: fadepages6Tag1 / 100,
+          transition: 'opacity 1s ease'
+        }}
+      >
+        Ser<NameColor>vices</NameColor>
+      </NameTag3>
+      <ServeDiv
+        className='Pages6_tag2'
+        style={{
+          opacity: fadepages6Tag2 / 100,
+          transition: 'opacity 1s ease'
+        }}
+      >
+        <Serve src='/assets/img/service1.PNG'></Serve>
+        <Serve src='/assets/img/service2.png'></Serve>
+        <Serve src='/assets/img/service3.png'></Serve>
+      </ServeDiv>
     </Page2_SQL>
   );
 };
@@ -1121,7 +1336,7 @@ const Block3 = styled.div`
   clip-path: polygon(60% 0%, 100% 0%, 40% 100%, 0% 100%);
   /* background: #27005d; */
   background-image: url('/assets/img/page2_clip4.jpg');
-  background-position: 40px 40px;
+  background-position: -60px -200px;
   color: transparent;
   background-size: cover;
   transform: rotate(61deg);
@@ -1135,7 +1350,7 @@ const Block4 = styled.div`
   clip-path: polygon(60% 0%, 100% 0%, 40% 100%, 0% 100%);
   /* background: #27005d; */
   background-image: url('/assets/img/page2_clip4.jpg');
-  background-position: -50px 10px;
+  background-position: 300px -240px;
   color: transparent;
   background-size: cover;
   transform: rotate(61deg);
@@ -1151,8 +1366,8 @@ const Block5 = styled.div`
   /* border: 2px solid red; */
   clip-path: polygon(60% 0%, 100% 0%, 40% 100%, 0% 100%);
   /* background: #27005d; */
-  background-image: url('/assets/img/page2_clip2.PNG');
-  background-position: 0px 0px;
+  background-image: url('/assets/img/tests.jpg');
+  background-position: 40px 0px;
   color: transparent;
   background-size: cover;
   transform: rotate(-58.5deg);
@@ -1167,8 +1382,8 @@ const Block6 = styled.div`
   /* border: 2px solid red; */
   clip-path: polygon(60% 0%, 100% 0%, 40% 100%, 0% 100%);
   /* background: #27005d; */
-  background-image: url('/assets/img/page2_clip2.PNG');
-  background-position: 80px 80px;
+  background-image: url('/assets/img/tests.jpg');
+  background-position: 40px 0px;
   color: transparent;
   background-size: cover;
   transform: rotate(-60.5deg);
@@ -1204,6 +1419,11 @@ const PageSlide = () => {
   const [fadepages2Tag2, setFadepages2Tag2] = useState(0);
   const [fadepages3Tag1, setFadepages3Tag1] = useState(0);
   const [fadepages3Tag2, setFadepages3Tag2] = useState(0);
+  const [fadepages4Tag1, setFadepages4Tag1] = useState(0);
+  const [fadepages4Tag2, setFadepages4Tag2] = useState(0);
+  const [fadepages5Tag1, setFadepages5Tag1] = useState(0);
+  const [fadepages6Tag1, setFadepages6Tag1] = useState(0);
+  const [fadepages6Tag2, setFadepages6Tag2] = useState(0);
   const [backgroundPositionX, setBackgroundPositionX] = useState(-190);
 
   const scrollposition = useRef(0);
@@ -1240,7 +1460,7 @@ const PageSlide = () => {
         scrollposition.current = 3;
       } else if (s_pos <= 7500) {
         scrollposition.current = 4;
-      } else if (s_pos <= 9300) {
+      } else if (s_pos <= 9500) {
         scrollposition.current = 5;
       } else if (s_pos <= 11000) {
         scrollposition.current = 6;
@@ -1262,6 +1482,11 @@ const PageSlide = () => {
       const pages2Tag2Element = document.querySelector('.Pages2_tag2');
       const pages3Tag1Element = document.querySelector('.Pages3_tag1');
       const pages3Tag2Element = document.querySelector('.Pages3_tag2');
+      const pages4Tag1Element = document.querySelector('.Pages4_tag1');
+      const pages4Tag2Element = document.querySelector('.Pages4_tag2');
+      const pages5Tag1Element = document.querySelector('.Pages5_tag1');
+      const pages6Tag1Element = document.querySelector('.Pages6_tag2');
+      const pages6Tag2Element = document.querySelector('.Pages6_tag2');
       // @ts-ignore
       const pages1Tag2Rect = pages1Tag2Element.getBoundingClientRect();
       // @ts-ignore
@@ -1272,6 +1497,17 @@ const PageSlide = () => {
       const pages3Tag1Rect = pages3Tag1Element.getBoundingClientRect();
       // @ts-ignore
       const pages3Tag2Rect = pages3Tag2Element.getBoundingClientRect();
+      // @ts-ignore
+      const pages4Ta12Rect = pages4Tag1Element.getBoundingClientRect();
+      // @ts-ignore
+      const pages4Tag2Rect = pages4Tag2Element.getBoundingClientRect();
+      // @ts-ignore
+      const pages5Tag1Rect = pages5Tag1Element.getBoundingClientRect();
+      // @ts-ignore
+      const pages6Tag1Rect = pages6Tag1Element.getBoundingClientRect();
+      // @ts-ignore
+      const pages6Tag2Rect = pages6Tag2Element.getBoundingClientRect();
+
       // console.log('Pages1_tag3 위치:', pages2Tag2Rect.left, evt.deltaY);
       on_indicator(pages1Tag2Rect.left);
 
@@ -1326,6 +1562,38 @@ const PageSlide = () => {
         } else if (pages3Tag2Rect.left <= 1900) {
           setFadepages3Tag2(100);
         }
+
+        // 페이지4 글자
+        if (pages3Tag1Rect.left <= -600) {
+          setFadepages4Tag1(100);
+        } else {
+          setFadepages4Tag1(30);
+        }
+        console.log(pages3Tag1Rect.left, '이동');
+        // 페이지4 우측태그
+        if (pages3Tag2Rect.left <= -500) {
+          setFadepages4Tag2(100);
+        } else {
+          setFadepages4Tag2(30);
+        }
+        // 페이지5
+        if (pages3Tag2Rect.left <= -2500) {
+          setFadepages5Tag1(95);
+        } else {
+          setFadepages5Tag1(30);
+        }
+        // 페이지6 글자
+        if (pages3Tag2Rect.left <= -4000) {
+          setFadepages6Tag1(100);
+        } else {
+          setFadepages6Tag1(30);
+        }
+        // 페이지6 내용
+        if (pages3Tag2Rect.left <= -4500) {
+          setFadepages6Tag2(100);
+        } else {
+          setFadepages6Tag2(30);
+        }
       } else if (evt.deltaY < 0) {
         if (pages1Tag2Rect.left >= 0) {
           setFadepages1Tag2(100);
@@ -1370,6 +1638,27 @@ const PageSlide = () => {
           setFadepages3Tag2(100);
         } else if (pages3Tag2Rect.left >= 1450) {
           setFadepages3Tag2(0);
+        }
+
+        // 페이지4 글자
+        if (pages3Tag1Rect.left >= -800) {
+          setFadepages4Tag1(30);
+        }
+        // 페이지4 우측태그
+        if (pages3Tag2Rect.left >= -1600) {
+          setFadepages4Tag2(30);
+        }
+        // 페이지5
+        if (pages3Tag2Rect.left >= -2600) {
+          setFadepages5Tag1(30);
+        }
+        // 페이지6 글자
+        if (pages3Tag2Rect.left >= -5000) {
+          setFadepages6Tag1(30);
+        }
+        // 페이지6 내용
+        if (pages3Tag2Rect.left >= -5500) {
+          setFadepages6Tag2(30);
         }
       }
 
@@ -1643,7 +1932,9 @@ const PageSlide = () => {
             당신 근처의 지역 생활 커뮤니티. <br />
             동네라서 가능한 모든 것 싸그리에서 가까운 이웃과 함께하세요.
             <br />
+            <GifImage src='/assets/img/motion.gif' alt='My GIF' />
           </Page2_tag1>
+
           <Page2_tag2>
             <Page2_img1
               className='Pages2_tag2'
@@ -1663,6 +1954,15 @@ const PageSlide = () => {
               src='/assets/img/page2_right2.jpg'
               alt='page2 오른쪽이미지2'
             ></Page2_img2>
+            <Page2_img3
+              className='Pages2_tag2'
+              style={{
+                opacity: fadepages2Tag2 / 100,
+                transition: 'opacity 1s ease'
+              }}
+              src='/assets/img/present.png'
+              alt='page2 오른쪽이미지3'
+            ></Page2_img3>
           </Page2_tag2>
           {/* 2-2 */}
           <Page2_section2
@@ -1671,9 +1971,15 @@ const PageSlide = () => {
             fadepages3Tag2={fadepages3Tag2}
           ></Page2_section2>
           {/* 2-3 */}
-          <Page2_section3></Page2_section3>
-          <Page2_section4></Page2_section4>
-          <Page2_section5></Page2_section5>
+          <Page2_section3
+            fadepages4Tag1={fadepages4Tag1}
+            fadepages4Tag2={fadepages4Tag2}
+          ></Page2_section3>
+          <Page2_section4 fadepages5Tag1={fadepages5Tag1}></Page2_section4>
+          <Page2_section5
+            fadepages6Tag1={fadepages6Tag1}
+            fadepages6Tag2={fadepages6Tag2}
+          ></Page2_section5>
         </Pages2>
       </PagesSection2>
     </Page>
