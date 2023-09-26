@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -49,12 +50,15 @@ public class BoardComment extends BaseTimeEntity {
     private int like;
 
     @Builder
-    public BoardComment(Long no, BoardList boardList, User user, BoardComment parentComment, String content, int like) {
+    public BoardComment(LocalDateTime modifyDate,LocalDateTime deleteDate,LocalDateTime createDate, Long no, BoardList boardList, User user, BoardComment parentComment, String content, int like) {
         this.no = no;
         this.boardList = boardList;
         this.user = user;
         this.parentComment = parentComment;
         this.content = content;
         this.like = like;
+        this.setCreateDate(createDate);
+        this.setDeleteDate(deleteDate);
+        this.setUpdateDate(modifyDate);
     }
 }

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -63,7 +64,7 @@ public class BoardList extends BaseTimeEntity {
     private int like;
 
     @Builder
-    public BoardList(Long no, User user, Board board, String title, boolean showName, boolean allowComment, int view, String content, int like) {
+    public BoardList(LocalDateTime deleteDate,LocalDateTime modifyDate,LocalDateTime createDate, Long no, User user, Board board, String title, boolean showName, boolean allowComment, int view, String content, int like) {
         this.no = no;
         this.user = user;
         this.board = board;
@@ -73,5 +74,8 @@ public class BoardList extends BaseTimeEntity {
         this.view = view;
         this.content = content;
         this.like = like;
+        this.setCreateDate(createDate);
+        this.setDeleteDate(deleteDate);
+        this.setUpdateDate(modifyDate);
     }
 }

@@ -54,8 +54,8 @@ public class AuctionProductAllDTO {
     // 경매 상품 삭제 시간
     private LocalDateTime deleteDate;
 
-    // 경매 상품 수정 시간
-    private LocalDateTime modifyDate;
+    // 경매 상품 생성 시간
+    private LocalDateTime createDate;
 
     // 경매 상품 분류
     private AuctionProductType type;

@@ -78,7 +78,7 @@ public class AuctionProductService {
                      .comment(products.get(i).getComment())
 //                     .auctionStatus(products.get(i).getAuctionStatus())
                      .finallyPrice(products.get(i).getFinallyPrice())
-                     .modifyDate(products.get(i).getModifyDate())
+                     .createDate(products.get(i).getCreateDate())
                      .type(products.get(i).getType())
                      .originPrice(products.get(i).getOriginPrice())
                      .build();
@@ -93,7 +93,7 @@ public class AuctionProductService {
 
     // 경매 상품 등록
     @Transactional
-    public void setAuctionProduct(AuctionProductCreateDTO auctionProductCreateDTO){
+    public Long setAuctionProduct(AuctionProductCreateDTO auctionProductCreateDTO){
 
         String startDate1 = auctionProductCreateDTO.getStartDate();
 
@@ -114,13 +114,15 @@ public class AuctionProductService {
                 .startDate(startDate)
                 .endDate(endDate)
                 .comment(auctionProductCreateDTO.getComment())
-                .modifyDate(LocalDateTime.now())
+                .createTime(LocalDateTime.now())
                 .originPrice(auctionProductCreateDTO.getOriginPrice())
                 .type(auctionProductCreateDTO.getType()).build();
 
 
 
-            auctionRepository.save(auctionProduct);
+            AuctionProduct auctionProduct1 = auctionRepository.save(auctionProduct);
+
+            return auctionProduct1.getNo();
     }
 
     // 경매상품 추가시 사진을 DB와 S3에 모두 저장
@@ -221,7 +223,7 @@ public class AuctionProductService {
                .auctionStatus(auctionProduct.getAuctionStatus())
                .finallyPrice(auctionProduct.getFinallyPrice())
                .deleteDate(auctionProduct.getDeleteDate())
-               .modifyDate(auctionProduct.getModifyDate())
+               .createDate(auctionProduct.getCreateDate())
                .type(auctionProduct.getType())
                .originPrice(auctionProduct.getOriginPrice()).build();
 

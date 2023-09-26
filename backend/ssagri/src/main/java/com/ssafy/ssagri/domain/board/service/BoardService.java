@@ -1,11 +1,13 @@
 package com.ssafy.ssagri.domain.board.service;
 
 import com.ssafy.ssagri.domain.board.dto.*;
+import com.ssafy.ssagri.domain.board.repository.BoardCommentRepository;
 import com.ssafy.ssagri.domain.board.repository.BoardListRepository;
 import com.ssafy.ssagri.domain.board.repository.BoardRopository;
 import com.ssafy.ssagri.domain.user.repository.UserRegistAndModifyRepository;
 import com.ssafy.ssagri.entity.board.Board;
 import com.ssafy.ssagri.entity.board.BoardList;
+import com.ssafy.ssagri.entity.comment.BoardComment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -28,6 +30,7 @@ public class BoardService {
     final private BoardRopository boardRopository;
     final private UserRegistAndModifyRepository userRegistAndModifyRepository;
     final private BoardListRepository boardListRepository;
+    final private BoardCommentRepository boardCommentRepository;
 
     // 조회수로 오름차순한 게시판이름이랑 조회수 출력
     public List<BoardClickDto> boardClickList(){
@@ -130,9 +133,13 @@ public class BoardService {
                 .content(boardWriteDto.getContents())
                 .like(0).build();
 
-        Board board = Board.builder()
-                        .boardLife(boardRopository.findByNo(boardWriteDto.getBoardNo())
-                                .getBoardLife().plusHours(1)).build();
+        Board board = boardRopository.findByNo(boardWriteDto.getBoardNo());
+
+
+
+       board.builder()
+               .boardLife(boardRopository.findByNo(boardWriteDto.getBoardNo())
+                       .getBoardLife().plusHours(1)).build();
 
         boardRopository.save(board);
 
@@ -202,5 +209,27 @@ public class BoardService {
             result.add(boardDto);
         }
         return result;
+    }
+
+    // 하나의 게시글에 댓글달기
+    public void writeComment(BoardWriteCommentDto boardWriteCommentDto){
+
+        BoardComment boardComment = BoardComment.builder()
+                .user(userRegistAndModifyRepository.findByNo(boardWriteCommentDto.getUserNo()))
+                .boardList(boardListRepository.findByNo(boardWriteCommentDto.getBoardWriteNo()))
+                .content(boardWriteCommentDto.getWriteComment()).build();
+
+        boardCommentRepository.save(boardComment);
+    }
+
+    // 게시판 삭제
+    public void boardDelete(Long boardNo){
+
+        Board board1 = boardRopository.findByNo(boardNo);
+
+        board1.builder()
+                .deleteTime(LocalDateTime.now()).build();
+
+        boardRopository.save(board1);
     }
 }

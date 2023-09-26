@@ -55,9 +55,6 @@ public class AuctionProduct extends BaseTimeEntity {
     @Column(name = "auction_product_end_date",nullable = false)
     private LocalDateTime endDate;
 
-    // 경매 삭제시간
-    @Column(name = "auction_product_delete_date")
-    private LocalDateTime deleteDate;
 
     // 경매 설명
     @Column(name = "auction_product_comment")
@@ -72,10 +69,6 @@ public class AuctionProduct extends BaseTimeEntity {
     @Column(name = "auction_product_finally_price")
     private int finallyPrice;
 
-    // 경매 수정시간
-    @Column(name = "auction_product_modify_date")
-    private LocalDateTime modifyDate;
-
     // 경매 분류 (모니터, 키보드 ,,,)
     @Enumerated(EnumType.STRING)
     @Column(name = "auction_product_type")
@@ -89,20 +82,21 @@ public class AuctionProduct extends BaseTimeEntity {
     List<AuctionProductImage> images = new ArrayList<>();
 
     @Builder
-    public AuctionProduct(int finallyPrice, AuctionStatus auctionStatus, LocalDateTime deleteDate, LocalDateTime modifyDate ,int originPrice, AuctionProductType type,User user, String name, int upPrice, int downPrice, int priceCount, LocalDateTime startDate, LocalDateTime endDate, String comment) {
+    public AuctionProduct(int finallyPrice,LocalDateTime modifyTime ,AuctionStatus auctionStatus, LocalDateTime deleteDate, LocalDateTime createTime ,int originPrice, AuctionProductType type,User user, String name, int upPrice, int downPrice, int priceCount, LocalDateTime startDate, LocalDateTime endDate, String comment) {
         this.user = user;
         this.name = name;
         this.upPrice = upPrice;
         this.downPrice = downPrice;
         this.priceCount = priceCount;
         this.startDate = startDate;
-        this.deleteDate = deleteDate;
+        this.setDeleteDate(deleteDate);
         this.endDate = endDate;
         this.comment = comment;
         this.auctionStatus = auctionStatus;
         this.originPrice = originPrice;
         this.type = type;
-        this.modifyDate = modifyDate;
+        this.setCreateDate(createTime);
         this.finallyPrice =finallyPrice;
+        this.setUpdateDate(modifyTime);
         }
 }
