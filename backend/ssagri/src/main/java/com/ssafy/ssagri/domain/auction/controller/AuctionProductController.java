@@ -38,6 +38,7 @@ public class AuctionProductController {
     @PostMapping(value = "/auction/regist")
     @ApiOperation("경매 등록")
     public Long auctionJoinList(@RequestBody AuctionProductCreateDTO auctionProductCreateDTO){
+        System.out.println("dididi");
         return auctionProductService.setAuctionProduct(auctionProductCreateDTO);
         // response 나중에 처리
     }
