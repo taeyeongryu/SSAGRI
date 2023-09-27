@@ -1,9 +1,8 @@
 package com.ssafy.ssagri.domain.usedproductlike.service;
 
 import com.ssafy.ssagri.domain.usedproduct.repository.UsedProductRepository;
-import com.ssafy.ssagri.domain.usedproductlike.repository.UsedProductLikeCustomRepository;
 import com.ssafy.ssagri.domain.usedproductlike.repository.UsedProductLikeRepository;
-import com.ssafy.ssagri.domain.user.repository.UserRegistRepository;
+import com.ssafy.ssagri.domain.user.repository.UserRegistAndModifyRepository;
 import com.ssafy.ssagri.entity.usedproduct.UsedProduct;
 import com.ssafy.ssagri.entity.usedproduct.UsedProductLike;
 import com.ssafy.ssagri.entity.user.User;
@@ -22,7 +21,7 @@ import static com.ssafy.ssagri.util.exception.CustomExceptionStatus.*;
 public class UsedProductLikeService {
 
     private final UsedProductLikeRepository usedProductLikeRepository;
-    private final UserRegistRepository userRegistRepository;
+    private final UserRegistAndModifyRepository userRegistRepository;
     private final UsedProductRepository usedProductRepository;
 
 

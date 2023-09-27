@@ -22,7 +22,8 @@ public enum ResponseStatusEnum {
     REFILL_TOKEN_IS_OK(1300, "액세스 토큰 발급이 성공적으로 이루어졌습니다."),
     //Mail send
     MAIL_SEND_IS_OK(1400, "이메일 전송과 인증번호 등록이 성공적으로 이루어졌습니다."),
-    //Mail - Authcode
+    //Mypage
+    MYPAGE_PROFILE_CHANGE_IS_OK(1500, "프로필 이미지 변경 성공"),
 
         ;
     private final int code;

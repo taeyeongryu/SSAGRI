@@ -7,7 +7,7 @@ import com.ssafy.ssagri.domain.usedproduct.repository.UsedProductRepository;
 import com.ssafy.ssagri.domain.usedproductlike.repository.UsedProductLikeRepository;
 import com.ssafy.ssagri.domain.usedproductphoto.dto.UsedProductPhotoResponseDto;
 import com.ssafy.ssagri.domain.usedproductphoto.repository.UsedProductPhotoRepository;
-import com.ssafy.ssagri.domain.user.repository.UserRegistRepository;
+import com.ssafy.ssagri.domain.user.repository.UserRegistAndModifyRepository;
 import com.ssafy.ssagri.entity.usedproduct.PhotoType;
 import com.ssafy.ssagri.entity.usedproduct.ProductCategory;
 import com.ssafy.ssagri.entity.usedproduct.UsedProduct;
@@ -39,7 +39,7 @@ public class UsedProductService {
     private final UsedProductRepository usedProductRepository;
     private final UsedProductPhotoRepository usedProductPhotoRepository;
     private final UsedProductLikeRepository usedProductLikeRepository;
-    private final UserRegistRepository userRegistRepository;
+    private final UserRegistAndModifyRepository userRegistRepository;
     private final ImageService imageService;
 
 
@@ -93,7 +93,7 @@ public class UsedProductService {
         //없는 중고 물품이면
         //예외 처리
         else {
-
+            new CustomException(CustomExceptionStatus.USED_PRODUCT_DOES_NOT_EXIST);
         }
         return productOptional.get().getNo();
     }
@@ -103,9 +103,14 @@ public class UsedProductService {
      */
 
     public Page<UsedProductResponseDto> selectUsedProductList(Long userNo, ProductCategory productCategory, Region region,String search ,Pageable pageable){
+
+        log.info("UsedProductService userNo: {}, category: {}, region: {}, search: {}", userNo, productCategory ,region ,search);
+
         Page<UsedProduct> usedProducts = usedProductRepository.selectAllUsedProduct(productCategory, region,search ,pageable);
         List<UsedProduct> usedProductList = usedProducts.getContent();
-        log.info("db에서 가져오기 성공");
+
+        log.info("UsedProductService usedProducts: {}", usedProducts);
+
         List<UsedProductResponseDto> usedProductResponseList = new ArrayList<>();
 
         for (UsedProduct usedProduct : usedProductList) {
@@ -122,7 +127,9 @@ public class UsedProductService {
             //리스트에 저장하기
             usedProductResponseList.add(usedProductResponse);
         }
-        log.info("사진 가져오기 성공");
+
+        log.info("UsedProductService usedProductResponseList : {}", usedProductResponseList);
+
         return new PageImpl<>(usedProductResponseList, usedProducts.getPageable(), usedProducts.getTotalElements());
     }
 

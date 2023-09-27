@@ -1,13 +1,10 @@
 package com.ssafy.ssagri.domain.auction.dto;
 
 import com.ssafy.ssagri.entity.auction.AuctionProductType;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
-@ToString
-@Builder
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AuctionProductCreateDTO {
 
     // 경매 주최자 아이디
@@ -44,4 +41,18 @@ public class AuctionProductCreateDTO {
     private AuctionProductType type;
 
 //    private LocalDateTime modifyDate;
+
+
+    @Builder
+    public AuctionProductCreateDTO(Long userNo, String name, String comment, String startDate, String endDate, int downPrice, int originPrice, int countPrice, AuctionProductType type) {
+        this.userNo = userNo;
+        this.name = name;
+        this.comment = comment;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.downPrice = downPrice;
+        this.originPrice = originPrice;
+        this.countPrice = countPrice;
+        this.type = type;
+    }
 }

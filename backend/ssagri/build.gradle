@@ -83,7 +83,14 @@ dependencies {
 	//	MongoDB
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 
+	// S3
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE' //AWS Cloud와 통합을 쉽게 해주는 Spring Cloud AWS 모듈의 스타터 패키지. 내부적으로는 AWS SDK를 포함.
+	implementation 'net.lingala.zip4j:zip4j:2.6.1' // zip 압축 다운로드
+	implementation 'org.apache.commons:commons-text:1.9' // 랜덤 문자열 생성
 
+	// Json
+	// https://mvnrepository.com/artifact/org.json/json
+	implementation group: 'org.json', name: 'json', version: '20230227'
 
 }
 

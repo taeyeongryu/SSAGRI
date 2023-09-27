@@ -3,9 +3,10 @@ import {
   ProductList03,
   TradeProductItem03
 } from '../components/tradeMainPage.styles';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ProductItemType } from './type';
 import axios from 'axios';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const DetailFrame = styled.div`
   width: 1920px;
@@ -113,6 +114,7 @@ const RegularPriceWon = styled.div`
   align-items: end;
 `;
 // 정가
+// @ts-ignore
 const CostText = styled.div`
   height: 36px;
   font-size: 14px;
@@ -121,12 +123,14 @@ const CostText = styled.div`
   display: flex;
   align-items: end;
 `;
+// @ts-ignore
 const Cost = styled.div`
   font-size: 24px;
   margin-left: 5px;
   color: #929292;
   text-decoration: line-through;
 `;
+// @ts-ignore
 const CostWon = styled.div`
   /* border: 1px solid black; */
   height: 36px;
@@ -367,12 +371,8 @@ const DetailSellorTemperatureScale = styled.div`
 `;
 
 // ----- 판매자 정보 가져와서 화면에 보여주기 -----
-const SellorDiv = (sellorNo) => {
-  const productAndSellorInfo = useRef({});
-  const url = `/usedproduct/detail/${sellorNo}`;
-  axios.get(url).then((res) => {
-    productAndSellorInfo.current = res.data;
-  });
+const SellorDiv = (sellorInfo: any) => {
+  // console.log('SellorDiv', sellorInfo.sellorInfo);
   return (
     <>
       <DetailSellorHeader>
@@ -384,13 +384,17 @@ const SellorDiv = (sellorNo) => {
       <DetailSellorDiv>
         <DetailSellorTitle>
           <DetailSellorLeft>
-            <DetailSellorNickname>코딩왕123</DetailSellorNickname>
+            <DetailSellorNickname>
+              {sellorInfo.sellorInfo.sellorNickname != null
+                ? sellorInfo.sellorInfo.sellorNickname
+                : '닉네임'}
+            </DetailSellorNickname>
             <DetailSellorTrade>판매상품 3</DetailSellorTrade>
           </DetailSellorLeft>
           <DetailSellorRight>
             <DetailSellorProfile>
               <img
-                src='/assets/img/profile.png'
+                src={sellorInfo.sellorInfo.sellorProfile}
                 style={{
                   width: '80px',
                   height: '80px'
@@ -402,7 +406,7 @@ const SellorDiv = (sellorNo) => {
         <DetailSellorTemperatureDiv>
           <DetailSellorTemperatureInfo>
             <DetailSellorTemperatureText>
-              매너온도 424
+              매너온도 {sellorInfo.sellorInfo.sellorTemper}
             </DetailSellorTemperatureText>
             <DetailSellorTemperatureMax>1,000</DetailSellorTemperatureMax>
           </DetailSellorTemperatureInfo>
@@ -477,7 +481,7 @@ const CautionBox = () => {
 
 // 본문 상품내용
 const DetailContentText = styled.div`
-  border: 3px solid blue;
+  border-top: 1px solid #a3a3a3;
   margin: 20px 0px;
 `;
 // 관련상품 추천
@@ -510,75 +514,185 @@ const Tag = styled.div`
   }
 `;
 
+// type Sellor = {
+//   sellorNickname: string;
+//   sellorNo: number;
+//   sellorProfile: string;
+//   sellorTemper: number;
+// };
+
 const TradeDetail = () => {
-  const sellorNo: number = 1;
-
-  // -------- 임시 데이터 --------
-  let responseList = useRef([
-    {
-      createDate: '2023-09-22T00:42:26.086Z',
-      like: true,
-      price: 130000,
-      productCategory: 'READY',
-      productNo: 2,
-      region: '지역',
-      saleStatus: 'READY',
-      title:
-        '송병훈 짱 송병훈 짱 송병훈 짱 송병훈 짱\n 송병훈 짱 송병훈 짱 송병훈 짱 송병훈 짱',
-      updateDate: '2023-09-22T00:42:26.086Z',
-      usedProductPhotoResponseDto: {
-        link: 'https://i.imgur.com/ixdlIIc.png',
-        photoNo: 0
-      }
+  // 물품, 판매자 정보 저장 예정
+  const productDetail = useRef({
+    content: 'string',
+    createDate: '2023-09-22T00:42:26.086Z',
+    like: true,
+    likeCount: 0,
+    price: 0,
+    productCategory: 'READY',
+    productNo: 2,
+    region: '지역',
+    saleStatus: 'READY',
+    title: '로딩 중...',
+    updateDate: '2023-09-22T00:42:26.086Z',
+    usedProductPhotoResponseDto: {
+      link: 'https://i.imgur.com/ixdlIIc.png',
+      photoNo: 0
     },
-    {
-      createDate: '2023-09-22T00:42:26.086Z',
-      like: true,
-      price: 130000,
-      productCategory: 'READY',
-      productNo: 2,
-      region: '지역',
-      saleStatus: 'READY',
-      title:
-        '송병훈 짱 송병훈 짱 송병훈 짱 송병훈 짱\n 송병훈 짱 송병훈 짱 송병훈 짱 송병훈 짱',
-      updateDate: '2023-09-22T00:42:26.086Z',
-      usedProductPhotoResponseDto: {
-        link: 'https://i.imgur.com/ixdlIIc.png',
-        photoNo: 0
-      }
-    },
-    {
-      createDate: '2023-09-22T00:42:26.086Z',
-      like: true,
-      price: 130000,
-      productCategory: 'READY',
-      productNo: 2,
-      region: '지역',
-      saleStatus: 'READY',
-      title:
-        '송병훈 짱 송병훈 짱 송병훈 짱 송병훈 짱\n 송병훈 짱 송병훈 짱 송병훈 짱 송병훈 짱',
-      updateDate: '2023-09-22T00:42:26.086Z',
-      usedProductPhotoResponseDto: {
-        link: 'https://i.imgur.com/ixdlIIc.png',
-        photoNo: 0
-      }
-    }
-  ]);
+    userNickname: 'string',
+    userNo: 0,
+    userProfile: 'string',
+    userTemper: 0
+  });
+  // URI에서 물품번호 가져오기
+  const productNo = useParams().no;
+  console.log(productNo, 'Detail');
+  // 판매자 정보 저장
+  const [sellorInfo, setSellorInfo] = useState({});
 
-  // useEffect(() => {
-  //   const url = '';
-  //   axios.get(url).then((res) => {
-  //     console.log(res.data);
-  //     responseList.current = res.data;
-  //   });
-  // }, []);
+  // 관련 추천 상품 리스트
+  const responseList = useRef([]);
+
+  const navigate = useNavigate();
+  const goChat = () => {
+    navigate(`/chat`);
+  };
+
+  let linkDto: any;
+  const categoryEng = useRef('');
+  const categoryKor = useRef('');
+  const regionEng = useRef('');
+  const regionKor = useRef('');
+  const likeYN = useRef('');
+  const pastTime = useRef('');
+  const [link, setLink] = useState('https://i.imgur.com/pqvW1Yv.png');
+
+  const userNo = localStorage.getItem('userNo');
+
+  useEffect(() => {
+    const url = `/usedproduct/detail/${userNo}?usedProductNo=${productNo}`;
+    axios
+      .get(url)
+      .then((res) => {
+        // console.log('check Detail', res);
+
+        // 응답 데이터 삽입
+        productDetail.current = res.data;
+        // console.log('check productDetail.current', productDetail.current);
+
+        // 이미지 링크 삽입
+        if (productDetail.current.usedProductPhotoResponseDto) {
+          linkDto = productDetail.current.usedProductPhotoResponseDto[0];
+        }
+        setLink(linkDto.link);
+
+        // HTML을 content 에 삽입
+        const detailContent: any = document.querySelector('#detail-content');
+        detailContent.innerHTML = productDetail.current.content;
+        // console.log('check link', link);
+
+        // 판매자 정보를 따로 저장
+        setSellorInfo({
+          sellorNickname: res.data.userNickname,
+          sellorNo: res.data.userNo,
+          sellorProfile: res.data.userProfile,
+          sellorTemper: res.data.userTemper
+        });
+        // console.log('check sellorInfo', sellorInfo);
+
+        // 카테고리를 따로 저장
+        categoryEng.current = productDetail.current.productCategory;
+        // console.log('check categoryEng', categoryEng.current);
+        switch (categoryEng.current) {
+          case 'MONITER':
+            categoryKor.current = '모니터';
+            break;
+          case 'KEYBOARD':
+            categoryKor.current = '키보드';
+            break;
+          case 'MOUSE':
+            categoryKor.current = '마우스';
+            break;
+          case 'LIFE':
+            categoryKor.current = '생활용품';
+            break;
+          case 'ETC':
+            categoryKor.current = '기타용품';
+            break;
+        }
+        // console.log('check categoryKor', categoryKor.current);
+
+        // 지역도 따로 저장
+        regionEng.current = productDetail.current.region;
+        // console.log('check regionEng', regionEng.current);
+        switch (regionEng.current) {
+          case 'SEOUL':
+            regionKor.current = '서울';
+            break;
+          case 'DAEJEON':
+            regionKor.current = '대전';
+            break;
+          case 'GUMI':
+            regionKor.current = '구미';
+            break;
+          case 'GWANGJU':
+            regionKor.current = '광주';
+            break;
+          case 'BUG':
+            regionKor.current = '부울경';
+            break;
+        }
+
+        // 시간을 계산해보자 https://stonefree.tistory.com/259
+        const time = new Date(productDetail.current.createDate);
+        const timeNow = new Date();
+        const diffSec = timeNow.getTime() - time.getTime();
+        const minute = diffSec / (60 * 1000);
+        // console.log('Minute : ', diffSec / (60 * 1000));
+        // console.log('Hour : ', diffSec / (60 * 60 * 1000));
+        // console.log('Date : ', diffSec / (24 * 60 * 60 * 1000));
+        // console.log(minute.toFixed(0));
+        // console.log(Math.floor(minute / 60));
+        if (minute < 60) {
+          pastTime.current = `${minute.toFixed(0)}분 전`;
+        } else if (minute < 24 * 60) {
+          pastTime.current = `${Math.floor(minute / 60)}시간 전`;
+        } else if (minute < 24 * 60 * 30) {
+          pastTime.current = `${Math.floor(minute / (24 * 60))}일 전`;
+        } else {
+          pastTime.current = `${Math.floor(minute / (24 * 60 * 30))}달 전`;
+        }
+        console.log(pastTime.current);
+
+        // 좋아요도 확인하자.
+        if (productDetail.current.like) {
+          likeYN.current = '/assets/img/heartColor.png';
+        } else {
+          likeYN.current = '/assets/img/heartWhite.png';
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    // 관련상품 데이터 가져오기
+    axios
+      .get(
+        `/usedproduct/${userNo}?category=${categoryEng.current}&region=${regionEng.current}&sort=like,desc&page=0&size=3`
+      )
+      .then((res) => {
+        console.log('res.data', res.data.content);
+        responseList.current = res.data.content;
+      });
+  }, []);
+
   return (
     <DetailFrame>
       <DetailDiv>
         <DetailUpDiv>
           <DetailUpDivImage>
             <img
-              src='/assets/img/zeuslab.jpg'
+              src={link}
               style={{
                 width: '600px',
                 height: '600px'
@@ -588,38 +702,40 @@ const TradeDetail = () => {
           <DetailUpDivInfo>
             <DetailUpDivInfoFrame>
               <DetailDivInfoCategory>
-                카테고리 &gt; <div style={{ color: '#000' }}>&nbsp;모니터</div>
+                카테고리 &gt;{' '}
+                <div style={{ color: '#000' }}>&nbsp;{categoryKor.current}</div>
               </DetailDivInfoCategory>
               <DetailDivInfoName>
                 <DetailDivInfoNameText>
                   {/* 30자 제한을 둬야 화면에 깔끔하게 나온다 */}
-                  제우스랩 포터블 모니터 Z16 Pro
+                  {productDetail.current.title}
                 </DetailDivInfoNameText>
                 <DetailDivInfoShareButton>
                   <DetailDivInfoShare src='/assets/img/share.png'></DetailDivInfoShare>
                 </DetailDivInfoShareButton>
               </DetailDivInfoName>
               <DetailDivInfoPrice>
-                <RegularPrice>130,000</RegularPrice>
+                <RegularPrice>{productDetail.current.price}</RegularPrice>
                 <RegularPriceWon>원</RegularPriceWon>
-                <CostText>정가</CostText>
+                {/* <CostText>정가</CostText>
                 <Cost>160,000</Cost>
-                <CostWon>원</CostWon>
+                <CostWon>원</CostWon> */}
               </DetailDivInfoPrice>
               <InfoLine></InfoLine>
               <DetailDivInfoEtc>
-                온천2동 · 2시간 전 · 조회 25 · 찜 0
+                {regionKor.current} · {pastTime.current} · 좋아요{' '}
+                {productDetail.current.likeCount}
               </DetailDivInfoEtc>
               <InfoLine></InfoLine>
               <DetailDivButton>
                 <DetailDivHeart>
                   <HeartText>찜하기</HeartText>
                   <HeartImgDiv>
-                    <HeartImg src='/assets/img/heartWhite.png'></HeartImg>
+                    <HeartImg src={likeYN.current}></HeartImg>
                   </HeartImgDiv>
                 </DetailDivHeart>
                 <DetailDivChat>
-                  <ChatText>구매 채팅하기</ChatText>
+                  <ChatText onClick={goChat}>구매 채팅하기</ChatText>
                   <ChatImgDiv>
                     <ChatImg src='/assets/img/chat.png'></ChatImg>
                   </ChatImgDiv>
@@ -628,7 +744,7 @@ const TradeDetail = () => {
               <InfoLine></InfoLine>
               {/* 판매자 정보 */}
               <DetailDivSellorFrame>
-                <SellorDiv sellorNo={sellorNo}></SellorDiv>
+                <SellorDiv sellorInfo={sellorInfo}></SellorDiv>
               </DetailDivSellorFrame>
             </DetailUpDivInfoFrame>
           </DetailUpDivInfo>
@@ -640,21 +756,21 @@ const TradeDetail = () => {
               <CautionBox></CautionBox>
             </DetailContentCaution>
             {/* 본문 내용 */}
-            <DetailContentText>본문내용 삽입 HTML</DetailContentText>
+            <DetailContentText id='detail-content'>
+              {productDetail.current.content}
+            </DetailContentText>
           </DetailContentDiv>
           <InfoLine></InfoLine>
           {/* 관련 추천상품 */}
           <DetailRecommend>
             <DetailRecommendText>관련상품</DetailRecommendText>
             <ProductList03>
-              {/* <Tag>&lt;</Tag> */}
               {/* @ts-ignore */}
               {responseList.current.map((item: ProductItemType, id) => {
                 return (
                   <TradeProductItem03 key={id} item={item}></TradeProductItem03>
                 );
               })}
-              {/* <Tag>&gt;</Tag> */}
             </ProductList03>
           </DetailRecommend>
         </DetailDownDiv>
