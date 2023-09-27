@@ -404,7 +404,7 @@ const SignInAndUpComponent = () => {
       })
       .catch((error) => {
         // ... 에러 처리
-        console.log(error);
+        console.log(error, '로그인실패', data);
       });
   };
 
