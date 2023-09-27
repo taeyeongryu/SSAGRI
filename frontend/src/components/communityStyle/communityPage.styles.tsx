@@ -95,8 +95,20 @@ const ListDiv = styled.div`
 `;
 
 const ListTag = styled.div`
+  width: 200px;
+  height: 52px;
+  border-radius: 20px;
+  line-height: 40px;
+  text-align: center;
+  border: 2px solid #dadcdd;
+  background-color: #e4e6e7;
   font-size: 25px;
   margin-top: 15px;
+  margin-left: 15px;
+  &:hover {
+    background-color: rgb(215, 224, 228); /* 호버 시 변경될 배경색 */
+    cursor: pointer; /* 호버 시 커서 모양 변경 (선택 사항) */
+  }
 `;
 
 const BrTag = styled.div`
@@ -113,17 +125,20 @@ const MidDiv = styled.div`
 `;
 const BottomDiv = styled.div`
   width: 100%;
-  height: 1500px;
+  height: 1600px;
   background-color: #eaecee;
-  /* border: 2px solid black; */
+  border: 2px solid #eaecee;
 `;
 const CommuPage = styled.div`
   margin-top: 20px;
   width: 300px;
-  height: 300px;
+  height: 100px;
   border: 10px;
   border-radius: 15px;
-  background-color: white;
+  background-color: #ffffff;
+  text-align: center;
+  line-height: 100px;
+  font-size: 30px;
 `;
 
 const ImgDiv = styled.img`
@@ -134,13 +149,13 @@ const ImgDiv = styled.img`
 `;
 
 const LifeTags = styled.div`
-  font-size: 30px;
-  margin: 100px 0 0 150px;
+  font-size: 40px;
+  margin: 200px 0 0 150px;
   /* margin-top: 100px; */
   width: 300px;
   height: 100px;
   font-weight: 600;
-  /* border: 2px solid black; */
+  border: 2px solid #eaecee;
 `;
 const LifeTag = styled.div`
   font-size: 25px;
@@ -154,9 +169,9 @@ const BottomTag = styled.div`
   /* margin-top: 100px; */
   width: 600px;
   height: 70px;
-  border: 2px solid black;
+  border: 2px solid rgb(218, 233, 247);
   border-radius: 50px;
-  background-color: aliceblue;
+  background-color: rgb(240, 248, 255);
   text-align: center;
   line-height: 70px;
 `;
@@ -166,6 +181,8 @@ const CommuListDiv = styled.div`
   width: 1200px;
   height: 500px;
   /* border: 2px solid black; */
+  border-radius: 10px;
+  background-color: rgb(129, 132, 136, 0.3);
   display: flex;
   justify-content: space-between;
 `;

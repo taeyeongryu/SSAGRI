@@ -3,6 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 
+const TopDiv = styled.div`
+  animation: fadein 2s ease-in-out;
+
+  @keyframes fadein {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+`;
 const Div = styled.div``;
 const TopTag = styled.div`
   font-size: 30px;
@@ -144,15 +156,15 @@ const BoardCreateMain = () => {
         console.log(res.data, '2번요청성공');
       })
       .catch((err) => {
-        console.log('실패1', err);
-        console.log('실패1', data);
+        console.log('실패2', err);
+        console.log('실패2', data);
       });
 
     navigate('/community/List');
   };
 
   return (
-    <Div style={{ width: '100vh', margin: '100px auto' }}>
+    <TopDiv style={{ width: '100vh', margin: '100px auto' }}>
       <TopTag>게시글 신규 등록</TopTag>
       <Tagexplain>게시글을 만들어 보세요.</Tagexplain>
       <TopFlexDiv>
@@ -172,7 +184,7 @@ const BoardCreateMain = () => {
         <CreateBtn onClick={CreateBoard}>게시글 생성하기</CreateBtn>
         <CancelBtn onClick={() => navigate('/community/1')}>뒤로가기</CancelBtn>
       </BottomFlexDiv>
-    </Div>
+    </TopDiv>
   );
 };
 
