@@ -15,6 +15,7 @@ import com.ssafy.ssagri.domain.auction.dto.AuctionProductAllDTO;
 import com.ssafy.ssagri.domain.auction.dto.AuctionProductCreateDTO;
 import com.ssafy.ssagri.entity.auction.AuctionProduct;
 import com.ssafy.ssagri.entity.auction.AuctionProductImage;
+import com.ssafy.ssagri.entity.auction.AuctionStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -104,6 +105,10 @@ public class AuctionProductService {
         LocalDateTime startDate = LocalDateTime.parse(startDate1, formatter);
         LocalDateTime endDate = LocalDateTime.parse(endDate1, formatter);
 
+        System.out.println(startDate);
+        System.out.println(endDate);
+
+
 
         AuctionProduct auctionProduct = AuctionProduct.builder()
                 .user(userRegistRepository.findByNo(auctionProductCreateDTO.getUserNo()))
@@ -112,12 +117,12 @@ public class AuctionProductService {
                 .downPrice(auctionProductCreateDTO.getDownPrice())
                 .priceCount(auctionProductCreateDTO.getCountPrice())
                 .startDate(startDate)
+                .auctionStatus(AuctionStatus.예정)
                 .endDate(endDate)
                 .comment(auctionProductCreateDTO.getComment())
                 .createTime(LocalDateTime.now())
                 .originPrice(auctionProductCreateDTO.getOriginPrice())
                 .type(auctionProductCreateDTO.getType()).build();
-
 
 
             AuctionProduct auctionProduct1 = auctionRepository.save(auctionProduct);
