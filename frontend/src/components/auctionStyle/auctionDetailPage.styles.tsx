@@ -7,7 +7,7 @@ const DetailDiv = styled.div`
   height: 1000px;
   border: 3px solid black;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
 `;
 
 // 상품 정보
@@ -17,6 +17,7 @@ const ProductInfo = styled.div`
 
 const ProductImage = styled.img`
   width: 400px;
+  border-radius: 8px;
 `;
 
 const SellerInfo = styled.div`
@@ -26,7 +27,23 @@ const SellerInfo = styled.div`
 `;
 
 // 입찰 정보
-const BidInfo = styled.div``;
+const BidInfo = styled.div`
+  width: 400px;
+`;
+
+const EachBid = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  background-color: rgba(157, 198, 255, 0.3);
+  border-radius: 8px;
+`;
+
+const HighPriceIcon = styled.div`
+  border: 1px solid #315dfb;
+  background: #9dc6ff;
+`;
 
 // 각 소제목
 const InfoTitle = styled.div`
@@ -116,12 +133,14 @@ const AuctionDetail = () => {
       <BidInfo>
         <InfoTitle>입찰 현황</InfoTitle>
         <InfoContentBox>
-          <div className='each-bid'>
-            <div>프로필 사진</div>
+          <EachBid>
+            <img src='/assets/img/bid_profile.png' alt='입찰자 프로필 사진' />
             <div>입찰자 닉네임</div>
             <div>입찰액</div>
-            <div>최고가</div>
-          </div>
+            <HighPriceIcon>
+              <div style={{ color: '#4786FA' }}>최고가</div>
+            </HighPriceIcon>
+          </EachBid>
         </InfoContentBox>
       </BidInfo>
     </DetailDiv>
