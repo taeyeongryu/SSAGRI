@@ -183,19 +183,24 @@ public class BoardService {
         Page<BoardList> allBoardWriteList = boardListRepository.findAllByBoardOrderByCreateDateAsc(board,pageable);
 
 
+
         List<BoardList> boardWriteList = allBoardWriteList.getContent();
 
         List<BoardListDto> result = new ArrayList<>();
 
         for(int i=0;i<boardWriteList.size();i++){
+
+            String boardLife = boardWriteList.get(i).getBoard().getBoardLife().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"));
+
             BoardListDto boardListDto = BoardListDto.builder()
                     .no(boardWriteList.get(i).getNo())
                     .user(boardWriteList.get(i).getUser().getNickname())
                     .boardName(boardWriteList.get(i).getBoard().getTitle())
-                    .boardLife(boardWriteList.get(i).getBoard().getBoardLife())
+                    .boardLife(boardLife)
                     .title(boardWriteList.get(i).getTitle())
                     .view(boardWriteList.get(i).getView())
                     .like(boardWriteList.get(i).getLike())
+//                    .createDate(boardWriteList.get(i).getCreateDate())
                     .allowComment(boardWriteList.get(i).isAllowComment())
                     .content(boardWriteList.get(i).getContent()).build();
 
