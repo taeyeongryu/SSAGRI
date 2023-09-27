@@ -1,12 +1,10 @@
 package com.ssafy.ssagri.domain.board.dto;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Data
 public class BoardCreateDto {
 
     // 게시판 생성자 no

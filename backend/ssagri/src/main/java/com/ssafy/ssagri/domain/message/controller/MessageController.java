@@ -31,7 +31,8 @@ public class MessageController {
     @SendTo("/sub/chat/room/{roomNo}")
     @Operation(summary = "메시지 보내는 메서드"
             ,description = "roomNo에 해당하는 채팅방에 Message 보내는 메서드")
-    public ResponseEntity<MessageResponseDto> sendMessage(@RequestBody MessageRequestDto messageRequest) {
+    public ResponseEntity<MessageResponseDto> sendMessage(@PathVariable(name = "roomNo") Long roomNo,@RequestBody MessageRequestDto messageRequest) {
+        log.info("roomNo = {}", roomNo);
         log.info("messageRequest = {}", messageRequest);
         MessageResponseDto messageResponse = messageService.saveMessage(messageRequest);
         return ResponseEntity.ok(messageResponse);
