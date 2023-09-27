@@ -264,14 +264,20 @@ const BottomPageSpace = ({ setCurrentPage, totalPage }) => {
   );
 };
 
-const AuctionItme = (item) => {
+const AuctionItme = (item: any) => {
   const navigate = useNavigate();
-  const goAuctionDetail = () => {
-    navigate('/auctionDetail');
+  // 상세 페이지로 이동
+  const goAuctionDetail = (item) => {
+    console.log(item);
+    navigate(`/auctionDetail/${item.item.no}`);
   };
 
   return (
-    <AuctionItem onClick={goAuctionDetail}>
+    <AuctionItem
+      onClick={() => {
+        goAuctionDetail(item);
+      }}
+    >
       <ItemImg src='assets/img/auctionsample.PNG'></ItemImg>
 
       <ItmeDiv1>
@@ -334,6 +340,7 @@ const AuctionPage = () => {
 
   // 로그인하고 다시 돌아오기 위해 현재 경로 저장
   const { pathname } = useLocation();
+  console.log(pathname);
 
   // const [researchItems,setResearchItems] =
   // const researchItems = itemList.filter(item => item.type === '모니터');
@@ -360,8 +367,7 @@ const AuctionPage = () => {
   // 경매 리스트 요청
 
   const auctionApi = axios.create({
-    // baseURL: process.env.REACT_APP_SPRING_URI,
-    headers: { 'cotent-type': 'application/json' }
+    headers: { 'content-type': 'application/json' }
   });
 
   const GetAuctionItemList = () => {

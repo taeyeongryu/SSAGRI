@@ -62,7 +62,7 @@ const App = () => {
         {/* 경매 생성 페이지 */}
         <Route path='/auctionCreate' element={<AuctionCreatePage />} />
         {/* 경매 상세 페이지 */}
-        <Route path='/auctionDetail' element={<AuctionDetailPage />} />
+        <Route path='/auctionDetail/:no' element={<AuctionDetailPage />} />
         {/* 커뮤티니 페이지 */}
         <Route path='/community' element={<CommunityPage />} />
         {/* 커뮤티니 생성 */}
