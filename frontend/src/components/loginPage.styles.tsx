@@ -347,8 +347,8 @@ const SignInAndUpComponent = () => {
 
   // 로그인 입력 폼
   const [signInForm, setSignInForm] = useState({
-    email: '',
-    password: ''
+    email: 'test@test.com',
+    password: 'test'
   });
 
   // 안내 메시지
@@ -767,18 +767,14 @@ const SignInAndUpComponent = () => {
             </Label>
             <Input
               type='email'
-              // value={signInForm.email}
-              value={'test@test.com'}
+              value={signInForm.email}
               onChange={onChangeEmail}
-              // defaultValue='test@test.com'
             ></Input>
             <Label htmlFor='password'>비밀번호</Label>
             <Input
               type='password'
-              // value={signInForm.password}
-              value={'test'}
+              value={signInForm.password}
               onChange={onChangePassword}
-              // defaultValue='test'
             ></Input>
             <A>비밀번호를 잊으셨나요?</A>
           </FormContent>

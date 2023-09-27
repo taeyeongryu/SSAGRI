@@ -274,7 +274,10 @@ const AuctionCreate = () => {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const day = date.getDate().toString().padStart(2, '0');
-    return `${year}-${month}-${day}`;
+    // const hour = date.getHours().toString().padStart(2, '0');
+    // const minute = date.getMinutes().toString().padStart(2, '0');
+    // const second = date.getSeconds().toString().padStart(2, '0');
+    return `${year}년 ${month}월 ${day}일 00시 00분 00초`;
   };
 
   const [nextPage, setNextPage] = useState(false);
@@ -285,12 +288,12 @@ const AuctionCreate = () => {
   const userNo = localStorage.getItem('userNo'); // 주최자 아이디
   const [itemName, setItemName] = useState(''); // 상품명
   const [itemDescription, setItemDescription] = useState(''); // 상품 설명
-  const [startTime, setStartTime] = useState(new Date()); // 경매 시작시간
-  const [endTime, setEndTime] = useState(new Date()); // 경매 마감시간
+  const [startTime, setStartTime] = useState(formatDate(new Date())); // 경매 시작시간
+  const [endTime, setEndTime] = useState(formatDate(new Date())); // 경매 마감시간
   const [downPrice, setDownPrice] = useState(0); // 경매 하한가
   const [originPrice, setOriginPrice] = useState(0); // 경매 정가
   const [countPrice, setCountPrice] = useState(0); // 경매 입찰 단위
-  const [Selected, setSelected] = useState(''); // 물품분류
+  const [Selected, setSelected] = useState('모니터'); // 물품분류
 
   // console.log(selectedDate, itemName, itemDescription);
 
@@ -334,45 +337,46 @@ const AuctionCreate = () => {
   };
 
   const onCalendarChange = async (value) => {
+    console.log(value); // Thu Sep 21 2023 00:00:00 GMT+0900 (한국 표준시)
     let startData = formatDate(value);
-    setStartTime(new Date(startData)); // 선택된 날짜를 상태에 반영
+    console.log(new Date());
+    console.log(formatDate(new Date()));
+    console.log(startData); // 2023-09-15
+    setStartTime(startData); // 선택된 날짜를 상태에 반영
   };
   const onCalendarChange2 = async (value) => {
     let endData = formatDate(value);
-    setEndTime(new Date(endData)); // 선택된 날짜를 상태에 반영
+    console.log(endData);
+    setEndTime(endData); // 선택된 날짜를 상태에 반영
   };
 
   // 경매 생성 요청
   const auctionApi = axios.create({
-    // baseURL: process.env.REACT_APP_SPRING_URI,
-    headers: { 'cotent-type': 'application/json' }
+    headers: { 'content-type': 'application/json' }
   });
 
   const CreateAuctionItem = () => {
     const data = {
-      comment: itemDescription,
-      countPrice: countPrice,
-      downPrice: downPrice,
-      // endDate: endTime,
-      endDate: '2023-09-21T05:41:47.940Z',
-      modifyDate: '2023-09-21T05:41:47.940Z',
-      name: itemName,
-      originPrice: originPrice,
-      // startDate: startTime,
-      startDate: '2023-09-21T05:41:47.940Z',
-      status: 'END',
-      type: Selected,
-      upPrice: 1000,
-      userNo: userNo
+      userNo: userNo, // 판매자 번호
+      name: itemName, // 상품명
+      comment: itemDescription, // 상품 설명
+      type: Selected, // 분류
+      downPrice: downPrice, // 시작가
+      originPrice: originPrice, // 정가
+      countPrice: countPrice, // 입찰 단위
+      startDate: startTime, // 시작시간
+      endDate: endTime // 종료시간
     };
+
+    console.log('경매 등록 데이터: ', data);
     auctionApi
       .post('/auction-product/auction/regist', data)
       .then((res) => {
         console.log(res, '성공');
+        // 성공하면 등록된 경매 LOT 번호 받아서 사진 업로드 하는 로직 추가해줘야 함.
       })
       .catch((err) => {
         console.log(err);
-        console.log(data);
       });
   };
 
@@ -468,7 +472,7 @@ const AuctionCreate = () => {
               <div className='preview-image' style={{ display: 'flex' }}>
                 {images.map((url, index) => {
                   return (
-                    <ImgBox>
+                    <ImgBox key={index}>
                       <PreviewImg src={url} key={index}></PreviewImg>
                     </ImgBox>
                   );
@@ -487,38 +491,32 @@ const AuctionCreate = () => {
             <Div7>
               <TagBtn1 style={{ marginBottom: '40px' }}>경매 기간</TagBtn1>
               <Div4>
+                {/* 시작 시간 설정하는 달력 */}
                 <Calendar
                   onChange={onCalendarChange}
                   value={value}
                   // @ts-ignore
+                  // 달력에서 날짜뒤에 '일' 제거
                   formatDay={(locale, date) => moment(date).format('DD')}
                 />
+                {/* 마감 시간 설정하는 달력 */}
                 <Calendar
                   onChange={onCalendarChange2}
                   value={value}
                   // @ts-ignore
+                  // 달력에서 날짜뒤에 '일' 제거
                   formatDay={(locale, date) => moment(date).format('DD')}
                 />
               </Div4>
               <Div4 style={{ marginTop: '40px' }}>
                 <Div3>
-                  <SelectDiv
-                    value={Selected}
-                    onChange={(e) => setSelected(e.target.value)}
-                  >
-                    {LocalList.map((item) => (
-                      <option value={item} key={item}>
-                        {item}
-                      </option>
-                    ))}
-                  </SelectDiv>
                   <TextDiv>시작 시간</TextDiv>
-                  <Div5>{moment(startTime).format('YYYY-MM-DD')}</Div5>
+                  <Div5>{startTime}</Div5>
                 </Div3>
                 <Div9>--</Div9>
                 <Div3>
                   <TextDiv>마감시간</TextDiv>
-                  <Div5>{moment(endTime).format('YYYY-MM-DD')}</Div5>
+                  <Div5>{endTime}</Div5>
                 </Div3>
               </Div4>
             </Div7>
