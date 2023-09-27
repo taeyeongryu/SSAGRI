@@ -185,6 +185,8 @@ const InputTag3 = styled.div`
   border: 1px solid rgb(0, 0, 0, 0.3);
   box-shadow: 2px 2px rgb(0, 0, 0, 0.3);
   /* background-color: #555453; */
+
+  display: flex;
 `;
 
 const InputTag5 = styled.input`
@@ -243,6 +245,26 @@ const SelectDiv = styled.select`
 const TextDiv = styled.div`
   font-size: 15px;
   margin-right: 20px;
+`;
+
+const AddImgBtn = styled.div`
+  background-image: url('/public/assets/img/addPhoto.png');
+  background-size: 100% 100%;
+
+  width: 140px;
+  height: 140px;
+`;
+
+// 미리보기 이미지 박스
+const ImgBox = styled.div`
+  width: 140px;
+  height: 140px;
+`;
+
+// 미리보기 이미지
+const PreviewImg = styled.img`
+  width: 130px;
+  height: 130px;
 `;
 
 const AuctionCreate = () => {
@@ -428,14 +450,12 @@ const AuctionCreate = () => {
           <CreateDiv6>
             <TagBtn1>이미지</TagBtn1>
             <InputTag3 className='addPhoto'>
-              <div
+              <AddImgBtn
                 onClick={() => {
                   // @ts-ignore
                   photoInput.current.click();
                 }}
-              >
-                이미지 등록 버튼
-              </div>
+              ></AddImgBtn>
               <input
                 type='file'
                 accept='image/jpg, image/jpeg, image/png'
@@ -445,16 +465,12 @@ const AuctionCreate = () => {
                 style={{ display: 'none' }}
                 onChange={addImage}
               />
-              <div style={{ display: 'flex' }} className='preview'>
+              <div className='preview-image' style={{ display: 'flex' }}>
                 {images.map((url, index) => {
                   return (
-                    <div>
-                      <img
-                        style={{ width: '200px' }}
-                        src={url}
-                        key={index}
-                      ></img>
-                    </div>
+                    <ImgBox>
+                      <PreviewImg src={url} key={index}></PreviewImg>
+                    </ImgBox>
                   );
                 })}
               </div>
