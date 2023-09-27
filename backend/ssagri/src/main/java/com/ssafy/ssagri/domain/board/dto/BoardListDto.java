@@ -43,7 +43,10 @@ public class BoardListDto {
     private int like;
 
     // 글 작성 시간
-    private String createDate;
+    private Long createDate;
+
+    // 댓글 갯수
+    private int commentCount;
 
 
 }

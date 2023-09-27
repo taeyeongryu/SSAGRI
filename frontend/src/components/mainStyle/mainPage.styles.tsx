@@ -442,12 +442,12 @@ const Page2_img2 = styled.img`
 `;
 const Page2_img3 = styled.img`
   position: absolute;
-  top: 350px;
+  top: 390px;
   left: -10px;
   /* margin-top: 250px; */
   font-size: 40px;
   width: 240px;
-  height: 270px;
+  height: 210px;
   /* border: 2px solid red; */
   margin-right: 300px;
   border-radius: 10px;
@@ -463,6 +463,7 @@ const Page2_colorbox = styled.div`
   /* border: 2px solid red; */
   clip-path: polygon(16% 0%, 100% 0%, 90% 100%, 0% 100%);
   background: #27005d;
+  background: linear-gradient(to bottom, rgb(39, 0, 93, 0.9), #27005d);
   /* overflow: hidden; */
   position: relative;
 `;
@@ -494,17 +495,21 @@ const Trade_box2 = styled.div`
 `;
 
 const NameTag0 = styled.p`
+  font-family: var(--font-Jua);
+  /* font-family: var(--font-NanumMyeongjo); */
+  /* font-family: var(--font-googleNanumPen); */
   font-size: 160px;
   width: 700px;
   color: white;
   z-index: 30;
-  background-image: url('/assets/img/page2_clip2.PNG');
-  background-position: 110px 30px;
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
+  /* background-image: url('/assets/img/page2_clip2.PNG'); */
+  /* background-position: 10px 30px; */
+  /* background-clip: text; */
+  /* -webkit-background-clip: text; */
+  /* color: transparent; */
   background-size: cover;
   font-weight: 600;
+
   /* border: 2px solid black; */
 `;
 const TradeBackground = styled.div`
@@ -528,6 +533,7 @@ const NameTag0_2 = styled.div`
   margin: 0;
   background-image: url('/assets/img/tests.jpg');
   background-position: -40px 40px;
+  background-position: 0px 0px;
   transform: rotate(-50deg);
 
   background-size: cover;
@@ -605,7 +611,7 @@ const Page2_section2 = ({
         >
           <NameTag0_2
             style={{
-              backgroundPosition: `${backgroundPositionX}px 80px`,
+              backgroundPosition: `${backgroundPositionX + 100}px 0px`,
               transition: 'backgroundPosition 1s ease'
             }}
           >
@@ -613,7 +619,7 @@ const Page2_section2 = ({
           </NameTag0_2>
           <NameTag0_3
             style={{
-              backgroundPosition: `${backgroundPositionX}px 80px`,
+              backgroundPosition: `${backgroundPositionX - 200}px 0px`,
               transition: 'backgroundPosition 1s ease'
             }}
           ></NameTag0_3>
@@ -1366,8 +1372,8 @@ const Block5 = styled.div`
   /* border: 2px solid red; */
   clip-path: polygon(60% 0%, 100% 0%, 40% 100%, 0% 100%);
   /* background: #27005d; */
-  background-image: url('/assets/img/tests.jpg');
-  background-position: 40px 0px;
+  background-image: url('/assets/img/page2_clip5.jpg');
+  background-position: -150px 0px;
   color: transparent;
   background-size: cover;
   transform: rotate(-58.5deg);
@@ -1382,8 +1388,8 @@ const Block6 = styled.div`
   /* border: 2px solid red; */
   clip-path: polygon(60% 0%, 100% 0%, 40% 100%, 0% 100%);
   /* background: #27005d; */
-  background-image: url('/assets/img/tests.jpg');
-  background-position: 40px 0px;
+  background-image: url('/assets/img/page2_clip5.jpg');
+  background-position: -10px 0px;
   color: transparent;
   background-size: cover;
   transform: rotate(-60.5deg);

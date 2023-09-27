@@ -1,7 +1,19 @@
 import { styled } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
+const TopDiv = styled.div`
+  animation: fadein 1s ease-in-out;
+
+  @keyframes fadein {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+`;
 const Div = styled.div``;
 const TopTag = styled.div`
   font-size: 30px;
@@ -85,8 +97,8 @@ const InputCheckbox = styled.input``;
 const CommuCreate = () => {
   const [commuTitle, setCommuTitle] = useState('');
   const [commuContent, setCommuContent] = useState('');
-  const [anony, setAnony] = useState('false');
-
+  const [anony, setAnony] = useState('실명');
+  const [userId, setUserId] = useState(0);
   const [clickCount, setClickCount] = useState(0);
 
   const navigate = useNavigate();
@@ -97,8 +109,8 @@ const CommuCreate = () => {
     });
     const data = {
       comment: commuContent,
-      no: 1,
       title: commuTitle,
+      userNo: userId,
       who: anony
     };
 
@@ -134,8 +146,22 @@ const CommuCreate = () => {
     }
   };
 
+  useEffect(() => {
+    const BoardApi = axios.create({
+      headers: { 'cotent-type': 'application/json' }
+    });
+    //유저 id정보 요청
+    BoardApi.get('/util/get-userno')
+      .then((res) => {
+        setUserId(res.data);
+      })
+      .catch((err) => {
+        console.log('실패1', err);
+      });
+  }, []);
+
   return (
-    <Div style={{ width: '100vh', margin: '0 auto' }}>
+    <TopDiv style={{ width: '100vh', margin: '0 auto' }}>
       <TopTag>게시판 신규 등록</TopTag>
       <Tagexplain>게시판 설정 정보를 관리 할 수 있습니다.</Tagexplain>
       <TopFlexDiv>
@@ -162,7 +188,7 @@ const CommuCreate = () => {
         <CreateBtn onClick={CreateCommu}>게시판 생성하기</CreateBtn>
         <CancelBtn onClick={() => navigate('/community')}>뒤로가기</CancelBtn>
       </BottomFlexDiv>
-    </Div>
+    </TopDiv>
   );
 };
 

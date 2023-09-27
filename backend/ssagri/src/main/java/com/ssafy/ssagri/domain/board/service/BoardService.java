@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -190,6 +191,9 @@ public class BoardService {
 
         for(int i=0;i<boardWriteList.size();i++){
 
+            System.out.println(boardWriteList.get(i).getNo());
+
+
             String boardLife = boardWriteList.get(i).getBoard().getBoardLife().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"));
 
             BoardListDto boardListDto = BoardListDto.builder()
@@ -200,8 +204,9 @@ public class BoardService {
                     .title(boardWriteList.get(i).getTitle())
                     .view(boardWriteList.get(i).getView())
                     .like(boardWriteList.get(i).getLike())
-//                    .createDate(boardWriteList.get(i).getCreateDate())
+                    .createDate(ChronoUnit.DAYS.between(boardWriteList.get(i).getCreateDate(),LocalDateTime.now()))
                     .allowComment(boardWriteList.get(i).isAllowComment())
+                    .commentCount(boardCommentRepository.findAllByBoardList(boardWriteList.get(i)).size())
                     .content(boardWriteList.get(i).getContent()).build();
 
             result.add(boardListDto);
