@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 const DetailDiv = styled.div`
   margin-top: 200px;
   margin-left: 200px;
-  width: 1500px;
+  width: 1400px;
   height: 1000px;
   border: 3px solid black;
   display: flex;
@@ -90,7 +90,7 @@ const AuctionDetail = () => {
                 <div>닉네임</div>
               </SellerInfo>
               <SellerInfo>
-                <div>지도 아이콘</div>
+                <img src='/assets/img/location.png' alt='위치 아이콘' />
                 <div>지역</div>
               </SellerInfo>
             </div>
