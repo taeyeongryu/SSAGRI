@@ -297,6 +297,27 @@ const AuctionCreate = () => {
 
   // console.log(selectedDate, itemName, itemDescription);
 
+  const photoUpload = (imageList, no) => {
+    imageList.map((image) => {
+      const formData2 = new FormData();
+
+      formData2.append('upload-file', image, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+
+      axios
+        .post(`/auction-product/upload/profile/${no}`)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
+  };
+
   // 사진 업로드
   const photoInput = useRef();
 
@@ -369,11 +390,13 @@ const AuctionCreate = () => {
     };
 
     console.log('경매 등록 데이터: ', data);
+
     auctionApi
       .post('/auction-product/auction/regist', data)
       .then((res) => {
-        console.log(res, '성공');
-        // 성공하면 등록된 경매 LOT 번호 받아서 사진 업로드 하는 로직 추가해줘야 함.
+        console.log(res.data); // 생성된 경매 번호
+        // 성공하면 등록된 경매 번호 받아서 사진 업로드 하는 로직 추가해줘야 함.
+        photoUpload(uploadImage, res.data);
       })
       .catch((err) => {
         console.log(err);
