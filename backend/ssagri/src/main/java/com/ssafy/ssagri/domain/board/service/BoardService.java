@@ -9,6 +9,8 @@ import com.ssafy.ssagri.entity.board.Board;
 import com.ssafy.ssagri.entity.board.BoardList;
 import com.ssafy.ssagri.entity.comment.BoardComment;
 import com.ssafy.ssagri.entity.user.User;
+import com.ssafy.ssagri.util.exception.CustomException;
+import com.ssafy.ssagri.util.exception.CustomExceptionStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -97,12 +99,16 @@ public class BoardService {
     // 게시판 등록
     @Transactional
     public void boardregist(BoardCreateDto boardCreateDto){
+        log.info("boardCreateDto = {}", boardCreateDto);
+
 
         Optional<User> findUser = userRegistAndModifyRepository.findById(boardCreateDto.getUserNo());
+        log.info("user");
         if (findUser.isEmpty()){
-            System.out.println("empty");
+            log.info("empty");
+            throw new CustomException(CustomExceptionStatus.USER_DOES_NOT_EXSIST);
         }else{
-            System.out.println("present");
+            log.info("present");
         }
 
 
