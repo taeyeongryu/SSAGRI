@@ -1,12 +1,15 @@
 package com.ssafy.ssagri.domain.chatroom.service;
 
 import com.ssafy.ssagri.domain.chatroom.dto.ChatRoomDetailResponseDto;
+import com.ssafy.ssagri.domain.chatroom.dto.ChatRoomListResponseDto;
 import com.ssafy.ssagri.domain.chatroom.dto.ChatRoomResponseDto;
 import com.ssafy.ssagri.domain.chatroom.repository.ChatRoomRepository;
 import com.ssafy.ssagri.domain.message.dto.MessageResponseDto;
+import com.ssafy.ssagri.domain.message.repository.MessageRepository;
 import com.ssafy.ssagri.domain.message.service.MessageService;
 import com.ssafy.ssagri.domain.user.repository.UserRegistAndModifyRepository;
 import com.ssafy.ssagri.entity.chat.ChatRoom;
+import com.ssafy.ssagri.entity.chat.Message;
 import com.ssafy.ssagri.entity.user.User;
 import com.ssafy.ssagri.util.exception.CustomException;
 import lombok.RequiredArgsConstructor;
@@ -29,24 +32,35 @@ import static com.ssafy.ssagri.util.exception.CustomExceptionStatus.USER_DOES_NO
 public class ChatRoomService {
     private final UserRegistAndModifyRepository userRegistAndModifyRepository;
     private final ChatRoomRepository chatRoomRepository;
+    private final MessageRepository messageRepository;
     private final MessageService messageService;
 
     /*
     * 특정유저의 No를 받아서 그 사람 참여하고
     * 있는 모든 채팅방 정보 Dto로 반환하는 메서드
     * */
-    public List<ChatRoomResponseDto> selectAllChatRoomByUser(Long userNo){
-        List<ChatRoom> chatRoomList = chatRoomRepository.selectByUserNo(userNo);
-        List<ChatRoomResponseDto> chatRoomResponseDtoList = new ArrayList<>();
-        for (ChatRoom chatRoom : chatRoomList) {
-            ChatRoomResponseDto chatRoomResponseDto = ChatRoomResponseDto.builder()
-                    .no(chatRoom.getNo())
-                    .userANo(chatRoom.getUserA().getNo())
-                    .userBNo(chatRoom.getUserB().getNo())
-                    .roomCode(chatRoom.getRoomCode())
-                    .updateDate(chatRoom.getChatUpdateDate())
+    public List<ChatRoomListResponseDto> selectAllChatRoomByUser(Long userNo){
+        List<Message> MessageList = messageRepository.findChatRoomByUserNo(userNo);
+        List<ChatRoomListResponseDto> chatRoomResponseDtoList = new ArrayList<>();
+        for (Message msg : MessageList) {
+            Long receiverNo = null;
+            // 사용자와 수신인의 no가 같다면, 반대편 사용자는 receiverNo, 아니라면 반대
+            if (userNo.longValue() == msg.getSenderNo().longValue()) {
+                receiverNo = msg.getReceiverNo();
+            } else {
+                receiverNo = msg.getSenderNo();
+            }
+            ChatRoomListResponseDto receiver = chatRoomRepository.findReceiver(receiverNo);
+            ChatRoomListResponseDto responseDto = ChatRoomListResponseDto.builder()
+                    .receiverNo(receiverNo)
+                    .chatRoomNo(msg.getRoomNo())
+                    .lastMent(msg.getContent())
+                    .lastDate(msg.getTime())
+                    .receiverNickName(receiver.getReceiverNickName())
+                    .receiverProfile(receiver.getReceiverProfile())
+                    .receiverRegion(receiver.getReceiverRegion())
                     .build();
-            chatRoomResponseDtoList.add(chatRoomResponseDto);
+            chatRoomResponseDtoList.add(responseDto);
         }
         return chatRoomResponseDtoList;
     }
@@ -157,5 +171,9 @@ public class ChatRoomService {
                 .roomCode(roomCode).build();
         chatRoomRepository.save(chatRoom);
         return chatRoom.toResponse();
+    }
+
+    public String selectNickname(Long userNo) {
+        return chatRoomRepository.findNickname(userNo);
     }
 }

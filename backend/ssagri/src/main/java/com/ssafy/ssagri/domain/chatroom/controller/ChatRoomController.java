@@ -1,6 +1,7 @@
 package com.ssafy.ssagri.domain.chatroom.controller;
 
 import com.ssafy.ssagri.domain.chatroom.dto.ChatRoomDetailResponseDto;
+import com.ssafy.ssagri.domain.chatroom.dto.ChatRoomListResponseDto;
 import com.ssafy.ssagri.domain.chatroom.dto.ChatRoomResponseDto;
 import com.ssafy.ssagri.domain.chatroom.service.ChatRoomService;
 import io.swagger.annotations.Api;
@@ -36,8 +37,8 @@ public class ChatRoomController {
     @GetMapping("/list/{userNo}")
     @Operation(summary = "UserA의 No를 받아서 UserA의 채팅방 목록 반환하는 메서드"
             , description = "특정 유저의 userNo를 넘겨주면 그 유저의 채팅방 전체를 List로 반환")
-    public ResponseEntity<List<ChatRoomResponseDto>> selectChatRoomByUser(@PathVariable(name = "userNo") Long userNo){
-        List<ChatRoomResponseDto> chatRoomResponseDtoList = chatRoomService.selectAllChatRoomByUser(userNo);
+    public ResponseEntity<List<ChatRoomListResponseDto>> selectChatRoomByUser(@PathVariable(name = "userNo") Long userNo){
+        List<ChatRoomListResponseDto> chatRoomResponseDtoList = chatRoomService.selectAllChatRoomByUser(userNo);
         return ResponseEntity.ok(chatRoomResponseDtoList);
     }
 
@@ -67,5 +68,12 @@ public class ChatRoomController {
     public ResponseEntity<Void> deleteChatRoom(@PathVariable(name = "userANo") Long userANo,@PathVariable(name = "userBNo") Long userBNo){
         chatRoomService.deleteChatRoom(userANo, userBNo);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/nickname/{userNo}")
+    @Operation(summary = "chatRoom에 들어올 때 닉네임을 반환")
+    public ResponseEntity<String> selectNickname(@PathVariable(name = "userNo") Long userNo){
+        String nickname = chatRoomService.selectNickname(userNo);
+        return ResponseEntity.ok(nickname);
     }
 }

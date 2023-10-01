@@ -552,7 +552,7 @@ const TradeDetail = () => {
 
   const navigate = useNavigate();
   const goChat = () => {
-    navigate(`/doChat`);
+    navigate(`/chat`);
   };
 
   let linkDto: any;

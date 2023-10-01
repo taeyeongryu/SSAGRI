@@ -3,6 +3,8 @@ package com.ssafy.ssagri.domain.message.repository;
 import static com.ssafy.ssagri.entity.chat.QMessage.message;
 
 import com.querydsl.core.QueryResults;
+import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.ssagri.entity.chat.Message;
 import java.util.List;
@@ -35,5 +37,21 @@ public class MessageCustomRepositoryImpl implements MessageCustomRepository{
         long total = queryResults.getTotal();
 
         return new PageImpl<>(results, pageable, total);
+    }
+
+    @Override
+    public List<Message> findChatRoomByUserNo(Long userNo) {
+        log.info("userNo : {}", userNo);
+        return jpaQueryFactory
+            .selectFrom(message)
+            .where(message.id.in(
+                JPAExpressions
+                    .select(message.id.max())
+                    .from(message)
+                    .where(message.receiverNo.eq(userNo).or(message.senderNo.eq(userNo)))
+                    .groupBy(message.roomNo)
+                    .orderBy(message.id.desc())
+            ))
+            .fetch();
     }
 }
