@@ -6,13 +6,14 @@ const JWT_EXPIRY_TIME = 24 * 3600 * 1000; // 만료 시간 (24시간)
 
 // 로그인 성공
 const onLoginSuccess = (response: any) => {
-  console.log('로그인 성공!');
+  // console.log('로그인 성공!');
   // 로컬 스토리지에 로그인 여부 저장 (새로고침 시 날아가는 것 때문)
   localStorage.setItem('isLoggedIn', 'true');
 
   const accessToken = response.headers['access-token'];
   // axios 헤더에 jwt 토큰 담기
   axios.defaults.headers.common['Authorization'] = accessToken;
+  sessionStorage.setItem('accessToken', accessToken);
 
   // userNo를 localStorage에 넣기
   let payload = accessToken.substring(
@@ -34,7 +35,7 @@ const onSilentRefresh = () => {
   axios
     .get('/jwt/refill')
     .then((res) => {
-      console.log('silent refresh, 새로운 액세스 토큰 발급');
+      // console.log('silent refresh, 새로운 액세스 토큰 발급');
       // 리프레시 토큰이 유효 [ STATUS 200 ]
       // 새로운 액세스 토큰 발급
       onLoginSuccess(res);

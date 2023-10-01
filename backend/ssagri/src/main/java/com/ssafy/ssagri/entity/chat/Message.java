@@ -1,25 +1,37 @@
 package com.ssafy.ssagri.entity.chat;
 
 import com.ssafy.ssagri.domain.message.dto.MessageResponseDto;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Generated;
 import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 
-@Document
+//@Document(collection = "Message")
+@Entity
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Message {
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    @Column(name = "room_no")
     private Long roomNo;
+    @Column(name = "sender_no")
     private Long senderNo;
+    @Column(name = "sender_nick_name")
     private String senderNickName;
+    @Column(name = "receiver_no")
     private Long receiverNo;
+    @Column(name = "receiver_nick_name")
     private String receiverNickName;
     private String content;
     private LocalDateTime time;

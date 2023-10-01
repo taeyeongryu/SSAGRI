@@ -1,10 +1,7 @@
 import { styled } from 'styled-components';
-import {
-  ProductList03,
-  TradeProductItem03
-} from '../components/tradeMainPage.styles';
+import { ProductList03, TradeProductItem03 } from './tradeMainPage.styles';
 import { useEffect, useRef, useState } from 'react';
-import { ProductItemType } from './type';
+import { ProductItemType } from '../type';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -555,7 +552,7 @@ const TradeDetail = () => {
 
   const navigate = useNavigate();
   const goChat = () => {
-    navigate(`/chat`);
+    navigate(`/doChat`);
   };
 
   let linkDto: any;
@@ -653,7 +650,9 @@ const TradeDetail = () => {
         // console.log('Date : ', diffSec / (24 * 60 * 60 * 1000));
         // console.log(minute.toFixed(0));
         // console.log(Math.floor(minute / 60));
-        if (minute < 60) {
+        if (minute < 1) {
+          pastTime.current = `방금 전`;
+        } else if (minute < 60) {
           pastTime.current = `${minute.toFixed(0)}분 전`;
         } else if (minute < 24 * 60) {
           pastTime.current = `${Math.floor(minute / 60)}시간 전`;
