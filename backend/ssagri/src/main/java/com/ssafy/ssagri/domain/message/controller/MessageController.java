@@ -33,8 +33,6 @@ public class MessageController {
     @SendTo(value = "/queue/chat/room/{chatRoomNo}")
     @ApiOperation(value = "메시지 보내는 메서드")
     public ResponseEntity<MessageResponseDto> sendMessage(@RequestBody MessageRequestDto messageRequest, @DestinationVariable Long chatRoomNo) {
-        log.info("roomNo = {}", roomNo);
-
         log.info("messageRequest = {}", messageRequest);
         log.info("chatRoomNo = {}", chatRoomNo);
         messageRequest.setChatRoomNo(chatRoomNo);
