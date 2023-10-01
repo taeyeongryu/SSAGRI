@@ -5,11 +5,13 @@ import com.ssafy.ssagri.domain.message.dto.MessageRequestDto;
 import com.ssafy.ssagri.domain.message.dto.MessageResponseDto;
 import com.ssafy.ssagri.domain.message.service.MessageService;
 import io.swagger.annotations.ApiOperation;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 
@@ -22,12 +24,13 @@ import org.springframework.web.bind.annotation.*;
 public class MessageController {
     private final MessageService messageService;
 
-
-    @MessageMapping("/chat/room/1")
-    @SendTo("/sub/chat/room/1")
-    @ApiOperation("메시지 보내는 메서드")
-    public ResponseEntity<MessageResponseDto> sendMessage(@RequestBody MessageRequestDto messageRequest) {
+    @MessageMapping(value = "/chat/room/{chatRoomNo}") // /simple/chat/room/1
+    @SendTo(value = "/queue/chat/room/{chatRoomNo}")
+    @ApiOperation(value = "메시지 보내는 메서드")
+    public ResponseEntity<MessageResponseDto> sendMessage(@RequestBody MessageRequestDto messageRequest, @DestinationVariable Long chatRoomNo) {
         log.info("messageRequest = {}", messageRequest);
+        log.info("chatRoomNo = {}", chatRoomNo);
+        messageRequest.setChatRoomNo(chatRoomNo);
         MessageResponseDto messageResponse = messageService.saveMessage(messageRequest);
         return ResponseEntity.ok(messageResponse);
     }

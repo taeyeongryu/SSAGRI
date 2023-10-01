@@ -334,8 +334,8 @@ const SignInAndUpComponent = () => {
 
   // 로그인 입력 폼
   const [signInForm, setSignInForm] = useState({
-    email: '',
-    password: ''
+    email: 'test@test.com',
+    password: 'test'
   });
 
   // 안내 메시지
@@ -370,20 +370,22 @@ const SignInAndUpComponent = () => {
   // 로그인 요청 api
   const onLoginHandler = (e) => {
     e.preventDefault();
-
     const data = {
       email: signInForm.email,
       password: signInForm.password
     };
+    console.log('data', data);
     axios
       .post('/user/login/', data)
       .then((res) => {
+        console.log('data', data);
         onLoginSuccess(res);
         setIsLoggedIn(true);
         navigate('/');
       })
       .catch((error) => {
         // ... 에러 처리
+        console.log('data', data);
         console.log(error);
       });
   };
@@ -782,16 +784,16 @@ const SignInAndUpComponent = () => {
             </Label>
             <Input
               type='email'
-              // value={signInForm.email}
-              value={'test@test.com'}
+              value={signInForm.email}
+              // value={'test@test.com'}
               onChange={onChangeEmail}
               // defaultValue='test@test.com'
             ></Input>
             <Label htmlFor='password'>비밀번호</Label>
             <Input
               type='password'
-              // value={signInForm.password}
-              value={'test'}
+              value={signInForm.password}
+              // value={'test'}
               onChange={onChangePassword}
               // defaultValue='test'
             ></Input>

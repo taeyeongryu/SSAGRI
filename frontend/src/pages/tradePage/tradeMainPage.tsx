@@ -1,4 +1,4 @@
-import { TradeMain } from '../components/tradeMainPage.styles';
+import { TradeMain } from '../../components/tradeStyle/tradeMainPage.styles';
 import { useEffect } from 'react';
 const TradeMainPage = () => {
   useEffect(() => {

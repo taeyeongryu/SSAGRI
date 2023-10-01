@@ -1,6 +1,6 @@
 import { styled } from 'styled-components';
 
-import { AuctionSearchInput } from '../tradeMainPage.styles';
+import { AuctionSearchInput } from '../tradeStyle/tradeMainPage.styles';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 

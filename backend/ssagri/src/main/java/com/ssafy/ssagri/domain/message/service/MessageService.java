@@ -23,7 +23,7 @@ public class MessageService {
 
     public Page<MessageResponseDto> selectMessageResponse(Long roomNo, Pageable pageable){
         log.info("roomNo : {}",roomNo);
-        Page<Message> messages = messageRepository.findMessagesByRoomIdOrderByTimeDesc(roomNo, pageable);
+        Page<Message> messages = messageRepository.findMessagesByRoomNo(roomNo, pageable);
         List<MessageResponseDto> messageResponseList = new ArrayList<>();
         for (Message message : messages) {
             messageResponseList.add(message.toResponse());
