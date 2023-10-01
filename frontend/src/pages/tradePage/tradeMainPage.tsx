@@ -1,6 +1,6 @@
 import { TradeMain } from '../../components/tradeStyle/tradeMainPage.styles';
 import { useEffect } from 'react';
-import { isLoggedInAtom } from '../states/account/loginAtom';
+import { isLoggedInAtom } from '../../states/account/loginAtom';
 import { useRecoilValue } from 'recoil';
 import { useLocation, useNavigate } from 'react-router-dom';
 
