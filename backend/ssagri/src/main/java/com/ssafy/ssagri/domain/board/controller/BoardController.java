@@ -59,14 +59,14 @@ public class BoardController {
     }
 
     // 게시판 클릭시 조회수 증가
-    @GetMapping(value = "/board/click/{boardNo}")
+    @GetMapping(value = "/click/{boardNo}")
     @ApiOperation("게시판 클릭 시 조회수 증가")
     public void boardClick(@PathVariable("boardNo") Long boardNo){
         boardService.boardClick(boardNo);
     }
 
     // 게시판 삭제
-    @GetMapping(value = "/board/delete/{boardNo}")
+    @GetMapping(value = "/delete/{boardNo}")
     @ApiOperation("게시판 삭제")
     public void boardDelete(@PathVariable("boardNo") Long boardNo){
         boardService.boardDelete(boardNo);
@@ -75,11 +75,19 @@ public class BoardController {
 
 
     // 모든 게시글 출력
-    @GetMapping("/all-write-list")
-    @ApiOperation("모든 게시글 출력")
-    public Page<BoardListDto> allWriteList(Pageable pageable) {
-        Page<BoardListDto> BoardListDtos = boardService.boardWriteList(pageable);
+    @GetMapping("/all-write-list/{boardNo}")
+    @ApiOperation("하나의 게시판에 대한 모든 게시글 출력")
+    public Page<BoardListDto> allWriteList(@PathVariable("boardNo") Long boardNo, Pageable pageable) {
+        System.out.println("헹어");
+        Page<BoardListDto> BoardListDtos = boardService.boardWriteList(boardNo, pageable);
         return BoardListDtos;
+    }
+
+    // 게시글 상세보기
+    @GetMapping("/write-list-detail/{boardWriteNo}")
+    @ApiOperation("게시글 상세보기 출력")
+    public BoardListDto detailWriteList(@PathVariable("boardWriteNo") Long boardWriteNo) {
+        return boardService.detailWriteBoard(boardWriteNo);
     }
 
     // 게시글에 좋아요 누르기
@@ -97,18 +105,12 @@ public class BoardController {
     }
 
 
-
     // 하나의 게시글에 댓글달기
     @PostMapping("/write/comment")
     @ApiOperation("하나의 게시글에 댓글달기")
     public void writeComment(@RequestBody BoardWriteCommentDto boardWriteCommentDto){
         boardService.writeComment(boardWriteCommentDto);
     }
-
-
-
-
-
 
 
 }

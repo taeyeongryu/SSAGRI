@@ -13,6 +13,10 @@ public enum CustomExceptionStatus {
     //ETC = 0xxx
     UTIL_ERR(-0100, "util 서비스 제공 도중 에러가 발생했습니다."),
 
+    //Oauth
+    OAUTH_USERINFO_PARSING_ERR(-900,"액세스 토큰 요청 후 유저 값 파싱 도중 문제가 발생했습니다."),
+    OAUTH_KAKAO_NOT_VALID_EMAIL(-901, "해당 계정이 존재하지 않습니다."),
+
     //Register = 1xxx
     REGISTER_NICKNAME_IS_DUPLICATE(-1000, "유저 닉네임이 중복됩니다."),
     REGISTER_EMAIL_IS_DUPLICATE(-1001, "이메일이 중복됩니다."),
@@ -50,9 +54,11 @@ public enum CustomExceptionStatus {
 
     //mypage = 18xx
     MYPAGE_PROFILE_FAIL(-1800, "마이페이지 프로필 갱신에 실패했습니다"),
+    MYPAGE_PASSWORD_FAIL(-1801, "패스워드를 바꿀 수 있는 유저가 아닙니다(Not NORMAL)"),
 
     //Auction = 19xx
     AUCTION_PRODUCT_DOES_NOT_EXIST(-1900, "존재하지 않는 경매 상품입니다."),
+    AUCTION_BID_DOES_NOT_EXIST(-1901,"존재하지 않는 입찰입니다."),
 
     //ChatRoom = 2xxx
     CHATROOM_DOES_NOT_EXIST(-2002, "존재하지 않는 채팅방입니다."),

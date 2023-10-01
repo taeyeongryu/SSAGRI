@@ -88,4 +88,16 @@ public class NotificationService {
             }
         }
     }
+
+    //Test Method
+    public void sendMessageTest(){
+        for (Long userNo : sseEmitterMap.keySet()) {
+            try {
+                sseEmitterMap.get(userNo).send(SseEmitter.event().name("new bid").data("test"));
+            } catch (IOException e) {
+                sseEmitterMap.remove(userNo);
+                throw new CustomException(CustomExceptionStatus.SSEEMITTER_DOES_NOT_EXIST);
+            }
+        }
+    }
 }

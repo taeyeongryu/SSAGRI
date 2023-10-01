@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
+import com.ssafy.ssagri.domain.S3.S3Service;
 import com.ssafy.ssagri.domain.auction.dto.Images;
 import com.ssafy.ssagri.domain.auction.repository.AuctionPhotoRepository;
 import com.ssafy.ssagri.domain.auction.repository.AuctionRepository;
@@ -15,6 +16,7 @@ import com.ssafy.ssagri.domain.auction.dto.AuctionProductAllDTO;
 import com.ssafy.ssagri.domain.auction.dto.AuctionProductCreateDTO;
 import com.ssafy.ssagri.entity.auction.AuctionProduct;
 import com.ssafy.ssagri.entity.auction.AuctionProductImage;
+import com.ssafy.ssagri.entity.auction.AuctionStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -34,17 +36,9 @@ import java.util.UUID;
 @Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-@PropertySource("classpath:application.properties")
 public class AuctionProductService {
 
-    @Value("${cloud.aws.s3.bucket}")
-    private String bucket;
-
-    @Value("${s3.learnershigh.url}")
-    private String URL;
-
-    @Qualifier("s3")
-    private final AmazonS3 amazonS3;
+    private final S3Service s3Service;
     private final AuctionRepository auctionRepository;
     private final UserRegistAndModifyRepository userRegistRepository;
     private final AuctionPhotoRepository auctionPhotoRepository;
@@ -104,6 +98,10 @@ public class AuctionProductService {
         LocalDateTime startDate = LocalDateTime.parse(startDate1, formatter);
         LocalDateTime endDate = LocalDateTime.parse(endDate1, formatter);
 
+        System.out.println(startDate);
+        System.out.println(endDate);
+
+
 
         AuctionProduct auctionProduct = AuctionProduct.builder()
                 .user(userRegistRepository.findByNo(auctionProductCreateDTO.getUserNo()))
@@ -112,6 +110,7 @@ public class AuctionProductService {
                 .downPrice(auctionProductCreateDTO.getDownPrice())
                 .priceCount(auctionProductCreateDTO.getCountPrice())
                 .startDate(startDate)
+                .auctionStatus(AuctionStatus.예정)
                 .endDate(endDate)
                 .comment(auctionProductCreateDTO.getComment())
                 .createTime(LocalDateTime.now())
@@ -119,62 +118,30 @@ public class AuctionProductService {
                 .type(auctionProductCreateDTO.getType()).build();
 
 
-
             AuctionProduct auctionProduct1 = auctionRepository.save(auctionProduct);
 
             return auctionProduct1.getNo();
     }
 
-    // 경매상품 추가시 사진을 DB와 S3에 모두 저장
+    // 옥션 상품 이미지 업로드
     @Transactional
-    public String auctionImageUploadToAWS(MultipartFile file, String dirName, Long no) {
-        String key = dirName + "/" + UUID.randomUUID() + "_" + file.getOriginalFilename();
+    public void auctionImageUpload(MultipartFile file, String dirName, Long no){
 
-        String originName = file.getOriginalFilename();
+       String key =  s3Service.S3ImageUploadToAWS(file, dirName, no);
 
-        System.out.println("key: " + key);  // ---> 키를 넣어놓기
+        System.out.println(key);
 
-        System.out.println(file.getOriginalFilename()); // ---> origin name 에 넣어놓기
-        try {
+        AuctionProduct auctionProduct = auctionRepository.findByNo(no);
 
-            ObjectMetadata metadata = new ObjectMetadata();
-            metadata.setContentType(file.getContentType());
-            metadata.setContentLength(file.getSize());
+        AuctionProductImage auctionProductImage = AuctionProductImage.builder()
+                .auctionProductNo(auctionProduct)
+                .imageLink(key).build();
 
-            PutObjectRequest request = new PutObjectRequest(bucket, key, file.getInputStream(), metadata);
-            request.withCannedAcl(CannedAccessControlList.AuthenticatedRead); // 접근권한 체크
-
-            amazonS3.getUrl(bucket, key).toString();
-
-
-            PutObjectResult result = amazonS3.putObject(request);
-
-            AuctionProduct auctionProduct = auctionRepository.findByNo(no);
-
-            AuctionProductImage auctionProductImage = AuctionProductImage.builder()
-                            .auctionProductNo(auctionProduct)
-                                    .imageLink(key).build();
-
-            auctionPhotoRepository.save(auctionProductImage);
-
-
-            return key;
-        } catch (AmazonServiceException e) {
-            // The call was transmitted successfully, but Amazon S3 couldn't process
-            // it, so it returned an error response.
-            log.error("uploadToAWS AmazonServiceException filePath={}, yyyymm={}, error={}", e.getMessage());
-        } catch (SdkClientException e) {
-            // Amazon S3 couldn't be contacted for a response, or the client
-            // couldn't parse the response from Amazon S3.
-            log.error("uploadToAWS SdkClientException filePath={}, error={}", e.getMessage());
-        } catch (Exception e) {
-            // Amazon S3 couldn't be contacted for a response, or the client
-            // couldn't parse the response from Amazon S3.
-            log.error("uploadToAWS SdkClientException filePath={}, error={}", e.getMessage());
-        }
-
-        return "";
+        auctionPhotoRepository.save(auctionProductImage);
     }
+
+
+
 
     // 경매 상품 이미지 업로드
     public List<Images> auctionProductLoad(Long auctionProductNo) {
@@ -192,7 +159,7 @@ public class AuctionProductService {
             Images image = Images.builder()
                     .no(list.get(i).getNo())
                     .auctionProductNo(list.get(i).getAuctionProductNo().getNo())
-                    .imageLink(URL + list.get(i).getImageLink()).build();
+                    .imageLink(list.get(i).getImageLink()).build();
 
             images.add(image);
         }

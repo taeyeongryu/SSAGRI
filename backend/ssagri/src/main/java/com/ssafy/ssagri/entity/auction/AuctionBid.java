@@ -21,7 +21,7 @@ public class AuctionBid extends BaseTimeEntity {
     private Long no;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "auction_product_bid_no",nullable = false)
+    @JoinColumn(name = "auction_product_bidder_no",nullable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -44,6 +44,7 @@ public class AuctionBid extends BaseTimeEntity {
     public AuctionBidSelectResponseDto toResponse(){
         return AuctionBidSelectResponseDto.builder()
                 .userNo(this.user.getNo())
+                .userNickname(this.user.getNickname())
                 .auctionProductNo(this.auctionProduct.getNo())
                 .auctionBidPrice(this.price)
                 .auctionBidDate(this.getCreateDate())

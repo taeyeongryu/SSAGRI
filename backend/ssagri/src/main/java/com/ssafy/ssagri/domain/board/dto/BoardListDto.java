@@ -1,9 +1,13 @@
 package com.ssafy.ssagri.domain.board.dto;
 
 
+import com.ssafy.ssagri.entity.board.Board;
+import com.ssafy.ssagri.entity.user.User;
 import lombok.Builder;
 import lombok.Getter;
+import org.hibernate.annotations.ColumnDefault;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 
@@ -15,13 +19,13 @@ public class BoardListDto {
     private Long no;
 
     // 글을 쓰는 사람 no
-    private Long user;
+    private String user;
 
     // 게시판 no
     private String boardName;
 
     // 게시판 생명 주기
-    private LocalDateTime boardLife;
+    private String boardLife;
 
     // 글 제목
     private String title;
@@ -37,4 +41,12 @@ public class BoardListDto {
 
     // 글 좋아요 수
     private int like;
+
+    // 글 작성 시간
+    private Long createDate;
+
+    // 댓글 갯수
+    private int commentCount;
+
+
 }

@@ -20,7 +20,8 @@ public class AuctionBidCustomRepositoryImpl implements AuctionBidCustomRepositor
     public List<AuctionBid> selectAuctionBidByAuctionProduct(Long auctionProductNo) {
         List<AuctionBid> findAuctionBidList = jpaQueryFactory.selectFrom(auctionBid)
                 .where(auctionBid.auctionProduct.no.eq(auctionProductNo))
-                .orderBy(auctionBid.no.desc()).fetch();
+                .orderBy(auctionBid.price.desc(),auctionBid.no.desc()).fetch();
         return findAuctionBidList;
+
     }
 }

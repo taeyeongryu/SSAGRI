@@ -27,27 +27,34 @@ public class Message {
     private Long roomNo;
     @Column(name = "sender_no")
     private Long senderNo;
+    @Column(name = "sender_nick_name")
+    private String senderNickName;
     @Column(name = "receiver_no")
     private Long receiverNo;
+    @Column(name = "receiver_nick_name")
+    private String receiverNickName;
     private String content;
     private LocalDateTime time;
 
     @Builder
-    public Message(int id, Long roomNo, Long senderNo, Long receiverNo, String content, LocalDateTime time) {
+    public Message(String id, Long roomNo, Long senderNo, String senderNickName, Long receiverNo, String receiverNickName, String content, LocalDateTime time) {
         this.id = id;
         this.roomNo = roomNo;
         this.senderNo = senderNo;
+        this.senderNickName = senderNickName;
         this.receiverNo = receiverNo;
+        this.receiverNickName = receiverNickName;
         this.content = content;
         this.time = time;
     }
-
 
     public MessageResponseDto toResponse(){
         MessageResponseDto messageResponse = MessageResponseDto.builder()
                 .chatRoomNo(roomNo)
                 .senderNo(senderNo)
+                .senderNickName(senderNickName)
                 .receiverNo(receiverNo)
+                .receiverNickName(receiverNickName)
                 .content(content)
                 .time(time)
                 .build();

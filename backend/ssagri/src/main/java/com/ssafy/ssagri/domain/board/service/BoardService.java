@@ -8,6 +8,9 @@ import com.ssafy.ssagri.domain.user.repository.UserRegistAndModifyRepository;
 import com.ssafy.ssagri.entity.board.Board;
 import com.ssafy.ssagri.entity.board.BoardList;
 import com.ssafy.ssagri.entity.comment.BoardComment;
+import com.ssafy.ssagri.entity.user.User;
+import com.ssafy.ssagri.util.exception.CustomException;
+import com.ssafy.ssagri.util.exception.CustomExceptionStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -18,8 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -94,15 +99,28 @@ public class BoardService {
     // 게시판 등록
     @Transactional
     public void boardregist(BoardCreateDto boardCreateDto){
+        log.info("boardCreateDto = {}", boardCreateDto);
+
+
+        Optional<User> findUser = userRegistAndModifyRepository.findById(boardCreateDto.getUserNo());
+        log.info("user");
+        if (findUser.isEmpty()){
+            log.info("empty");
+            throw new CustomException(CustomExceptionStatus.USER_DOES_NOT_EXSIST);
+        }else{
+            log.info("present");
+        }
+
+
         Board board = Board.builder()
-                .user(userRegistAndModifyRepository.findByNo(boardCreateDto.getNo()))
+                .user(findUser.get())
                 .title(boardCreateDto.getTitle())
 //                .boardColor(boardCreateDto.getColor())
                 .boardClick(0)
+//                .createTime(LocalDateTime.now())
                 .showName(boardCreateDto.getWho())
-                .createTime(LocalDateTime.now())
-                .boardLife(LocalDateTime.now().plusDays(7))
-                .allowDelete(false).build();
+                .boardLife(LocalDateTime.now().plusDays(7)).build();
+
 
         boardRopository.save(board);
 
@@ -111,12 +129,11 @@ public class BoardService {
     // 게시판 클릭 시 조회수 증가
     @Transactional
     public void boardClick(Long boardNo){
+
         Board board1 = boardRopository.findByNo(boardNo);
 
-        Board board = Board.builder()
-                .boardClick(board1.getBoardClick()+1).build();
 
-        boardRopository.save(board);
+        board1.click();
 
 
     }
@@ -124,8 +141,17 @@ public class BoardService {
     // 게시글 등록
     @Transactional
     public void boardWrite(BoardWriteDto boardWriteDto){
+
+        Optional<User> findUser = userRegistAndModifyRepository.findById(boardWriteDto.getUserNo());
+        if (findUser.isEmpty()){
+            System.out.println("empty");
+        }else{
+            System.out.println("present");
+        }
+
+
         BoardList boardList = BoardList.builder()
-                .user(userRegistAndModifyRepository.findByNo(boardWriteDto.getUserNo()))
+                .user(findUser.get())
                 .board(boardRopository.findByNo(boardWriteDto.getBoardNo()))
                 .title(boardWriteDto.getTitle())
                 .allowComment(boardWriteDto.getAllowComment())
@@ -152,38 +178,63 @@ public class BoardService {
     public void writeLike(Long writeNo){
         BoardList boardList1 = boardListRepository.findByNo(writeNo);
 
-        BoardList boardList = BoardList.builder()
-                .like(boardList1.getLike()+1).build();
-
-        boardListRepository.save(boardList);
+       boardList1.like();
 
     }
 
     // 게시글 모두 출력
-    public Page<BoardListDto> boardWriteList(Pageable pageable){
+    public Page<BoardListDto> boardWriteList(Long boardNo, Pageable pageable){
 
-        Page<BoardList> allBoardWriteList = boardListRepository.findAllByOrderByCreateDateAsc(pageable);
+        Board board = boardRopository.findByNo(boardNo);
+
+        Page<BoardList> allBoardWriteList = boardListRepository.findAllByBoardOrderByCreateDateAsc(board,pageable);
+
+
 
         List<BoardList> boardWriteList = allBoardWriteList.getContent();
 
         List<BoardListDto> result = new ArrayList<>();
 
         for(int i=0;i<boardWriteList.size();i++){
+
+            System.out.println(boardWriteList.get(i).getNo());
+
+
+            String boardLife = boardWriteList.get(i).getBoard().getBoardLife().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"));
+
             BoardListDto boardListDto = BoardListDto.builder()
                     .no(boardWriteList.get(i).getNo())
-                    .user(boardWriteList.get(i).getUser().getNo())
+                    .user(boardWriteList.get(i).getUser().getNickname())
                     .boardName(boardWriteList.get(i).getBoard().getTitle())
-                    .boardLife(boardWriteList.get(i).getBoard().getBoardLife())
+                    .boardLife(boardLife)
                     .title(boardWriteList.get(i).getTitle())
                     .view(boardWriteList.get(i).getView())
                     .like(boardWriteList.get(i).getLike())
+                    .createDate(ChronoUnit.DAYS.between(boardWriteList.get(i).getCreateDate(),LocalDateTime.now()))
                     .allowComment(boardWriteList.get(i).isAllowComment())
+                    .commentCount(boardCommentRepository.findAllByBoardList(boardWriteList.get(i)).size())
                     .content(boardWriteList.get(i).getContent()).build();
 
             result.add(boardListDto);
         }
 
         return new PageImpl<>(result, allBoardWriteList.getPageable(), allBoardWriteList.getTotalElements());
+    }
+
+    // 게시글 상세보기
+    public BoardListDto detailWriteBoard(Long boardWriteNo){
+
+        BoardList boardList = boardListRepository.findByNo(boardWriteNo);
+
+        BoardListDto boardListDto = BoardListDto.builder()
+                .title(boardList.getTitle())
+                .user(boardList.getUser().getNickname())
+                .view(boardList.getView())
+                .allowComment(boardList.isAllowComment())
+                .like(boardList.getLike())
+                .content(boardList.getContent()).build();
+
+        return boardListDto;
     }
 
     // 생명주기 가장 짧은 Top3 뽑기
@@ -212,6 +263,7 @@ public class BoardService {
     }
 
     // 하나의 게시글에 댓글달기
+    @Transactional
     public void writeComment(BoardWriteCommentDto boardWriteCommentDto){
 
         BoardComment boardComment = BoardComment.builder()
@@ -222,14 +274,17 @@ public class BoardService {
         boardCommentRepository.save(boardComment);
     }
 
+    // 댓글 삭제
+//    @Transactional
+//    public void commentDelete(Long boardC)
+
     // 게시판 삭제
+    @Transactional
     public void boardDelete(Long boardNo){
 
         Board board1 = boardRopository.findByNo(boardNo);
 
-        board1.builder()
-                .deleteTime(LocalDateTime.now()).build();
+        board1.delete();
 
-        boardRopository.save(board1);
     }
 }

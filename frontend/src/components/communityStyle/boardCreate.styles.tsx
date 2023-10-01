@@ -1,8 +1,20 @@
 import { styled } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
+const TopDiv = styled.div`
+  animation: fadein 2s ease-in-out;
+
+  @keyframes fadein {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+`;
 const Div = styled.div``;
 const TopTag = styled.div`
   font-size: 30px;
@@ -87,6 +99,7 @@ const BoardCreateMain = () => {
   const [title, setTitle] = useState('');
   const [accept, setAcceopt] = useState(false);
   const [clickCount, setClickCount] = useState(0);
+  const [userId, setUserId] = useState(0);
   const onInput1 = (e) => {
     setTitle(e.target.value);
   };
@@ -103,32 +116,55 @@ const BoardCreateMain = () => {
     }
   };
 
-  const CreateBoard = () => {
+  const [urlparam, setUrlparam] = useState(0);
+
+  useEffect(() => {
+    console.log('생성게시글');
+    const searchParams = new URLSearchParams(location.search);
+    for (const param of searchParams) {
+      const paramName = param[0];
+      console.log(paramName);
+      const paramValue = parseInt(param[1], 10);
+      setUrlparam(paramValue);
+    }
     const BoardApi = axios.create({
+      headers: { 'cotent-type': 'application/json' }
+    });
+    //유저 id정보 요청
+    BoardApi.get('/util/get-userno')
+      .then((res) => {
+        setUserId(res.data);
+      })
+      .catch((err) => {
+        console.log('실패1', err);
+      });
+  }, []);
+  const CreateBoard = () => {
+    const BoardApi2 = axios.create({
       headers: { 'cotent-type': 'application/json' }
     });
     const data = {
       allowComment: accept, // 댓글 허용여부 true ,false
-      boardNo: 1, // 게시판 번호
+      boardNo: urlparam, // 게시판 번호
       contents: content, // 내용
       title: title, // 제목
-      userNo: 1 // 로그인유저
+      userNo: userId // 로그인유저
     };
-
-    //게시판 순위 정보
-    BoardApi.post('/board/write', data)
+    //게시글 생성
+    BoardApi2.post('/board/write', data)
       .then((res) => {
-        console.log(res.data, '1번요청성공');
+        console.log(res.data, '2번요청성공');
       })
       .catch((err) => {
-        console.log('실패1', err);
-        console.log('실패1', data);
+        console.log('실패2', err);
+        console.log('실패2', data);
       });
-    navigate('/community');
+
+    navigate('/community/List');
   };
 
   return (
-    <Div style={{ width: '100vh', margin: '100px auto' }}>
+    <TopDiv style={{ width: '100vh', margin: '100px auto' }}>
       <TopTag>게시글 신규 등록</TopTag>
       <Tagexplain>게시글을 만들어 보세요.</Tagexplain>
       <TopFlexDiv>
@@ -148,7 +184,7 @@ const BoardCreateMain = () => {
         <CreateBtn onClick={CreateBoard}>게시글 생성하기</CreateBtn>
         <CancelBtn onClick={() => navigate('/community/1')}>뒤로가기</CancelBtn>
       </BottomFlexDiv>
-    </Div>
+    </TopDiv>
   );
 };
 

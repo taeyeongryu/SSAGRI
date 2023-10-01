@@ -1,5 +1,6 @@
 package com.ssafy.ssagri.domain.auction.controller;
 
+import com.ssafy.ssagri.domain.S3.S3Service;
 import com.ssafy.ssagri.domain.auction.service.AuctionProductService;
 import com.ssafy.ssagri.domain.auction.dto.AuctionProductAllDTO;
 import com.ssafy.ssagri.domain.auction.dto.AuctionProductCreateDTO;
@@ -25,6 +26,7 @@ import java.util.List;
 public class AuctionProductController {
 
     private final AuctionProductService auctionProductService;
+    private final S3Service s3service;
 
     @GetMapping(value = "/all-list")
     @ApiOperation("모든 경매 출력")
@@ -37,20 +39,21 @@ public class AuctionProductController {
 
     @PostMapping(value = "/auction/regist")
     @ApiOperation("경매 등록")
-    public Long registList(@RequestBody AuctionProductCreateDTO auctionProductCreateDTO){
+    public Long auctionJoinList(@RequestBody AuctionProductCreateDTO auctionProductCreateDTO){
+        System.out.println("dididi");
         return auctionProductService.setAuctionProduct(auctionProductCreateDTO);
         // response 나중에 처리
     }
 
     @PostMapping(value = "/upload/profile/{no}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation("경매 상품 추가시 사진 업로드")
-    public String auctionImageUpload(@RequestParam("multipartFile") MultipartFile multipartFile, @PathVariable("no") Long no) throws IOException {
+    public void auctionImageUpload(@RequestParam("multipartFile") MultipartFile multipartFile, @PathVariable("no") Long no) throws IOException {
 
         System.out.println("업로드");
-        return auctionProductService.auctionImageUploadToAWS(multipartFile, "auction" + "/" + no , no); // lesson 가 lesson/로 들어감.
+        auctionProductService.auctionImageUpload(multipartFile, "auction" + "/" + no , no); // lesson 가 lesson/로 들어감.
+//        return auctionProductService.auctionImageUploadToAWS(multipartFile, "auction" + "/" + no , no);
 
     }
-
 
 
     // S3 경매 상품 이미지 불러오기
