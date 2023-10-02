@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     @Column(name = "room_no")
     private Long roomNo;
     @Column(name = "sender_no")
@@ -37,7 +37,7 @@ public class Message {
     private LocalDateTime time;
 
     @Builder
-    public Message(int id, Long roomNo, Long senderNo, String senderNickName, Long receiverNo, String receiverNickName, String content, LocalDateTime time) {
+    public Message(Long id, Long roomNo, Long senderNo, String senderNickName, Long receiverNo, String receiverNickName, String content, LocalDateTime time) {
         this.id = id;
         this.roomNo = roomNo;
         this.senderNo = senderNo;

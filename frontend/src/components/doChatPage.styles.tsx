@@ -56,6 +56,7 @@ const DoChat = () => {
   const connect = () => {
     // stomp 객체 생성
     console.log('연결 시도 중...');
+    // const socket = new SockJS('https://j9b209.p.ssafy.io/api/ws', null, {
     const socket = new SockJS('http://localhost:5000/api/ws', null, {
       transports: ['websocket']
     });

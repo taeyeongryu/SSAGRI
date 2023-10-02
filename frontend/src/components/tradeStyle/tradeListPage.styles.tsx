@@ -271,8 +271,11 @@ const ProductListSearch = ({
       }}
     >
       <ProductList02 style={{ height: '520px' }}>
-        {responseList.map((item: ProductItemType, id) => (
-          <TradeProductItem02 key={id} item={item}></TradeProductItem02>
+        {responseList.map((item: ProductItemType) => (
+          <TradeProductItem02
+            key={item.productNo}
+            item={item}
+          ></TradeProductItem02>
         ))}
       </ProductList02>
       <BottomPageSpace
@@ -555,6 +558,7 @@ const BottomPageSpace = ({ response, setNumber }) => {
     if (response.first) {
       result.push(
         <PagingButton
+          key={-2}
           style={{
             color: 'rgb(0,0,0,0.3)',
             borderColor: 'rgb(0,0,0,0.3)'
@@ -565,6 +569,7 @@ const BottomPageSpace = ({ response, setNumber }) => {
       );
       result.push(
         <PagingButton
+          key={-1}
           style={{
             color: 'rgb(0,0,0,0.3)',
             borderColor: 'rgb(0,0,0,0.3)'
@@ -575,12 +580,12 @@ const BottomPageSpace = ({ response, setNumber }) => {
       );
     } else {
       result.push(
-        <PagingButton onClick={changeFirstPage}>
+        <PagingButton key={-2} onClick={changeFirstPage}>
           <PagingButtonText>&lt;&lt;</PagingButtonText>
         </PagingButton>
       );
       result.push(
-        <PagingButton onClick={changeOneMinus}>
+        <PagingButton key={-1} onClick={changeOneMinus}>
           <PagingButtonText>&lt;</PagingButtonText>
         </PagingButton>
       );
@@ -589,9 +594,9 @@ const BottomPageSpace = ({ response, setNumber }) => {
     for (let i = 1; i <= totalPages; i++) {
       result.push(
         <PagingButton
+          key={i}
           id={'pageNumber' + i}
           className='pageNumbers'
-          key={i}
           onClick={() => changePage(i)}
         >
           <PagingButtonText>{i}</PagingButtonText>
@@ -602,6 +607,7 @@ const BottomPageSpace = ({ response, setNumber }) => {
     if (response.last) {
       result.push(
         <PagingButton
+          key={11}
           style={{
             color: 'rgb(0,0,0,0.3)',
             borderColor: 'rgb(0,0,0,0.3)'
@@ -612,6 +618,7 @@ const BottomPageSpace = ({ response, setNumber }) => {
       );
       result.push(
         <PagingButton
+          key={12}
           style={{
             color: 'rgb(0,0,0,0.3)',
             borderColor: 'rgb(0,0,0,0.3)'
@@ -622,12 +629,12 @@ const BottomPageSpace = ({ response, setNumber }) => {
       );
     } else {
       result.push(
-        <PagingButton onClick={changeOnePlus}>
+        <PagingButton key={11} onClick={changeOnePlus}>
           <PagingButtonText>&gt;</PagingButtonText>
         </PagingButton>
       );
       result.push(
-        <PagingButton onClick={changeLastPage}>
+        <PagingButton key={12} onClick={changeLastPage}>
           <PagingButtonText>&gt;&gt;</PagingButtonText>
         </PagingButton>
       );

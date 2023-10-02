@@ -29,7 +29,7 @@ const TradeMain = () => {
   const [region, setRegion] = useState<string>('서울');
   const regionList = ['서울', '대전', '구미', '광주', '부울경'];
   useEffect(() => {
-    console.log('region', region);
+    // console.log('region', region);
   }, [region]);
   return (
     <TradeMainFrameDiv>
@@ -507,13 +507,10 @@ const AuctionSearchInput = () => {
   );
 };
 
-const TradeProductItem01 = (item) => {
-  useEffect(() => {
-    // console.log(item.item.usedProductPhotoResponseDto.link);
-  });
-
+const TradeProductItem01 = ({ item }) => {
+  // console.log('item : ', item);
   let productLike: string = '';
-  if (item.item.like) {
+  if (item.like) {
     productLike = '/assets/img/heartColor.png';
   } else {
     productLike = '/assets/img/heartWhite.png';
@@ -521,15 +518,50 @@ const TradeProductItem01 = (item) => {
 
   // --- 지역 데이터는 도시가 아니라, "동" 단위로 가져와야 한다.
 
+  // 날짜 포맷
+  const formatDate = (date) => {
+    const time = new Date(date);
+    const timeNow = new Date();
+    const diffSec = timeNow.getTime() - time.getTime();
+    const minute = diffSec / (60 * 1000);
+    if (minute < 1) {
+      return `방금 전`;
+    } else if (minute < 60) {
+      return `${minute.toFixed(0)}분 전`;
+    } else if (minute < 24 * 60) {
+      return `${Math.floor(minute / 60)}시간 전`;
+    } else if (minute < 24 * 60 * 30) {
+      return `${Math.floor(minute / (24 * 60))}일 전`;
+    } else {
+      return `${Math.floor(minute / (24 * 60 * 30))}달 전`;
+    }
+  };
+
+  // 지역 포맷
+  const formatRegion = (region) => {
+    switch (region) {
+      case 'SEOUL':
+        return '서울';
+      case 'DAEJEON':
+        return '대전';
+      case 'GUMI':
+        return '구미';
+      case 'GWANGJU':
+        return '광주';
+      case 'BUG':
+        return '부울경';
+    }
+  };
+
   const navigate = useNavigate();
   const goTradeDetail = (no: number) => {
     navigate(`/tradeDetail/${no}`);
   };
   return (
-    <ProductStyle01 onClick={() => goTradeDetail(item.item.productNo)}>
+    <ProductStyle01 onClick={() => goTradeDetail(item.productNo)}>
       <ProductImgStyle01
         // src={item.usedProductPhotoResponseDto.link}
-        src={item.item.usedProductPhotoResponseDto.link}
+        src={item.usedProductPhotoResponseDto.link}
       ></ProductImgStyle01>
       <ProductLike01>
         <img
@@ -542,25 +574,60 @@ const TradeProductItem01 = (item) => {
         />
       </ProductLike01>
       <ProductDetailStyle01>
-        <ProductName01>{item.item.title}</ProductName01>
-        <ProductPrice01>{item.item.price} 원</ProductPrice01>
+        <ProductName01>{item.title}</ProductName01>
+        <ProductPrice01>{item.price} 원</ProductPrice01>
         <SellerLocationAndTime01>
-          {item.item.region} | 10분 전
+          {formatRegion(item.region)} | {formatDate(item.createDate)}
         </SellerLocationAndTime01>
       </ProductDetailStyle01>
     </ProductStyle01>
   );
 };
-const TradeProductItem02 = (item) => {
+const TradeProductItem02 = ({ item }) => {
   // console.log('item : ', item);
   // console.log('item.item : ', item.item);
 
   let productLike: string = '';
-  if (item.item.like) {
+  if (item.like) {
     productLike = '/assets/img/heartColor.png';
   } else {
     productLike = '/assets/img/heartWhite.png';
   }
+
+  // 날짜 포맷
+  const formatDate = (date) => {
+    const time = new Date(date);
+    const timeNow = new Date();
+    const diffSec = timeNow.getTime() - time.getTime();
+    const minute = diffSec / (60 * 1000);
+    if (minute < 1) {
+      return `방금 전`;
+    } else if (minute < 60) {
+      return `${minute.toFixed(0)}분 전`;
+    } else if (minute < 24 * 60) {
+      return `${Math.floor(minute / 60)}시간 전`;
+    } else if (minute < 24 * 60 * 30) {
+      return `${Math.floor(minute / (24 * 60))}일 전`;
+    } else {
+      return `${Math.floor(minute / (24 * 60 * 30))}달 전`;
+    }
+  };
+
+  // 지역 포맷
+  const formatRegion = (region) => {
+    switch (region) {
+      case 'SEOUL':
+        return '서울';
+      case 'DAEJEON':
+        return '대전';
+      case 'GUMI':
+        return '구미';
+      case 'GWANGJU':
+        return '광주';
+      case 'BUG':
+        return '부울경';
+    }
+  };
 
   const navigate = useNavigate();
   const goTradeDetail = (no: number) => {
@@ -569,10 +636,13 @@ const TradeProductItem02 = (item) => {
   // --- 지역 데이터는 도시가 아니라, "동" 단위로 가져와야 한다.
 
   return (
-    <ProductStyle02 onClick={() => goTradeDetail(item.item.productNo)}>
+    <ProductStyle02
+      key={item.productNo}
+      onClick={() => goTradeDetail(item.productNo)}
+    >
       <ProductImgStyle02
         // src={item.usedProductPhotoResponseDto.link}
-        src={item.item.usedProductPhotoResponseDto.link}
+        src={item.usedProductPhotoResponseDto.link}
       ></ProductImgStyle02>
       <ProductLike02>
         <img
@@ -585,26 +655,57 @@ const TradeProductItem02 = (item) => {
         />
       </ProductLike02>
       <ProductDetailStyle02>
-        <ProductName02>{item.item.title}</ProductName02>
-        <ProductPrice02>{item.item.price} 원</ProductPrice02>
+        <ProductName02>{item.title}</ProductName02>
+        <ProductPrice02>{item.price} 원</ProductPrice02>
         <SellerLocationAndTime02>
-          {item.item.region} | 10분 전
+          {formatRegion(item.region)} | {formatDate(item.createDate)}
         </SellerLocationAndTime02>
       </ProductDetailStyle02>
     </ProductStyle02>
   );
 };
-const TradeProductItem03 = (item) => {
+const TradeProductItem03 = ({ item }) => {
   let productLike: string = '';
-  if (item.item.like) {
+  if (item.like) {
     productLike = '/assets/img/heartColor.png';
   } else {
     productLike = '/assets/img/heartWhite.png';
   }
 
-  useEffect(() => {
-    // console.log(item.item.usedProductPhotoResponseDto.link);
-  });
+  // 날짜 포맷
+  const formatDate = (date) => {
+    const time = new Date(date);
+    const timeNow = new Date();
+    const diffSec = timeNow.getTime() - time.getTime();
+    const minute = diffSec / (60 * 1000);
+    if (minute < 1) {
+      return `방금 전`;
+    } else if (minute < 60) {
+      return `${minute.toFixed(0)}분 전`;
+    } else if (minute < 24 * 60) {
+      return `${Math.floor(minute / 60)}시간 전`;
+    } else if (minute < 24 * 60 * 30) {
+      return `${Math.floor(minute / (24 * 60))}일 전`;
+    } else {
+      return `${Math.floor(minute / (24 * 60 * 30))}달 전`;
+    }
+  };
+
+  // 지역 포맷
+  const formatRegion = (region) => {
+    switch (region) {
+      case 'SEOUL':
+        return '서울';
+      case 'DAEJEON':
+        return '대전';
+      case 'GUMI':
+        return '구미';
+      case 'GWANGJU':
+        return '광주';
+      case 'BUG':
+        return '부울경';
+    }
+  };
 
   const navigate = useNavigate();
   const goTradeDetail = (no: number) => {
@@ -614,10 +715,10 @@ const TradeProductItem03 = (item) => {
   // --- 지역 데이터는 도시가 아니라, "동" 단위로 가져와야 한다.
 
   return (
-    <ProductStyle03 onClick={() => goTradeDetail(item.item.productNo)}>
+    <ProductStyle03 onClick={() => goTradeDetail(item.productNo)}>
       <ProductImgStyle03
         // src={item.usedProductPhotoResponseDto.link}
-        src={item.item.usedProductPhotoResponseDto.link}
+        src={item.usedProductPhotoResponseDto.link}
       ></ProductImgStyle03>
       <ProductLike03>
         <img
@@ -630,10 +731,10 @@ const TradeProductItem03 = (item) => {
         />
       </ProductLike03>
       <ProductDetailStyle03>
-        <ProductName03>{item.item.title}</ProductName03>
-        <ProductPrice03>{item.item.price} 원</ProductPrice03>
+        <ProductName03>{item.title}</ProductName03>
+        <ProductPrice03>{item.price} 원</ProductPrice03>
         <SellerLocationAndTime03>
-          {item.item.region} | 10분 전
+          {formatRegion(item.region)} | {formatDate(item.createDate)}
         </SellerLocationAndTime03>
       </ProductDetailStyle03>
     </ProductStyle03>
@@ -641,10 +742,6 @@ const TradeProductItem03 = (item) => {
 };
 
 const TradeMainProduct = (region) => {
-  // console.log(typeof region);
-  // console.log(typeof region.region);
-  // console.log(region.region);
-
   const [recentData, setRecentData] = useState([]);
   const [popularData, setPopularData] = useState([]);
 
@@ -684,10 +781,7 @@ const TradeMainProduct = (region) => {
         `/usedproduct/${userNo}?region=${regionText}&sort=no,desc&page=0&size=4`
       )
       .then((res) => {
-        // console.log('recentData');
-        // console.log(res.data.content);
         setRecentData(res.data.content);
-        // console.log(recentData);
       })
       .catch((err) => {
         console.log(err);
@@ -698,10 +792,7 @@ const TradeMainProduct = (region) => {
         `/usedproduct/${userNo}?region=${regionText}&sort=like,desc&page=0&size=4`
       )
       .then((res) => {
-        // console.log('popularData');
-        // console.log(res.data.content);
         setPopularData(res.data.content);
-        // console.log(popularData);
       })
       .catch((err) => {
         console.log(err);
