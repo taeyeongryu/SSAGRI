@@ -280,6 +280,12 @@ const OverlayPanel = styled.div`
   }
 `;
 
+const KakaoLogin = styled.div`
+  margin-top: 20px;
+  width: 100%;
+  height: 42px;
+`;
+
 const SignInAndUpComponent = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
@@ -772,6 +778,11 @@ const SignInAndUpComponent = () => {
     // @ts-ignore
     signInButton.addEventListener('click', signInClickHandler);
 
+    if (location.state) {
+      // 카카오 계정 회원가입 시 바로 회원가입 창이 뜨도록
+      signUpClickHandler();
+    }
+
     return () => {
       // @ts-ignore
       signUpButton.removeEventListener('click', signUpClickHandler);
@@ -795,9 +806,12 @@ const SignInAndUpComponent = () => {
         <Form>
           <H1>로그인</H1>
           <div className='social-container'>
-            <div style={{ color: 'blue' }} onClick={onSocialLogin}>
-              <span>카카오계정 로그인</span>
-            </div>
+            <KakaoLogin onClick={onSocialLogin}>
+              <img
+                src='/assets/img/kakao_login_medium_wide.png'
+                alt='카카오 로그인'
+              />
+            </KakaoLogin>
           </div>
           <FormContent>
             <Label htmlFor='email'>
