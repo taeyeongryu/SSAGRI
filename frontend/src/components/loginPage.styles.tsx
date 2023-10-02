@@ -280,6 +280,12 @@ const OverlayPanel = styled.div`
   }
 `;
 
+const KakaoLogin = styled.div`
+  margin-top: 20px;
+  width: 100%;
+  height: 42px;
+`;
+
 const SignInAndUpComponent = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
@@ -408,6 +414,20 @@ const SignInAndUpComponent = () => {
         // ... 에러 처리
         console.log('data', data);
         console.log(error);
+      });
+  };
+
+  // 소셜 로그인 요청 api
+  const onSocialLogin = (e) => {
+    axios
+      .get('/oauth/page')
+      .then((res) => {
+        console.log('여기로 리다이렉팅 해야함: ', res.data);
+        const link = res.data;
+        window.location.href = link;
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 
@@ -542,6 +562,28 @@ const SignInAndUpComponent = () => {
     }
   };
 
+  // 소셜 로그인으로 회원가입하는 경우
+  const location = useLocation();
+  const [isKakao, setIsKakao] = useState(false);
+
+  // 프로필 사진과 이메일 닉네임을 기본값으로 바꿔주고
+  // 이메일은 변경 불가, 중복된 이메일이 있는지는 백엔드에서 분별해줌
+
+  useEffect(() => {
+    if (location.state) {
+      setIsKakao(true);
+      const userData = location.state.userData;
+
+      signUpForm.email = userData.email;
+      signUpForm.nickname = userData.nickname;
+      setImage(userData.profileURL);
+
+      setIsEmailValid(true);
+      setIsPasswordValid(true);
+      setIsConfirmValid(true);
+    }
+  }, []);
+
   // 이메일 중복확인
   const doubleCheckEmail = (e) => {
     e.preventDefault();
@@ -670,7 +712,7 @@ const SignInAndUpComponent = () => {
       regions: regionFormat(signUpForm.region),
       number: parseInt(signUpForm.cardinalNumber),
       nickname: signUpForm.nickname,
-      userCreateType: 'NORMAL', // 'NORMAL', 'KAKAO'
+      userCreateType: isKakao ? 'KAKAO' : 'NORMAL', // 'NORMAL', 'KAKAO'
       userCreateDate: now
     };
 
@@ -739,6 +781,11 @@ const SignInAndUpComponent = () => {
     // @ts-ignore
     signInButton.addEventListener('click', signInClickHandler);
 
+    if (location.state) {
+      // 카카오 계정 회원가입 시 바로 회원가입 창이 뜨도록
+      signUpClickHandler();
+    }
+
     return () => {
       // @ts-ignore
       signUpButton.removeEventListener('click', signUpClickHandler);
@@ -761,6 +808,14 @@ const SignInAndUpComponent = () => {
       <FormContainer className='sign-in-container' id='sign-in-container'>
         <Form>
           <H1>로그인</H1>
+          <div className='social-container'>
+            <KakaoLogin onClick={onSocialLogin}>
+              <img
+                src='/assets/img/kakao_login_medium_wide.png'
+                alt='카카오 로그인'
+              />
+            </KakaoLogin>
+          </div>
           <FormContent>
             <Label htmlFor='email'>
               이메일
@@ -771,17 +826,13 @@ const SignInAndUpComponent = () => {
             <Input
               type='email'
               value={signInForm.email}
-              // value={'test@test.com'}
               onChange={onChangeEmail}
-              // defaultValue='test@test.com'
             ></Input>
             <Label htmlFor='password'>비밀번호</Label>
             <Input
               type='password'
               value={signInForm.password}
-              // value={'test'}
               onChange={onChangePassword}
-              // defaultValue='test'
             ></Input>
             <A>비밀번호를 잊으셨나요?</A>
           </FormContent>
@@ -863,32 +914,36 @@ const SignInAndUpComponent = () => {
                 </Verify>
               </div>
             ) : null}
-            <Label htmlFor='password'>
-              <div>비밀번호</div>
-              {isPasswordValid ? (
-                <ValidMsg>{signUpPasswordMessage}</ValidMsg>
-              ) : (
-                <InvalidMsg>{signUpPasswordMessage}</InvalidMsg>
-              )}
-            </Label>
-            <Input
-              type='password'
-              value={signUpForm.password}
-              onChange={onChangeSignUpPassword}
-            ></Input>
-            <Label htmlFor='passwordConfirm'>
-              <div>비밀번호 확인</div>
-              {isConfirmValid ? (
-                <ValidMsg>{passwordConfirmMessage}</ValidMsg>
-              ) : (
-                <InvalidMsg>{passwordConfirmMessage}</InvalidMsg>
-              )}
-            </Label>
-            <Input
-              type='password'
-              value={signUpForm.passwordConfirm}
-              onChange={onChangePasswordConfirm}
-            ></Input>
+            {!isKakao ? (
+              <div>
+                <Label htmlFor='password'>
+                  <div>비밀번호</div>
+                  {isPasswordValid ? (
+                    <ValidMsg>{signUpPasswordMessage}</ValidMsg>
+                  ) : (
+                    <InvalidMsg>{signUpPasswordMessage}</InvalidMsg>
+                  )}
+                </Label>
+                <Input
+                  type='password'
+                  value={signUpForm.password}
+                  onChange={onChangeSignUpPassword}
+                ></Input>
+                <Label htmlFor='passwordConfirm'>
+                  <div>비밀번호 확인</div>
+                  {isConfirmValid ? (
+                    <ValidMsg>{passwordConfirmMessage}</ValidMsg>
+                  ) : (
+                    <InvalidMsg>{passwordConfirmMessage}</InvalidMsg>
+                  )}
+                </Label>
+                <Input
+                  type='password'
+                  value={signUpForm.passwordConfirm}
+                  onChange={onChangePasswordConfirm}
+                ></Input>
+              </div>
+            ) : null}
             <div
               style={{
                 display: 'flex',

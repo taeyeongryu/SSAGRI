@@ -23,6 +23,7 @@ import Navbar from './components/navbar';
 import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import { isLoggedInAtom } from './states/account/loginAtom';
+import SocialKakaoPage from './pages/SocialKakao';
 import DoChatPage from './pages/doChatPage';
 
 const App = () => {
@@ -42,6 +43,8 @@ const App = () => {
       <Routes>
         {/* 로그인 페이지 */}
         <Route path='/login' element={<LoginPage />} />
+        {/* 카카오 로그인 중간 페이지 */}
+        <Route path='/api/oauth' element={<SocialKakaoPage />} />
         {/* 메인 페이지 */}
         <Route path='/' element={<MainPage />} />
         {/* 중고거래 메인 페이지 */}
@@ -63,7 +66,7 @@ const App = () => {
         {/* 경매 생성 페이지 */}
         <Route path='/auctionCreate' element={<AuctionCreatePage />} />
         {/* 경매 상세 페이지 */}
-        <Route path='/auctionDetail' element={<AuctionDetailPage />} />
+        <Route path='/auctionDetail/:no' element={<AuctionDetailPage />} />
         {/* 커뮤티니 페이지 */}
         <Route path='/community' element={<CommunityPage />} />
         {/* 커뮤티니 생성 */}
