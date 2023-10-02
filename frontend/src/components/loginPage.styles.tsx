@@ -418,7 +418,7 @@ const SignInAndUpComponent = () => {
   };
 
   // 소셜 로그인 요청 api
-  const onSocialLogin = (e) => {
+  const onSocialLogin = () => {
     axios
       .get('/oauth/page')
       .then((res) => {
