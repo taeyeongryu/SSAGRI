@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 // import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 
@@ -46,16 +46,24 @@ const ChatHeader = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  align-items: center;
+  align-items: start;
 `;
 const ChatMyId = styled.div`
-  width: 100%;
+  max-width: 460px;
   font-size: 24px;
   font-weight: bold;
-  margin-left: 10px;
+  padding-left: 10px;
   display: flex;
   justify-content: start;
   align-items: center;
+`;
+const ChatMyNickName = styled.div`
+  max-width: 300px;
+  font-size: 24px;
+  font-weight: bold;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
 // @ts-ignore
 const ChatUnRead = styled.div`
@@ -192,6 +200,7 @@ const ChatProfileRight = styled.img`
   width: 50px;
   height: 50px;
   margin: 0 5px;
+  border-radius: 50%;
 `;
 const ChatOtherNick = styled.div`
   /* border: 1px solid black; */
@@ -269,7 +278,7 @@ const ChatMyMessageFrame = styled.div`
   align-items: end;
 `;
 const ChatMessageTime = styled.div`
-  width: 100px;
+  width: 70px;
   height: 20px;
   line-height: 20px;
   color: #929292;
@@ -304,6 +313,7 @@ const ChatOthersProfile = styled.div`
 const ChatOthersProfileImg = styled.img`
   width: 30px;
   height: 30px;
+  border-radius: 50%;
 `;
 const ChatOthersMessage = styled.div`
   max-width: 35%;
@@ -389,8 +399,7 @@ const Chatting = () => {
   // 페이지 진입시, 채팅창 목록 보여주기
   const userNo = localStorage.getItem('userNo');
   const [userNick, setUserNick] = useState<string>('');
-  const [chatRoomNo, setChatRoomNo] = useState('');
-  const [receiverNo, setReceiverNo] = useState('');
+  const [selectChat, setSelectChat] = useState({});
   const [myChatList, setMyChatList] = useState<any[]>([]);
   /*
   chatRoonNo: 1
@@ -408,7 +417,7 @@ const Chatting = () => {
     const timeNow = new Date();
     const diffSec = timeNow.getTime() - time.getTime();
     const minute = diffSec / (60 * 1000);
-    console.log(Math.floor(minute / 60));
+    // console.log(Math.floor(minute / 60));
 
     if (minute < 1) {
       return `방금 전`;
@@ -441,16 +450,16 @@ const Chatting = () => {
 
   // chatRoomNo 따라 채팅하기 -> chatRoomNo으로 useEffect 활성화
   // const navigate = useNavigate();
-  const doChatting = (chatRoomNo, receiverNo) => () => {
-    setReceiverNo(receiverNo);
-    setChatRoomNo(chatRoomNo);
+  const selectChatting = (selectChat) => () => {
+    // console.log('selectChat : ', selectChat);
+    setSelectChat(selectChat);
   };
 
   useEffect(() => {
     axios
       .get(`/chatroom/nickname/${userNo}`)
       .then((res) => {
-        console.log(res.data);
+        // console.log('nickname : ', res.data);
         setUserNick(res.data);
       })
       .catch((err) => {
@@ -460,8 +469,10 @@ const Chatting = () => {
     axios
       .get(`/chatroom/list/${userNo}`)
       .then((res) => {
-        console.log(res.data);
+        // console.log('chatroom list : ', res.data);
         setMyChatList(res.data);
+        setSelectChat(res.data[0]);
+        // console.log('selectChat', res.data[0]);
       })
       .catch((err) => {
         console.log(err);
@@ -473,12 +484,7 @@ const Chatting = () => {
     const result: any = [];
     for (let i = 0; i < myChatList.length; i++) {
       result.push(
-        <ChatItem
-          onClick={doChatting(
-            myChatList[i].chatRoomNo,
-            myChatList[i].receiverNo
-          )}
-        >
+        <ChatItem key={i} onClick={selectChatting(myChatList[i])}>
           <ChatProfile src={myChatList[i].receiverProfile}></ChatProfile>
           <ChatRight>
             <ChatInfo>
@@ -516,7 +522,16 @@ const Chatting = () => {
         {/* 채팅 목록 */}
         <ChatLeft>
           <ChatHeader>
-            <ChatMyId>{userNick}</ChatMyId>
+            <ChatMyId>
+              <ChatMyNickName>{userNick}</ChatMyNickName>
+              <div
+                style={{
+                  fontSize: '18px'
+                }}
+              >
+                님의 채팅목록
+              </div>
+            </ChatMyId>
             {/* <ChatUnRead>
               안읽은 메세지만 보기
               <img
@@ -534,109 +549,7 @@ const Chatting = () => {
         </ChatLeft>
         {/* 채팅 하나 공간 */}
         <ChatContentFrame>
-          <ChatContentHeader>
-            <ChatProfileRight src='/assets/img/profile.png'></ChatProfileRight>
-            <ChatOtherNick>코딩왕123</ChatOtherNick>
-            <SellorProduct>
-              <SellorProductImg src='/assets/img/setting.png'></SellorProductImg>
-            </SellorProduct>
-          </ChatContentHeader>
-          <ChatContent>
-            <ChatDateDiv>
-              <ChatDateLine></ChatDateLine>
-              <ChatDate>2023년 9월 19일</ChatDate>
-              <ChatDateLine></ChatDateLine>
-            </ChatDateDiv>
-            <ChatMyMessageFrame>
-              <ChatMessageTime>오후 1시 30분</ChatMessageTime>
-              <ChatMyMessage>제우스랩?</ChatMyMessage>
-            </ChatMyMessageFrame>
-            <ChatOthersMessageFrame>
-              <ChatOthersProfile>
-                <ChatOthersProfileImg src='/assets/img/profile.png'></ChatOthersProfileImg>
-              </ChatOthersProfile>
-              <ChatOthersMessage>네</ChatOthersMessage>
-              <ChatMessageTime>오후 1시 30분</ChatMessageTime>
-            </ChatOthersMessageFrame>
-            <ChatMyMessageFrame>
-              <ChatMessageTime>오후 1시 30분</ChatMessageTime>
-              <ChatMyMessage>안녕하세요 지금도?</ChatMyMessage>
-            </ChatMyMessageFrame>
-            <ChatOthersMessageFrame>
-              <ChatOthersProfile>
-                <ChatOthersProfileImg src='/assets/img/profile.png'></ChatOthersProfileImg>
-              </ChatOthersProfile>
-              <ChatOthersMessage>네 팝니다.</ChatOthersMessage>
-              <ChatMessageTime>오후 1시 30분</ChatMessageTime>
-            </ChatOthersMessageFrame>
-            <ChatMyMessageFrame>
-              <ChatMessageTime>오후 1시 30분</ChatMessageTime>
-              <ChatMyMessage>
-                안녕하세요 지금도 제우스랩 판매하시나요? 안녕하세요 지금도
-                제우스랩 판매하시나요?안녕하세요 지금도 제우스랩 판매하시나요?
-              </ChatMyMessage>
-            </ChatMyMessageFrame>
-            <ChatOthersMessageFrame>
-              <ChatOthersProfile>
-                <ChatOthersProfileImg src='/assets/img/profile.png'></ChatOthersProfileImg>
-              </ChatOthersProfile>
-              <ChatOthersMessage>안녕하세요. 네 팝니다.</ChatOthersMessage>
-              <ChatMessageTime>오후 1시 30분</ChatMessageTime>
-            </ChatOthersMessageFrame>
-            <ChatMyMessageFrame>
-              <ChatMessageTime>오후 1시 30분</ChatMessageTime>
-              <ChatMyMessage>
-                안녕하세요 지금도 제우스랩 판매하시나요?
-              </ChatMyMessage>
-            </ChatMyMessageFrame>
-            <ChatOthersMessageFrame>
-              <ChatOthersProfile>
-                <ChatOthersProfileImg src='/assets/img/profile.png'></ChatOthersProfileImg>
-              </ChatOthersProfile>
-              <ChatOthersMessage>
-                안녕하세요. 네 팝니다.안녕하세요. 네 팝니다.안녕하세요. 네
-                팝니다.안녕하세요. 네 팝니다.
-              </ChatOthersMessage>
-              <ChatMessageTime>오후 1시 30분</ChatMessageTime>
-            </ChatOthersMessageFrame>
-            <ChatMyMessageFrame>
-              <ChatMessageTime>오후 1시 30분</ChatMessageTime>
-              <ChatMyMessage>
-                안녕하세요 지금도 제우스랩 판매하시나요?
-              </ChatMyMessage>
-            </ChatMyMessageFrame>
-            <ChatOthersMessageFrame>
-              <ChatOthersProfile>
-                <ChatOthersProfileImg src='/assets/img/profile.png'></ChatOthersProfileImg>
-              </ChatOthersProfile>
-              <ChatOthersMessage>안녕하세요. 네 팝니다.</ChatOthersMessage>
-              <ChatMessageTime>오후 1시 30분</ChatMessageTime>
-            </ChatOthersMessageFrame>
-            <ChatMyMessageFrame>
-              <ChatMessageTime>오후 1시 30분</ChatMessageTime>
-              <ChatMyMessage>
-                안녕하세요 지금도 제우스랩 판매하시나요?
-              </ChatMyMessage>
-            </ChatMyMessageFrame>
-            <ChatOthersMessageFrame>
-              <ChatOthersProfile>
-                <ChatOthersProfileImg src='/assets/img/profile.png'></ChatOthersProfileImg>
-              </ChatOthersProfile>
-              <ChatOthersMessage>안녕하세요. 네 팝니다.</ChatOthersMessage>
-              <ChatMessageTime>오후 1시 30분</ChatMessageTime>
-            </ChatOthersMessageFrame>
-          </ChatContent>
-          <ChatMessageTyping>
-            <ChatMessageTypingDiv>
-              <ChatInput>
-                <ChatInputMessage>메세지를 입력해주세요...</ChatInputMessage>
-              </ChatInput>
-              <ChatMessageDivRight>
-                {/* <ChatButtonMarginDiv></ChatButtonMarginDiv> */}
-                <ChatButton>전송</ChatButton>
-              </ChatMessageDivRight>
-            </ChatMessageTypingDiv>
-          </ChatMessageTyping>
+          <DoChatting selectChat={selectChat}></DoChatting>
         </ChatContentFrame>
       </ChatDiv>
       {/* <ChatImgRight>
@@ -651,6 +564,168 @@ const Chatting = () => {
         ></img>
       </ChatImgRight> */}
     </ChatFrame>
+  );
+};
+
+const DoChatting = ({ selectChat }) => {
+  const userNo = localStorage.getItem('userNo');
+  const number = useRef(0);
+  const totalPages = useRef(0);
+  const pastMessage = useRef(false);
+  const [messageList, setMessageList] = useState<any[]>([]);
+  const totalMessageList = useRef([]);
+
+  // 채팅창 날짜선 형식 변환
+  const transformDate = (date) => {
+    const result = new Date(date);
+    const year = result.getFullYear();
+    const month = result.getMonth() + 1;
+    const day = result.getDate();
+    return `${year}년 ${month}월 ${day}일 `;
+  };
+
+  // 메세지 시간 포맷
+  const messageFormatDate = (date) => {
+    const result = new Date(date);
+    const hour = result.getHours();
+    let minute = result.getMinutes().toString();
+    if (minute.length === 1) {
+      minute = `0${minute}`;
+    }
+    if (hour < 12) {
+      return `오전 ${hour}:${minute}`;
+    } else {
+      if (hour == 12) {
+        return `오후 ${12}:${minute}`;
+      } else {
+        return `오후 ${hour - 12}:${minute}`;
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (selectChat.chatRoomNo !== undefined) {
+      // console.log('selectChat', selectChat);
+      axios
+        .get(`/message/${selectChat.chatRoomNo}?&page=0&size=20`)
+        .then((res) => {
+          // 반환 메세지 삽입
+          setMessageList(res.data.content);
+          totalMessageList.current = res.data.content;
+
+          // 누적 메세지 삽입
+          // totalMessageList.current.unshift(...res.data.content);
+          // console.log('totalMessageList : ', totalMessageList);
+
+          // 페이지 번호 삽입
+          number.current = res.data.number;
+          totalPages.current = res.data.totalPages;
+          // console.log('get messageList : ', messageList);
+
+          // 이전 메세지가 있는지 없는지 page를 통해 판별한다.
+          if (number.current + 1 < totalPages.current) {
+            pastMessage.current = true;
+          } else {
+            pastMessage.current = false;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [selectChat]);
+
+  // 스크롤을 위로 올렸을 때, pastMessage.current = true 라면,
+  // 이전의 데이터를 불러온다.
+
+  // messageList가 변경되었을 때, 메세지들을 가공한다.
+  useEffect(() => {}, [totalMessageList.current]);
+
+  // 대화 목록 DIV ->
+  // 뒤에서 앞으로 채운다.
+  // 1. 날짜를 저장해 두다가, 날짜가 변경될 때 날짜선을 그어준다.
+  // 2. 내가 보낸 사람이면 내가 보낸 div를 만든다.
+  // 3. 상대방이 보낸 메세지면 상대방이 보낸 div를 만든다.
+  const messageListRendering = () => {
+    const result: any = [];
+    let date = ''; // 날짜 저장
+    let pastDate = ''; // 갱신되는 과거 날짜
+    let messageList: any[] = totalMessageList.current; // 여기서 쓰일 메세지 배열
+    // console.log('messageList : ', messageList);
+    for (let i = 0; i < messageList.length; i++) {
+      // 내 메세지 출력
+      if (messageList[i].senderNo == userNo) {
+        result.unshift(
+          <ChatMyMessageFrame>
+            <ChatMessageTime>
+              {messageFormatDate(messageList[i].time)}
+            </ChatMessageTime>
+            <ChatMyMessage>{messageList[i].content}</ChatMyMessage>
+          </ChatMyMessageFrame>
+        );
+      } else {
+        // 상대방 메세지 출력
+        result.unshift(
+          <ChatOthersMessageFrame>
+            <ChatOthersProfile>
+              <ChatOthersProfileImg
+                src={selectChat.receiverProfile}
+              ></ChatOthersProfileImg>
+            </ChatOthersProfile>
+            <ChatOthersMessage>{messageList[i].content}</ChatOthersMessage>
+            <ChatMessageTime>
+              {messageFormatDate(messageList[i].time)}
+            </ChatMessageTime>
+          </ChatOthersMessageFrame>
+        );
+      }
+
+      // 첫 날짜 저장
+      if (i === 0) {
+        // console.log(messageList[i].time);
+        date = messageList[i].time.substring(0, 10);
+        // console.log(transformDate(date));
+      }
+      // 날짜가 바뀔 때마다 저장
+      pastDate = messageList[i].time.substring(0, 10);
+      // console.log('pastDate : ', pastDate);
+      // 날짜가 다르다면 날짜 삽입, 마지막 메세지라면 날짜 삽입
+      if (date !== pastDate || i == messageList.length - 1) {
+        date = pastDate;
+        result.unshift(
+          <ChatDateDiv>
+            <ChatDateLine></ChatDateLine>
+            <ChatDate>{transformDate(date)}</ChatDate>
+            <ChatDateLine></ChatDateLine>
+          </ChatDateDiv>
+        );
+      }
+    }
+    return result;
+  };
+
+  return (
+    <>
+      <ChatContentHeader>
+        <ChatProfileRight src={selectChat.receiverProfile}></ChatProfileRight>
+        <ChatOtherNick>{selectChat.receiverNickName}</ChatOtherNick>
+        <SellorProduct>
+          <SellorProductImg src='/assets/img/setting.png'></SellorProductImg>
+        </SellorProduct>
+      </ChatContentHeader>
+      <ChatContent>{messageListRendering()}</ChatContent>
+      <ChatMessageTyping>
+        <ChatMessageTypingDiv>
+          <ChatInput>
+            <ChatInputMessage>메세지를 입력해주세요...</ChatInputMessage>
+          </ChatInput>
+          <ChatMessageDivRight>
+            {/* <ChatButtonMarginDiv></ChatButtonMarginDiv> */}
+            <ChatButton>전송</ChatButton>
+          </ChatMessageDivRight>
+        </ChatMessageTypingDiv>
+      </ChatMessageTyping>
+    </>
   );
 };
 
