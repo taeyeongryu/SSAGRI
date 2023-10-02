@@ -301,14 +301,14 @@ const AuctionCreate = () => {
     imageList.map((image) => {
       const formData2 = new FormData();
 
-      formData2.append('upload-file', image, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
+      formData2.append('upload-file', image);
 
       axios
-        .post(`/auction-product/upload/profile/${no}`)
+        .post(`/auction-product/upload/profile/${no}`, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
         .then((res) => {
           console.log(res);
         })

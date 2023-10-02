@@ -23,6 +23,7 @@ import Navbar from './components/navbar';
 import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import { isLoggedInAtom } from './states/account/loginAtom';
+import SocialKakaoPage from './pages/SocialKakao';
 
 const App = () => {
   // @ts-ignore
@@ -41,6 +42,8 @@ const App = () => {
       <Routes>
         {/* 로그인 페이지 */}
         <Route path='/login' element={<LoginPage />} />
+        {/* 카카오 로그인 중간 페이지 */}
+        <Route path='/api/oauth' element={<SocialKakaoPage />} />
         {/* 메인 페이지 */}
         <Route path='/' element={<MainPage />} />
         {/* 중고거래 메인 페이지 */}
