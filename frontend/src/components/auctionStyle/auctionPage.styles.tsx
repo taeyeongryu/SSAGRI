@@ -1,9 +1,7 @@
 import { styled } from 'styled-components';
-
-import { AuctionSearchInput } from '../tradeMainPage.styles';
+import { AuctionSearchInput } from '../tradeStyle/tradeMainPage.styles';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-
 import axios from 'axios';
 import { useRecoilValue } from 'recoil';
 import { isLoggedInAtom } from '../../states/account/loginAtom';

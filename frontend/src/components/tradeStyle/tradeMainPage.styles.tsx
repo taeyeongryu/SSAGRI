@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { useEffect, useState } from 'react';
-import { ProductItemType } from './type';
+import { ProductItemType } from '../type';
 
 // Header 제외 중고거래 컴포넌트
 const TradeMainFrameDiv = styled.div`

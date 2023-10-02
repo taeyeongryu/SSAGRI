@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import ClassicEditor from '../ckeditor';
+import ClassicEditor from '../../ckeditor';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import { useState } from 'react';
 

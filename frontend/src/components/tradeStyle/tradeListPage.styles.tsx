@@ -4,12 +4,12 @@ import {
   ProductList02,
   TradeProductItem02,
   TradeMainMap
-} from '../components/tradeMainPage.styles';
+} from './tradeMainPage.styles';
 // @ts-ignore
 import { useEffect, useRef, useState } from 'react';
 // @ts-ignore
 import axios from 'axios';
-import { ProductItemType } from './type';
+import { ProductItemType } from '../type';
 import { useNavigate } from 'react-router-dom';
 
 // Header 제외 중고거래 컴포넌트

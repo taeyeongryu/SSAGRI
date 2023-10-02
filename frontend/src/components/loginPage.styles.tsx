@@ -395,9 +395,11 @@ const SignInAndUpComponent = () => {
       email: signInForm.email,
       password: signInForm.password
     };
+    console.log('data', data);
     axios
       .post('/user/login/', data)
       .then((res) => {
+        console.log('data', data);
         onLoginSuccess(res);
         setIsLoggedIn(true);
 
@@ -410,7 +412,8 @@ const SignInAndUpComponent = () => {
       })
       .catch((error) => {
         // ... 에러 처리
-        console.log(error, '로그인실패', data);
+        console.log('data', data);
+        console.log(error);
       });
   };
 

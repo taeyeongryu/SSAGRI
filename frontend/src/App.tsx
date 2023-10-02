@@ -4,11 +4,11 @@ import { Route, Routes } from 'react-router-dom';
 // 각 페이지 정보
 import LoginPage from './pages/loginPage';
 import MainPage from './pages/mainPage/mainPage';
-import TradeMainPage from './pages/tradeMainPage';
-import TradeListPage from './pages/tradeListPage';
-import TradeCreatePage from './pages/tradeCreatePage';
-import TradeUpdatePage from './pages/tradeUpdatePage';
-import TradeDetailPage from './pages/tradeDetailPage';
+import TradeMainPage from './pages/tradePage/tradeMainPage';
+import TradeListPage from './pages/tradePage/tradeListPage';
+import TradeCreatePage from './pages/tradePage/tradeCreatePage';
+import TradeUpdatePage from './pages/tradePage/tradeUpdatePage';
+import TradeDetailPage from './pages/tradePage/tradeDetailPage';
 import ChattingPage from './pages/chattingPage';
 import CommunityPage from './pages/communityPage/communityPage';
 import CommunityCreatePage from './pages/communityPage/communityCreatePage';
@@ -24,6 +24,7 @@ import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import { isLoggedInAtom } from './states/account/loginAtom';
 import SocialKakaoPage from './pages/SocialKakao';
+import DoChatPage from './pages/doChatPage';
 
 const App = () => {
   // @ts-ignore
@@ -59,7 +60,7 @@ const App = () => {
         {/* 채팅 화면 페이지 */}
         <Route path='/chat' element={<ChattingPage />} />
         {/* 채팅 연결 페이지 */}
-        {/* <Route path='/doChat' element={<DoChatPage />} /> */}
+        <Route path='/doChat' element={<DoChatPage />} />
         {/* 경매 페이지 */}
         <Route path='/auction' element={<AuctionPage />} />
         {/* 경매 생성 페이지 */}
