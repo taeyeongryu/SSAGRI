@@ -521,169 +521,204 @@ const Tag = styled.div`
 const TradeDetail = () => {
   // 물품, 판매자 정보 저장 예정
   const productDetail = useRef({
-    content: 'string',
-    createDate: '2023-09-22T00:42:26.086Z',
-    like: true,
+    content: '',
+    createDate: '',
+    like: false,
     likeCount: 0,
     price: 0,
-    productCategory: 'READY',
-    productNo: 2,
-    region: '지역',
-    saleStatus: 'READY',
-    title: '로딩 중...',
-    updateDate: '2023-09-22T00:42:26.086Z',
-    usedProductPhotoResponseDto: {
-      link: 'https://i.imgur.com/ixdlIIc.png',
-      photoNo: 0
-    },
-    userNickname: 'string',
+    productCategory: '',
+    productNo: 0,
+    region: '',
+    saleStatus: '',
+    title: '',
+    updateDate: '',
+    usedProductPhotoResponseDto: [
+      {
+        link: 'https://i.imgur.com/pqvW1Yv.png',
+        photoNo: 0
+      }
+    ],
+    userNickname: '',
     userNo: 0,
-    userProfile: 'string',
+    userProfile: '',
     userTemper: 0
   });
   // URI에서 물품번호 가져오기
   const productNo = useParams().no;
-  console.log(productNo, 'Detail');
+  // console.log(productNo, 'Detail');
   // 판매자 정보 저장
   const [sellorInfo, setSellorInfo] = useState({});
-
   // 관련 추천 상품 리스트
-  const responseList = useRef([]);
-
-  const navigate = useNavigate();
-  const goChat = () => {
-    navigate(`/chat`);
-  };
-
+  const [responseList, setResponseList] = useState([]);
   let linkDto: any;
   const categoryEng = useRef('');
   const categoryKor = useRef('');
   const regionEng = useRef('');
   const regionKor = useRef('');
-  const likeYN = useRef('');
+  const [like, setLike] = useState(false); // 찜하기 유무 bool
+  const likeYN = useRef(''); // 찜하기 이미지 경로
   const pastTime = useRef('');
   const [link, setLink] = useState('https://i.imgur.com/pqvW1Yv.png');
-
   const userNo = localStorage.getItem('userNo');
+  const chatSellor = document.querySelector('#chat-sellor');
 
+  // @ts-ignore
+  if (userNo == sellorInfo.sellorNo && chatSellor !== null) {
+    // @ts-ignore
+    chatSellor.style.display = 'none';
+  }
+
+  // 화면 이동: 채팅창
+  const navigate = useNavigate();
+  const goChat = (sellorNo) => {
+    navigate(`/chat?sellorNo=${sellorNo}`);
+  };
+
+  // 찜하기 전환
+  const changeLike = () => {
+    if (!like) {
+      axios.post(`/usedproductlike/${userNo}/${productNo}`).then((res) => {
+        console.log(res.config.method, res.status);
+      });
+      likeYN.current = '/assets/img/heartColor.png';
+    } else {
+      axios.delete(`/usedproductlike/${userNo}/${productNo}`).then((res) => {
+        console.log(res.config.method, res.status);
+      });
+      likeYN.current = '/assets/img/heartWhite.png';
+    }
+    setLike(!like);
+  };
+
+  // 디테일 페이지 초기 렌더링
   useEffect(() => {
-    const url = `/usedproduct/detail/${userNo}?usedProductNo=${productNo}`;
-    axios
-      .get(url)
-      .then((res) => {
-        // console.log('check Detail', res);
+    const firstFunction = async () => {
+      try {
+        const url = `/usedproduct/detail/${userNo}?usedProductNo=${productNo}`;
+        await axios
+          .get(url)
+          .then((res) => {
+            // console.log('check Detail', res);
 
-        // 응답 데이터 삽입
-        productDetail.current = res.data;
-        // console.log('check productDetail.current', productDetail.current);
+            // 응답 데이터 삽입
+            productDetail.current = res.data;
+            const productResponse = res.data;
+            // console.log('check productDetail.current', productDetail.current);
 
-        // 이미지 링크 삽입
-        if (productDetail.current.usedProductPhotoResponseDto) {
-          linkDto = productDetail.current.usedProductPhotoResponseDto[0];
-        }
-        setLink(linkDto.link);
+            // 이미지 링크 삽입
+            if (productResponse.usedProductPhotoResponseDto) {
+              linkDto = productResponse.usedProductPhotoResponseDto[0];
+            }
+            setLink(linkDto.link);
 
-        // HTML을 content 에 삽입
-        const detailContent: any = document.querySelector('#detail-content');
-        detailContent.innerHTML = productDetail.current.content;
-        // console.log('check link', link);
+            // HTML을 content 에 삽입
+            const detailContent: any =
+              document.querySelector('#detail-content');
+            detailContent.innerHTML = productResponse.content;
+            // console.log('check link', link);
 
-        // 판매자 정보를 따로 저장
-        setSellorInfo({
-          sellorNickname: res.data.userNickname,
-          sellorNo: res.data.userNo,
-          sellorProfile: res.data.userProfile,
-          sellorTemper: res.data.userTemper
-        });
-        // console.log('check sellorInfo', sellorInfo);
+            // 판매자 정보를 따로 저장
+            setSellorInfo({
+              sellorNickname: res.data.userNickname,
+              sellorNo: res.data.userNo,
+              sellorProfile: res.data.userProfile,
+              sellorTemper: res.data.userTemper
+            });
+            // console.log('check sellorInfo', sellorInfo);
 
-        // 카테고리를 따로 저장
-        categoryEng.current = productDetail.current.productCategory;
-        // console.log('check categoryEng', categoryEng.current);
-        switch (categoryEng.current) {
-          case 'MONITER':
-            categoryKor.current = '모니터';
-            break;
-          case 'KEYBOARD':
-            categoryKor.current = '키보드';
-            break;
-          case 'MOUSE':
-            categoryKor.current = '마우스';
-            break;
-          case 'LIFE':
-            categoryKor.current = '생활용품';
-            break;
-          case 'ETC':
-            categoryKor.current = '기타용품';
-            break;
-        }
-        // console.log('check categoryKor', categoryKor.current);
+            // 카테고리를 따로 저장
+            categoryEng.current = productResponse.productCategory;
+            // console.log('check categoryEng', categoryEng.current);
+            switch (categoryEng.current) {
+              case 'MONITER':
+                categoryKor.current = '모니터';
+                break;
+              case 'KEYBOARD':
+                categoryKor.current = '키보드';
+                break;
+              case 'MOUSE':
+                categoryKor.current = '마우스';
+                break;
+              case 'LIFE':
+                categoryKor.current = '생활용품';
+                break;
+              case 'ETC':
+                categoryKor.current = '기타용품';
+                break;
+            }
+            // console.log('check categoryKor', categoryKor.current);
 
-        // 지역도 따로 저장
-        regionEng.current = productDetail.current.region;
-        // console.log('check regionEng', regionEng.current);
-        switch (regionEng.current) {
-          case 'SEOUL':
-            regionKor.current = '서울';
-            break;
-          case 'DAEJEON':
-            regionKor.current = '대전';
-            break;
-          case 'GUMI':
-            regionKor.current = '구미';
-            break;
-          case 'GWANGJU':
-            regionKor.current = '광주';
-            break;
-          case 'BUG':
-            regionKor.current = '부울경';
-            break;
-        }
+            // 지역도 따로 저장
+            regionEng.current = productResponse.region;
+            // console.log('check regionEng', regionEng.current);
+            switch (regionEng.current) {
+              case 'SEOUL':
+                regionKor.current = '서울';
+                break;
+              case 'DAEJEON':
+                regionKor.current = '대전';
+                break;
+              case 'GUMI':
+                regionKor.current = '구미';
+                break;
+              case 'GWANGJU':
+                regionKor.current = '광주';
+                break;
+              case 'BUG':
+                regionKor.current = '부울경';
+                break;
+            }
 
-        // 시간을 계산해보자 https://stonefree.tistory.com/259
-        const time = new Date(productDetail.current.createDate);
-        const timeNow = new Date();
-        const diffSec = timeNow.getTime() - time.getTime();
-        const minute = diffSec / (60 * 1000);
-        // console.log('Minute : ', diffSec / (60 * 1000));
-        // console.log('Hour : ', diffSec / (60 * 60 * 1000));
-        // console.log('Date : ', diffSec / (24 * 60 * 60 * 1000));
-        // console.log(minute.toFixed(0));
-        // console.log(Math.floor(minute / 60));
-        if (minute < 1) {
-          pastTime.current = `방금 전`;
-        } else if (minute < 60) {
-          pastTime.current = `${minute.toFixed(0)}분 전`;
-        } else if (minute < 24 * 60) {
-          pastTime.current = `${Math.floor(minute / 60)}시간 전`;
-        } else if (minute < 24 * 60 * 30) {
-          pastTime.current = `${Math.floor(minute / (24 * 60))}일 전`;
-        } else {
-          pastTime.current = `${Math.floor(minute / (24 * 60 * 30))}달 전`;
-        }
-        console.log(pastTime.current);
+            // 시간을 계산해보자 https://stonefree.tistory.com/259
+            const time = new Date(productResponse.createDate);
+            const timeNow = new Date();
+            const diffSec = timeNow.getTime() - time.getTime();
+            const minute = diffSec / (60 * 1000);
+            // console.log('Minute : ', diffSec / (60 * 1000));
+            // console.log('Hour : ', diffSec / (60 * 60 * 1000));
+            // console.log('Date : ', diffSec / (24 * 60 * 60 * 1000));
+            // console.log(minute.toFixed(0));
+            // console.log(Math.floor(minute / 60));
+            if (minute < 1) {
+              pastTime.current = `방금 전`;
+            } else if (minute < 60) {
+              pastTime.current = `${minute.toFixed(0)}분 전`;
+            } else if (minute < 24 * 60) {
+              pastTime.current = `${Math.floor(minute / 60)}시간 전`;
+            } else if (minute < 24 * 60 * 30) {
+              pastTime.current = `${Math.floor(minute / (24 * 60))}일 전`;
+            } else {
+              pastTime.current = `${Math.floor(minute / (24 * 60 * 30))}달 전`;
+            }
+            // console.log(pastTime.current);
 
-        // 좋아요도 확인하자.
-        if (productDetail.current.like) {
-          likeYN.current = '/assets/img/heartColor.png';
-        } else {
-          likeYN.current = '/assets/img/heartWhite.png';
-        }
-      })
-      .catch((err) => {
+            // 좋아요도 확인하자.
+            setLike(productDetail.current.like);
+            if (productDetail.current.like) {
+              likeYN.current = '/assets/img/heartColor.png';
+            } else {
+              likeYN.current = '/assets/img/heartWhite.png';
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+
+        // 관련상품 데이터 가져오기
+        await axios
+          .get(
+            `/usedproduct/${userNo}?category=${categoryEng.current}&region=${regionEng.current}&sort=like,desc&page=0&size=3`
+          )
+          .then((res) => {
+            // console.log('res.data', res.data.content);
+            setResponseList(res.data.content);
+          });
+      } catch (err) {
         console.log(err);
-      });
-
-    // 관련상품 데이터 가져오기
-    axios
-      .get(
-        `/usedproduct/${userNo}?category=${categoryEng.current}&region=${regionEng.current}&sort=like,desc&page=0&size=3`
-      )
-      .then((res) => {
-        console.log('res.data', res.data.content);
-        responseList.current = res.data.content;
-      });
-  }, []);
+      }
+    };
+    firstFunction();
+  }, [productNo]);
 
   return (
     <DetailFrame>
@@ -722,19 +757,26 @@ const TradeDetail = () => {
               </DetailDivInfoPrice>
               <InfoLine></InfoLine>
               <DetailDivInfoEtc>
-                {regionKor.current} · {pastTime.current} · 좋아요{' '}
+                {regionKor.current} · {pastTime.current} · 찜하기{' '}
                 {productDetail.current.likeCount}
               </DetailDivInfoEtc>
               <InfoLine></InfoLine>
               <DetailDivButton>
-                <DetailDivHeart>
+                <DetailDivHeart onClick={() => changeLike()}>
                   <HeartText>찜하기</HeartText>
                   <HeartImgDiv>
                     <HeartImg src={likeYN.current}></HeartImg>
                   </HeartImgDiv>
                 </DetailDivHeart>
-                <DetailDivChat>
-                  <ChatText onClick={goChat}>구매 채팅하기</ChatText>
+                <DetailDivChat id='chat-sellor'>
+                  <ChatText
+                    onClick={() => {
+                      // @ts-ignore
+                      goChat(sellorInfo.sellorNo);
+                    }}
+                  >
+                    구매 채팅하기
+                  </ChatText>
                   <ChatImgDiv>
                     <ChatImg src='/assets/img/chat.png'></ChatImg>
                   </ChatImgDiv>
@@ -755,9 +797,7 @@ const TradeDetail = () => {
               <CautionBox></CautionBox>
             </DetailContentCaution>
             {/* 본문 내용 */}
-            <DetailContentText id='detail-content'>
-              {productDetail.current.content}
-            </DetailContentText>
+            <DetailContentText id='detail-content'></DetailContentText>
           </DetailContentDiv>
           <InfoLine></InfoLine>
           {/* 관련 추천상품 */}
@@ -765,7 +805,7 @@ const TradeDetail = () => {
             <DetailRecommendText>관련상품</DetailRecommendText>
             <ProductList03>
               {/* @ts-ignore */}
-              {responseList.current.map((item: ProductItemType, id) => {
+              {responseList.map((item: ProductItemType, id) => {
                 return (
                   <TradeProductItem03 key={id} item={item}></TradeProductItem03>
                 );

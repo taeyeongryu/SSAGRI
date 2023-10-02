@@ -4,7 +4,6 @@ import static com.ssafy.ssagri.entity.chat.QMessage.message;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPAExpressions;
-import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.ssagri.entity.chat.Message;
 import java.util.List;
@@ -50,8 +49,9 @@ public class MessageCustomRepositoryImpl implements MessageCustomRepository{
                     .from(message)
                     .where(message.receiverNo.eq(userNo).or(message.senderNo.eq(userNo)))
                     .groupBy(message.roomNo)
-                    .orderBy(message.id.desc())
+
             ))
+            .orderBy(message.id.desc())
             .fetch();
     }
 }
