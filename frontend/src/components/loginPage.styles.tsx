@@ -289,8 +289,8 @@ const KakaoLogin = styled.div`
 
 const SignInAndUpComponent = () => {
   const navigate = useNavigate();
-  const { state } = useLocation();
-  console.log('state: ', state);
+  // const { state } = useLocation();
+  // console.log('state: ', state);
 
   const [image, setImage] = useState(
     'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
@@ -391,7 +391,6 @@ const SignInAndUpComponent = () => {
   // 로그인 요청 api
   const onLoginHandler = (e) => {
     e.preventDefault();
-    console.log(state);
 
     const data = {
       email: signInForm.email,
@@ -404,13 +403,7 @@ const SignInAndUpComponent = () => {
         console.log('data', data);
         onLoginSuccess(res);
         setIsLoggedIn(true);
-
-        // 이전 경로가 있다면 로그인 성공 후 그 경로로 다시 이동
-        if (state) {
-          navigate(state);
-        } else {
-          navigate('/'); // 메인페이지
-        }
+        navigate('/'); // 메인페이지로 이동
       })
       .catch((error) => {
         // ... 에러 처리

@@ -385,13 +385,8 @@ const AuctionPage = () => {
   const isLoggedIn = useRecoilValue(isLoggedInAtom);
 
   useEffect(() => {
-    setTimeout(() => {}, 2000);
-
     if (isLoggedIn) {
       GetAuctionItemList();
-    } else {
-      alert('로그인이 필요한 페이지입니다.');
-      navigate('/login', { state: pathname });
     }
   }, [isLoggedIn]);
 
