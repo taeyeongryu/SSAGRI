@@ -571,7 +571,7 @@ const SignInAndUpComponent = () => {
   // 이메일은 변경 불가, 중복된 이메일이 있는지는 백엔드에서 분별해줌
 
   useEffect(() => {
-    if (location.state !== null) {
+    if (location.state) {
       setIsKakao(true);
       const userData = location.state.userData;
 
@@ -785,6 +785,7 @@ const SignInAndUpComponent = () => {
     signInButton.addEventListener('click', signInClickHandler);
 
     if (location.state) {
+      console.log(location.state);
       // 카카오 계정 회원가입 시 바로 회원가입 창이 뜨도록
       signUpClickHandler();
     }
