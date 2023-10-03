@@ -385,6 +385,8 @@ const AuctionPage = () => {
   const isLoggedIn = useRecoilValue(isLoggedInAtom);
 
   useEffect(() => {
+    setTimeout(() => {}, 2000);
+
     if (isLoggedIn) {
       GetAuctionItemList();
     } else {
