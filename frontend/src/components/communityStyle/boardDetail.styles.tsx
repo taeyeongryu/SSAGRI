@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+// 게시글 세부페이지 컴포넌트
+
 const DetailDiv = styled.div`
   width: 100%;
   height: 1000px;
@@ -16,12 +18,10 @@ const DetailDiv = styled.div`
       opacity: 1;
     }
   }
-  /* border: 3px solid black; */
 `;
 const TopTitle = styled.div`
   width: 100%;
   height: 200px;
-  /* background-color: #f6e1b6; */
   display: flex;
   background-image: url('/assets/img/boardTop.PNG');
   background-size: cover;
@@ -40,14 +40,11 @@ const TopTitle = styled.div`
 
 const TitleDiv = styled.div`
   font-family: var(--font-googleNanumPen);
-  /* font-family: var(--font-Jua); */
-  /* font-family: var(--font-NanumMyeongjo); */
   display: flex;
   font-size: 45px;
   margin-top: 104px;
   margin-left: 70px;
   width: 700px;
-  /* border: 2px solid black; */
   color: white;
   height: 50px;
 `;
@@ -55,7 +52,6 @@ const BoardImg = styled.img`
   width: 60px;
   height: 60px;
   margin-right: 10px;
-  /* margin-top: 20px; */
 `;
 
 const TopDiv = styled.div`
@@ -103,6 +99,8 @@ const TagBtn = styled.div`
   }
 `;
 
+// 게시글 디테일 양식
+
 const BoardDetailMain = () => {
   const [urlparam, setUrlparam] = useState(0);
   const [boardData, setBoardData] = useState([]);
@@ -112,7 +110,7 @@ const BoardDetailMain = () => {
   const GoBack = () => {
     navigate('/');
   };
-
+  // 게시글 정보 가져오기
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     for (const param of searchParams) {

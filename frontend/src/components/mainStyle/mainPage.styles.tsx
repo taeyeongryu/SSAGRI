@@ -11,6 +11,8 @@ import Matter, {
 } from 'matter-js';
 import { useNavigate } from 'react-router-dom';
 
+// 메인페이지 구성 컴포넌트
+
 const MainPage = styled.div`
   width: 100%;
   height: 100%;
@@ -22,8 +24,6 @@ const Scrollbar = styled.div`
   margin: 90vh 25vw;
   width: 50vw;
   height: 6px;
-  /* border: 1px solid rgb(73, 147, 250, 0.7);
-  border: 1px solid #f94c10; */
   border-radius: 1px;
   z-index: 20;
   &::before,
@@ -79,9 +79,12 @@ const ScrollTagDiv = styled.div`
   top: -25px;
   color: rgb(0, 0, 0, 0.5);
 `;
+
+// 스크롤 게이지바
 const ScrollTag = (scrollposition) => {
   const scrollContainer: HTMLElement | null =
     document.querySelector('.page-container');
+    // 클릭시 해당 위치로 이동로직
   const handleHomeClick = () => {
     if (scrollContainer) {
       scrollContainer.scrollLeft = 0;
@@ -115,7 +118,6 @@ const ScrollTag = (scrollposition) => {
   };
   return (
     <ScrollTagDiv>
-      {/* <span style={HomeStyle}>Home</span> */}
       <span
         style={{
           marginRight: '130px',
@@ -199,32 +201,26 @@ const Page = styled.div`
   display: flex;
   overflow: hidden;
 
-  /* scroll-behavior: smooth; */
 `;
 const PagesSection1 = styled.section`
   min-width: 130vw;
   min-height: 100vh;
   display: flex;
-  /* justify-content: center; */
   align-items: center;
   font-size: 4ch;
-  /* overflow: hidden; */
-  /* border: 1px solid black; */
+
 `;
 const PagesSection2 = styled.section`
-  /* min-width: 6000px; */
+
   min-height: 100vh;
   display: flex;
-  /* justify-content: center; */
   align-items: center;
   font-size: 4ch;
-  /* overflow: hidden; */
-  /* border: 10px solid black; */
+
 `;
 const Pages1 = styled.div`
   display: flex;
   align-items: center;
-  /* overflow: hidden; */
   margin-left: 300px;
   position: relative;
 `;
@@ -232,9 +228,7 @@ const Pages1_Left = styled.div`
   position: relative;
   width: 530px;
   height: 500px;
-  /* border: 1px solid black; */
   margin-right: 200px;
-  /* align-items: center; */
 `;
 
 const Pages1_tag1 = styled.p`
@@ -274,7 +268,7 @@ const Pages1_Img1 = styled.img`
   border-radius: 20px;
   animation:
     moveUpDown 1s infinite alternate,
-    fadein 1.5s ease-in-out; /* 애니메이션 적용 */
+    fadein 1.5s ease-in-out; 
 
   @keyframes moveUpDown {
     0% {
@@ -296,19 +290,9 @@ const Pages1_Img1 = styled.img`
 `;
 
 const Pages1_Right = styled.div`
-  /* position: absolute;
-  top: -250px;
-  left: 700px; */
   position: relative;
-  /* width: 480px;
-  height: 540px; */
-  /* border: 1px solid black; */
-  /* transform: rotate(20deg); */
-  /* overflow: hidden; */
   width: 150vh;
   height: 100vh;
-  /* width: 320px;
-  height: 320px; */
   @media (max-width: 1000px) {
     width: 420px;
     height: 420px;
@@ -335,10 +319,6 @@ const Pages1_img1 = styled.img`
   width: 550px;
   height: 550px;
   margin-top: 200px;
-
-  /* width: 320px;
-  height: 320px; */
-  /* border: 20px solid red; */
   @media (max-width: 1000px) {
     width: 420px;
     height: 420px;
@@ -347,7 +327,6 @@ const Pages1_img1 = styled.img`
 
 const Pages2 = styled.div`
   display: flex;
-  /* align-items: center; */
   overflow: hidden;
   margin-left: 10px;
 `;
@@ -355,13 +334,11 @@ const Pages2 = styled.div`
 const Page2_tag1 = styled.div`
   position: relative;
   font-family: var(--font-Pretendard);
-  /* font-family: var(--font-googleNanumPen); */
   margin-top: 400px;
   margin-right: 200px;
   font-size: 45px;
   width: 800px;
   height: 200px;
-  /* border: 2px solid red; */
   background-image: url('/assets/img/page2_clip2.PNG');
   background-position: 0px 60px;
   background-clip: text;
@@ -395,10 +372,7 @@ const Page2_tag2 = styled.div`
   font-size: 40px;
   width: 600px;
   height: 700px;
-  /* border: 2px solid red; */
-  /* margin-right: 300px; */
   border-radius: 10px;
-  /* align-items: center; */
   animation: ${fadeIn} 10.5s ease forwards;
   &.hidden {
     animation: ${fadeOut} 10.5s ease forwards;
@@ -420,11 +394,9 @@ const Page2_img1 = styled.img`
   position: absolute;
   top: 0px;
   left: 130px;
-  /* margin-top: 250px; */
   font-size: 40px;
   width: 370px;
   height: 400px;
-  /* border: 2px solid red; */
   margin-right: 300px;
   border-radius: 10px;
 `;
@@ -432,11 +404,9 @@ const Page2_img2 = styled.img`
   position: absolute;
   top: 250px;
   left: 220px;
-  /* margin-top: 250px; */
   font-size: 40px;
   width: 340px;
   height: 370px;
-  /* border: 2px solid red; */
   margin-right: 300px;
   border-radius: 10px;
 `;
@@ -444,14 +414,15 @@ const Page2_img3 = styled.img`
   position: absolute;
   top: 390px;
   left: -10px;
-  /* margin-top: 250px; */
   font-size: 40px;
   width: 240px;
   height: 210px;
-  /* border: 2px solid red; */
   margin-right: 300px;
   border-radius: 10px;
 `;
+
+
+
 
 // 섹션2번 -중고거래
 
@@ -460,11 +431,9 @@ const Page2_colorbox = styled.div`
   font-size: 40px;
   width: 2700px;
   height: 100vh;
-  /* border: 2px solid red; */
   clip-path: polygon(16% 0%, 100% 0%, 90% 100%, 0% 100%);
   background: #27005d;
   background: linear-gradient(to bottom, rgb(39, 0, 93, 0.9), #27005d);
-  /* overflow: hidden; */
   position: relative;
 `;
 
@@ -472,7 +441,6 @@ const TradeDiv = styled.div`
   position: relative;
   display: flex;
   align-items: center;
-  /* border: 2px solid red; */
 `;
 const Trade_box1 = styled.div`
   margin-top: 150px;
@@ -481,37 +449,26 @@ const Trade_box1 = styled.div`
   width: 500px;
   height: 700px;
   z-index: 20;
-  /* border: 2px solid red; */
 `;
 const Trade_box2 = styled.div`
   position: absolute;
 
   top: -100px;
   left: 1400px;
-  /* margin-top: 100px; */
   width: 500px;
   height: 700px;
-  /* border: 2px solid red; */
 `;
 
 const NameTag0 = styled.p`
   font-family: var(--font-Jua);
-  /* font-family: var(--font-NanumMyeongjo); */
-  /* font-family: var(--font-googleNanumPen); */
   font-size: 160px;
   width: 700px;
   color: white;
   z-index: 30;
-  /* background-image: url('/assets/img/page2_clip2.PNG'); */
-  /* background-position: 10px 30px; */
-  /* background-clip: text; */
-  /* -webkit-background-clip: text; */
-  /* color: transparent; */
   background-size: cover;
   font-weight: 600;
-
-  /* border: 2px solid black; */
 `;
+
 const TradeBackground = styled.div`
   width: 100%;
   height: 100%;
@@ -526,8 +483,6 @@ const NameTag0_2 = styled.div`
   width: 530px;
   height: 750px;
   clip-path: polygon(55% 0%, 100% 0%, 45% 100%, 0% 100%);
-  /* width: 700px; */
-  /* background-color: red; */
   color: white;
   border: 2px solid black;
   margin: 0;
@@ -577,6 +532,7 @@ const Trade_btn = styled.div`
   }
 `;
 
+// 2페이지 -중고거래
 const Page2_section2 = ({
   backgroundPositionX,
   fadepages3Tag1,
@@ -624,12 +580,6 @@ const Page2_section2 = ({
             }}
           ></NameTag0_3>
         </Trade_box2>
-        {/* <Next_line></Next_line>
-        <Recent_box>
-          <NameTag0_3>최근 등록 리스트</NameTag0_3>
-          <Recent_list></Recent_list>
-          <Recent_btn>최근 등록 상품</Recent_btn>
-        </Recent_box> */}
       </TradeDiv>
     </Page2_colorbox>
   );
@@ -640,13 +590,10 @@ const Page2_section2 = ({
 const Page2_Auction = styled.div`
   width: 2020px;
   height: 100vh;
-  /* border: 5px solid black; */
 `;
 
 const AuctionDiv = styled.div`
   display: flex;
-  /* align-items: center; */
-  /* border: 2px solid red; */
 `;
 const AuctionLeft = styled.div`
   margin-top: 100px;
@@ -656,7 +603,6 @@ const AuctionLeft = styled.div`
 const AuctionRight = styled.div`
   width: 550px;
   height: 450px;
-  /* border-left: 2px solid black; */
   text-align: center;
   line-height: 450px;
 `;
@@ -665,14 +611,9 @@ const AuctionDiv2 = styled.div`
   margin-left: 20px;
   margin-top: 12px;
   z-index: 2;
-  /* width: 900px; */
   width: 530px;
   height: 400px;
   border-right: 2px solid rgb(75, 82, 126, 0.2);
-  /* border: 2px solid black; */
-  /* background-color: #f6f1f1; */
-  /* border: 2px solid black; */
-  /* height: 450px; */
 `;
 const AuctionMidtag1 = styled.div`
   font-size: 27px;
@@ -711,7 +652,6 @@ const Auctionbox = styled.div`
   margin-top: 220px;
   width: 450px;
   height: 200px;
-  // border: 2px solid black;
 `;
 
 const Auction_tuto = styled.div`
@@ -823,6 +763,7 @@ const TradeImg = styled.img`
   opacity: 0.4;
 `;
 
+// 3페이지 -경매
 const Page2_section3 = ({ fadepages4Tag1, fadepages4Tag2 }) => {
   const navigate = useNavigate();
   return (
@@ -879,29 +820,25 @@ const Page2_section3 = ({ fadepages4Tag1, fadepages4Tag2 }) => {
   );
 };
 
-// 섹션3번 -커뮤니티
+// 섹션4번 -커뮤니티
 
 const Page2_Commu = styled.div`
   width: 2820px;
   height: 100vh;
   background-color: aliceblue;
   clip-path: polygon(11% 0%, 100% 0%, 100% 100%, 0% 100%);
-  /* border: 5px solid black; */
 `;
 
 const CommuDiv = styled.div`
-  /* display: flex; */
   margin-left: 400px;
   width: 1400px;
   height: 900px;
-  /* border: 2px solid red; */
 `;
 
 const NameTag2 = styled.p`
   text-align: center;
   margin-left: 570px;
   font-weight: 600;
-  /* border: 2px solid red; */
   margin-top: 150px;
   font-size: 70px;
   width: 400px;
@@ -919,13 +856,10 @@ const Tagcolor = styled.span`
 `;
 
 const Commu_img = styled.div`
-  /* margin: 50px 0 400px 0; */
   margin-left: 300px;
   margin-top: 40px;
-  /* margin: 150px 200px 0 250px; */
   width: 1000px;
   height: 500px;
-  /* border: 20px solid black; */
 `;
 
 const CommuBottom = styled.div`
@@ -936,15 +870,16 @@ const CommuBottom = styled.div`
   margin-left: 300px;
 `;
 
+// 4페이지 -커뮤니티
 const Page2_section4 = ({ fadepages5Tag1 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const totalScore = useRef<number>(0);
 
   useEffect(() => {
+    // matter js - 커뮤니티 구현
     // 2d 엔진 모델
     const engine = Engine.create(); // 물리엔진
     engine.world.gravity.y = -0.05;
-    // engine.world.gravity.x = -0.1;
     const render = Render.create({
       // 시각화
       engine,
@@ -977,7 +912,6 @@ const Page2_section4 = ({ fadepages5Tag1 }) => {
 
       // 텍스트 추가
       ctx.fillStyle = 'white'; // 텍스트 색상
-      // ctx.font = '24px Arial';
       ctx.font = `${fontsize} Arial`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
@@ -1049,7 +983,6 @@ const Page2_section4 = ({ fadepages5Tag1 }) => {
           texture: textImage1.src
         }
 
-        // visible: false
       }
     });
     const group2 = Bodies.circle(410, 650, 85, {
@@ -1122,10 +1055,8 @@ const Page2_section4 = ({ fadepages5Tag1 }) => {
       rightWall,
       leftWall,
       topWall,
-
       group1,
       group2,
-
       group5,
       group6,
       group7
@@ -1207,14 +1138,13 @@ const Page2_section4 = ({ fadepages5Tag1 }) => {
   );
 };
 
-// 섹션4번 -Q&A
+// 섹션5번 -Q&A
 
 const Page2_SQL = styled.div`
   position: relative;
   margin-left: -600px;
   width: 2100px;
   height: 100vh;
-  /* border: 5px solid black; */
 `;
 
 const NameTag3 = styled.p`
@@ -1233,10 +1163,8 @@ const Page2_colorbox2 = styled.div`
   font-size: 40px;
   width: 2900px;
   height: 100vh;
-  /* border: 2px solid red; */
   clip-path: polygon(12% 0%, 100% 0%, 100% 100%, 0% 100%);
   background: #cccaca;
-  /* overflow: hidden; */
   position: relative;
 `;
 
@@ -1255,7 +1183,6 @@ const ServeDiv = styled.div`
   display: flex;
   top: 430px;
   left: 180px;
-  /* width: 600px; */
 `;
 const Page2_section5 = ({ fadepages6Tag1, fadepages6Tag2 }) => {
   return (
@@ -1285,21 +1212,14 @@ const Page2_section5 = ({ fadepages6Tag1, fadepages6Tag2 }) => {
   );
 };
 
-//작업중
 
 const BlockDiv1 = styled.div`
-  /* margin-top:700px; */
   position: relative;
   top: 215px;
   left: 21px;
   z-index: 10;
-  /* border: 2px solid purple; */
   width: 590px;
   height: 590px;
-  /* background-image: url('/assets/img/page2_clip2.PNG');
-    background-position: 20px 80px;
-  color: transparent;
-  background-size: cover; */
 `;
 
 const Block1 = styled.div`
@@ -1308,9 +1228,7 @@ const Block1 = styled.div`
   left: 0%;
   width: 41%;
   height: 42.5%;
-  /* border: 2px solid red; */
   clip-path: polygon(60% 0%, 100% 0%, 40% 100%, 0% 100%);
-  /* background: #27005d; */
   background-image: url('/assets/img/page2_clip3.jpg');
   background-position: 0px 0px;
   color: transparent;
@@ -1322,9 +1240,7 @@ const Block2 = styled.div`
   left: 28.5%;
   width: 41%;
   height: 42.5%;
-  /* border: 2px solid red; */
   clip-path: polygon(60% 0%, 100% 0%, 40% 100%, 0% 100%);
-  /* background: #27005d; */
   background-image: url('/assets/img/page2_clip3.jpg');
   background-position: 120px 0px;
   color: transparent;
@@ -1333,14 +1249,11 @@ const Block2 = styled.div`
 
 const Block3 = styled.div`
   position: absolute;
-  /* top: 360px; */
   bottom: -4%;
-  /* left: 119px; */
   left: 21%;
   width: 41%;
   height: 42.5%;
   clip-path: polygon(60% 0%, 100% 0%, 40% 100%, 0% 100%);
-  /* background: #27005d; */
   background-image: url('/assets/img/page2_clip4.jpg');
   background-position: -60px -200px;
   color: transparent;
@@ -1354,7 +1267,6 @@ const Block4 = styled.div`
   width: 41%;
   height: 42.5%;
   clip-path: polygon(60% 0%, 100% 0%, 40% 100%, 0% 100%);
-  /* background: #27005d; */
   background-image: url('/assets/img/page2_clip4.jpg');
   background-position: 300px -240px;
   color: transparent;
@@ -1363,15 +1275,11 @@ const Block4 = styled.div`
 `;
 const Block5 = styled.div`
   position: absolute;
-  /* top: 73px; */
   top: 16%;
-  /* left: 385px; */
   left: 64%;
   width: 41%;
   height: 42.5%;
-  /* border: 2px solid red; */
   clip-path: polygon(60% 0%, 100% 0%, 40% 100%, 0% 100%);
-  /* background: #27005d; */
   background-image: url('/assets/img/page2_clip5.jpg');
   background-position: -150px 0px;
   color: transparent;
@@ -1385,9 +1293,7 @@ const Block6 = styled.div`
   left: 50%;
   width: 41%;
   height: 42.5%;
-  /* border: 2px solid red; */
   clip-path: polygon(60% 0%, 100% 0%, 40% 100%, 0% 100%);
-  /* background: #27005d; */
   background-image: url('/assets/img/page2_clip5.jpg');
   background-position: -10px 0px;
   color: transparent;
@@ -1396,7 +1302,6 @@ const Block6 = styled.div`
 `;
 
 const BlockDot = styled.div`
-  /* margin-top:700px; */
   position: absolute;
   top: 295px;
   left: 265px;
@@ -1404,11 +1309,9 @@ const BlockDot = styled.div`
   width: 1px;
   height: 1px;
   background-color: red;
-  /* background-image: url('/assets/img/page2_clip2.PNG');
-    background-position: 20px 80px;
-  color: transparent;
-  background-size: cover; */
 `;
+
+// 전체 페이지 - 가로 스크롤 로직
 
 const PageSlide = () => {
   const rotation = useRef(0);
@@ -1443,7 +1346,6 @@ const PageSlide = () => {
     const indi_bar = document.getElementById('indi_bar');
     let pct = 0;
     let s_pos = 0;
-    // const win_wid = window.innerWidth;
     let s_move_max = 11000; // 슬라이드 전체길이
 
     // 스크롤바 게이지
@@ -1708,7 +1610,6 @@ const PageSlide = () => {
       if (evt.deltaY < 0 && scrollContainer.scrollLeft == 0) {
         rotation.current = 0;
       }
-      // console.log( size.width);
       // @ts-ignore
       if (scrollContainer.scrollLeft > 0 && scrollContainer.scrollLeft < 1650) {
         if (evt.deltaY > 0) {
@@ -1847,80 +1748,39 @@ const PageSlide = () => {
                 style={{
                   transition:
                     'transform 0.3s, width 0.5s, height 0.5s, top 0.5s, left 0.5s'
-
-                  // width: `${size.width}px`,
-                  // height: `${size.height}px`,
-                  // top: `${size.top1}px`,
-                  // left: `${size.left1}px`
                 }}
               ></Block1>
               <Block2
                 style={{
                   transition:
                     'transform 0.3s, width 0.5s, height 0.5s, top 0.5s, left 0.5s'
-                  // transformOrigin: '488 303 0'
-                  // width: `${size.width}px`,
-                  // height: `${size.height}px`,
-                  // top: `${size.top2}px`,
-                  // left: `${size.left2}px`
                 }}
               ></Block2>
               <Block3
                 style={{
                   transition:
                     'transform 0.3s, width 0.5s, height 0.5s, top 0.5s, left 0.5s'
-                  // transformOrigin: '488 303 0'
-                  // width: `${size.width}px`,
-                  // height: `${size.height}px`,
-                  // top: `${size.top3}px`,
-                  // left: `${size.left3}px`
                 }}
               ></Block3>
               <Block4
                 style={{
                   transition:
                     'transform 0.3s, width 0.5s, height 0.5s, top 0.5s, left 0.5s'
-                  // transformOrigin: '488 303 0'
-                  // width: `${size.width}px`,
-                  // height: `${size.height}px`,
-                  // top: `${size.top4}px`,
-                  // left: `${size.left4}px`
                 }}
               ></Block4>
               <Block5
                 style={{
                   transition:
                     'transform 0.3s, width 0.5s, height 0.5s, top 0.5s, left 0.5s'
-                  // transformOrigin: '488 303 0'
-                  // width: `${size.width}px`,
-                  // height: `${size.height}px`,
-                  // top: `${size.top5}px`,
-                  // left: `${size.left5}px`
                 }}
               ></Block5>
               <Block6
                 style={{
                   transition:
                     'transform 0.3s, width 0.5s, height 0.5s, top 0.5s, left 0.5s'
-                  // transformOrigin: '488 303 0'
-                  // width: `${size.width}px`,
-                  // height: `${size.height}px`,
-                  // top: `${size.top6}px`,
-                  // left: `${size.left6}px`
                 }}
               ></Block6>
             </BlockDiv1>
-
-            {/* <Pages1_img1
-              src='/assets/img/mainbox1.png'
-              alt=''
-              style={{
-                transform: `rotate(${rotation}deg)`,
-                width: `600px`,
-                height: `600px`,
-                transition: 'transform 0.3s, width 0.1s, height 0.1s'
-              }}
-            /> */}
           </Pages1_Right>
         </Pages1>
       </PagesSection1>

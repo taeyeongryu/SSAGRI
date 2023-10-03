@@ -3,17 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
+// 게시글 목록리스트 구성 컴포넌트
+
 const DetailDiv = styled.div`
   width: 100%;
   height: 1000px;
-
-  /* border: 3px solid black; */
 `;
 
 const TopTitle = styled.div`
   width: 100%;
   height: 200px;
-  /* background-color: #f6e1b6; */
   display: flex;
   background-image: url('/assets/img/boardTop.PNG');
   background-size: cover;
@@ -52,7 +51,6 @@ const LineDiv = styled.hr`
 
 const FlexDiv = styled.div`
   display: flex;
-  /* justify-content: space-evenly; */
 `;
 
 const LeftDiv = styled.div`
@@ -70,7 +68,6 @@ const CreateDiv = styled.div`
   margin: 50px 0 50px 0;
   border-radius: 7px;
   box-shadow: 2px 2px 2px rgb(0, 0, 0, 0.4);
-  /* text-align: center; */
   line-height: 70px;
   font-size: 25px;
   font-weight: 600;
@@ -202,7 +199,6 @@ const PagingSpace = styled.div`
   height: 50px;
   margin-top: 50px;
   margin-left: 490px;
-  /* border: 1px solid red; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -219,9 +215,6 @@ const PagingButton = styled.button`
   justify-content: center;
   align-items: center;
   &:hover {
-    /* border: 2px solid #4786fa;
-    background-color: #4786fa;
-    color: #fff; */
     box-shadow: 1px 1px 2px 2px #757575;
   }
 `;
@@ -261,14 +254,11 @@ const AlarmTag = styled.div``;
 
 const TitleDiv = styled.div`
   font-family: var(--font-googleNanumPen);
-  /* font-family: var(--font-Jua); */
-  /* font-family: var(--font-NanumMyeongjo); */
   display: flex;
   font-size: 45px;
   margin-top: 104px;
   margin-left: 70px;
   width: 700px;
-  /* border: 2px solid black; */
   color: white;
   height: 50px;
 `;
@@ -290,7 +280,6 @@ const BoardImg = styled.img`
   width: 60px;
   height: 60px;
   margin-right: 10px;
-  /* margin-top: 20px; */
 `;
 const BoardImg2 = styled.img`
   width: 80px;
@@ -309,8 +298,6 @@ const BodyTop = styled.div`
   display: flex;
   width: 590px;
   height: 70px;
-  /* border: 2px solid black; */
-  /* text-align: center; */
   line-height: 70px;
   margin-top: 5px;
 `;
@@ -334,7 +321,6 @@ const MoreImg = styled.img``;
 const BodyTitle = styled.div`
   width: 490px;
   height: 50px;
-  /* border: 2px solid black; */
   line-height: 50px;
   margin-left: 30px;
   margin-top: 10px;
@@ -345,7 +331,6 @@ const BodyTitle = styled.div`
 const BodyTitle2 = styled.div`
   width: 490px;
   height: 50px;
-  /* border: 2px solid black; */
   line-height: 50px;
   margin-left: 30px;
   margin-top: 20px;
@@ -356,42 +341,32 @@ const BodyTitle2 = styled.div`
 const BodyCommu = styled.div`
   width: 490px;
   height: 140px;
-  /* border: 2px solid black; */
   margin-left: 38px;
   margin-top: 10px;
-  /* line-height: 180px; */
 `;
 const BodyCommu2 = styled.div`
   width: 490px;
   height: 358px;
-  /* border: 2px solid black; */
   margin-left: 38px;
   margin-top: 30px;
-  /* line-height: 180px; */
 `;
 const BodyCommu3 = styled.div`
   width: 490px;
   height: 82px;
-  /* border: 2px solid black; */
   margin-left: 38px;
   margin-top: 10px;
-  /* line-height: 180px; */
 `;
 const BodyCommu4 = styled.div`
   width: 490px;
   height: 188px;
-  /* border: 2px solid black; */
   margin-left: 38px;
   margin-top: 10px;
-  /* line-height: 180px; */
 `;
 const BodyCommu5 = styled.div`
   width: 490px;
   height: 88px;
-  /* border: 2px solid black; */
   margin-left: 38px;
   margin-top: 10px;
-  /* line-height: 180px; */
 `;
 const BodyLine = styled.hr`
   width: 550px;
@@ -400,7 +375,6 @@ const BodyLine = styled.hr`
 const BodyBottom = styled.div`
   width: 590px;
   height: 40px;
-  /* border: 2px solid black; */
   display: flex;
 `;
 const Views = styled.div`
@@ -410,6 +384,8 @@ const Likes = styled.div`
   margin-left: 360px;
 `;
 
+// 게시글 리스트 구성 양식
+
 const BoardMain = () => {
   const navigate = useNavigate();
   const GoBoard = () => {
@@ -418,6 +394,8 @@ const BoardMain = () => {
   const [urlparam, setUrlparam] = useState(0);
   const [boardList, setBoardList] = useState([]);
   console.log(boardList);
+
+  // 게시판 정보 가져오기
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     for (const param of searchParams) {
@@ -440,11 +418,7 @@ const BoardMain = () => {
         });
     }
   }, []);
-  // const boardInfo1 = boardList[0];
-  // const boardInfo2 = boardList[1];
-  // const boardInfo3 = boardList[2];
-  // const boardInfo4 = boardList[3];
-  // const boardInfo5 = boardList[4];
+
   return (
     <DetailDiv>
       <TopTitle>
@@ -473,7 +447,6 @@ const BoardMain = () => {
             <CreateTag>글 생성하기</CreateTag>
           </CreateDiv>
           <CommuBody1 onClick={GoBoard}>
-            {/* 닉네임 {boardInfo1 ? boardInfo1.title : ''} */}
             <BodyTop>
               <Profile src='/assets/img/profile.png'></Profile>
               <NickName>닉네임</NickName>
