@@ -1,11 +1,12 @@
 import { styled } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { onLogout, onSilentRefresh } from '../utils/user';
+import { onLogout, onLoginSuccess } from '../utils/user';
 
 // 로그인 여부
 import { useRecoilState } from 'recoil';
 import { isLoggedInAtom } from '../states/account/loginAtom';
+import axios from 'axios';
 // 로그아웃
 
 const NavbarDiv = styled.div`
@@ -112,8 +113,7 @@ const MenuBar = () => {
   };
 
   useEffect(() => {
-    console.log('로그인 여부 바뀜');
-    console.log(isLoggedIn);
+    console.log('로그인 여부 바뀜', isLoggedIn);
   }, [isLoggedIn]);
 
   return (
@@ -204,8 +204,29 @@ const SideBar = () => {
 };
 
 const Navbar = () => {
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
+
+  const onSilentRefreshInNav = () => {
+    localStorage.removeItem('isLoggedIn');
+    axios
+      .get('/jwt/refill')
+      .then((res) => {
+        console.log('silent refresh, 새로운 액세스 토큰 발급');
+        console.log('Recoil 로그인 여부: ', isLoggedIn);
+        // 리프레시 토큰이 유효 [ STATUS 200 ]
+        // 새로운 액세스 토큰 발급
+        onLoginSuccess(res);
+        setIsLoggedIn(true);
+      })
+      .catch(() => {
+        console.log('silent refresh, 리프레시 토큰이 유효하지 않습니다.');
+        // 리프레시 토큰이 유효하지 않은 경우 [ STATUS 400, 500 ]
+        // 로그인페이지로 이동
+      });
+  };
+
   useEffect(() => {
-    onSilentRefresh();
+    onSilentRefreshInNav();
   }, []);
 
   return (
