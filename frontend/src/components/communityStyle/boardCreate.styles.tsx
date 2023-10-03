@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 
+// 게시글 생성 컴포넌트
+
 const TopDiv = styled.div`
   animation: fadein 2s ease-in-out;
 
@@ -23,7 +25,6 @@ const TopTag = styled.div`
 `;
 const Tagexplain = styled.div`
   font-size: 20px;
-  /* font-weight: 580; */
   margin: 20px 0 50px 130px;
 `;
 const FlexDiv = styled.div`
@@ -45,7 +46,6 @@ const TagTitle = styled.div`
 
 const InputTag = styled.input`
   border-radius: 5px;
-  /* background-color: #555453; */
   border: 1px solid rgb(0, 0, 0, 0.3);
   box-shadow: 2px 2px rgb(0, 0, 0, 0.3);
 `;
@@ -93,6 +93,8 @@ const MidDiv = styled.div`
   margin-left: 130px;
 `;
 
+// 게시글 생성 양식
+
 const BoardCreateMain = () => {
   const navigate = useNavigate();
   const [content, setContent] = useState('');
@@ -100,6 +102,10 @@ const BoardCreateMain = () => {
   const [accept, setAcceopt] = useState(false);
   const [clickCount, setClickCount] = useState(0);
   const [userId, setUserId] = useState(0);
+  // 게시판 정보
+  const [urlparam, setUrlparam] = useState(0);
+  
+  // 글 입력정보
   const onInput1 = (e) => {
     setTitle(e.target.value);
   };
@@ -116,10 +122,9 @@ const BoardCreateMain = () => {
     }
   };
 
-  const [urlparam, setUrlparam] = useState(0);
-
+  // 게시판 정보 가져오기
+  
   useEffect(() => {
-    console.log('생성게시글');
     const searchParams = new URLSearchParams(location.search);
     for (const param of searchParams) {
       const paramName = param[0];

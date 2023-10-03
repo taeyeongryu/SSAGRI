@@ -2,6 +2,9 @@ import { styled } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+
+// 게시판 생성 컴포넌트
+
 const TopDiv = styled.div`
   animation: fadein 1s ease-in-out;
 
@@ -22,7 +25,6 @@ const TopTag = styled.div`
 `;
 const Tagexplain = styled.div`
   font-size: 20px;
-  /* font-weight: 580; */
   margin: 20px 0 50px 130px;
 `;
 const FlexDiv = styled.div`
@@ -44,7 +46,6 @@ const TagTitle = styled.div`
 
 const InputTag = styled.input`
   border-radius: 5px;
-  /* background-color: #555453; */
   border: 1px solid rgb(0, 0, 0, 0.3);
   box-shadow: 2px 2px rgb(0, 0, 0, 0.3);
 `;
@@ -93,6 +94,8 @@ const MidDiv = styled.div`
 `;
 
 const InputCheckbox = styled.input``;
+
+// 게시판 생성 양식
 
 const CommuCreate = () => {
   const [commuTitle, setCommuTitle] = useState('');
