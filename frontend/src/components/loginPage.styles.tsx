@@ -281,6 +281,7 @@ const OverlayPanel = styled.div`
 `;
 
 const KakaoLogin = styled.div`
+  cursor: pointer;
   margin-top: 20px;
   width: 100%;
   height: 42px;
@@ -843,6 +844,14 @@ const SignInAndUpComponent = () => {
       <FormContainer className='sign-up-container' id='sign-up-container'>
         <Form>
           <H1>회원가입</H1>
+          <div className='social-container'>
+            <KakaoLogin onClick={onSocialLogin}>
+              <img
+                src='/assets/img/kakao_login_medium_narrow.png'
+                alt='카카오 로그인'
+              />
+            </KakaoLogin>
+          </div>
           <FormContent>
             <Label htmlFor='profile-img'>프로필 사진</Label>
             <Avatar

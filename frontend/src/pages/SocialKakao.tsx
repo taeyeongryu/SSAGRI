@@ -70,7 +70,10 @@ const SocialKakaoPage = () => {
 
   return (
     <div style={{ marginTop: '200px' }}>
-      <span>카카오 로그인 대기중 페이지</span>
+      <div className='notice'>
+        <p>로그인 중 입니다</p>
+        <p>잠시만 기다려주세요</p>
+      </div>
     </div>
   );
 };
