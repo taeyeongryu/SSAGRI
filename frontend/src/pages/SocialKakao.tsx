@@ -1,9 +1,14 @@
 import axios from 'axios';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { onLoginSuccess } from '../utils/user';
+import { useRecoilState } from 'recoil';
+import { isLoggedInAtom } from '../states/account/loginAtom';
 
 const SocialKakaoPage = () => {
   const navigate = useNavigate();
+
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
 
   let code = new URL(window.location.href);
 
@@ -28,6 +33,11 @@ const SocialKakaoPage = () => {
       })
       .then((res) => {
         console.log(res);
+        onLoginSuccess(res);
+        setIsLoggedIn(true);
+        console.log(isLoggedIn);
+        alert('로그인 되었습니다.');
+        navigate('/');
       })
       .catch((err) => {
         console.log(err.response);

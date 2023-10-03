@@ -6,7 +6,7 @@ const JWT_EXPIRY_TIME = 24 * 3600 * 1000; // 만료 시간 (24시간)
 
 // 로그인 성공
 const onLoginSuccess = (response: any) => {
-  // console.log('로그인 성공!');
+  console.log('로그인 성공!');
   // 로컬 스토리지에 로그인 여부 저장 (새로고침 시 날아가는 것 때문)
   localStorage.setItem('isLoggedIn', 'true');
 

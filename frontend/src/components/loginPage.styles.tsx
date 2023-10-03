@@ -571,13 +571,15 @@ const SignInAndUpComponent = () => {
   // 이메일은 변경 불가, 중복된 이메일이 있는지는 백엔드에서 분별해줌
 
   useEffect(() => {
-    if (location.state) {
+    if (location.state !== null) {
       setIsKakao(true);
       const userData = location.state.userData;
 
-      signUpForm.email = userData.email;
-      signUpForm.nickname = userData.nickname;
-      setImage(userData.profileURL);
+      if (userData) {
+        signUpForm.email = userData.email;
+        signUpForm.nickname = userData.nickname;
+        setImage(userData.profileURL);
+      }
 
       setIsEmailValid(true);
       setIsPasswordValid(true);
