@@ -18,6 +18,7 @@ import axios from 'axios';
 const CommunityDiv = styled.div`
   position: relative;
   width: 100%;
+  height: 5200px;
   margin-top: 5px;
   background-color: #f4f7f9;
 `;
@@ -49,12 +50,12 @@ const RightDiv = styled.div`
 
   width: 1300px;
   height: 53vh;
-  background-color: #f4eeee;
+  background-color: rgb(244, 238, 238,0.3);
   border: 1.3px solid rgb(0, 0, 0, 0.1);
   box-shadow: 2px 2px 2px rgb(0, 0, 0, 0.4);
-  border-radius: 10px;
+  border-radius: 5px;
   animation: fadein 1s ease-in-out;
-  clip-path: polygon(2% 0%, 100% 0%, 98% 100%, 0% 100%);
+  /* clip-path: polygon(2% 0%, 100% 0%, 98% 100%, 0% 100%); */
   @keyframes fadein {
     0% {
       opacity: 0;
@@ -75,10 +76,19 @@ const FontDiv = styled.div`
   font-size: 20px;
 `;
 const CommuList = styled(FontDiv)`
+  width: 1300px;
+  height: 80px;
   font-size: 29px;
   font-weight: 600;
-  margin: 30px 0 45px 110px;
+  /* margin: 30px 0 45px 110px; */
+  line-height: 80px;
+  background-color: rgb(244, 238, 238);
 `;
+
+const CommuTopTag = styled.div`
+  margin-left: 80px;
+`
+
 const CommuTag = styled(FontDiv)`
   font-size: 25px;
   margin-left: 50px;
@@ -117,16 +127,24 @@ const ListTag = styled.div`
   border-radius: 20px;
   line-height: 40px;
   text-align: center;
-  border: 2px solid #dadcdd;
-  background-color: #e4e6e7;
+  /* border: 2px solid #dadcdd;
+  background-color: #e4e6e7; */
+  color : rgb(29, 38, 125);
   font-size: 25px;
   margin-top: 15px;
   margin-left: 15px;
   &:hover {
+    color : rgb(29, 38, 125,0.9);
     background-color: rgb(215, 224, 228); /* 호버 시 변경될 배경색 */
     cursor: pointer; /* 호버 시 커서 모양 변경 (선택 사항) */
   }
 `;
+
+const ListsDiv =styled.div`
+  /* border: 2px solid black; */
+  width: 250px;
+  margin-left: 20px;
+` 
 
 const BrTag = styled.div`
   margin-top: 220px;
@@ -141,20 +159,21 @@ const MidDiv = styled.div`
 `;
 const BottomDiv = styled.div`
   width: 100%;
-  height: 1600px;
+  height: 1900px;
   background-color: #eaecee;
   border: 2px solid #eaecee;
 `;
 const CommuPage = styled.div`
   margin-top: 20px;
   width: 300px;
-  height: 100px;
+  height: 80px;
   border: 10px;
-  border-radius: 15px;
-  background-color: #ffffff;
+  border-radius: 10px 10px 0 0;
+  background-color: rgb(200, 142, 167,0.5);
   text-align: center;
-  line-height: 100px;
+  line-height: 80px;
   font-size: 30px;
+  /* color: #CE5959; */
 `;
 
 const ImgDiv = styled.img`
@@ -166,48 +185,127 @@ const ImgDiv = styled.img`
 
 const LifeTags = styled.div`
   font-size: 40px;
-  margin: 200px 0 0 150px;
+  margin: 200px 0 100px 150px;
   width: 300px;
-  height: 100px;
+  height: 80px;
   font-weight: 600;
-  border: 2px solid #eaecee;
+
+  /* border: 2px solid #186fc7; */
+  /* background-color: #186fc7; */
+  background-color: rgb(29, 38, 125,0.9);
+  color: white;
+  border-radius: 50px;
+text-align: center;
+line-height: 80px;
 `;
+
+
+const LifeTags2 = styled(LifeTags)`
+    background-color: #cc4830;
+    font-size: 35px;
+    margin-bottom: 100px;
+`
+
 const LifeTag = styled.div`
   font-size: 25px;
   font-weight: 600;
 `;
+
+const Lifename = styled.div`
+margin: -20px 0 100px 300px;
+font-size: 23px;
+  color:#cc4830;
+  font-weight: 600;
+`
 const BottomTag = styled.div`
   font-size: 25px;
-  margin: 150px auto 0;
+  margin: 180px auto ;
   width: 600px;
-  height: 70px;
+  height: 80px;
   border: 2px solid rgb(218, 233, 247);
   border-radius: 50px;
   background-color: rgb(240, 248, 255);
   text-align: center;
-  line-height: 70px;
+  line-height: 80px;
+  &:hover {
+    color : rgb(29, 38, 125,0.9);
+    background-color:rgb(212, 231, 248); /* 호버 시 변경될 배경색 */
+    cursor: pointer; /* 호버 시 커서 모양 변경 (선택 사항) */
+  }
 `;
 
+const CommuTopDiv = styled.div`
+display: flex;
+    width: 1300px;
+    height: 70px;
+    margin: 10px auto 0;
+    line-height: 70px;
+    background-color: #dfe0e2;
+    border-top: 5px solid #1D267D;
+    border-left: 2px solid rgb(0,0,0,0.1);
+    border-right: 2px solid rgb(0,0,0,0.1);
+    border-bottom: 2px solid rgb(0,0,0,0.1);
+    `
+const CommuTopImg = styled.img`
+  width: 27px;
+  height: 27px;
+  margin: 21px 0 0 20px;
+  `
+
+const CommuTopTitle = styled.div`
+  margin-left: 60px;
+  font-size: 25px;
+  color: #1D267D;
+  `
 const CommuListDiv = styled.div`
-  margin: 10px auto;
-  width: 1200px;
+  margin: 0 auto 200px;
+  width: 1300px;
   height: 500px;
-  border-radius: 10px;
-  background-color: rgb(129, 132, 136, 0.3);
+  border-left: 2px solid rgb(0,0,0,0.1);
+  border-right: 2px solid rgb(0,0,0,0.1);
+  border-bottom: 2px solid rgb(0,0,0,0.1);
+  border-radius: 0 0px 10px 10px;
+  background-color: #f8f7f5;
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
 `;
+
+const LineDiv =styled.div`
+height: 500px;
+border: 1px solid rgb(0,0,0,0.1);
+`
 
 const Rank = styled.div`
   width: 20px;
   height: 20px;
-  background-color: red;
+  background-color: rgb(255, 0, 0,0.7);
   color: white;
   text-align: center;
   line-height: 20px;
   border-radius: 3px;
 `;
 
+const RedDiv = styled.span`
+  color: red;
+  margin-left: 15px;
+  margin-right: 15px;
+  font-size: 34px;
+`
+
+const BoardLife = styled.div`
+height: 60px;
+  font-size: 20px;
+  /* border: 2px solid black; */
+  line-height: 60px;
+  background-color: #E7CBCB;
+  color: rgb(255, 0, 0,0.6);
+`
+const BottomText = styled.div`
+  margin:450px 0 0 250px;
+font-size: 40px;
+color: #569DAA;
+font-weight: 600;
+`
 // 커뮤니티 구성 컴포넌트
 
 const CommunityMain = () => {
@@ -236,8 +334,10 @@ const CommunityMain = () => {
   type CommuItem = {
     title: string;
     boardNo: number;
+    boardLife?: string;
     click: number;
   };
+
   useEffect(() => {
     if (inView) {
       // inView 값이 true이면 화면에 보임
@@ -254,7 +354,7 @@ const CommunityMain = () => {
     CommuApi.get('/board/click-board-list')
       .then((res) => {
         setCommuRank(res.data);
-        console.log(res, '12131');
+    
       })
       .catch((err) => {
         console.log('실패1', err);
@@ -272,9 +372,9 @@ const CommunityMain = () => {
     // 남은 게시판 생명 Top3
     CommuApi.get('/board/board-life')
       .then((res) => {
-        console.log(res, '3번요청성공');
+      
         setCommuLife(res.data);
-        console.log(commuLife, '확인3');
+    
       })
       .catch((err) => {
         console.log(err);
@@ -475,7 +575,10 @@ const CommunityMain = () => {
   return (
     <CommunityDiv>
       <Div>.</Div>
-      <TopDiv>금주의 Hot 게시판</TopDiv>
+      <TopDiv>금주의 
+      <RedDiv>Hot</RedDiv>      
+        
+        게시판</TopDiv>
       <TopDiv2>활동량을 늘리고 게시판 크기를 키워보세요!</TopDiv2>
 
       <LeftDiv>
@@ -493,7 +596,11 @@ const CommunityMain = () => {
       </LeftDiv>
 
       <RightDiv>
-        <CommuList>금주의 게시판 순위</CommuList>
+        <CommuList>
+        <CommuTopTag> 
+          금주의 게시판 순위
+          </CommuTopTag> 
+          </CommuList>
         <FlexDiv>
           <Div>
             {commuRank.slice(0, 5).map((item: CommuItem, id) => (
@@ -559,35 +666,69 @@ const CommunityMain = () => {
       <BottomDiv>
         <Div>
           <LifeTags>게시판 리스트</LifeTags>
+          <CommuTopDiv>
+            <CommuTopTitle>
+            전체
+            </CommuTopTitle>
+            <CommuTopImg src='/assets/img/List.png'></CommuTopImg> 
+            </CommuTopDiv> 
           <CommuListDiv>
-            <Div>
+            <ListsDiv>
               {commuList.slice(0, 7).map((item: CommuItem, id) => (
-                <ListTag key={id}>{item.title}</ListTag>
+                <ListTag key={id}                 onClick={() =>
+                  navigate(
+                    `/community/${item.boardNo}?boardNo=${item.boardNo}`
+                  )
+                }>{item.title}</ListTag>
               ))}
-            </Div>
-            <Div>
+            </ListsDiv>
+            <LineDiv></LineDiv> 
+            <ListsDiv>
               {commuList.slice(7, 14).map((item: CommuItem, id) => (
-                <ListTag key={id}>{item.title}</ListTag>
+                <ListTag key={id}                 onClick={() =>
+                  navigate(
+                    `/community/${item.boardNo}?boardNo=${item.boardNo}`
+                  )
+                }>{item.title}</ListTag>
               ))}
-            </Div>
-            <Div>
+            </ListsDiv>
+            <ListsDiv>
               {commuList.slice(14, 21).map((item: CommuItem, id) => (
-                <ListTag key={id}>{item.title}</ListTag>
+                <ListTag key={id}                 onClick={() =>
+                  navigate(
+                    `/community/${item.boardNo}?boardNo=${item.boardNo}`
+                  )
+                }>{item.title}</ListTag>
               ))}
-            </Div>
+            </ListsDiv>
           </CommuListDiv>
         </Div>
-        <Div>
-          <LifeTags>남은 게시판 생명</LifeTags>
+        <Div style={{marginTop:'300px'}}>
+
+          <LifeTags2>남은 게시판 생명</LifeTags2>
+          <Lifename>곧 사라질 게시판들이에요. 활동이 필요해요!</Lifename>
+
+  
           <FlexDiv>
             {commuLife.map((item: CommuItem, id) => (
-              <div>
+              <div key={id}>
                 <LifeTag>Top.{id + 1}</LifeTag>
-                <CommuPage key={id}>{item.title}</CommuPage>
+                <CommuPage key={id}                 onClick={() =>
+                    navigate(
+                      `/community/${item.boardNo}?boardNo=${item.boardNo}`
+                    )
+                  }>{item.title}
+                  {item.boardLife ? 
+                <BoardLife>
+                {item.boardLife.slice(9, 22)}
+                </BoardLife>
+:null}
+                </CommuPage>
               </div>
             ))}
           </FlexDiv>
         </Div>
+        <BottomText>혹시 원하는 게시판이 없으신가요?</BottomText>  
         <BottomTag onClick={() => navigate('/communityCreate')}>
           게시판 만들러 가기
         </BottomTag>
