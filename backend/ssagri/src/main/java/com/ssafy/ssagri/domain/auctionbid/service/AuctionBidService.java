@@ -68,6 +68,9 @@ public class AuctionBidService {
                 .user(user)
                 .price(auctionBidSaveRequestDto.getAuctionBidPrice())
                 .build();
+
+        auctionProduct.setFinallyPrice(auctionBidSaveRequestDto.getAuctionBidPrice());
+
         auctionBidRepository.save(auctionBid);
 
         //이 Auction에 입찰했던 사람들한테 메시지 보내주기
