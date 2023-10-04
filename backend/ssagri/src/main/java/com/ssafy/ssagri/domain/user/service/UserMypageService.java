@@ -8,13 +8,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static com.ssafy.ssagri.util.ResponseStatusEnum.MYPAGE_PROFILE_CHANGE_IS_OK;
-import static com.ssafy.ssagri.util.ResponseStatusEnum.REGIST_IS_OK;
-import static com.ssafy.ssagri.util.exception.CustomExceptionStatus.MYPAGE_PASSWORD_FAIL;
-import static com.ssafy.ssagri.util.exception.CustomExceptionStatus.MYPAGE_PROFILE_FAIL;
+import java.time.LocalDateTime;
+
+import static com.ssafy.ssagri.util.ResponseStatusEnum.*;
+import static com.ssafy.ssagri.util.exception.CustomExceptionStatus.*;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +23,8 @@ public class UserMypageService {
 
     private final UserRegistAndModifyRepository userRegistAndModifyRepository;
     private final UtilService utilService;
+
+    @Transactional
     public ResponseEntity<?> changeProfile(String path, Long userNo) throws CustomException {
         try {
             userRegistAndModifyRepository.updateImage(path, userNo);
@@ -29,16 +32,27 @@ public class UserMypageService {
         } catch (Exception e) {
             throw new CustomException(MYPAGE_PROFILE_FAIL);
         }
-
-
     }
 
-    public ResponseEntity<?> changePassword(String password, HttpServletRequest request) throws Exception {
-        Long userNo = utilService.getUserNo(request);
-        System.out.println(password);
-        if(userRegistAndModifyRepository.UserTypeIsNormal(userNo)) throw new CustomException(MYPAGE_PASSWORD_FAIL);
-        //여기서 끊김 : if문이 동작하지 않는다.
-        System.out.println("완벽하네요");
-        return null;
+    @Transactional
+    public ResponseEntity<?> changePassword(String password, Long userNo) throws Exception {
+        if(!userRegistAndModifyRepository.UserTypeIsNormal(userNo)) throw new CustomException(MYPAGE_PASSWORD_FAIL);
+        userRegistAndModifyRepository.changeUserPassword(password, userNo); //변경
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(MYPAGE_PASSWORD_CHANGE_IS_OK.getCode(), MYPAGE_PASSWORD_CHANGE_IS_OK.getMessage()));
+    }
+
+    @Transactional
+    public ResponseEntity<?> changeNickname(String nickname, Long userNo) {
+        if (userRegistAndModifyRepository.isNicknameExists(nickname)) {
+            throw new CustomException(REGISTER_NICKNAME_IS_DUPLICATE);
+        }
+        userRegistAndModifyRepository.changeUserNickname(nickname, userNo); //변경
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(MYPAGE_NICKNAME_CHANGE_IS_OK.getCode(), MYPAGE_NICKNAME_CHANGE_IS_OK.getMessage()));
+    }
+
+    @Transactional
+    public ResponseEntity<?> deleteUser(Long userNo) {
+        userRegistAndModifyRepository.deleteUser(LocalDateTime.now(), userNo); //변경
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(MYPAGE_USER_REMOVE_IS_OK.getCode(), MYPAGE_USER_REMOVE_IS_OK.getMessage()));
     }
 }

@@ -387,29 +387,75 @@ const SignInAndUpComponent = () => {
   // 로그인여부
   // @ts-ignore
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
+  const [userId, setUserId] = useState(0);
+  console.log(userId);
+  const storedAccessToken = sessionStorage.getItem('accessToken');
+  const notifi = axios.create({
+    headers: { Authorization: storedAccessToken }
+  });
+  // 유저No 요청 api
+  const getUserNo = () => {
+    console.log(storedAccessToken);
+    console.log('토큰확인', `Bearer ${storedAccessToken}`);
+    console.log('2번@@@');
+    notifi
+      .get('/util/get-userno')
+      .then((res) => {
+        setUserId(res.data);
+        console.log('No 성공', res.data);
+      })
+      .catch((err) => {
+        console.log('No실패', err);
+      });
+  };
+
+  // 알림등록 api
+  const notification = () => {
+    console.log('3번@@@');
+
+    notifi
+      .get('/notification/subscribe/1')
+      .then((res) => {
+        console.log(res.data, '알림요청성공');
+      })
+      .catch((err) => {
+        console.log('알림 실패', err);
+      });
+  };
 
   // 로그인 요청 api
-  const onLoginHandler = (e) => {
+  const onLoginHandler = async (e) => {
     e.preventDefault();
 
     const data = {
       email: signInForm.email,
       password: signInForm.password
     };
+
     console.log('data', data);
-    axios
-      .post('/user/login/', data)
-      .then((res) => {
-        console.log('data', data);
-        onLoginSuccess(res);
-        setIsLoggedIn(true);
-        navigate('/'); // 메인페이지로 이동
-      })
-      .catch((error) => {
-        // ... 에러 처리
-        console.log('data', data);
-        console.log(error);
-      });
+
+    try {
+      const res = await axios.post('/user/login/', data);
+      console.log('data', data);
+
+      // 첫 번째 비동기 작업: 로그인 성공 시 처리
+      onLoginSuccess(res);
+      setIsLoggedIn(true);
+      console.log('1번@@@');
+      // 다음 비동기 작업: 유저No 정보 가져오기
+      await getUserNo();
+
+      // 또 다음 비동기 작업: 알림 등록
+      await notification();
+
+      // 마지막 비동기 작업: 메인페이지로 이동
+      await console.log('4번@@@');
+      await navigate('/');
+    } catch (error) {
+      // ... 에러 처리
+      console.log('data', data);
+      console.error(error);
+    }
   };
 
   // 소셜 로그인 요청 api

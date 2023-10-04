@@ -45,7 +45,9 @@ public class UsedProductController {
         "    \"saleStatus\":\"READY\"\n" +
         "} 형식으로 보내야 함")
     public ResponseEntity<Long> save(@RequestPart UsedProductSaveRequestDto usedProductSaveRequest
+
         ,@RequestPart("s3uploadMain") MultipartFile multipartFileMain)throws Exception {
+
 
         log.info("usedProductSaveRequest : {} ", usedProductSaveRequest);
 

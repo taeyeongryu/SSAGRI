@@ -42,7 +42,20 @@ public class RedisService {
         stringRedisTemplate.delete(authcode);
     }
 
+    public void savePasswordAuthCode(String authcode, String email) {
+        String key = "[PW-CHECK-CODE]"+email;
+        stringRedisTemplate.opsForValue().set(key, authcode);
+        stringRedisTemplate.expire(key, 300, TimeUnit.SECONDS);
+    }
+    public void deletePasswordAuthCode(String email){
+        stringRedisTemplate.delete("[PW-CHECK-CODE]"+email);
+    }
+
     public Boolean authcodeExists(String authcode) {
         return stringRedisTemplate.hasKey(authcode);
+    }
+
+    public String getAuthCode(String value) {
+        return stringRedisTemplate.opsForValue().get(value);
     }
 }

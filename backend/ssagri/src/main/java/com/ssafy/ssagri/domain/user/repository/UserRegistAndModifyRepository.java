@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 
 @Repository
 public interface UserRegistAndModifyRepository extends JpaRepository<User, Long> {
@@ -28,4 +29,22 @@ public interface UserRegistAndModifyRepository extends JpaRepository<User, Long>
 
     @Query("SELECT COUNT(u) > 0 FROM User u WHERE u.no = :userNo and u.userCreateType = 'NORMAL'")
     boolean UserTypeIsNormal(@Param("userNo") Long userNo);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE User u SET u.password = :password WHERE u.no = :userNo")
+    void changeUserPassword(@Param("password") String password, @Param("userNo") Long userNo);
+
+    @Query("SELECT u.no FROM User u WHERE u.email = :email")
+    Long getUserNoByEmail(@Param("email") String email);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE User u SET u.nickname = :nickname WHERE u.no = :userNo")
+    void changeUserNickname(@Param("nickname") String nickname, @Param("userNo") Long userNo);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE User u SET u.userDeleteDate = :now WHERE u.no = :userNo")
+    void deleteUser(@Param("now") LocalDateTime now, @Param("userNo") Long userNo);
 }

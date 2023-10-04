@@ -17,16 +17,19 @@ public class AuctionBidSelectResponseDto {
     private Long userNo;
     //입찰자 Nickname
     private String userNickname;
+    //입찰자 프사 링크
+    private String userProfileImageLink;
     //입찰 금액
     private int auctionBidPrice;
     //입찰 일시
     private LocalDateTime auctionBidDate;
 
     @Builder
-    public AuctionBidSelectResponseDto(Long auctionProductNo, Long userNo, String userNickname, int auctionBidPrice, LocalDateTime auctionBidDate) {
+    public AuctionBidSelectResponseDto(Long auctionProductNo, Long userNo, String userNickname, String userProfileImageLink, int auctionBidPrice, LocalDateTime auctionBidDate) {
         this.auctionProductNo = auctionProductNo;
         this.userNo = userNo;
         this.userNickname = userNickname;
+        this.userProfileImageLink = userProfileImageLink;
         this.auctionBidPrice = auctionBidPrice;
         this.auctionBidDate = auctionBidDate;
     }

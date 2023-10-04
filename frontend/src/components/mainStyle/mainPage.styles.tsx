@@ -84,7 +84,7 @@ const ScrollTagDiv = styled.div`
 const ScrollTag = (scrollposition) => {
   const scrollContainer: HTMLElement | null =
     document.querySelector('.page-container');
-    // 클릭시 해당 위치로 이동로직
+  // 클릭시 해당 위치로 이동로직
   const handleHomeClick = () => {
     if (scrollContainer) {
       scrollContainer.scrollLeft = 0;
@@ -200,7 +200,6 @@ const ScrollTag = (scrollposition) => {
 const Page = styled.div`
   display: flex;
   overflow: hidden;
-
 `;
 const PagesSection1 = styled.section`
   min-width: 130vw;
@@ -208,15 +207,12 @@ const PagesSection1 = styled.section`
   display: flex;
   align-items: center;
   font-size: 4ch;
-
 `;
 const PagesSection2 = styled.section`
-
   min-height: 100vh;
   display: flex;
   align-items: center;
   font-size: 4ch;
-
 `;
 const Pages1 = styled.div`
   display: flex;
@@ -268,7 +264,7 @@ const Pages1_Img1 = styled.img`
   border-radius: 20px;
   animation:
     moveUpDown 1s infinite alternate,
-    fadein 1.5s ease-in-out; 
+    fadein 1.5s ease-in-out;
 
   @keyframes moveUpDown {
     0% {
@@ -420,9 +416,6 @@ const Page2_img3 = styled.img`
   margin-right: 300px;
   border-radius: 10px;
 `;
-
-
-
 
 // 섹션2번 -중고거래
 
@@ -982,7 +975,6 @@ const Page2_section4 = ({ fadepages5Tag1 }) => {
         sprite: {
           texture: textImage1.src
         }
-
       }
     });
     const group2 = Bodies.circle(410, 650, 85, {
@@ -1212,7 +1204,6 @@ const Page2_section5 = ({ fadepages6Tag1, fadepages6Tag2 }) => {
   );
 };
 
-
 const BlockDiv1 = styled.div`
   position: relative;
   top: 215px;
@@ -1373,7 +1364,7 @@ const PageSlide = () => {
       } else if (s_pos <= 11000) {
         scrollposition.current = 6;
       }
-      console.log(s_pos);
+
       pct = (s_pos * 100) / s_move_max;
       // @ts-ignore
       indi_bar.style.clipPath = `
@@ -1477,7 +1468,7 @@ const PageSlide = () => {
         } else {
           setFadepages4Tag1(30);
         }
-        console.log(pages3Tag1Rect.left, '이동');
+
         // 페이지4 우측태그
         if (pages3Tag2Rect.left <= -500) {
           setFadepages4Tag2(100);
@@ -1573,7 +1564,6 @@ const PageSlide = () => {
       // 이미지 회전 동작로직
       if (scrollContainer) {
         scrollContainer.scrollLeft += evt.deltaY * 0.8;
-        // console.log(evt.deltaY, scrollContainer.scrollLeft);
         const currentScrollLeft = scrollContainer.scrollLeft;
         const deltaY = evt.deltaY;
 
