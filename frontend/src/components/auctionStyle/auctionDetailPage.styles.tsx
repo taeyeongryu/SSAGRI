@@ -1,5 +1,10 @@
+import axios from 'axios';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { styled } from 'styled-components';
+
+import IcLeft from '/assets/img/icon_left.svg';
+import IcRight from '/assets/img/icon_right.svg';
 
 const DetailDiv = styled.div`
   margin-top: 200px;
@@ -16,9 +21,52 @@ const ProductInfo = styled.div`
   margin: 10px;
 `;
 
-const ProductImage = styled.img`
-  width: 400px;
-  border-radius: 8px;
+// 상품 이미지
+const StWrapper = styled.div`
+  display: flex;
+  position: relative;
+  width: 500px;
+  height: 400px;
+  overflow: hidden;
+`;
+
+const StImageWrapper = styled.div`
+  display: flex;
+
+  & > img {
+    width: 500px;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+`;
+
+const StLeftButton = styled(IcLeft)`
+  position: absolute;
+  top: calc(100% / 2);
+  left: 10px;
+  z-index: 999;
+
+  &:hover {
+    cursor: pointer;
+    & > path {
+      fill: rgba(255, 255, 255, 0.5);
+    }
+  }
+`;
+
+const StRightButton = styled(IcRight)`
+  position: absolute;
+  top: calc(100% / 2);
+  right: 10px;
+  z-index: 999;
+
+  &:hover {
+    cursor: pointer;
+    & > path {
+      fill: rgba(255, 255, 255, 0.5);
+    }
+  }
 `;
 
 const SellerInfo = styled.div`
@@ -66,7 +114,84 @@ const InfoContent = styled.div`
 
 const AuctionDetail = () => {
   const { state } = useLocation();
-  console.log('경매 아이템 정보: ', state);
+  const auctionItem = state.item;
+  console.log('경매 아이템 정보: ', auctionItem);
+
+  const images = [];
+
+  // 가격 선택 박스
+  // 초기 가격 설정
+  const [startPrice, setStartPrice] = useState(auctionItem.downPrice); // 입찰 가능한 최소금액
+  const [selectedPrice, setSelectedPrice] = useState(auctionItem.downPrice); // 화면에서 선택된 금액
+
+  // 입찰가격 옵션
+  const priceOptions = [];
+
+  for (
+    let price = startPrice;
+    price <= startPrice + 10 * auctionItem.priceCount;
+    price += auctionItem.priceCount
+  ) {
+    // @ts-ignore
+    priceOptions.push(price);
+  }
+
+  const handlePriceChange = (e) => {
+    setSelectedPrice(parseInt(e.target.value));
+  };
+
+  // 경매 입찰
+  const auctionBid = () => {
+    const bidData = {
+      auctionBidPrice: selectedPrice,
+      auctionNo: auctionItem.no,
+      userNo: auctionItem.userNo
+    };
+    console.log('입찰 정보: ', bidData);
+
+    axios
+      .post(`/auction-bid`, bidData)
+      .then((res) => {
+        console.log(res);
+        // 입찰 가능한 최소금액을 갱신해준다.
+        setStartPrice(selectedPrice + auctionItem.priceCount);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  // 지역 포맷
+  const formatRegion = (region) => {
+    switch (region) {
+      case 'SEOUL':
+        return '서울';
+      case 'DAEJEON':
+        return '대전';
+      case 'GUMI':
+        return '구미';
+      case 'GWANGJU':
+        return '광주';
+      case 'BUG':
+        return '부울경';
+    }
+  };
+
+  // 상품 사진 불러오기
+  const loadImg = () => {
+    axios
+      .get(`/auction-product/load/${auctionItem.no}`)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    loadImg();
+  });
 
   return (
     <DetailDiv>
@@ -74,10 +199,15 @@ const AuctionDetail = () => {
         <InfoTitle>상품 정보</InfoTitle>
         <InfoContentBox>
           <InfoContent className='image'>
-            <ProductImage
-              src='/assets/img/auctionsample.PNG'
-              alt='상품 이미지'
-            ></ProductImage>
+            <StWrapper>
+              <StLeftButton />
+              <StRightButton />
+              <StImageWrapper>
+                {images.map(({ url, id }) => (
+                  <img src={url} alt={id} key={id} />
+                ))}
+              </StImageWrapper>
+            </StWrapper>
           </InfoContent>
 
           <InfoContent className='info'>
@@ -88,36 +218,36 @@ const AuctionDetail = () => {
               <SellerInfo>
                 <img
                   style={{ width: '30px' }}
-                  src='/assets/img/profile.png'
+                  src={auctionItem.profile}
                   alt='판매자 프로필 사진'
                 />
-                <div>닉네임</div>
+                <div> {auctionItem.userNickName} </div>
               </SellerInfo>
               <SellerInfo>
                 <img src='/assets/img/location.png' alt='위치 아이콘' />
-                <div>지역</div>
+                <div>{formatRegion(auctionItem.region)}</div>
               </SellerInfo>
             </div>
 
-            <div>제우스랩 Z16P PRO MAX</div>
+            <div> {state.item.name} </div>
 
             <div style={{ backgroundColor: 'grey', color: 'white' }}>
-              상품설명 ~~~~~~~~~~~~~~~
+              {state.item.comment}
             </div>
           </InfoContent>
 
           <InfoContent className='price-info'>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <div>시작가</div>
-              <div>150000</div>
+              <div>{state.item.downPrice}</div>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <div>정가</div>
-              <div>210000</div>
+              <div>{state.item.originPrice}</div>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <div>현재가</div>
-              <div>180000</div>
+              <div>{state.item.finallyPrice}</div>
             </div>
           </InfoContent>
 
@@ -129,8 +259,29 @@ const AuctionDetail = () => {
               <div>남은 시간</div>
               <div>24:00:00</div>
             </div>
-            <div style={{ border: '1px solid black' }}>190000</div>
-            <div style={{ backgroundColor: 'black', color: 'white' }}>입찰</div>
+            {/* 입찰가격 선택 */}
+            <div style={{ border: '1px solid black' }}>
+              <div>
+                <select
+                  id='priceSelect'
+                  onChange={handlePriceChange}
+                  value={selectedPrice}
+                >
+                  {priceOptions.map((price, index) => (
+                    <option key={index} value={price}>
+                      {price}원
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            {/* 입찰 버튼 */}
+            <div
+              style={{ backgroundColor: 'black', color: 'white' }}
+              onClick={auctionBid}
+            >
+              입찰
+            </div>
           </InfoContent>
         </InfoContentBox>
       </ProductInfo>

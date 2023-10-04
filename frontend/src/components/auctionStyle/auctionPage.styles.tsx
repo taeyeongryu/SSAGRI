@@ -389,6 +389,7 @@ const AuctionPage = () => {
   useEffect(() => {
     if (isLoggedIn) {
       GetAuctionItemList();
+    } else {
     }
   }, [isLoggedIn]);
 
