@@ -13,10 +13,10 @@ import Matter, {
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+// 커뮤니티 메인페이지 구성
+
 const CommunityDiv = styled.div`
   width: 100%;
-  /* height: 100%; */
-
   background-color: #f4f7f9;
 `;
 
@@ -72,7 +72,6 @@ const MidTag = styled.div`
   margin: 160px 0 0 200px;
   font-weight: 600;
   color: #4786fa;
-  /* opacity: 0; */
   transition: opacity 1s ease;
 
   &.visible {
@@ -91,7 +90,6 @@ const ListDiv = styled.div`
   margin: 20px auto;
   width: 250px;
   height: 50px;
-  /* border: 2px solid red; */
 `;
 
 const ListTag = styled.div`
@@ -115,13 +113,11 @@ const BrTag = styled.div`
   margin-top: 220px;
   width: 100%;
   height: 1px;
-  /* border: 1px solid rgb(0, 0, 0, 0.2); */
 `;
 
 const MidDiv = styled.div`
   width: 100%;
   height: 600px;
-  /* background-color: #DED1D1; */
 `;
 const BottomDiv = styled.div`
   width: 100%;
@@ -151,7 +147,6 @@ const ImgDiv = styled.img`
 const LifeTags = styled.div`
   font-size: 40px;
   margin: 200px 0 0 150px;
-  /* margin-top: 100px; */
   width: 300px;
   height: 100px;
   font-weight: 600;
@@ -159,14 +154,11 @@ const LifeTags = styled.div`
 `;
 const LifeTag = styled.div`
   font-size: 25px;
-
   font-weight: 600;
-  /* border: 2px solid black; */
 `;
 const BottomTag = styled.div`
   font-size: 25px;
   margin: 150px auto 0;
-  /* margin-top: 100px; */
   width: 600px;
   height: 70px;
   border: 2px solid rgb(218, 233, 247);
@@ -180,12 +172,13 @@ const CommuListDiv = styled.div`
   margin: 10px auto;
   width: 1200px;
   height: 500px;
-  /* border: 2px solid black; */
   border-radius: 10px;
   background-color: rgb(129, 132, 136, 0.3);
   display: flex;
   justify-content: space-between;
 `;
+
+// 커뮤니티 구성 컴포넌트
 
 const CommunityMain = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -279,7 +272,6 @@ const CommunityMain = () => {
 
       // 텍스트 추가
       ctx.fillStyle = 'white'; // 텍스트 색상
-      // ctx.font = '24px Arial';
       ctx.font = `${fontsize} Arial`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
@@ -293,8 +285,6 @@ const CommunityMain = () => {
     };
 
     // 이미지 생성
-    // const textImage1 = textToImage('자유 게시판', 320, 320, '30px', '#8ECDDD');
-    // const textImage2 = textToImage('수명 게시판', 85, 85, '14px', '#E4F1FF');
     const textImage1 = new Image();
     textImage1.src =
       textToImage('자유 게시판', 320, 320, '30px', '#8ECDDD')?.src || '';
