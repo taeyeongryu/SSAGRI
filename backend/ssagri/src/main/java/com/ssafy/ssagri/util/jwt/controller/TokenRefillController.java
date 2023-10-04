@@ -7,6 +7,7 @@ import com.ssafy.ssagri.util.jwt.service.TokenRefillService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,7 @@ import static com.ssafy.ssagri.util.ResponseStatusEnum.REGIST_NICKNAME_IS_OK;
 @RequiredArgsConstructor
 @RequestMapping("/jwt")
 @Api(tags = "[JWT]만료된 토큰 발생 시 재요청 컨트롤러")
+@Slf4j
 public class TokenRefillController {
 
     private final TokenRefillService tokenRefillService;
@@ -45,7 +47,7 @@ public class TokenRefillController {
             " ")
     public ResponseEntity<ResponseDTO> refillRefreshToken(HttpServletRequest request, HttpServletResponse response) throws CustomException, IOException {
         String token = tokenRefillService.checkCookie(request); //1. 리프레시 쿠키 유효한지 확인
-        System.out.println("리프레시 쿠키 : " + token);
+        log.info("[TokenRefillController] 리프레시 쿠키 유효성 검증 완료 : {}", token);
         Long userNo = JwtUtil.getUserNo(token);
         tokenRefillService.checkRefreshTokenIsVaild(token, userNo); //2. 쿠키에서 꺼낸 값 유효성 확인, 이후 Redis에 존재 여부 확인
         return tokenRefillService.setHeaderAccessTokens(token, userNo); //3. 새로운 토큰 생성하여 전송

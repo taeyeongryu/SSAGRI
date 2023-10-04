@@ -24,7 +24,9 @@ public enum ResponseStatusEnum {
     MAIL_SEND_IS_OK(1400, "이메일 전송과 인증번호 등록이 성공적으로 이루어졌습니다."),
     //Mypage
     MYPAGE_PROFILE_CHANGE_IS_OK(1500, "프로필 이미지 변경 성공"),
-
+    MYPAGE_PASSWORD_CHANGE_IS_OK(1501, "비밀번호 변경 성공"),
+    MYPAGE_NICKNAME_CHANGE_IS_OK(1502, "닉네임 변경 성공"),
+    MYPAGE_USER_REMOVE_IS_OK(1503, "회원 삭제 성공"),
         ;
     private final int code;
     private final String message;
