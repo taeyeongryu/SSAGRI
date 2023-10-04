@@ -45,6 +45,7 @@ public class AuctionBid extends BaseTimeEntity {
         return AuctionBidSelectResponseDto.builder()
                 .userNo(this.user.getNo())
                 .userNickname(this.user.getNickname())
+                .userProfileImageLink(this.user.getProfile())
                 .auctionProductNo(this.auctionProduct.getNo())
                 .auctionBidPrice(this.price)
                 .auctionBidDate(this.getCreateDate())
