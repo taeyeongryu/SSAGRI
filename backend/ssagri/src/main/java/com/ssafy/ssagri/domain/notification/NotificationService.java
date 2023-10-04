@@ -50,7 +50,7 @@ public class NotificationService {
         sseEmitter.onCompletion(() -> sseEmitterMap.remove(userNo));
 
         sseEmitterMap.put(userNo, sseEmitter);
-
+        System.out.println("sseEmitterMap.size() = " + sseEmitterMap.size());
         return sseEmitter;
     }
 
@@ -93,7 +93,7 @@ public class NotificationService {
     public void sendMessageTest(){
         for (Long userNo : sseEmitterMap.keySet()) {
             try {
-                sseEmitterMap.get(userNo).send(SseEmitter.event().name("new bid").data("test"));
+                sseEmitterMap.get(userNo).send(SseEmitter.event().name("new bid").data("test12345"));
             } catch (IOException e) {
                 sseEmitterMap.remove(userNo);
                 throw new CustomException(CustomExceptionStatus.SSEEMITTER_DOES_NOT_EXIST);
