@@ -50,7 +50,9 @@ public class UsedProductService {
      * */
     @Transactional
     public Long saveUsedProduct(UsedProductSaveRequestDto usedProductSaveRequest,
+
         MultipartFile MultipartFileMain )throws Exception{
+
         //유저 조회
         Optional<User> findUser = userRegistRepository.findById(usedProductSaveRequest.getUserNo());
 
@@ -75,10 +77,12 @@ public class UsedProductService {
 
         //대표 사진 Entity생성
         UsedProductPhoto usedProductPhotoMain = UsedProductPhoto.builder()
+
             .usedProduct(usedProductEntity)
             .usedProductPhotoLink(link)
             .usedProductPhotoType(PhotoType.MAIN)
             .build();
+
 
         //대표 사진 DB 저장
         usedProductPhotoRepository.save(usedProductPhotoMain);
@@ -170,8 +174,11 @@ public class UsedProductService {
         }else{
             throw new CustomException(CustomExceptionStatus.USED_PRODUCT_DOES_NOT_EXIST);
         }
+
         UsedProductDetailResponseDto detailResponse = usedProduct.toDetailResponse(usedProduct.getUser());
+
         UsedProductPhotoResponseDto usedProductPhotoResponseDtoList = usedProductPhotoRepository.selectMainPhotoByProductNo(usedProductNo);
+
         detailResponse.setUsedProductPhotoResponseDto(usedProductPhotoResponseDtoList);
         boolean isLike = usedProductLikeRepository.checkLikeByUserNo(userNo,usedProductNo);
         detailResponse.setLike(isLike);

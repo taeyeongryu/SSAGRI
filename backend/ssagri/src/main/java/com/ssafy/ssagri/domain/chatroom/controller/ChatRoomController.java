@@ -58,7 +58,8 @@ public class ChatRoomController {
             ,description = "userANo, userBNo를 이용해서 채팅방 입장하는 메서드 채팅방 존재하지 않으면 생성되고, 존재하면 기존에 있던 메시지까지 반환")
     public ResponseEntity<ChatRoomDetailResponseDto> selectChatRoomDetail(@PathVariable(name = "userANo") Long userANo, @PathVariable(name = "userBNo") Long userBNo, Pageable pageable){
         ChatRoomDetailResponseDto chatRoomDetailResponseDto = chatRoomService.selectChatRoomDetailByUsers(userANo, userBNo, pageable);
-        return ResponseEntity.ok(chatRoomDetailResponseDto);
+        return ResponseEntity.status(HttpStatus.OK).body(chatRoomDetailResponseDto);
+
 
     }
 
