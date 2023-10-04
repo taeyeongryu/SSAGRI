@@ -92,6 +92,14 @@ public class AuctionProductController {
 
     }
 
+    // 경매 상품 상세 페이지
+    @ApiOperation("경매 상품 상세 페이지")
+    @GetMapping("/detail")
+    public AuctionProductAllDTO auctionDetail(@RequestParam("auctionNo") Long auctionNo){
+        return auctionProductService.auctionDetail(auctionNo);
+
+    }
+
 
 
 
