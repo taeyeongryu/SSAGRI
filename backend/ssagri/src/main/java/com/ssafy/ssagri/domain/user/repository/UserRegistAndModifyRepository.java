@@ -34,6 +34,10 @@ public interface UserRegistAndModifyRepository extends JpaRepository<User, Long>
     @Transactional
     @Query("UPDATE User u SET u.password = :password WHERE u.no = :userNo")
     void changeUserPassword(@Param("password") String password, @Param("userNo") Long userNo);
+
+    @Query("SELECT u.no FROM User u WHERE u.email = :email")
+    Long getUserNoByEmail(@Param("email") String email);
+
     @Modifying
     @Transactional
     @Query("UPDATE User u SET u.nickname = :nickname WHERE u.no = :userNo")

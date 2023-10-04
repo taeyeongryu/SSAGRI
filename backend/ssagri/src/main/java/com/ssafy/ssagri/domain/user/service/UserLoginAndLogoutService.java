@@ -39,6 +39,7 @@ public class UserLoginAndLogoutService {
     public ResponseEntity<ResponseDTO> loginUser(UserLoginDTO userLoginDTO, HttpServletResponse response) throws CustomException {
         //1. 유저 DB 존재 체크
         ResponseEntity<ResponseDTO> responseResult = checkAccount(userLoginDTO);
+        if(userLoginAndLogoutRepository.isAccountDeleted(userLoginDTO.getEmail())) throw new CustomException(LOGIN_ACCOUT_IS_REMOVED);
         Long userNo = userLoginAndLogoutRepository.getUserNoUsingEmail(userLoginDTO.getEmail()); //userNo 찾기
 
         //2. 유저가 존재한다면 Access token과 Refresh token 발급, Refresh의 경우 Cookie로 설정

@@ -17,15 +17,17 @@ public enum CustomExceptionStatus {
     OAUTH_USERINFO_PARSING_ERR(-900,"액세스 토큰 요청 후 유저 값 파싱 도중 문제가 발생했습니다."),
     OAUTH_KAKAO_NOT_VALID_EMAIL(-901, "해당 계정이 존재하지 않습니다."),
 
-    //Register = 1xxx
+    //Register and Find = 1xxx
     REGISTER_NICKNAME_IS_DUPLICATE(-1000, "유저 닉네임이 중복됩니다."),
     REGISTER_EMAIL_IS_DUPLICATE(-1001, "이메일이 중복됩니다."),
+    CHANGE_PASSWORD_FAIL(-1002, "비밀번호 변경에 실패했습니다."),
+
     //LOGIN = 11xx
     LOGIN_HAVE_NO_ACCOUT(-1101, "일치하는 계정이 없습니다."),
     LOGIN_GET_TOKEN_ERROR(-1102, "토큰 발급 과정에서 문제가 발생했습니다."),
     LOGIN_SAVE_TOKEN_ERROR(-1103, "토큰을 Redis로 저장하는 과정에서 문제가 발생했습니다."),
     USER_DOES_NOT_EXSIST(-1104,"존재하지 않는 유저 입니다."),
-
+    LOGIN_ACCOUT_IS_REMOVED(1101, "탈퇴한 회원입니다. (로그인 불가)"),
     //LOGOUT = 12xx
     LOGOUT_TOKEN_ERR(-1201, "토큰 헤더가 없거나 유효하지 않습니다."),
 
@@ -46,7 +48,8 @@ public enum CustomExceptionStatus {
     MAIL_AUTH_SAVE_ERR(-1501, "인증번호를 Redis에 저장하는 중 에러가 발생했습니다."),
 
     //Redis = 16xx
-    REDIS_GET_VALUE_FAIL(-1600, "redis 키값으로 value를 찾아오는 것을 실패했습니다. (입력 값 다름)"),
+    REDIS_GET_VALUE_FAIL(-1600, "redis 해당 키가 존재하지 않습니다"),
+    REDIS_GET_MATCH_FAIL(-1601, "redis 키값은 존재하나, 내용물이 다릅니다."),
 
     //file = 17xx
     FILE_UPLOAD_FAIL(-1700, "파일 업로드 과정에서 문제가 발생했습니다."),

@@ -69,8 +69,8 @@ public class EmailService {
         return key.toString();
     }
 
-    public String sendSimpleMessageChange(String to)throws Exception {
-        String authCode =  createKey(); // 인증코드 생성
+    public String sendSimpleMessageChange(String to, String authCode)throws Exception {
+//        String authCode =  createKey(); // 인증코드 생성
         MimeMessage message = createMessageChange(to, authCode); // 메시지 생성
         try{ // 예외처리
             javaMailSender.send(message);
