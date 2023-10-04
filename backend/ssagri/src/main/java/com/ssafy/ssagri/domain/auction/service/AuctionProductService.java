@@ -16,6 +16,7 @@ import com.ssafy.ssagri.domain.auction.dto.AuctionProductAllDTO;
 import com.ssafy.ssagri.domain.auction.dto.AuctionProductCreateDTO;
 import com.ssafy.ssagri.entity.auction.AuctionProduct;
 import com.ssafy.ssagri.entity.auction.AuctionProductImage;
+import com.ssafy.ssagri.entity.auction.AuctionProductType;
 import com.ssafy.ssagri.entity.auction.AuctionStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -201,6 +202,94 @@ public class AuctionProductService {
        return auctionProductAllDTO;
     }
 
+
+    // 타입에 대한 경매 상품 리스트 출력
+    public List<AuctionProductAllDTO> auctionTypeList(AuctionProductType type) {
+
+
+        List<AuctionProduct> products = auctionRepository.findAllByType(type);
+
+
+        List<AuctionProductAllDTO> result = new ArrayList<>();
+
+
+        for(int i=0;i<products.size();i++){
+
+            String startDate = products.get(i).getStartDate().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"));
+
+            String endDate = products.get(i).getEndDate().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"));
+
+            AuctionProductAllDTO auctionProductAllDTO = AuctionProductAllDTO.builder()
+                    .no(products.get(i).getNo())
+                    .userNickName(products.get(i).getUser().getNickname())
+                    .userNo(products.get(i).getUser().getNo())
+                    .number(products.get(i).getUser().getNumber())
+                    .region(products.get(i).getUser().getRegion())
+                    .profile(products.get(i).getUser().getProfile())
+                    .name(products.get(i).getName())
+                    .upPrice(products.get(i).getUpPrice())
+                    .downPrice(products.get(i).getDownPrice())
+                    .priceCount(products.get(i).getPriceCount())
+                    .startDate(startDate)
+                    .endDate(endDate)
+                    .comment(products.get(i).getComment())
+//                     .auctionStatus(products.get(i).getAuctionStatus())
+                    .finallyPrice(products.get(i).getFinallyPrice())
+                    .createDate(products.get(i).getCreateDate())
+                    .type(products.get(i).getType())
+                    .originPrice(products.get(i).getOriginPrice())
+                    .build();
+
+            result.add(auctionProductAllDTO);
+
+        }
+
+        return result;
+    }
+
+    // 검색으로 경매 상품 검색
+    public List<AuctionProductAllDTO> auctionSearchList(String searchWord) {
+
+
+        List<AuctionProduct> products = auctionRepository.findAllByName(searchWord);
+
+
+        List<AuctionProductAllDTO> result = new ArrayList<>();
+
+
+        for(int i=0;i<products.size();i++){
+
+            String startDate = products.get(i).getStartDate().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"));
+
+            String endDate = products.get(i).getEndDate().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"));
+
+            AuctionProductAllDTO auctionProductAllDTO = AuctionProductAllDTO.builder()
+                    .no(products.get(i).getNo())
+                    .userNickName(products.get(i).getUser().getNickname())
+                    .userNo(products.get(i).getUser().getNo())
+                    .number(products.get(i).getUser().getNumber())
+                    .region(products.get(i).getUser().getRegion())
+                    .profile(products.get(i).getUser().getProfile())
+                    .name(products.get(i).getName())
+                    .upPrice(products.get(i).getUpPrice())
+                    .downPrice(products.get(i).getDownPrice())
+                    .priceCount(products.get(i).getPriceCount())
+                    .startDate(startDate)
+                    .endDate(endDate)
+                    .comment(products.get(i).getComment())
+//                     .auctionStatus(products.get(i).getAuctionStatus())
+                    .finallyPrice(products.get(i).getFinallyPrice())
+                    .createDate(products.get(i).getCreateDate())
+                    .type(products.get(i).getType())
+                    .originPrice(products.get(i).getOriginPrice())
+                    .build();
+
+            result.add(auctionProductAllDTO);
+
+        }
+
+        return result;
+    }
 
 
 

@@ -6,6 +6,7 @@ import com.ssafy.ssagri.domain.auction.dto.AuctionProductAllDTO;
 import com.ssafy.ssagri.domain.auction.dto.AuctionProductCreateDTO;
 
 import com.ssafy.ssagri.dto.etc.CustomResponseBody;
+import com.ssafy.ssagri.entity.auction.AuctionProductType;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -73,6 +74,22 @@ public class AuctionProductController {
             return ResponseEntity.ok().body(responseBody);
         }
         return ResponseEntity.ok().body(responseBody);
+    }
+
+    // 옥션 상품 카테고리별 검색
+    @ApiOperation("경매 상품 카테고리별 검색")
+    @GetMapping("/type")
+    public List<AuctionProductAllDTO> typeList(@RequestParam("auctionType")AuctionProductType type){
+        return auctionProductService.auctionTypeList(type);
+
+    }
+
+    // 검색으로 상품 검색
+    @ApiOperation("검색으로 상품 검색")
+    @GetMapping("/search")
+    public List<AuctionProductAllDTO> searchList(@RequestParam("auctionSearch") String searchWord){
+        return auctionProductService.auctionSearchList(searchWord);
+
     }
 
 
