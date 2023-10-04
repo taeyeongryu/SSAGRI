@@ -97,7 +97,7 @@ public class AuctionBidService {
     }
 
     public AuctionBidSelectResponseDto changeResponseDto(AuctionBidSocketRequestDto auctionBidSocketRequestDto) {
-        AuctionBid auctionBid = auctionBidRepository.findById(auctionBidSocketRequestDto.getAuctionBidNo())
+        AuctiogitnBid auctionBid = auctionBidRepository.findById(auctionBidSocketRequestDto.getAuctionBidNo())
                 .orElseThrow(()->new CustomException(CustomExceptionStatus.AUCTION_BID_DOES_NOT_EXIST));
         return auctionBid.toResponse();
     }
