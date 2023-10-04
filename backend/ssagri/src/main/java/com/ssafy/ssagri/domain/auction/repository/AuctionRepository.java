@@ -19,4 +19,6 @@ List<AuctionProduct> findAllByType(AuctionProductType type);
 List<AuctionProduct> findAllByName(@Param("keyword") String keyword);
 
 
+
+
 }
