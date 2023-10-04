@@ -25,7 +25,7 @@ public class UsedProductDetailResponseDto {
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
 
-    private List<UsedProductPhotoResponseDto> usedProductPhotoResponseDto;
+    private UsedProductPhotoResponseDto usedProductPhotoResponseDto;
 
     private int likeCount;
     private boolean isLike;
@@ -37,7 +37,7 @@ public class UsedProductDetailResponseDto {
     private int userTemper;
 
     @Builder
-    public UsedProductDetailResponseDto(Long productNo, ProductCategory productCategory, String title, String content, int price, SaleStatus saleStatus, Region region, LocalDateTime createDate, LocalDateTime updateDate, List<UsedProductPhotoResponseDto> usedProductPhotoResponseDto, int likeCount, boolean isLike, Long userNo, String userNickname, String userProfile, int userTemper) {
+    public UsedProductDetailResponseDto(Long productNo, ProductCategory productCategory, String title, String content, int price, SaleStatus saleStatus, Region region, LocalDateTime createDate, LocalDateTime updateDate, UsedProductPhotoResponseDto usedProductPhotoResponseDto, int likeCount, boolean isLike, Long userNo, String userNickname, String userProfile, int userTemper) {
         this.productNo = productNo;
         this.productCategory = productCategory;
         this.title = title;

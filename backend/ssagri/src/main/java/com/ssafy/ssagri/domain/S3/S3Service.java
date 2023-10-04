@@ -10,6 +10,7 @@ import com.amazonaws.services.s3.model.PutObjectResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.lingala.zip4j.tasks.ExtractAllFilesTask;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,7 @@ public class S3Service {
     @Value("${s3.learnershigh.url}")
     private String URL;
 
+    @Qualifier("s3")
     private final AmazonS3 amazonS3;
 
     // 경매상품 추가시 사진을 DB와 S3에 모두 저장

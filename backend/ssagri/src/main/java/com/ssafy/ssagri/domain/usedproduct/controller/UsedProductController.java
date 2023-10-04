@@ -36,20 +36,20 @@ public class UsedProductController {
 
     @PostMapping("")
     @Operation(summary = "for-mdata로 사진, UsedProductSaveRequest 넘겨줘야 함"
-            , description = "{\n" +
-            "    \"userNo\":1,\n" +
-            "    \"productCategory\":\"READY\",\n" +
-            "    \"title\":\"title123\",\n" +
-            "    \"content\":\"content\",\n" +
-            "    \"price\":1234,\n" +
-            "    \"saleStatus\":\"READY\"\n" +
-            "} 형식으로 보내야 함")
+        , description = "{\n" +
+        "    \"userNo\":1,\n" +
+        "    \"productCategory\":\"READY\",\n" +
+        "    \"title\":\"title123\",\n" +
+        "    \"content\":\"content\",\n" +
+        "    \"price\":1234,\n" +
+        "    \"saleStatus\":\"READY\"\n" +
+        "} 형식으로 보내야 함")
     public ResponseEntity<Long> save(@RequestPart UsedProductSaveRequestDto usedProductSaveRequest
-            ,@RequestPart("s3uploadMain") MultipartFile multipartFileMain
-            ,@RequestPart(name = "s3uploadSub", required = false) List<MultipartFile> multipartFileSubList)throws Exception {
-        System.out.println("usedProductSaveRequest = " + usedProductSaveRequest);
+        ,@RequestPart("s3uploadMain") MultipartFile multipartFileMain)throws Exception {
 
-        Long id = usedProductService.saveUsedProduct(usedProductSaveRequest,multipartFileMain,multipartFileSubList);
+        log.info("usedProductSaveRequest : {} ", usedProductSaveRequest);
+
+        Long id = usedProductService.saveUsedProduct(usedProductSaveRequest,multipartFileMain);
         return ResponseEntity.status(HttpStatus.OK).body(id);
     }
 

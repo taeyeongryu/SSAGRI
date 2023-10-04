@@ -1,11 +1,18 @@
+import { createRequire } from 'node:module';
+const require = createRequire(import.meta.url);
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 // @ts-ignore
 import nodePolyfills from 'vite-plugin-node-stdlib-browser';
+import ckeditor5 from '@ckeditor/vite-plugin-ckeditor5';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), nodePolyfills()],
+  plugins: [
+    react(),
+    nodePolyfills(),
+    ckeditor5({ theme: require.resolve('@ckeditor/ckeditor5-theme-lark') })
+  ],
   server: {
     hmr: {
       overlay: false

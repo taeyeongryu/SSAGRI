@@ -247,6 +247,35 @@ const SearchRegion = styled.div`
   }
 `;
 
+// 물품 등록
+const ProductCreate = styled.div`
+  width: 100px;
+  height: 40px;
+  margin-right: 25px;
+  border: 1px solid #4786fa;
+  border-radius: 10px;
+  text-align: center;
+  line-height: 40px;
+  font-size: 18px;
+  font-weight: bold;
+  background-color: #fff;
+  color: #4786fa;
+  box-shadow: 2px 2px 2px 1px #929292;
+  &:hover {
+    box-shadow: 2px 2px 3px 3px #757575;
+    color: tomato;
+  }
+  animation: fadein 5s ease-in-out;
+
+  @keyframes fadein {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+`;
 // ------ 검색 입력 01 --------
 const Search01 = styled.div`
   width: 500px;
@@ -266,6 +295,15 @@ const SearchInput01 = styled.input`
   border: 0;
   margin-left: 16px;
   font-size: 16px;
+`;
+
+// ------ 검색 입력 00 --------
+const Search00 = styled(Search01)`
+  /* width: 400px;
+  margin-right: 0px; */
+`;
+const SearchInput00 = styled(SearchInput01)`
+  /* width: 340px; */
 `;
 
 // ------ 검색 입력 02 --------
@@ -305,13 +343,15 @@ const RecentOrPopularProductDiv = styled.div`
   }
 `;
 const RecentOrPopularProductTitle = styled.div`
-  width: 200px;
+  width: 850px;
   height: 50px;
   margin-bottom: 10px;
   font-size: 24px;
   font-weight: bold;
   text-align: center;
   line-height: 50px;
+  display: flex;
+  justify-content: space-between;
 `;
 
 // -------------------- Product v01 -------------------------
@@ -450,8 +490,8 @@ const SearchDiv01 = (regionText: any) => {
   };
 
   return (
-    <Search01>
-      <SearchInput01
+    <Search00>
+      <SearchInput00
         type='text'
         placeholder='원하는 제품을 검색해 보세요!'
         onChange={(e) => setSearch(e.target.value)}
@@ -460,11 +500,11 @@ const SearchDiv01 = (regionText: any) => {
             goTradeList(search);
           }
         }}
-      ></SearchInput01>
+      ></SearchInput00>
       <SearchButton onClick={() => goTradeList(search)}>
         <SearchImg src='/assets/img/searchGlass-4786fa.png'></SearchImg>
       </SearchButton>
-    </Search01>
+    </Search00>
   );
 };
 const SearchDiv02 = ({ regionText, category, search, setSearch }) => {
@@ -771,6 +811,10 @@ const TradeMainProduct = (region) => {
     // console.log('change Page to List', regionText);
     navigate(`/tradeList?region=${regionText}`);
   };
+  const goProductCreate = () => {
+    // console.log('change Page to List', regionText);
+    navigate(`/tradeCreate`);
+  };
 
   const userNo = localStorage.getItem('userNo');
 
@@ -811,6 +855,7 @@ const TradeMainProduct = (region) => {
       <RecentOrPopularProductDiv>
         <RecentOrPopularProductTitle>
           방금 등록된 물품
+          <ProductCreate onClick={goProductCreate}>물품 등록</ProductCreate>
         </RecentOrPopularProductTitle>
         <ProductList01>
           {recentData.map((item: ProductItemType, id) => (
