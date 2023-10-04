@@ -23,7 +23,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class NotificationService {
     // userNo, SseEmitter 이렇게 두개가 들어간다.
