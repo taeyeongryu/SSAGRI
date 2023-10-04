@@ -196,7 +196,7 @@ const AuctionDetail = () => {
       });
   };
 
-  const [bidList, setBidList] = useState([]);
+  const [bidList, setBidList] = useState<any[]>([]);
 
   // 경매 입찰 내역 조회
   const getBidList = () => {
