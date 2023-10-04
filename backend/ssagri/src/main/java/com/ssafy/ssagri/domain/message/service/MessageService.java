@@ -28,21 +28,32 @@ public class MessageService {
 
     public Page<MessageResponseDto> selectMessageResponse(Long roomNo, Pageable pageable){
         log.info("roomNo : {}",roomNo);
+
+        //메시지 페이징으로 가져오기
         Page<Message> messages = messageRepository.findMessagesByRoomNo(roomNo, pageable);
+
+        //메시지 content 저장
+        List<Message> messageList = messages.getContent();
+
+        //메시지 response list 선언
         List<MessageResponseDto> messageResponseList = new ArrayList<>();
-        for (Message message : messages) {
+
+        //메시지Entity 메시지ResponseDto로 변환
+        for (Message message : messageList) {
             messageResponseList.add(message.toResponse());
         }
+
+        //반환
         return new PageImpl<>(messageResponseList, messages.getPageable(), messages.getTotalElements());
     }
 
 
 
     /*
-    * MessageRequest를 받아서
-    * Entity로 바꾸고 DB 저장
-    * MessageResponse로 바꿔서 client로 반환
-    * */
+     * MessageRequest를 받아서
+     * Entity로 바꾸고 DB 저장
+     * MessageResponse로 바꿔서 client로 반환
+     * */
     @Transactional
     public MessageResponseDto saveMessage(MessageRequestDto messageRequest){
         log.info("messageRequest = {}", messageRequest);

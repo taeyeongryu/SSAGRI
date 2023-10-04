@@ -231,6 +231,7 @@ const ChatOtherNick = styled.div`
   justify-content: start;
   align-items: center;
 `;
+// @ts-ignore
 const SellorProduct = styled.button`
   background: none;
   border: none;
@@ -240,6 +241,7 @@ const SellorProduct = styled.button`
     cursor: pointer;
   }
 `;
+// @ts-ignore
 const SellorProductImg = styled.img`
   width: 40px;
   height: 40px;
@@ -481,6 +483,17 @@ const ChattingDiv = () => {
 
   // 대화 목록 렌더링
   useEffect(() => {
+    // 채팅방이 없으면 생성하기
+    axios
+      .get(`chatroom/${userNo}/${sellorNo}?page=0&size=100`)
+      // @ts-ignore
+      .then((res) => {
+        // console.log('chatroom/A/B : ', res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
     axios
       .get(`/chatroom/nickname/${userNo}`)
       .then((res) => {
@@ -497,12 +510,15 @@ const ChattingDiv = () => {
         // console.log('chatroom list : ', res.data);
         setMyChatList(res.data);
         setSelectChat(res.data[0]);
-        console.log('selectChat', selectChat);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
+
+  // useEffect(() => {
+  //   console.log('selectChat', selectChat);
+  // }, [selectChat]);
 
   // 채팅목록 DIV
   const chatListRendering = () => {
@@ -598,7 +614,7 @@ const ChattingDiv = () => {
 
 // 대화 주고받는 컴포넌트
 const DoChatting = ({ selectChat }) => {
-  // console.log(selectChat);
+  // console.log('DoChatting - selectChat : ', selectChat);
   if (!selectChat) {
     return null; // 혹은 로딩 중인 UI 등 다른 처리 가능
   }
@@ -629,14 +645,18 @@ const DoChatting = ({ selectChat }) => {
     // stomp 객체 생성
     const socket = new SockJS('https://j9b209.p.ssafy.io/api/ws', null, {
       // const socket = new SockJS('http://localhost:5000/api/ws', null, {
-      transports: ['websocket']
+      transports: ['websocket', 'xhr-streaming', 'xhr-polling']
     });
     const stompClient = Stomp.over(socket);
     // console.log('stomp 객체 생성..', stompClient);
+    // @ts-ignore
     stompClient.connect({}, function (frame) {
-      console.log('Connected: ' + frame);
-      stompClient.subscribe(`/queue/chat/room/${chatRoomNo}`, (frame) => {
-        console.log('subscribe: ' + frame);
+      // console.log('Connected: ' + frame);
+      // @ts-ignore
+      stompClient.subscribe(`/queue/chat/room/${chatRoomNo}`, async (frame) => {
+        // console.log('subscribe: ' + frame);
+        const chat = JSON.parse(frame.body).body;
+        setMessageList((prevLogs) => [chat, ...prevLogs]);
       });
     });
     setStompClient(stompClient);
@@ -644,7 +664,7 @@ const DoChatting = ({ selectChat }) => {
 
   // 메세지 전송
   const sendMessage = () => {
-    if (message == '') {
+    if (message === '') {
       alert('메세지를 작성해주세요!');
       return;
     }
@@ -665,16 +685,9 @@ const DoChatting = ({ selectChat }) => {
         })
       );
     }
-    let newMsg = {
-      chatRoomNo: chatRoomNo,
-      content: message,
-      receiverNickName: '',
-      receiverNo: receiverNo,
-      senderNickName: '',
-      senderNo: userNo,
-      time: new Date().toString()
-    };
-    setMessageList((prevLogs) => [newMsg, ...prevLogs]);
+
+    const chatInput: any = document.querySelector('#chat-input-message');
+    chatInput.innerHTML = '';
     setMessage('');
   };
 
@@ -683,62 +696,61 @@ const DoChatting = ({ selectChat }) => {
     setMessage(e.target.innerText);
   };
 
-  /* scroll로 메세지 로드 */
-  // const loadMoreChatLogs = async () => {
-  //   console.log('pastMessage.current', pastMessage.current);
-  //   if (pastMessage.current) {
-  //     try {
-  //       let newMsg = await fetchMoreLogs();
-  //       if (newMsg) setMessageList((prevLogs) => [...newMsg, ...prevLogs]);
-  //     } catch (error) {
-  //       console.log('loadMoreChatLogs err', error);
-  //     }
-  //   }
-  // };
+  /* scroll로 메세지 로드 
+  const loadMoreChatLogs = async () => {
+    console.log('pastMessage.current', pastMessage.current);
+    if (pastMessage.current) {
+      try {
+        let newMsg = await fetchMoreLogs();
+        if (newMsg) setMessageList((prevLogs) => [...newMsg, ...prevLogs]);
+      } catch (error) {
+        console.log('loadMoreChatLogs err', error);
+      }
+    }
+  };
 
-  // const fetchMoreLogs = () => {
-  //   return axios
-  //     .get(`/message/${selectChat.chatRoomNo}?&page=${number}&size=100`)
-  //     .then((res) => {
-  //       number.current = res.data.number;
-  //       totalPages.current = res.data.totalPages;
-  //       // console.log('get messageList : ', messageList);
+  const fetchMoreLogs = () => {
+    return axios
+      .get(`/message/${selectChat.chatRoomNo}?&page=${number}&size=100`)
+      .then((res) => {
+        number.current = res.data.number;
+        totalPages.current = res.data.totalPages;
+        // console.log('get messageList : ', messageList);
 
-  //       // 이전 메세지가 있는지 없는지 page를 통해 판별한다.
-  //       if (number.current + 1 < totalPages.current) {
-  //         pastMessage.current = true;
-  //       } else {
-  //         pastMessage.current = false;
-  //       }
+        // 이전 메세지가 있는지 없는지 page를 통해 판별한다.
+        if (number.current + 1 < totalPages.current) {
+          pastMessage.current = true;
+        } else {
+          pastMessage.current = false;
+        }
 
-  //       // 반환 메세지 삽입
-  //       return res.data.content;
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
+        // 반환 메세지 삽입
+        return res.data.content;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  */
 
   // ------------------------- useEffect ----------------------------
 
   // 웹소켓 연결을 갱신
+  // 해당 채팅방의 메세지들 호출
   useEffect(() => {
     // 이전의 연결은 연결 해지
     if (stompClient && stompClient.connected) {
-      // console.log("Attempting to disconnect existing stompClient connection");
+      // console.log('Attempting to disconnect existing stompClient connection');
       stompClient.disconnect(() => {
-        // console.log("Disconnected existing stompClient connection");
+        // console.log('Disconnected existing stompClient connection');
       });
       setStompClient(undefined);
-      console.log('Disconnected!');
+      // console.log('Disconnected!');
     }
 
     // 새로운 연결 시도
     connect();
-  }, []);
 
-  // 해당 채팅방의 메세지들 호출
-  useEffect(() => {
     if (selectChat.chatRoomNo !== undefined) {
       // console.log('selectChat', selectChat);
       axios
@@ -803,9 +815,9 @@ const DoChatting = ({ selectChat }) => {
             님과의 대화
           </div>
         </ChatOtherNick>
-        <SellorProduct>
+        {/* <SellorProduct>
           <SellorProductImg src='/assets/img/setting.png'></SellorProductImg>
-        </SellorProduct>
+        </SellorProduct> */}
       </ChatContentHeader>
       {/* 대화 내용 */}
       <ChatContent>
@@ -820,6 +832,7 @@ const DoChatting = ({ selectChat }) => {
         <ChatMessageTypingDiv>
           <ChatInput>
             <ChatInputMessage
+              id='chat-input-message'
               contentEditable
               onInput={messageInputChange}
             ></ChatInputMessage>
@@ -866,10 +879,10 @@ const ChatContentComp = ({ messageList, receiverProfile }) => {
   };
 
   /* 대화 목록 DIV ->
-   뒤에서 앞으로 채운다. unshift
-   1. 날짜를 저장해 두다가, 날짜가 변경될 때 날짜선을 그어준다.
-   2. 내가 보낸 사람이면 내가 보낸 div를 만든다.
-   3. 상대방이 보낸 메세지면 상대방이 보낸 div를 만든다.
+  뒤에서 앞으로 채운다. unshift
+  1. 날짜를 저장해 두다가, 날짜가 변경될 때 날짜선을 그어준다.
+  2. 내가 보낸 사람이면 내가 보낸 div를 만든다.
+  3. 상대방이 보낸 메세지면 상대방이 보낸 div를 만든다.
   */
   const messageListRendering = () => {
     const result: any = [];
@@ -877,6 +890,8 @@ const ChatContentComp = ({ messageList, receiverProfile }) => {
     let pastDate = ''; // 갱신되는 과거 날짜
     // console.log('messageList : ', messageList);
     for (let i = 0; i < messageList.length; i++) {
+      pastDate = messageList[i].time.substring(0, 10);
+
       // 내 메세지 출력
       if (messageList[i].senderNo == userNo) {
         result.unshift(
@@ -885,6 +900,7 @@ const ChatContentComp = ({ messageList, receiverProfile }) => {
               {messageFormatDate(messageList[i].time)}
             </ChatMessageTime>
             <ChatMyMessage>{messageList[i].content}</ChatMyMessage>
+            {/* <ChatMyMessage>{pastDate}</ChatMyMessage> */}
           </ChatMyMessageFrame>
         );
       } else {
@@ -897,6 +913,7 @@ const ChatContentComp = ({ messageList, receiverProfile }) => {
               ></ChatOthersProfileImg>
             </ChatOthersProfile>
             <ChatOthersMessage>{messageList[i].content}</ChatOthersMessage>
+            {/* <ChatOthersMessage>{pastDate}</ChatOthersMessage> */}
             <ChatMessageTime>
               {messageFormatDate(messageList[i].time)}
             </ChatMessageTime>
@@ -912,11 +929,13 @@ const ChatContentComp = ({ messageList, receiverProfile }) => {
       }
       // 날짜가 바뀔 때마다 저장
       pastDate = messageList[i].time.substring(0, 10);
+      // console.log('date : ', date);
+      // console.log('pastDate : ', pastDate);
       // console.log('pastDate : ', pastDate);
       // 날짜가 다르다면 날짜 삽입, 마지막 메세지라면 날짜 삽입
-      if (date !== pastDate || i == messageList.length - 1) {
+      if (date !== pastDate || i === messageList.length - 1) {
         result.unshift(
-          <ChatDateDiv>
+          <ChatDateDiv key={i + 'date'}>
             <ChatDateLine></ChatDateLine>
             <ChatDate>{transformDate(date)}</ChatDate>
             <ChatDateLine></ChatDateLine>

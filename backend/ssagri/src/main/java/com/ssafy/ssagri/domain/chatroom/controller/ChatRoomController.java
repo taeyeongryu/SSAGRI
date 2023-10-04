@@ -56,9 +56,12 @@ public class ChatRoomController {
     @GetMapping("/{userANo}/{userBNo}")
     @Operation(summary = "userANo,userBNo, size, page 넘겨줘야 함, 채팅방에 입장하는 메서드, 반환값은 채팅방 정보랑 메시지를 반환"
             ,description = "userANo, userBNo를 이용해서 채팅방 입장하는 메서드 채팅방 존재하지 않으면 생성되고, 존재하면 기존에 있던 메시지까지 반환")
-    public ResponseEntity<ChatRoomDetailResponseDto> selectChatRoomDetail(@PathVariable(name = "userANo") Long userANo, @PathVariable(name = "userBNo") Long userBNo, Pageable pageable){
-        ChatRoomDetailResponseDto chatRoomDetailResponseDto = chatRoomService.selectChatRoomDetailByUsers(userANo, userBNo, pageable);
-        return ResponseEntity.ok(chatRoomDetailResponseDto);
+    public ResponseEntity<?> selectChatRoomDetail(@PathVariable(name = "userANo") Long userANo, @PathVariable(name = "userBNo") Long userBNo, Pageable pageable){
+        log.info("request Controller : {}, {}, {}", userANo, userBNo, pageable);
+        ChatRoomDetailResponseDto responseDto = chatRoomService.selectChatRoomDetailByUsers(userANo, userBNo, pageable);
+        log.info("response Controller Dto : {}" ,responseDto);
+
+        return ResponseEntity.ok(responseDto);
 
     }
 

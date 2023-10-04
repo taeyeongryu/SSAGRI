@@ -13,6 +13,7 @@ import com.ssafy.ssagri.entity.chat.Message;
 import com.ssafy.ssagri.entity.user.User;
 import com.ssafy.ssagri.util.exception.CustomException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ import static com.ssafy.ssagri.util.exception.CustomExceptionStatus.USER_DOES_NO
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Slf4j
 public class ChatRoomService {
     private final UserRegistAndModifyRepository userRegistAndModifyRepository;
     private final ChatRoomRepository chatRoomRepository;
@@ -76,12 +78,14 @@ public class ChatRoomService {
     }
 
     //이 메서드 실행하기 전에는 save 먼저 해서 채팅방을 만들어 줘야 한다.
+    @Transactional
     public ChatRoomDetailResponseDto selectChatRoomDetailByUsers(Long userA , Long userB, Pageable pageable){
         //채팅방이 없으면 생성하고 있으면 조회하는 메서드
         ChatRoomResponseDto chatRoomResponseDto = saveChatRoom(userA, userB);
 
-
         Page<MessageResponseDto> messageResponseList = messageService.selectMessageResponse(chatRoomResponseDto.getNo(), pageable);
+        log.info("Service - Page<MessageResponseDto> : {}", messageResponseList);
+
 
         ChatRoomDetailResponseDto chatRoomDetailResponseDto = ChatRoomDetailResponseDto.builder()
                 .chatRoomNo(chatRoomResponseDto.getNo())
@@ -90,6 +94,9 @@ public class ChatRoomService {
                 .chatRoomCode(chatRoomResponseDto.getRoomCode())
                 .messageResponseList(messageResponseList)
                 .build();
+
+        log.info("Service - ChatRoomDetailResponseDto : {}", chatRoomDetailResponseDto);
+
         return chatRoomDetailResponseDto;
     }
     /*

@@ -24,7 +24,6 @@ import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import { isLoggedInAtom } from './states/account/loginAtom';
 import SocialKakaoPage from './pages/SocialKakao';
-import DoChatPage from './pages/doChatPage';
 
 const App = () => {
   // @ts-ignore
@@ -59,8 +58,6 @@ const App = () => {
         <Route path='/tradeDetail/:no' element={<TradeDetailPage />} />
         {/* 채팅 화면 페이지 */}
         <Route path='/chat' element={<ChattingPage />} />
-        {/* 채팅 연결 페이지 */}
-        <Route path='/doChat' element={<DoChatPage />} />
         {/* 경매 페이지 */}
         <Route path='/auction' element={<AuctionPage />} />
         {/* 경매 생성 페이지 */}
