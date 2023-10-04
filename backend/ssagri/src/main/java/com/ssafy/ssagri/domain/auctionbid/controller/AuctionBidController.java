@@ -24,7 +24,7 @@ public class AuctionBidController {
 
     @PostMapping("")
     @Operation(summary = "경매 상품에 입찰하는 메서드", description = "입찰자No, 경매상품No, 입찰금액을 넘겨줘야 한다.")
-    public ResponseEntity<Long> saveAuctionBid(AuctionBidSaveRequestDto auctionBidSaveRequestDto){
+    public ResponseEntity<Long> saveAuctionBid(@RequestBody AuctionBidSaveRequestDto auctionBidSaveRequestDto){
         Long bidNo = auctionBidService.save(auctionBidSaveRequestDto);
         return ResponseEntity.ok(bidNo);
     }
