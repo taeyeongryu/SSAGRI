@@ -5,7 +5,7 @@ services:
     # nginx 라는 service
     nginx:
         # 사용되는 이미지
-        image: nginx:1.15-alpine
+        image: nginx:1.3.0
         # 만들어질 컨테이너명
         container_name: nginx-container
         # 도커 네트워크
