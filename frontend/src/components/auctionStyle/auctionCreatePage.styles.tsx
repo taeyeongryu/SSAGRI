@@ -248,7 +248,7 @@ const TextDiv = styled.div`
 `;
 
 const AddImgBtn = styled.div`
-  background-image: url('/public/assets/img/addPhoto.png');
+  background-image: url('/assets/img/addPhoto.png');
   background-size: 100% 100%;
 
   width: 140px;
@@ -301,14 +301,9 @@ const AuctionCreate = () => {
     imageList.map((image) => {
       const formData2 = new FormData();
 
-      formData2.append('upload-file', image);
-
+      formData2.append('multipartFile', image);
       axios
-        .post(`/auction-product/upload/profile/${no}`, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        })
+        .post(`/auction-product/upload/profile/${no}`, formData2)
         .then((res) => {
           console.log(res);
         })

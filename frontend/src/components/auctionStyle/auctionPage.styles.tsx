@@ -267,7 +267,9 @@ const AuctionItme = (item: any) => {
   // 상세 페이지로 이동
   const goAuctionDetail = (item) => {
     console.log(item);
-    navigate(`/auctionDetail/${item.item.no}`);
+    navigate(`/auctionDetail/${item.item.no}`, {
+      state: item
+    });
   };
 
   return (
@@ -387,6 +389,7 @@ const AuctionPage = () => {
   useEffect(() => {
     if (isLoggedIn) {
       GetAuctionItemList();
+    } else {
     }
   }, [isLoggedIn]);
 
