@@ -25,32 +25,36 @@ const CommunityDiv = styled.div`
 const TopDiv = styled.div`
   font-size: 35px;
   font-weight: 600;
-  margin: 10px 0 0 450px;
+  margin: 10px 0 50px 400px;
 `;
 const TopDiv2 = styled.div`
-  font-size: 25px;
+  /* width: 100%; */
+  font-size: 30px;
   font-weight: 600;
-  margin: 10px 0 0 750px;
+  text-align: center;
+  /* border: 2px solid black; */
+  /* margin: 0 auto; */
+  color: #6da3d3;
 `;
 const Div = styled.div``;
 
 const LeftDiv = styled.div`
-  margin: 28px auto;
+  margin: 58px auto;
   width: 1045px;
   height: 540px;
   border-bottom: 10px solid #d0e7d2;
 `;
 const RightDiv = styled.div`
-  margin-top: 70px;
+  margin: 220px auto;
 
-  width: 20vw;
-  height: 50vh;
-  background-color: #f2ead3;
+  width: 1300px;
+  height: 53vh;
+  background-color: #f4eeee;
   border: 1.3px solid rgb(0, 0, 0, 0.1);
   box-shadow: 2px 2px 2px rgb(0, 0, 0, 0.4);
   border-radius: 10px;
   animation: fadein 1s ease-in-out;
-
+  clip-path: polygon(2% 0%, 100% 0%, 98% 100%, 0% 100%);
   @keyframes fadein {
     0% {
       opacity: 0;
@@ -71,12 +75,15 @@ const FontDiv = styled.div`
   font-size: 20px;
 `;
 const CommuList = styled(FontDiv)`
-  font-size: 25px;
-  margin: 30px 0 45px 50px;
+  font-size: 29px;
+  font-weight: 600;
+  margin: 30px 0 45px 110px;
 `;
 const CommuTag = styled(FontDiv)`
   font-size: 25px;
   margin-left: 50px;
+  font-weight: 560;
+  color: #585757;
 `;
 const MidTag = styled.div`
   font-size: 42px;
@@ -101,6 +108,7 @@ const ListDiv = styled.div`
   margin: 20px auto;
   width: 250px;
   height: 50px;
+  font-weight: 600;
 `;
 
 const ListTag = styled.div`
@@ -127,8 +135,9 @@ const BrTag = styled.div`
 `;
 
 const MidDiv = styled.div`
+  margin-top: 150px;
   width: 100%;
-  height: 600px;
+  height: 700px;
 `;
 const BottomDiv = styled.div`
   width: 100%;
@@ -475,18 +484,56 @@ const CommunityMain = () => {
 
       <RightDiv>
         <CommuList>금주의 게시판 순위</CommuList>
-        {commuRank.slice(0, 5).map((item: CommuItem, id) => (
-          <ListDiv key={id}>
-            {id + 1}.
-            <CommuTag
-              onClick={() =>
-                navigate(`/community/${item.boardNo}?boardNo=${item.boardNo}`)
-              }
-            >
-              {item.title}
-            </CommuTag>
-          </ListDiv>
-        ))}
+        <FlexDiv>
+          <Div>
+            {commuRank.slice(0, 5).map((item: CommuItem, id) => (
+              <ListDiv key={id}>
+                {id + 1}.
+                <CommuTag
+                  onClick={() =>
+                    navigate(
+                      `/community/${item.boardNo}?boardNo=${item.boardNo}`
+                    )
+                  }
+                >
+                  {item.title}
+                </CommuTag>
+              </ListDiv>
+            ))}
+          </Div>
+          <Div>
+            {commuRank.slice(5, 10).map((item: CommuItem, id) => (
+              <ListDiv key={id}>
+                {id + 6}.
+                <CommuTag
+                  onClick={() =>
+                    navigate(
+                      `/community/${item.boardNo}?boardNo=${item.boardNo}`
+                    )
+                  }
+                >
+                  {item.title}
+                </CommuTag>
+              </ListDiv>
+            ))}
+          </Div>
+          <Div>
+            {commuRank.slice(10, 15).map((item: CommuItem, id) => (
+              <ListDiv key={id}>
+                {id + 11}.
+                <CommuTag
+                  onClick={() =>
+                    navigate(
+                      `/community/${item.boardNo}?boardNo=${item.boardNo}`
+                    )
+                  }
+                >
+                  {item.title}
+                </CommuTag>
+              </ListDiv>
+            ))}
+          </Div>
+        </FlexDiv>
       </RightDiv>
 
       <BrTag></BrTag>
