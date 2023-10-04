@@ -79,6 +79,7 @@ const DetailDivInfoNameText = styled.div`
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 `;
+/*
 const DetailDivInfoShareButton = styled.button`
   background-color: white;
   border: 0;
@@ -90,6 +91,7 @@ const DetailDivInfoShare = styled.img`
   width: 20px;
   height: 20px;
 `;
+*/
 // 가격
 const DetailDivInfoPrice = styled.div`
   margin-bottom: 5px;
