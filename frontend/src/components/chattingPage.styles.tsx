@@ -810,7 +810,7 @@ const DoChatting = ({ selectChat }) => {
       {/* 대화 내용 */}
       <ChatContent>
         <ChatContentComp
-          key={selectChat.receiverRegion}
+          key={-1}
           messageList={messageList}
           receiverProfile={selectChat.receiverProfile}
         ></ChatContentComp>

@@ -2,17 +2,18 @@ import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 import axios from 'axios';
-// import ClassicEditor from './ckeditor';
+// import ClassicEditor from './ckeditor'; // -> tradeCreate에서 만들면, 만들 필요 없다.
 
 // ClassicEditor
 //   // Note that you do not have to specify the plugin and toolbar configuration — using defaults from the build.
-//   .create(document.querySelector('#ckeditor-div') as HTMLElement, {})
+//   .create(document.querySelector('#ckeditor') as HTMLElement, {
+//     initialData: '<h2>Initial data</h2><p>Foo bar.</p>'
+//   })
 //   .then((editor) => {
 //     console.log('Editor was initialized', editor);
 //   })
-//   // @ts-ignore
 //   .catch((error) => {
-//     // console.error(error.stack);
+//     console.error(error.stack);
 //   });
 
 // axios 설정

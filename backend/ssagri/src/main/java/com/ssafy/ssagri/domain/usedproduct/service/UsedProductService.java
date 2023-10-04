@@ -1,5 +1,6 @@
 package com.ssafy.ssagri.domain.usedproduct.service;
 
+import com.ssafy.ssagri.domain.S3.S3Service;
 import com.ssafy.ssagri.domain.usedproduct.dto.request.UsedProductSaveRequestDto;
 import com.ssafy.ssagri.domain.usedproduct.dto.response.UsedProductDetailResponseDto;
 import com.ssafy.ssagri.domain.usedproduct.dto.response.UsedProductResponseDto;
@@ -40,47 +41,49 @@ public class UsedProductService {
     private final UsedProductPhotoRepository usedProductPhotoRepository;
     private final UsedProductLikeRepository usedProductLikeRepository;
     private final UserRegistAndModifyRepository userRegistRepository;
-    private final ImageService imageService;
+    private final S3Service s3Service;
 
 
 
     /*
-    * 대표 사진이랑 본문 사진이랑 따로 받아서 저장한다.
-    * */
+     * 대표 사진이랑 본문 사진이랑 따로 받아서 저장한다.
+     * */
     @Transactional
     public Long saveUsedProduct(UsedProductSaveRequestDto usedProductSaveRequest,
-           MultipartFile MultipartFileMain , List<MultipartFile> multipartFileSubList)throws Exception{
-
+        MultipartFile MultipartFileMain )throws Exception{
+        //유저 조회
         Optional<User> findUser = userRegistRepository.findById(usedProductSaveRequest.getUserNo());
+
         User user = null;
+
+        //유저 없다면 예외 발생
         if (findUser.isPresent()) {
             user = findUser.get();
         }else{
             throw new CustomException(CustomExceptionStatus.USER_DOES_NOT_EXSIST);
         }
-        System.out.println("user.getRegion() = " + user.getRegion());
+
+        log.info("user.getRegion : {}", user.getRegion());
+
+        //중고 물품 Entity생성
         UsedProduct usedProductEntity = usedProductSaveRequest.toEntity(user);
+        //중고 물품 DB저장
         usedProductRepository.save(usedProductEntity);
 
         //대표 사진 저장 하는 것
-        String link = imageService.saveImage(MultipartFileMain);
+        String link = s3Service.S3ImageUploadToAWS(MultipartFileMain,"/used",usedProductEntity.getNo());
+
+        //대표 사진 Entity생성
         UsedProductPhoto usedProductPhotoMain = UsedProductPhoto.builder()
-                .usedProduct(usedProductEntity)
-                .usedProductPhotoLink(link)
-                .usedProductPhotoType(PhotoType.MAIN)
-                .build();
+            .usedProduct(usedProductEntity)
+            .usedProductPhotoLink(link)
+            .usedProductPhotoType(PhotoType.MAIN)
+            .build();
+
+        //대표 사진 DB 저장
         usedProductPhotoRepository.save(usedProductPhotoMain);
 
-        //본문 사진 저장 하는 것
-        for (MultipartFile multipartFileSub : multipartFileSubList) {
-            link = imageService.saveImage(multipartFileSub);
-            UsedProductPhoto usedProductPhotoSub = UsedProductPhoto.builder()
-                    .usedProduct(usedProductEntity)
-                    .usedProductPhotoLink(link)
-                    .usedProductPhotoType(PhotoType.SUB)
-                    .build();
-            usedProductPhotoRepository.save(usedProductPhotoSub);
-        }
+        //No 반환
         return usedProductEntity.getNo();
     }
     @Transactional
@@ -98,8 +101,8 @@ public class UsedProductService {
         return productOptional.get().getNo();
     }
     /*
-    *중고물품 리스트 가져오는 메서드
-    *phototype이 sub 인것만 가져온다.
+     *중고물품 리스트 가져오는 메서드
+     *phototype이 sub 인것만 가져온다.
      */
 
     public Page<UsedProductResponseDto> selectUsedProductList(Long userNo, ProductCategory productCategory, Region region,String search ,Pageable pageable){
@@ -157,8 +160,8 @@ public class UsedProductService {
     }
 
     /*
-    * 디테일한 상품 정보 가져오는 메서드
-    * */
+     * 디테일한 상품 정보 가져오는 메서드
+     * */
     public UsedProductDetailResponseDto selectUsedProductDetail(Long userNo,Long usedProductNo){
         Optional<UsedProduct> findUsedProduct = usedProductRepository.findById(usedProductNo);
         UsedProduct usedProduct = null;
@@ -168,7 +171,7 @@ public class UsedProductService {
             throw new CustomException(CustomExceptionStatus.USED_PRODUCT_DOES_NOT_EXIST);
         }
         UsedProductDetailResponseDto detailResponse = usedProduct.toDetailResponse(usedProduct.getUser());
-        List<UsedProductPhotoResponseDto> usedProductPhotoResponseDtoList = usedProductPhotoRepository.selectSubPhotoByProductNo(usedProductNo);
+        UsedProductPhotoResponseDto usedProductPhotoResponseDtoList = usedProductPhotoRepository.selectMainPhotoByProductNo(usedProductNo);
         detailResponse.setUsedProductPhotoResponseDto(usedProductPhotoResponseDtoList);
         boolean isLike = usedProductLikeRepository.checkLikeByUserNo(userNo,usedProductNo);
         detailResponse.setLike(isLike);
