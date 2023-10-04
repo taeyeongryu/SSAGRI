@@ -47,8 +47,9 @@ public class JwtFilter extends OncePerRequestFilter {
             "/api/user/", //로그인, 로그아웃 관련
             "/api/file/", //파일 업로드 관련
             "/api/test", //테스팅 환경
-            "/api/ws" // 웹소켓 환경
-        
+            "/api/ws" ,// 웹소켓 환경
+            "/api/notification/subscribe/1",
+            "/api/notification"
     };
 
     @Operation(summary = "필터링 거치지 않는 API endpoint 목록", description = "내부 allowedURI 저장값이 적용됩니다.")
@@ -74,6 +75,7 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         //토큰 원본 꺼내기 및 처리
         String rawToken = request.getHeader(HttpHeaders.AUTHORIZATION);
+        System.out.println("테스트 : jwtFilter, rawToken = " + rawToken);
         if(rawToken == null || !rawToken.startsWith("Bearer ")){
             System.out.println("토큰이 없거나 올바르지 않네요");
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);

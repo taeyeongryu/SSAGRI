@@ -619,7 +619,36 @@ const TradeDetail = () => {
             // HTML을 content 에 삽입
             const detailContent: any =
               document.querySelector('#detail-content');
-            detailContent.innerHTML = productResponse.content;
+
+            const htmlCode: string = productResponse.content;
+            const flag = htmlCode.search('<figure class="media">');
+            console.log('check flag', flag);
+
+            if (flag !== -1) {
+              const figureStart: number = htmlCode.search(
+                '<figure class="media">'
+              );
+              const oembedStart: number = htmlCode.search('<oembed url="h');
+              const oembedEnd: number = htmlCode.search('</oembed>');
+              const figureEnd: number = htmlCode.search('</figure>');
+
+              const embedUrl = htmlCode.substring(
+                oembedStart + 13,
+                oembedEnd - 2
+              );
+              // (560, 315), (1000, 562)
+              const movieTag = `<iframe width="1000" height="562" src="${embedUrl}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+
+              const startHtml = htmlCode.substring(0, figureStart);
+              const endHtml = htmlCode.substring(figureEnd + 9);
+
+              console.log(startHtml, movieTag, endHtml);
+              const newHtml = startHtml + movieTag + endHtml;
+
+              detailContent.innerHTML = newHtml;
+            } else {
+              detailContent.innerHTML = htmlCode;
+            }
             // console.log('check link', link);
 
             // 판매자 정보를 따로 저장
@@ -723,7 +752,7 @@ const TradeDetail = () => {
       }
     };
     firstFunction();
-  }, [productNo]);
+  }, []);
 
   return (
     <DetailFrame>

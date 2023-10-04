@@ -4,6 +4,7 @@ import com.ssafy.ssagri.entity.auction.AuctionProductImage;
 import com.ssafy.ssagri.entity.auction.AuctionProductType;
 
 import com.ssafy.ssagri.entity.auction.AuctionStatus;
+import com.ssafy.ssagri.entity.user.Region;
 import com.ssafy.ssagri.entity.user.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,8 +22,20 @@ public class AuctionProductAllDTO {
     // 경매 no
     private Long no;
 
-    // 경매 개최자 no
+    // 경매 개최자 nickname
     private String userNickName;
+
+    // 경매 개최자 no
+    private Long userNo;
+
+    // 경매 개최자 지역
+    private Region region;
+
+    // 경매 개최자 기수
+    private int number;
+
+    // 경매 개최자 프로필
+    private String profile;
 
     // 경매 상품 이름
     private String name;
@@ -62,6 +75,8 @@ public class AuctionProductAllDTO {
 
     // 경매 상품 정가
     private int originPrice;
+
+
 
 
 
