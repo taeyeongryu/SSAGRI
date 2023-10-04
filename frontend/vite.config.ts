@@ -5,15 +5,15 @@ import react from '@vitejs/plugin-react';
 // @ts-ignore
 import nodePolyfills from 'vite-plugin-node-stdlib-browser';
 import ckeditor5 from '@ckeditor/vite-plugin-ckeditor5';
-import svgr from '@honkhonk/vite-plugin-svgr';
+import svgr from '@svgr/rollup';
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     react(),
+    svgr(),
     nodePolyfills(),
-    ckeditor5({ theme: require.resolve('@ckeditor/ckeditor5-theme-lark') }),
-    svgr()
+    ckeditor5({ theme: require.resolve('@ckeditor/ckeditor5-theme-lark') })
   ],
   server: {
     hmr: {

@@ -1,10 +1,10 @@
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { styled } from 'styled-components';
 
-import IcLeft from '/assets/img/icon_left.svg';
-import IcRight from '/assets/img/icon_right.svg';
+import { ReactComponent as IcLeft } from '/public/assets/img/icon_left.svg';
+import { ReactComponent as IcRight } from '/public/assets/img/icon_right.svg';
 
 const DetailDiv = styled.div`
   margin-top: 200px;
@@ -50,7 +50,7 @@ const StLeftButton = styled(IcLeft)`
   &:hover {
     cursor: pointer;
     & > path {
-      fill: rgba(255, 255, 255, 0.5);
+      fill: rgba(0, 0, 0, 0.5);
     }
   }
 `;
@@ -117,7 +117,7 @@ const AuctionDetail = () => {
   const auctionItem = state.item;
   console.log('경매 아이템 정보: ', auctionItem);
 
-  const images = [];
+  const [images, setImages] = useState([]);
 
   // 가격 선택 박스
   // 초기 가격 설정
@@ -145,7 +145,7 @@ const AuctionDetail = () => {
     const bidData = {
       auctionBidPrice: selectedPrice,
       auctionNo: auctionItem.no,
-      userNo: auctionItem.userNo
+      userNo: Number(localStorage.getItem('userNo')) // 입찰자의 유저 넘버
     };
     console.log('입찰 정보: ', bidData);
 
@@ -155,6 +155,7 @@ const AuctionDetail = () => {
         console.log(res);
         // 입찰 가능한 최소금액을 갱신해준다.
         setStartPrice(selectedPrice + auctionItem.priceCount);
+        getBidList();
       })
       .catch((err) => {
         console.log(err);
@@ -182,16 +183,85 @@ const AuctionDetail = () => {
     axios
       .get(`/auction-product/load/${auctionItem.no}`)
       .then((res) => {
-        console.log(res);
+        if (res.data.result) {
+          console.log('상품 사진 있음: ', res.data.result);
+          const auctionItemImages = res.data.result;
+          setImages(auctionItemImages);
+        } else {
+          console.log('상품 사진 없음');
+        }
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
+  const [bidList, setBidList] = useState([]);
+
+  // 경매 입찰 내역 조회
+  const getBidList = () => {
+    axios
+      .get(`/auction-bid/${auctionItem.no}`)
+      .then((res) => {
+        console.log('입찰 내역: ', res.data);
+        setBidList(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const [currentIdx, setCurrentIdx] = useState(0);
+  const slideRef = useRef(null);
+
+  useEffect(() => {
+    if (currentIdx === -1) {
+      // @ts-ignore
+      slideRef.current.style.transition = 'all 0.5s ease-in-out';
+      // @ts-ignore
+      slideRef.current.style.transform = `translateX(-2000px)`;
+      setCurrentIdx(images.length - 1);
+    } else if (currentIdx === images.length) {
+      setCurrentIdx(0);
+      // @ts-ignore
+      slideRef.current.style.transition = 'all 0.5s ease-in-out';
+      // @ts-ignore
+      slideRef.current.style.transform = `translateX(0px)`;
+    }
+  }, [currentIdx]);
+
+  const onClickLeftButton = () => {
+    if (currentIdx === -1) {
+      setCurrentIdx(images.length - 1);
+    } else {
+      setCurrentIdx((prev) => prev - 1);
+      // @ts-ignore
+      slideRef.current.style.transition = 'all 0.5s ease-in-out';
+      // @ts-ignore
+      slideRef.current.style.transform = `translateX(-${
+        currentIdx * 500 - 500
+      }px)`;
+    }
+  };
+
+  const onClickRightButton = () => {
+    if (currentIdx === images.length) {
+      setCurrentIdx(0);
+    } else {
+      setCurrentIdx((prev) => prev + 1);
+      // @ts-ignore
+      slideRef.current.style.transition = 'all 0.5s ease-in-out';
+      // @ts-ignore
+      slideRef.current.style.transform = `translateX(-${
+        500 * (currentIdx + 1)
+      }px)`;
+    }
+  };
+
   useEffect(() => {
     loadImg();
-  });
+    getBidList();
+  }, []);
 
   return (
     <DetailDiv>
@@ -200,11 +270,12 @@ const AuctionDetail = () => {
         <InfoContentBox>
           <InfoContent className='image'>
             <StWrapper>
-              <StLeftButton />
-              <StRightButton />
-              <StImageWrapper>
-                {images.map(({ url, id }) => (
-                  <img src={url} alt={id} key={id} />
+              <StLeftButton onClick={onClickLeftButton} />
+              <StRightButton onClick={onClickRightButton} />
+              <StImageWrapper ref={slideRef}>
+                {images.map((url, id) => (
+                  // @ts-ignore
+                  <img src={url.imageLink} key={id} />
                 ))}
               </StImageWrapper>
             </StWrapper>
@@ -288,14 +359,18 @@ const AuctionDetail = () => {
       <BidInfo>
         <InfoTitle>입찰 현황</InfoTitle>
         <InfoContentBox>
-          <EachBid>
-            <img src='/assets/img/bid_profile.png' alt='입찰자 프로필 사진' />
-            <div>입찰자 닉네임</div>
-            <div>입찰액</div>
-            <HighPriceIcon>
-              <div style={{ color: '#4786FA' }}>최고가</div>
-            </HighPriceIcon>
-          </EachBid>
+          {bidList.map((bid, idx) => (
+            <EachBid key={idx}>
+              <img src={bid.userProfileURL} alt='입찰자 프로필 사진' />
+              <div>{bid.userNickname}</div>
+              <div>{bid.auctionBidPrice}</div>
+              {idx === 0 ? (
+                <HighPriceIcon>
+                  <div style={{ color: '#4786FA' }}>최고가</div>
+                </HighPriceIcon>
+              ) : null}
+            </EachBid>
+          ))}
         </InfoContentBox>
       </BidInfo>
     </DetailDiv>
