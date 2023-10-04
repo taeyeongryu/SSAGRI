@@ -12,19 +12,14 @@ import com.ssafy.ssagri.entity.auction.AuctionProduct;
 import com.ssafy.ssagri.entity.user.User;
 import com.ssafy.ssagri.util.exception.CustomException;
 import com.ssafy.ssagri.util.exception.CustomExceptionStatus;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 @RequiredArgsConstructor
@@ -97,7 +92,7 @@ public class AuctionBidService {
     }
 
     public AuctionBidSelectResponseDto changeResponseDto(AuctionBidSocketRequestDto auctionBidSocketRequestDto) {
-        AuctiogitnBid auctionBid = auctionBidRepository.findById(auctionBidSocketRequestDto.getAuctionBidNo())
+        AuctionBid auctionBid = auctionBidRepository.findById(auctionBidSocketRequestDto.getAuctionBidNo())
                 .orElseThrow(()->new CustomException(CustomExceptionStatus.AUCTION_BID_DOES_NOT_EXIST));
         return auctionBid.toResponse();
     }
