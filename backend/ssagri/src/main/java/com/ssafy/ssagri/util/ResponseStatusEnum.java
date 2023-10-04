@@ -22,6 +22,8 @@ public enum ResponseStatusEnum {
     REFILL_TOKEN_IS_OK(1300, "액세스 토큰 발급이 성공적으로 이루어졌습니다."),
     //Mail send
     MAIL_SEND_IS_OK(1400, "이메일 전송과 인증번호 등록이 성공적으로 이루어졌습니다."),
+    MAIL_SEND_AND_RANDOM_CODE_IS_OK(1401, "이메일 전송과 레디스 임시 비밀번호 설정이 성공적으로 이루어졌습니다."),
+    MAIL_CHECK_IS_OK(1402, "최종적으로 임시 코드로 비밀번호가 변경되었습니다."),
     //Mypage
     MYPAGE_PROFILE_CHANGE_IS_OK(1500, "프로필 이미지 변경 성공"),
     MYPAGE_PASSWORD_CHANGE_IS_OK(1501, "비밀번호 변경 성공"),
