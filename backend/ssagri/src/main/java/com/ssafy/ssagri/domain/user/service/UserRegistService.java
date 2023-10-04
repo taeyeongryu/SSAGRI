@@ -22,12 +22,12 @@ import static com.ssafy.ssagri.util.exception.CustomExceptionStatus.*;
 @Slf4j
 public class UserRegistService {
 
-    private final UserRegistAndModifyRepository userRegistRepository;
+    private final UserRegistAndModifyRepository userRegistAndModifyRepository;
     private final RedisService redisService;
 
     @Transactional
     public ResponseEntity<ResponseDTO> registUser(UserRegistDTO userRegistDTO) throws Exception {
-        userRegistRepository.save(
+        userRegistAndModifyRepository.save(
                 new User(userRegistDTO.getEmail(),
                         userRegistDTO.getPassword(),
                         userRegistDTO.getNickname(),
@@ -43,14 +43,14 @@ public class UserRegistService {
 
     //닉네임 중복 확인 로직
     public ResponseEntity<ResponseDTO> checkDuplicateNickname(String nickname) throws CustomException {
-        if (userRegistRepository.isNicknameExists(nickname)) {
+        if (userRegistAndModifyRepository.isNicknameExists(nickname)) {
             throw new CustomException(REGISTER_NICKNAME_IS_DUPLICATE);
         }
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(REGIST_NICKNAME_IS_OK.getCode(), REGIST_NICKNAME_IS_OK.getMessage()));
     }
 
     public ResponseEntity<?> checkDuplicateEmail(String email) throws CustomException {
-        if(userRegistRepository.isEmailExists(email)) {
+        if(userRegistAndModifyRepository.isEmailExists(email)) {
             throw new CustomException(REGISTER_EMAIL_IS_DUPLICATE);
         }
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(REGIST_IS_OK.getCode(), REGIST_IS_OK.getMessage()));

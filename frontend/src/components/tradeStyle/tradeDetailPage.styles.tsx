@@ -79,6 +79,7 @@ const DetailDivInfoNameText = styled.div`
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 `;
+/*
 const DetailDivInfoShareButton = styled.button`
   background-color: white;
   border: 0;
@@ -90,6 +91,7 @@ const DetailDivInfoShare = styled.img`
   width: 20px;
   height: 20px;
 `;
+*/
 // 가격
 const DetailDivInfoPrice = styled.div`
   margin-bottom: 5px;
@@ -324,8 +326,9 @@ const DetailSellorProfile = styled.div`
   right: 0px;
 `;
 // 매너온도
+/*
 const DetailSellorTemperatureDiv = styled.div`
-  /* border: 1px solid black; */
+  border: 1px solid black;
   width: 100%;
   height: 50px;
   font-size: 16px;
@@ -350,14 +353,14 @@ const DetailSellorTemperatureMax = styled.div`
   margin-right: 3px;
 `;
 const DetailSellorTemperatureGraph = styled.div`
-  /* border: 1px solid black; */
+  border: 1px solid black;
   width: 100%;
   height: 10px;
   border-radius: 10px;
   background-color: #ccf4dc;
 `;
 const DetailSellorTemperatureScale = styled.div`
-  /* border: 1px solid black; */
+  border: 1px solid black;
   width: 40%;
   height: 10px;
   border-radius: 10px;
@@ -366,6 +369,7 @@ const DetailSellorTemperatureScale = styled.div`
   top: 0px;
   left: 0px;
 `;
+*/
 
 // ----- 판매자 정보 가져와서 화면에 보여주기 -----
 const SellorDiv = (sellorInfo: any) => {
@@ -400,7 +404,7 @@ const SellorDiv = (sellorInfo: any) => {
             </DetailSellorProfile>
           </DetailSellorRight>
         </DetailSellorTitle>
-        <DetailSellorTemperatureDiv>
+        {/* <DetailSellorTemperatureDiv>
           <DetailSellorTemperatureInfo>
             <DetailSellorTemperatureText>
               매너온도 {sellorInfo.sellorInfo.sellorTemper}
@@ -410,7 +414,7 @@ const SellorDiv = (sellorInfo: any) => {
           <DetailSellorTemperatureGraph>
             <DetailSellorTemperatureScale></DetailSellorTemperatureScale>
           </DetailSellorTemperatureGraph>
-        </DetailSellorTemperatureDiv>
+        </DetailSellorTemperatureDiv> */}
       </DetailSellorDiv>
     </>
   );
@@ -558,7 +562,7 @@ const TradeDetail = () => {
   const [like, setLike] = useState(false); // 찜하기 유무 bool
   const likeYN = useRef(''); // 찜하기 이미지 경로
   const pastTime = useRef('');
-  const [link, setLink] = useState('https://i.imgur.com/pqvW1Yv.png');
+  const [link, setLink] = useState<string>('https://i.imgur.com/pqvW1Yv.png');
   const userNo = localStorage.getItem('userNo');
   const chatSellor = document.querySelector('#chat-sellor');
 
@@ -598,7 +602,7 @@ const TradeDetail = () => {
         await axios
           .get(url)
           .then((res) => {
-            // console.log('check Detail', res);
+            console.log('check Detail', res);
 
             // 응답 데이터 삽입
             productDetail.current = res.data;
@@ -607,14 +611,44 @@ const TradeDetail = () => {
 
             // 이미지 링크 삽입
             if (productResponse.usedProductPhotoResponseDto) {
-              linkDto = productResponse.usedProductPhotoResponseDto[0];
+              linkDto = productResponse.usedProductPhotoResponseDto;
             }
+
             setLink(linkDto.link);
 
             // HTML을 content 에 삽입
             const detailContent: any =
               document.querySelector('#detail-content');
-            detailContent.innerHTML = productResponse.content;
+
+            const htmlCode: string = productResponse.content;
+            const flag = htmlCode.search('<figure class="media">');
+            console.log('check flag', flag);
+
+            if (flag !== -1) {
+              const figureStart: number = htmlCode.search(
+                '<figure class="media">'
+              );
+              const oembedStart: number = htmlCode.search('<oembed url="h');
+              const oembedEnd: number = htmlCode.search('</oembed>');
+              const figureEnd: number = htmlCode.search('</figure>');
+
+              const embedUrl = htmlCode.substring(
+                oembedStart + 13,
+                oembedEnd - 2
+              );
+              // (560, 315), (1000, 562)
+              const movieTag = `<iframe width="1000" height="562" src="${embedUrl}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+
+              const startHtml = htmlCode.substring(0, figureStart);
+              const endHtml = htmlCode.substring(figureEnd + 9);
+
+              console.log(startHtml, movieTag, endHtml);
+              const newHtml = startHtml + movieTag + endHtml;
+
+              detailContent.innerHTML = newHtml;
+            } else {
+              detailContent.innerHTML = htmlCode;
+            }
             // console.log('check link', link);
 
             // 판매자 정보를 따로 저장
@@ -718,7 +752,7 @@ const TradeDetail = () => {
       }
     };
     firstFunction();
-  }, [productNo]);
+  }, []);
 
   return (
     <DetailFrame>
@@ -744,9 +778,9 @@ const TradeDetail = () => {
                   {/* 30자 제한을 둬야 화면에 깔끔하게 나온다 */}
                   {productDetail.current.title}
                 </DetailDivInfoNameText>
-                <DetailDivInfoShareButton>
+                {/* <DetailDivInfoShareButton>
                   <DetailDivInfoShare src='/assets/img/share.png'></DetailDivInfoShare>
-                </DetailDivInfoShareButton>
+                </DetailDivInfoShareButton> */}
               </DetailDivInfoName>
               <DetailDivInfoPrice>
                 <RegularPrice>{productDetail.current.price}</RegularPrice>

@@ -46,11 +46,13 @@ public class UsedProductService {
 
 
     /*
-    * 대표 사진이랑 본문 사진이랑 따로 받아서 저장한다.
-    * */
+     * 대표 사진이랑 본문 사진이랑 따로 받아서 저장한다.
+     * */
     @Transactional
     public Long saveUsedProduct(UsedProductSaveRequestDto usedProductSaveRequest,
-           MultipartFile MultipartFileMain )throws Exception{
+
+        MultipartFile MultipartFileMain )throws Exception{
+
         //유저 조회
         Optional<User> findUser = userRegistRepository.findById(usedProductSaveRequest.getUserNo());
 
@@ -75,10 +77,12 @@ public class UsedProductService {
 
         //대표 사진 Entity생성
         UsedProductPhoto usedProductPhotoMain = UsedProductPhoto.builder()
-                .usedProduct(usedProductEntity)
-                .usedProductPhotoLink(link)
-                .usedProductPhotoType(PhotoType.MAIN)
-                .build();
+
+            .usedProduct(usedProductEntity)
+            .usedProductPhotoLink(link)
+            .usedProductPhotoType(PhotoType.MAIN)
+            .build();
+
 
         //대표 사진 DB 저장
         usedProductPhotoRepository.save(usedProductPhotoMain);
@@ -101,8 +105,8 @@ public class UsedProductService {
         return productOptional.get().getNo();
     }
     /*
-    *중고물품 리스트 가져오는 메서드
-    *phototype이 sub 인것만 가져온다.
+     *중고물품 리스트 가져오는 메서드
+     *phototype이 sub 인것만 가져온다.
      */
 
     public Page<UsedProductResponseDto> selectUsedProductList(Long userNo, ProductCategory productCategory, Region region,String search ,Pageable pageable){
@@ -160,8 +164,8 @@ public class UsedProductService {
     }
 
     /*
-    * 디테일한 상품 정보 가져오는 메서드
-    * */
+     * 디테일한 상품 정보 가져오는 메서드
+     * */
     public UsedProductDetailResponseDto selectUsedProductDetail(Long userNo,Long usedProductNo){
         Optional<UsedProduct> findUsedProduct = usedProductRepository.findById(usedProductNo);
         UsedProduct usedProduct = null;
@@ -172,8 +176,9 @@ public class UsedProductService {
         }
 
         UsedProductDetailResponseDto detailResponse = usedProduct.toDetailResponse(usedProduct.getUser());
-        log.info("",detailResponse);
-        List<UsedProductPhotoResponseDto> usedProductPhotoResponseDtoList = usedProductPhotoRepository.selectSubPhotoByProductNo(usedProductNo);
+
+        UsedProductPhotoResponseDto usedProductPhotoResponseDtoList = usedProductPhotoRepository.selectMainPhotoByProductNo(usedProductNo);
+
         detailResponse.setUsedProductPhotoResponseDto(usedProductPhotoResponseDtoList);
         boolean isLike = usedProductLikeRepository.checkLikeByUserNo(userNo,usedProductNo);
         detailResponse.setLike(isLike);

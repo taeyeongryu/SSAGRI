@@ -75,7 +75,6 @@ public class UserRegistController {
     @Transactional
     @GetMapping("/check/authcode-valid")
     public ResponseEntity<?> checkAuthcodeIsValid(@RequestParam String authcode) throws CustomException {
-//        log.warn("테스트 {}", authcode);
         userRegisterService.checkAuthcode(authcode); //Authcode 맞는지 판별
         return ResponseEntity.ok(new ResponseDTO(MAIL_SEND_IS_OK.getCode(), MAIL_SEND_IS_OK.getMessage()));
     }
@@ -84,7 +83,6 @@ public class UserRegistController {
     @Transactional
     @PostMapping("/upload/profile")
     public String saveFile(HttpServletRequest request, @RequestParam("upload-file") MultipartFile multipartFile) throws IOException {
-        log.warn("테스트 {}", multipartFile);
         return s3FileService.saveFile(request, multipartFile, "profile");
     }
 

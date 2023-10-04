@@ -81,8 +81,15 @@
   min-height: 770px;
 } */
 
+/* ckeditor 최소 높이 */
 .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
   min-height: 728px;
+}
+
+/* ckeditor 너비 */
+.ck.ck-editor {
+  position: relative;
+  width: 100%;
 }
 
 /* :root {

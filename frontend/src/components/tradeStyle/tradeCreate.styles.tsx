@@ -1,7 +1,10 @@
 import { styled } from 'styled-components';
-import ClassicEditor from '../../ckeditor';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '../../ckeditor';
+// import { ClassicEditor } from '@ckeditor/ckeditor5-editor-classic';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import axios from 'axios';
 
 const CreateAndUpdateFrame = styled.div`
   width: 1920px;
@@ -57,10 +60,14 @@ const CreateAndUpdateButton = styled.button`
     background-color: #fff;
     color: #4786fa;
   }
-  &:active {
+`;
+
+const BackButton = styled(CreateAndUpdateButton)`
+  background-color: tomato;
+  margin-right: 10px;
+  &:hover {
     border: 2px solid tomato;
     color: tomato;
-    box-shadow: 0px 0px 0px 0px #fff;
   }
 `;
 
@@ -75,12 +82,12 @@ const CreateAndUpdateDivItem = styled.div`
 
 const CreateAndUpdateDivItemUp = styled.div`
   width: 100%;
-  height: 130px;
+  /* height: 130px; */
   display: flex;
 `;
 
 const CreateAndUpdateDivItemUpLeft = styled.div`
-  width: 50%;
+  width: 100%;
   /* border: 1px solid blue; */
   display: flex;
   flex-direction: column;
@@ -91,125 +98,230 @@ const CreateAndUpdateDivItemUpLeft = styled.div`
 const LeftItemName = styled.input`
   width: 100%;
   height: 40px;
-  border: 1px solid blue;
+  border: 1px solid #4786fa;
 `;
 
 const LeftItemCategory = styled.select`
   width: 100%;
   height: 40px;
-  border: 1px solid blue;
+  border: 1px solid #4786fa;
 `;
 
-const LeftItemPrice = styled.input`
-  width: 100%;
-  height: 40px;
-  border: 1px solid blue;
-`;
+const LeftItemPrice = styled(LeftItemName)``;
 
-const CreateAndUpdateDivItemUpRight = styled.div`
-  width: 50%;
-  /* border: 1px solid red; */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
+// const CreateAndUpdateDivItemUpRight = styled.div`
+//   width: 0%;
+//   /* border: 1px solid red; */
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// `;
 
 const RightItemImage = styled.div`
   width: 100%;
-  height: 120px;
-  border: 1px solid blue;
+  height: 30px;
+  border: 1px solid #4786fa;
   overflow-y: hidden;
   overflow-x: auto;
 `;
 
 const CreateAndUpdateDivItemDown = styled.div`
   width: 100%;
-  border: 1px solid red;
+  border: 1px solid #4786fa;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
+interface Product {
+  userNo: string | null;
+  productCategory: string;
+  title: string;
+  content: string;
+  price: number;
+  saleStatus: string;
+}
+
 const TradeCreate = () => {
-  const [data, setData] = useState<string>('');
-  const userNo = localStorage.getItem('userNo');
-  console.log('userNo', userNo);
+  const user = localStorage.getItem('userNo');
+  const FILE_SIZE_MAX_LIMIT = 100 * 1024 * 1024;
+  const [thumbnailPhoto, setthumbnailPhoto] = useState<File | null>(null);
+  // const [data, setData] = useState<string>('');
+  //axios 전달을 위한 데이터 key값을 먼저 지정해둠
+  // @ts-ignore
+  const [product, setProduct] = useState<Product>({
+    userNo: user,
+    productCategory: '',
+    title: '',
+    content: '',
+    price: 0,
+    saleStatus: 'READY'
+  });
+  // 이후 product input에 작성한 내용을 다시 전달함
+  // @ts-ignore
+  const { userNo, productCategory, title, content, price, saleStatus } =
+    product;
+
+  const navigate = useNavigate();
+  // 뒤로가기 버튼
+  const backToMain = () => {
+    navigate('/tradeMain');
+  };
+
+  // --- 함수 영역 ---
+
+  const savethumbnailPhoto = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files !== null) {
+      if (event.target.files[0].size > FILE_SIZE_MAX_LIMIT) {
+        event.target.value = '';
+        alert('업로드 가능한 최대 용량은 100MB입니다. ');
+        return;
+      } else {
+        const thumbnailfile = event.target.files[0];
+        console.log(thumbnailfile);
+        if (thumbnailfile) {
+          setthumbnailPhoto(thumbnailfile);
+        } else {
+          setthumbnailPhoto(null);
+        }
+      }
+    }
+  };
+
+  const saveProduct = async (e: any) => {
+    e.preventDefault();
+    // if (!title || !productCategory || !price) {
+    //   alert('모든 칸을 입력해주세요.');
+    // } else {
+    const data = new FormData();
+    const productInfo = JSON.stringify(product);
+    const productblob = new Blob([productInfo], {
+      type: 'application/json'
+    });
+    data.append('usedProductSaveRequest', productblob);
+    data.append('s3uploadMain', thumbnailPhoto as File);
+    console.log(data);
+    try {
+      await axios.post('/usedproduct', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': 'true'
+        }
+      });
+      console.log('요청성공');
+      alert('등록되었습니다.');
+      navigate('/tradeMain');
+    } catch (error) {
+      console.log(error);
+    }
+    // }
+  };
+
+  const onChangeTitle = (e) => {
+    product.title = e.target.value;
+    // console.log(product);
+  };
+  const onChangeCategory = (e) => {
+    product.productCategory = e.target.value;
+    // console.log(product);
+  };
+  const onChangePrice = (e) => {
+    product.price = e.target.value;
+    // console.log(product);
+  };
+  const onChangeContent = (inputData) => {
+    product.content = inputData;
+    // console.log(product);
+  };
 
   return (
     <CreateAndUpdateFrame>
       <CreateAndUpdateDiv>
         <CreateAndUpdateDivHeader>
-          <CreateAndUpdateDivHeaderItem>상품등록</CreateAndUpdateDivHeaderItem>
-          <CreateAndUpdateButton>등록</CreateAndUpdateButton>
+          <CreateAndUpdateDivHeaderItem>물품등록</CreateAndUpdateDivHeaderItem>
+          <div>
+            <BackButton onClick={backToMain}>뒤로가기</BackButton>
+            <CreateAndUpdateButton onClick={saveProduct}>
+              등록
+            </CreateAndUpdateButton>
+          </div>
         </CreateAndUpdateDivHeader>
         <CreateAndUpdateDivItem>
           <CreateAndUpdateDivItemUp>
             <CreateAndUpdateDivItemUpLeft>
-              <LeftItemName type='text' placeholder='상품명'></LeftItemName>
-              <LeftItemCategory>
+              <LeftItemName
+                type='text'
+                placeholder='상품명'
+                name='title'
+                onChange={onChangeTitle}
+              ></LeftItemName>
+              <LeftItemCategory
+                name='productCategory'
+                id='level'
+                onChange={onChangeCategory}
+              >
                 <option value=''>선택</option>
-                <option value=''>키보드</option>
-                <option value=''>마우스</option>
-                <option value=''>모니터</option>
-                <option value=''>생활용품</option>
-                <option value=''>기타용품</option>
+                <option value='KEYBOARD'>키보드</option>
+                <option value='MOUSE'>마우스</option>
+                <option value='MONITER'>모니터</option>
+                <option value='LIFE'>생활용품</option>
+                <option value='ETC'>기타용품</option>
               </LeftItemCategory>
               <LeftItemPrice
                 type='number'
                 placeholder='판매가격'
+                name='price'
+                onChange={onChangePrice}
               ></LeftItemPrice>
+              <RightItemImage>
+                {' '}
+                <input
+                  type='file'
+                  accept='image/*'
+                  name='s3uploadMain'
+                  id='s3uploadMain'
+                  onChange={savethumbnailPhoto}
+                />
+              </RightItemImage>
             </CreateAndUpdateDivItemUpLeft>
-            <CreateAndUpdateDivItemUpRight>
-              <RightItemImage>이미지 업로드</RightItemImage>
-            </CreateAndUpdateDivItemUpRight>
+            {/* <CreateAndUpdateDivItemUpRight></CreateAndUpdateDivItemUpRight> */}
           </CreateAndUpdateDivItemUp>
           <CreateAndUpdateDivItemDown>
-            <div
-              id='ckeditor-div'
-              style={{ width: '100%', height: '100%', fontSize: '1rem' }}
-            >
-              <CKEditor
-                editor={ClassicEditor}
-                config={{
-                  // 여기에 config 입력
-                  toolbar: [
-                    'undo',
-                    'redo',
-                    '|',
-                    'heading',
-                    '|',
-                    'bold',
-                    'italic',
-                    // '|',
-                    // 'bulletedList',
-                    // 'numberedList',
-                    // 'blockQuote',
-                    '|'
-                    // 'link',
-                    // 'insertTable',
-                    // 'imageUpload'
-                  ],
-                  language: 'ko',
-                  placeholder: '내용을 입력해주세요...'
-                }}
-                data={data}
-                onReady={(editor) => {
-                  // You can store the "editor" and use when it is needed.
-                  console.log('Editor is ready to use!', editor);
-                }}
-                onChange={(event, editor) => {
-                  const inputData = editor.getData();
-                  console.log({ event, editor, inputData });
-                  setData(inputData);
-                }}
-                onBlur={(_event, editor) => {
-                  console.log('Blur.', editor);
-                }}
-                onFocus={(_event, editor) => {
-                  console.log('Focus.', editor);
-                }}
-              />
-            </div>
+            <CKEditor
+              editor={ClassicEditor}
+              data='
+              <ul>
+              <li>상품명</li>
+              <li>구매시기</li>
+              <li>사용기간</li>
+              <li>하자여부</li>
+              </ul>
+              <br/>
+              * 실제 촬영한 사진과 함께 상세 정보를 입력해주세요.<br/>
+              * 카카오톡 아이디 첨부시 게시물 삭제 및 이용제재 처리될 수 있어요.
+              <br/><br/>
+              안전하고 건전한 거래환경을 위해 싸그리가 함께합니다.
+              '
+              onReady={(editor) => {
+                // You can store the "editor" and use when it is needed.
+                console.log('Editor is ready to use!', editor);
+              }}
+              // @ts-ignore
+              onChange={(event, editor) => {
+                const inputData = editor.getData();
+                // console.log({ event, editor, inputData });
+                onChangeContent(inputData);
+              }}
+              // @ts-ignore
+              onBlur={(event, editor) => {
+                // console.log('Blur.', editor);
+              }}
+              // @ts-ignore
+              onFocus={(event, editor) => {
+                // console.log('Focus.', editor);
+              }}
+            />
           </CreateAndUpdateDivItemDown>
         </CreateAndUpdateDivItem>
       </CreateAndUpdateDiv>
@@ -218,75 +330,185 @@ const TradeCreate = () => {
 };
 
 const TradeUpdate = () => {
-  const [data, setData] = useState<string>('');
+  const user = localStorage.getItem('userNo');
+  const FILE_SIZE_MAX_LIMIT = 100 * 1024 * 1024;
+  const [thumbnailPhoto, setthumbnailPhoto] = useState<File | null>(null);
+  // const [data, setData] = useState<string>('');
+  //axios 전달을 위한 데이터 key값을 먼저 지정해둠
+  // @ts-ignore
+  const [product, setProduct] = useState<Product>({
+    userNo: user,
+    productCategory: '',
+    title: '',
+    content: '',
+    price: 0,
+    saleStatus: 'READY'
+  });
+  // 이후 product input에 작성한 내용을 다시 전달함
+  // @ts-ignore
+  const { userNo, productCategory, title, content, price, saleStatus } =
+    product;
+
+  const navigate = useNavigate();
+  // 뒤로가기 버튼
+  const backToMain = () => {
+    navigate('/tradeMain');
+  };
+
+  // --- 함수 영역 ---
+
+  const savethumbnailPhoto = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files !== null) {
+      if (event.target.files[0].size > FILE_SIZE_MAX_LIMIT) {
+        event.target.value = '';
+        alert('업로드 가능한 최대 용량은 100MB입니다. ');
+        return;
+      } else {
+        const thumbnailfile = event.target.files[0];
+        console.log(thumbnailfile);
+        if (thumbnailfile) {
+          setthumbnailPhoto(thumbnailfile);
+        } else {
+          setthumbnailPhoto(null);
+        }
+      }
+    }
+  };
+
+  const saveProduct = async (e: any) => {
+    e.preventDefault();
+    if (!title || !productCategory || !price) {
+      alert('모든 칸을 입력해주세요.');
+    } else {
+      const data = new FormData();
+      const productInfo = JSON.stringify(product);
+      const productblob = new Blob([productInfo], {
+        type: 'application/json'
+      });
+      data.append('usedProductSaveRequest', productblob);
+      data.append('s3uploadMain', thumbnailPhoto as File);
+      console.log(data);
+      try {
+        await axios.post('/usedproduct', data, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Credentials': 'true'
+          }
+        });
+        console.log('요청성공');
+        alert('등록되었습니다.');
+        navigate('/tradeMain');
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  const onChangeTitle = (e) => {
+    product.title = e.target.value;
+    // console.log(product);
+  };
+  const onChangeCategory = (e) => {
+    product.productCategory = e.target.value;
+    // console.log(product);
+  };
+  const onChangePrice = (e) => {
+    product.price = e.target.value;
+    // console.log(product);
+  };
+  const onChangeContent = (inputData) => {
+    product.content = inputData;
+    // console.log(product);
+  };
+
   return (
     <CreateAndUpdateFrame>
       <CreateAndUpdateDiv>
         <CreateAndUpdateDivHeader>
           <CreateAndUpdateDivHeaderItem>상품수정</CreateAndUpdateDivHeaderItem>
-          <CreateAndUpdateButton>수정</CreateAndUpdateButton>
+          <div>
+            <BackButton onClick={backToMain}>뒤로가기</BackButton>
+            <CreateAndUpdateButton onClick={saveProduct}>
+              수정
+            </CreateAndUpdateButton>
+          </div>
         </CreateAndUpdateDivHeader>
         <CreateAndUpdateDivItem>
           <CreateAndUpdateDivItemUp>
             <CreateAndUpdateDivItemUpLeft>
-              <LeftItemName type='text' placeholder='상품명'></LeftItemName>
-              <LeftItemCategory>
+              <LeftItemName
+                type='text'
+                placeholder='상품명'
+                name='title'
+                onChange={onChangeTitle}
+              ></LeftItemName>
+              <LeftItemCategory
+                name='productCategory'
+                id='level'
+                onChange={onChangeCategory}
+              >
                 <option value=''>선택</option>
-                <option value=''>키보드</option>
-                <option value=''>마우스</option>
-                <option value=''>모니터</option>
-                <option value=''>생활용품</option>
-                <option value=''>기타용품</option>
+                <option value='KEYBOARD'>키보드</option>
+                <option value='MOUSE'>마우스</option>
+                <option value='MONITER'>모니터</option>
+                <option value='LIFE'>생활용품</option>
+                <option value='ETC'>기타용품</option>
               </LeftItemCategory>
               <LeftItemPrice
                 type='number'
                 placeholder='판매가격'
+                name='price'
+                onChange={onChangePrice}
               ></LeftItemPrice>
+              <RightItemImage>
+                {' '}
+                <input
+                  type='file'
+                  accept='image/*'
+                  name='s3uploadMain'
+                  id='s3uploadMain'
+                  onChange={savethumbnailPhoto}
+                />
+              </RightItemImage>
             </CreateAndUpdateDivItemUpLeft>
-            <CreateAndUpdateDivItemUpRight>
-              <RightItemImage>이미지 업로드</RightItemImage>
-            </CreateAndUpdateDivItemUpRight>
+            {/* <CreateAndUpdateDivItemUpRight></CreateAndUpdateDivItemUpRight> */}
           </CreateAndUpdateDivItemUp>
           <CreateAndUpdateDivItemDown>
             <CKEditor
               editor={ClassicEditor}
-              config={{
-                // 여기에 config 입력
-                toolbar: [
-                  'undo',
-                  'redo',
-                  '|',
-                  'heading',
-                  '|',
-                  'bold',
-                  'italic',
-                  // '|',
-                  // 'bulletedList',
-                  // 'numberedList',
-                  // 'blockQuote',
-                  '|'
-                  // 'link',
-                  // 'insertTable',
-                  // 'imageUpload'
-                ],
-                language: 'ko',
-                placeholder: '내용을 입력해주세요...'
-              }}
-              data={data}
+              data='
+              <ul>
+              <li>상품명</li>
+              <li>구매시기</li>
+              <li>사용기간</li>
+              <li>하자여부</li>
+              </ul>
+              <br/><br/>
+              * 실제 촬영한 사진과 함께 상세 정보를 입력해주세요.<br/>
+              * 카카오톡 아이디 첨부시 게시물 삭제 및 이용제재 처리될 수 있어요.<br/>
+              * 영산 URL 첨부는 하나만 해주세요.<br/>
+              * 유튜브 영상 첨부시 URL이 아닌, "공유 - 퍼가기" 에 나타나는 src 링크를 입력해주세요.
+              <br/><br/>
+              안전하고 건전한 거래환경을 위해 싸그리가 함께합니다.
+              '
               onReady={(editor) => {
                 // You can store the "editor" and use when it is needed.
                 console.log('Editor is ready to use!', editor);
               }}
+              // @ts-ignore
               onChange={(event, editor) => {
                 const inputData = editor.getData();
-                console.log({ event, editor, inputData });
-                setData(inputData);
+                // console.log({ event, editor, inputData });
+                onChangeContent(inputData);
               }}
-              onBlur={(_event, editor) => {
-                console.log('Blur.', editor);
+              // @ts-ignore
+              onBlur={(event, editor) => {
+                // console.log('Blur.', editor);
               }}
-              onFocus={(_event, editor) => {
-                console.log('Focus.', editor);
+              // @ts-ignore
+              onFocus={(event, editor) => {
+                // console.log('Focus.', editor);
               }}
             />
           </CreateAndUpdateDivItemDown>
