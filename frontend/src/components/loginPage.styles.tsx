@@ -799,7 +799,7 @@ const SignInAndUpComponent = () => {
       // @ts-ignore
       signInButton.removeEventListener('click', signInClickHandler);
     };
-  }, []);
+  }, [socialSignUpDone]);
 
   useEffect(() => {
     if (isEmailValid && isPasswordValid && isConfirmValid && isNicknameUnique) {
