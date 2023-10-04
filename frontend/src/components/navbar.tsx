@@ -316,16 +316,19 @@ const Navbar = () => {
     const urlEndPoint =
       'https://j9b209.p.ssafy.io/api/notification/subscribe/1';
     const eventSource = new EventSource(urlEndPoint);
+
     eventSource.addEventListener('sse-emitter-created', function (event) {
+      // event.preventDefault();
       console.log(event);
     });
 
     eventSource.addEventListener('new bid', function (e) {
-      console.log(e.data);
+      // e.preventDefault();
+      console.log('알림', e.data);
       if (e.data) {
       }
     });
-  });
+  }, []);
 
   return (
     <NavbarDiv>

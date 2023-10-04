@@ -198,6 +198,16 @@ const CommuListDiv = styled.div`
   justify-content: space-between;
 `;
 
+const Rank = styled.div`
+  width: 20px;
+  height: 20px;
+  background-color: red;
+  color: white;
+  text-align: center;
+  line-height: 20px;
+  border-radius: 3px;
+`;
+
 // 커뮤니티 구성 컴포넌트
 
 const CommunityMain = () => {
@@ -488,7 +498,7 @@ const CommunityMain = () => {
           <Div>
             {commuRank.slice(0, 5).map((item: CommuItem, id) => (
               <ListDiv key={id}>
-                {id + 1}.
+                <Rank>{id + 1}</Rank>
                 <CommuTag
                   onClick={() =>
                     navigate(
@@ -504,7 +514,7 @@ const CommunityMain = () => {
           <Div>
             {commuRank.slice(5, 10).map((item: CommuItem, id) => (
               <ListDiv key={id}>
-                {id + 6}.
+                <Rank>{id + 6}</Rank>
                 <CommuTag
                   onClick={() =>
                     navigate(
@@ -520,7 +530,7 @@ const CommunityMain = () => {
           <Div>
             {commuRank.slice(10, 15).map((item: CommuItem, id) => (
               <ListDiv key={id}>
-                {id + 11}.
+                <Rank>{id + 11}</Rank>
                 <CommuTag
                   onClick={() =>
                     navigate(
