@@ -13,7 +13,6 @@ import com.ssafy.ssagri.entity.chat.Message;
 import com.ssafy.ssagri.entity.user.User;
 import com.ssafy.ssagri.util.exception.CustomException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -84,8 +83,9 @@ public class ChatRoomService {
         //채팅방이 없으면 생성하고 있으면 조회하는 메서드
         ChatRoomResponseDto chatRoomResponseDto = saveChatRoom(userA, userB);
 
-
         Page<MessageResponseDto> messageResponseList = messageService.selectMessageResponse(chatRoomResponseDto.getNo(), pageable);
+        log.info("Service - Page<MessageResponseDto> : {}", messageResponseList);
+
 
         ChatRoomDetailResponseDto chatRoomDetailResponseDto = ChatRoomDetailResponseDto.builder()
                 .chatRoomNo(chatRoomResponseDto.getNo())
@@ -95,7 +95,8 @@ public class ChatRoomService {
                 .messageResponseList(messageResponseList)
                 .build();
 
-        log.info("메서드 끝~");
+        log.info("Service - ChatRoomDetailResponseDto : {}", chatRoomDetailResponseDto);
+
         return chatRoomDetailResponseDto;
     }
     /*

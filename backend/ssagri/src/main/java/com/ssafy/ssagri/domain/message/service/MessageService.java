@@ -50,10 +50,10 @@ public class MessageService {
 
 
     /*
-    * MessageRequest를 받아서
-    * Entity로 바꾸고 DB 저장
-    * MessageResponse로 바꿔서 client로 반환
-    * */
+     * MessageRequest를 받아서
+     * Entity로 바꾸고 DB 저장
+     * MessageResponse로 바꿔서 client로 반환
+     * */
     @Transactional
     public MessageResponseDto saveMessage(MessageRequestDto messageRequest){
         log.info("messageRequest = {}", messageRequest);

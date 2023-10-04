@@ -178,7 +178,7 @@ const TradeCreate = () => {
         return;
       } else {
         const thumbnailfile = event.target.files[0];
-        console.log(thumbnailfile);
+        // console.log(thumbnailfile);
         if (thumbnailfile) {
           setthumbnailPhoto(thumbnailfile);
         } else {
@@ -200,7 +200,7 @@ const TradeCreate = () => {
     });
     data.append('usedProductSaveRequest', productblob);
     data.append('s3uploadMain', thumbnailPhoto as File);
-    console.log(data);
+    // console.log(data);
     try {
       await axios.post('/usedproduct', data, {
         headers: {
@@ -209,7 +209,7 @@ const TradeCreate = () => {
           'Access-Control-Allow-Credentials': 'true'
         }
       });
-      console.log('요청성공');
+      // console.log('요청성공');
       alert('등록되었습니다.');
       navigate('/tradeMain');
     } catch (error) {
@@ -299,13 +299,16 @@ const TradeCreate = () => {
               </ul>
               <br/>
               * 실제 촬영한 사진과 함께 상세 정보를 입력해주세요.<br/>
-              * 카카오톡 아이디 첨부시 게시물 삭제 및 이용제재 처리될 수 있어요.
+              * 카카오톡 아이디 첨부시 게시물 삭제 및 이용제재 처리될 수 있어요.<br/>
+              * 영산 URL 첨부는 하나만 해주세요.<br/>
+              * 유튜브 영상 첨부시 URL이 아닌, "공유 - 퍼가기" 에 나타나는 src 링크를 입력해주세요.
               <br/><br/>
               안전하고 건전한 거래환경을 위해 싸그리가 함께합니다.
               '
+              // @ts-ignore
               onReady={(editor) => {
                 // You can store the "editor" and use when it is needed.
-                console.log('Editor is ready to use!', editor);
+                // console.log('Editor is ready to use!', editor);
               }}
               // @ts-ignore
               onChange={(event, editor) => {
@@ -365,7 +368,7 @@ const TradeUpdate = () => {
         return;
       } else {
         const thumbnailfile = event.target.files[0];
-        console.log(thumbnailfile);
+        // console.log(thumbnailfile);
         if (thumbnailfile) {
           setthumbnailPhoto(thumbnailfile);
         } else {
@@ -387,7 +390,7 @@ const TradeUpdate = () => {
       });
       data.append('usedProductSaveRequest', productblob);
       data.append('s3uploadMain', thumbnailPhoto as File);
-      console.log(data);
+      // console.log(data);
       try {
         await axios.post('/usedproduct', data, {
           headers: {
@@ -396,7 +399,7 @@ const TradeUpdate = () => {
             'Access-Control-Allow-Credentials': 'true'
           }
         });
-        console.log('요청성공');
+        // console.log('요청성공');
         alert('등록되었습니다.');
         navigate('/tradeMain');
       } catch (error) {
@@ -492,9 +495,10 @@ const TradeUpdate = () => {
               <br/><br/>
               안전하고 건전한 거래환경을 위해 싸그리가 함께합니다.
               '
+              // @ts-ignore
               onReady={(editor) => {
                 // You can store the "editor" and use when it is needed.
-                console.log('Editor is ready to use!', editor);
+                // console.log('Editor is ready to use!', editor);
               }}
               // @ts-ignore
               onChange={(event, editor) => {

@@ -581,13 +581,15 @@ const TradeDetail = () => {
   // 찜하기 전환
   const changeLike = () => {
     if (!like) {
+      // @ts-ignore
       axios.post(`/usedproductlike/${userNo}/${productNo}`).then((res) => {
-        console.log(res.config.method, res.status);
+        // console.log(res.config.method, res.status);
       });
       likeYN.current = '/assets/img/heartColor.png';
     } else {
+      // @ts-ignore
       axios.delete(`/usedproductlike/${userNo}/${productNo}`).then((res) => {
-        console.log(res.config.method, res.status);
+        // console.log(res.config.method, res.status);
       });
       likeYN.current = '/assets/img/heartWhite.png';
     }
@@ -602,7 +604,7 @@ const TradeDetail = () => {
         await axios
           .get(url)
           .then((res) => {
-            console.log('check Detail', res);
+            // console.log('check Detail', res);
 
             // 응답 데이터 삽입
             productDetail.current = res.data;
@@ -622,7 +624,7 @@ const TradeDetail = () => {
 
             const htmlCode: string = productResponse.content;
             const flag = htmlCode.search('<figure class="media">');
-            console.log('check flag', flag);
+            // console.log('check flag', flag);
 
             if (flag !== -1) {
               const figureStart: number = htmlCode.search(
@@ -642,7 +644,7 @@ const TradeDetail = () => {
               const startHtml = htmlCode.substring(0, figureStart);
               const endHtml = htmlCode.substring(figureEnd + 9);
 
-              console.log(startHtml, movieTag, endHtml);
+              // console.log(startHtml, movieTag, endHtml);
               const newHtml = startHtml + movieTag + endHtml;
 
               detailContent.innerHTML = newHtml;
