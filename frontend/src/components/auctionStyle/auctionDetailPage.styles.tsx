@@ -1,3 +1,4 @@
+import { useLocation } from 'react-router-dom';
 import { styled } from 'styled-components';
 
 const DetailDiv = styled.div`
@@ -64,6 +65,9 @@ const InfoContent = styled.div`
 `;
 
 const AuctionDetail = () => {
+  const { state } = useLocation();
+  console.log('경매 아이템 정보: ', state);
+
   return (
     <DetailDiv>
       <ProductInfo>

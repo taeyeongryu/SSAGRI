@@ -560,6 +560,7 @@ const SignInAndUpComponent = () => {
   // 소셜 로그인으로 회원가입하는 경우
   const location = useLocation();
   const [isKakao, setIsKakao] = useState(false);
+  const [socialProfileURL, setSocialProfileURL] = useState('');
 
   // 프로필 사진과 이메일 닉네임을 기본값으로 바꿔주고
   // 이메일은 변경 불가, 중복된 이메일이 있는지는 백엔드에서 분별해줌
@@ -573,6 +574,7 @@ const SignInAndUpComponent = () => {
         signUpForm.email = userData.email;
         signUpForm.nickname = userData.nickname;
         setImage(userData.profileURL);
+        setSocialProfileURL(userData.profileURL);
       }
 
       setIsEmailValid(true);
@@ -703,7 +705,7 @@ const SignInAndUpComponent = () => {
     console.log(now);
 
     const data = {
-      profile: profileImageUrl,
+      profile: isKakao ? socialProfileURL : profileImageUrl,
       email: signUpForm.email,
       password: signUpForm.password,
       regions: regionFormat(signUpForm.region),
@@ -722,6 +724,8 @@ const SignInAndUpComponent = () => {
     }
   };
 
+  const [socialSignUpDone, setSocialSignUpDone] = useState(false);
+
   // 회원가입 버튼 클릭시
   const onSignUp = async (e) => {
     e.preventDefault();
@@ -733,7 +737,8 @@ const SignInAndUpComponent = () => {
       const response = await signUpUser(profileImageUrl);
 
       console.log('회원가입 성공: ', response);
-      navigate('/login');
+      setSocialSignUpDone(true);
+      alert('회원가입이 완료되었습니다.');
     } catch (error) {
       console.error('회원가입 실패: ', error);
     }
@@ -778,10 +783,14 @@ const SignInAndUpComponent = () => {
     // @ts-ignore
     signInButton.addEventListener('click', signInClickHandler);
 
+    // 소셜 회원가입 시 카카오 계정 로그인이 되면 회원가입 창이 나오도록
     if (location.state) {
-      console.log(location.state);
-      // 카카오 계정 회원가입 시 바로 회원가입 창이 뜨도록
       signUpClickHandler();
+    }
+
+    // 소셜 회원가입 완료되면 로그인 창이 나오도록
+    if (socialSignUpDone) {
+      signInClickHandler();
     }
 
     return () => {
