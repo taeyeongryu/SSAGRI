@@ -66,8 +66,13 @@ const TitleName2 = styled.span`
 `;
 
 const Title = () => {
+  const navigate = useNavigate();
+
+  const goMain = () => {
+    navigate('/');
+  };
   return (
-    <TitleTag>
+    <TitleTag onClick={goMain}>
       <TitleName1>싸</TitleName1>
       <TitleName2>그리</TitleName2>
     </TitleTag>
@@ -224,18 +229,61 @@ const Navbar = () => {
         // 로그인페이지로 이동
       });
   };
+  // 알림등록 api
+  // const notification = () => {
+  //   const storedAccessToken = sessionStorage.getItem('accessToken');
+  //   const notifi = axios.create({
+  //     headers: { Authorization: storedAccessToken }
+  //   });
+  //   console.log('3번@@@');
+  //   const data = {
+  //     timeout: 0
+  //   };
+
+  //   notifi
+  //     .get('/notification/subscribe/1')
+  //     .then((res) => {
+  //       console.log(res.data, '알림요청성공');
+  //     })
+  //     .catch((err) => {
+  //       console.log('알림 실패', err);
+  //     });
+  // };
 
   useEffect(() => {
     onSilentRefreshInNav();
-  }, []);
+    // notification();
+
+    const urlEndPoint =
+      'https://j9b209.p.ssafy.io/api/notification/subscribe/1';
+    const eventSource = new EventSource(urlEndPoint);
+    eventSource.addEventListener('sse-emitter-created', function (event) {
+      console.log(event);
+    });
+
+    eventSource.addEventListener('new bid', function (e) {
+      console.log(e.data);
+      var parsedata = JSON.parse(e.data);
+      console.log(parsedata);
+    });
+
+    const storedAccessToken = sessionStorage.getItem('accessToken');
+    const notifi = axios.create({
+      headers: { Authorization: storedAccessToken }
+    });
+
+    notifi
+      .get('/notification')
+      .then((result) => {
+        console.log('성공', result);
+      })
+      .catch((error) => {
+        console.error('토큰 전달 및 SSE 연결 설정 실패:', error);
+      });
+  });
 
   return (
     <NavbarDiv>
-      {/* <img
-        style={{ marginTop: '1vh', marginLeft: '1vw' }}
-        src='/assets/img/logo.PNG'
-        alt=''
-      /> */}
       <Title></Title>
       <MenuBar></MenuBar>
       <SideBar></SideBar>

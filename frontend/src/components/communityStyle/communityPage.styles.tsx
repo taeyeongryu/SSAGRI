@@ -16,16 +16,27 @@ import axios from 'axios';
 // 커뮤니티 메인페이지 구성
 
 const CommunityDiv = styled.div`
+  position: relative;
   width: 100%;
+  margin-top: 5px;
   background-color: #f4f7f9;
 `;
 
+const TopDiv = styled.div`
+  font-size: 35px;
+  font-weight: 600;
+  margin: 10px 0 0 450px;
+`;
+const TopDiv2 = styled.div`
+  font-size: 25px;
+  font-weight: 600;
+  margin: 10px 0 0 750px;
+`;
 const Div = styled.div``;
 
 const LeftDiv = styled.div`
-  margin-top: 50px;
-  margin-left: 100px;
-  width: 945px;
+  margin: 28px auto;
+  width: 1045px;
   height: 540px;
   border-bottom: 10px solid #d0e7d2;
 `;
@@ -302,14 +313,14 @@ const CommunityMain = () => {
       engine,
       canvas: canvasRef.current!,
       options: {
-        width: 950,
+        width: 1050,
         height: 530,
         background: '#f4f7f9',
         wireframes: false
       }
     });
 
-    const topWall = Bodies.rectangle(0, 5, 1890, 10, {
+    const topWall = Bodies.rectangle(0, 5, 2090, 10, {
       // x,y좌표, 바닥 너비, 바닥 높이
       isStatic: true, // 다른 사물이 통과하지 못함
       collisionFilter: {
@@ -329,7 +340,7 @@ const CommunityMain = () => {
         fillStyle: '#D0E7D2'
       }
     });
-    const rightWall = Bodies.rectangle(940, 0, 10, 1090, {
+    const rightWall = Bodies.rectangle(1040, 0, 10, 1090, {
       isStatic: true, // 다른 사물이 통과하지 못함
       collisionFilter: {
         group: -1 // 특정 그룹에 대해서만 다른 효과를 내기 위해 그룹 묶기
@@ -444,36 +455,40 @@ const CommunityMain = () => {
 
   return (
     <CommunityDiv>
-      <FlexDiv>
-        <LeftDiv>
-          <div className='space-y-[1rem]'>
-            <div
-              className='relative'
-              style={{
-                width: 300,
-                height: 400
-              }}
-            >
-              <canvas ref={canvasRef} />
-            </div>
+      <Div>.</Div>
+      <TopDiv>금주의 Hot 게시판</TopDiv>
+      <TopDiv2>활동량을 늘리고 게시판 크기를 키워보세요!</TopDiv2>
+
+      <LeftDiv>
+        <div className='space-y-[1rem]'>
+          <div
+            className='relative'
+            style={{
+              width: 300,
+              height: 400
+            }}
+          >
+            <canvas ref={canvasRef} />
           </div>
-        </LeftDiv>
-        <RightDiv>
-          <CommuList>금주의 게시판 순위</CommuList>
-          {commuRank.slice(0, 5).map((item: CommuItem, id) => (
-            <ListDiv key={id}>
-              {id + 1}.
-              <CommuTag
-                onClick={() =>
-                  navigate(`/community/${item.boardNo}?boardNo=${item.boardNo}`)
-                }
-              >
-                {item.title}
-              </CommuTag>
-            </ListDiv>
-          ))}
-        </RightDiv>
-      </FlexDiv>
+        </div>
+      </LeftDiv>
+
+      <RightDiv>
+        <CommuList>금주의 게시판 순위</CommuList>
+        {commuRank.slice(0, 5).map((item: CommuItem, id) => (
+          <ListDiv key={id}>
+            {id + 1}.
+            <CommuTag
+              onClick={() =>
+                navigate(`/community/${item.boardNo}?boardNo=${item.boardNo}`)
+              }
+            >
+              {item.title}
+            </CommuTag>
+          </ListDiv>
+        ))}
+      </RightDiv>
+
       <BrTag></BrTag>
       <MidDiv>
         <FlexDiv>

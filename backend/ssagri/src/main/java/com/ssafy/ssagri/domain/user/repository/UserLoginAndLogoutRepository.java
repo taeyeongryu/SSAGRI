@@ -14,4 +14,7 @@ public interface UserLoginAndLogoutRepository extends JpaRepository<User, Long> 
 
     @Query("SELECT u.no FROM User u WHERE u.email =:email")
     Long getUserNoUsingEmail(@Param("email") String email);
+
+    @Query("SELECT COUNT(u) > 0 FROM User u WHERE u.email = :email and u.userDeleteDate is not null")
+    boolean isAccountDeleted(@Param("email") String email);
 }

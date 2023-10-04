@@ -13,6 +13,7 @@ const onLoginSuccess = (response: any) => {
   const accessToken = response.headers['access-token'];
   // axios 헤더에 jwt 토큰 담기
   axios.defaults.headers.common['Authorization'] = accessToken;
+
   sessionStorage.setItem('accessToken', accessToken);
 
   // userNo를 localStorage에 넣기
