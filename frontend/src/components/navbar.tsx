@@ -65,6 +65,83 @@ const TitleName2 = styled.span`
   color: #f2f7f7; // 텍스트 색상 설정
 `;
 
+const NotifyDiv = styled.div`
+  z-index: 50;
+  /* display: flex; */
+  position: fixed;
+  bottom: 50px;
+  right: 50px;
+  width: 400px;
+  height: 300px;
+  background-color: white;
+  border: 2px solid #337ccf;
+  border-radius: 10px;
+  font-weight: 600;
+`;
+
+const NotifyImg = styled.img`
+  width: 150px;
+  margin: 15px 0 0 110px;
+`;
+const NotifyTag = styled.p`
+  font-size: 27px;
+  margin: 30px 0 0 40px;
+  color: #337ccf;
+`;
+const NotifyText = styled.p`
+  font-size: 27px;
+  margin: 5px 0 0 110px;
+  color: #337ccf;
+`;
+const CancleBtn = styled.div`
+  width: 40px;
+  height: 30px;
+  /* border: 1px solid black; */
+  font-size: 20px;
+  border-radius: 5px;
+  text-align: center;
+  line-height: 30px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  &:hover {
+    background-color: #e4e3e3; /* 호버 시 변경될 배경색 */
+    cursor: pointer; /* 호버 시 커서 모양 변경 (선택 사항) */
+  }
+`;
+const GoTradeBtn = styled.div`
+  width: 140px;
+  height: 40px;
+  border: 1px solid black;
+  border-radius: 15px;
+  text-align: center;
+  line-height: 40px;
+  margin-top: 10px;
+  margin-left: 120px;
+  color: white;
+  background-color: #337ccf;
+  &:hover {
+    background-color: #6faabb; /* 호버 시 변경될 배경색 */
+    cursor: pointer; /* 호버 시 커서 모양 변경 (선택 사항) */
+  }
+`;
+const Notify = ({ setNotify }) => {
+  const navigate = useNavigate();
+  return (
+    <NotifyDiv>
+      <CancleBtn onClick={() => setNotify(false)}>x</CancleBtn>
+      <NotifyTag>경매상회입찰이 되었어요!</NotifyTag>
+
+      <NotifyImg src='/assets/img/notify.PNG'></NotifyImg>
+      <NotifyText>+ ㅇㄴㅁㄹ</NotifyText>
+      {/* <GoTradeBtn onClick={() => navigate('/')}>재입찰하러 가기</GoTradeBtn> */}
+      <GoTradeBtn onClick={() => navigate('/auctionDetail/3')}>
+        재입찰하러 가기
+      </GoTradeBtn>
+    </NotifyDiv>
+  );
+};
+
 const Title = () => {
   const navigate = useNavigate();
 
@@ -210,6 +287,8 @@ const SideBar = () => {
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
+  // 알람유무
+  const [notify, setNotify] = useState(true);
 
   const onSilentRefreshInNav = () => {
     localStorage.removeItem('isLoggedIn');
@@ -229,31 +308,11 @@ const Navbar = () => {
         // 로그인페이지로 이동
       });
   };
-  // 알림등록 api
-  // const notification = () => {
-  //   const storedAccessToken = sessionStorage.getItem('accessToken');
-  //   const notifi = axios.create({
-  //     headers: { Authorization: storedAccessToken }
-  //   });
-  //   console.log('3번@@@');
-  //   const data = {
-  //     timeout: 0
-  //   };
-
-  //   notifi
-  //     .get('/notification/subscribe/1')
-  //     .then((res) => {
-  //       console.log(res.data, '알림요청성공');
-  //     })
-  //     .catch((err) => {
-  //       console.log('알림 실패', err);
-  //     });
-  // };
 
   useEffect(() => {
     onSilentRefreshInNav();
     // notification();
-
+    // 알림기능
     const urlEndPoint =
       'https://j9b209.p.ssafy.io/api/notification/subscribe/1';
     const eventSource = new EventSource(urlEndPoint);
@@ -263,23 +322,9 @@ const Navbar = () => {
 
     eventSource.addEventListener('new bid', function (e) {
       console.log(e.data);
-      var parsedata = JSON.parse(e.data);
-      console.log(parsedata);
+      if (e.data) {
+      }
     });
-
-    const storedAccessToken = sessionStorage.getItem('accessToken');
-    const notifi = axios.create({
-      headers: { Authorization: storedAccessToken }
-    });
-
-    notifi
-      .get('/notification')
-      .then((result) => {
-        console.log('성공', result);
-      })
-      .catch((error) => {
-        console.error('토큰 전달 및 SSE 연결 설정 실패:', error);
-      });
   });
 
   return (
@@ -287,6 +332,8 @@ const Navbar = () => {
       <Title></Title>
       <MenuBar></MenuBar>
       <SideBar></SideBar>
+      {/* 알림 */}
+      {notify ? <Notify setNotify={setNotify}></Notify> : null}
     </NavbarDiv>
   );
 };
