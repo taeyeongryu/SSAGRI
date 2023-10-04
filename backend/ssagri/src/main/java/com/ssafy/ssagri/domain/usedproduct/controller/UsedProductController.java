@@ -45,11 +45,11 @@ public class UsedProductController {
             "    \"saleStatus\":\"READY\"\n" +
             "} 형식으로 보내야 함")
     public ResponseEntity<Long> save(@RequestPart UsedProductSaveRequestDto usedProductSaveRequest
-            ,@RequestPart("s3uploadMain") MultipartFile multipartFileMain
-            ,@RequestPart(name = "s3uploadSub", required = false) List<MultipartFile> multipartFileSubList)throws Exception {
-        System.out.println("usedProductSaveRequest = " + usedProductSaveRequest);
+            ,@RequestPart("s3uploadMain") MultipartFile multipartFileMain)throws Exception {
 
-        Long id = usedProductService.saveUsedProduct(usedProductSaveRequest,multipartFileMain,multipartFileSubList);
+        log.info("usedProductSaveRequest : {} ", usedProductSaveRequest);
+
+        Long id = usedProductService.saveUsedProduct(usedProductSaveRequest,multipartFileMain);
         return ResponseEntity.status(HttpStatus.OK).body(id);
     }
 
