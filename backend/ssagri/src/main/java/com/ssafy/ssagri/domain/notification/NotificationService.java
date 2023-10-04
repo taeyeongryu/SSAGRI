@@ -50,20 +50,23 @@ public class NotificationService {
         sseEmitter.onCompletion(() -> sseEmitterMap.remove(userNo));
 
         sseEmitterMap.put(userNo, sseEmitter);
-        System.out.println("sseEmitterMap.size() = " + sseEmitterMap.size());
+        log.info("sseEmitterMap.size() = {}", sseEmitterMap.size());
         return sseEmitter;
     }
 
-    public void sendMessageToBidder(Long AuctionNo, String bidderNickname, int price) {
+    public void sendMessageToBidder(Long auctionNo, String bidderNickname, int price) {
+        log.info("sseEmitterMap.size() = {}", sseEmitterMap.size());
+
         //메시지 Json으로 만들어 준다.
         //"bidderNickname을 가진 사용자가, price을 입찰했다"는 의미
         String sendingMessage = new JSONObject()
+                .put("auctionNo",auctionNo)
                 .put("bidderNickname", bidderNickname)
                 .put("price", price)
                 .toString();
 
         //AuctionNo에 해당하는 경매에 참여하는 사람을 전부 가져온다.
-        List<AuctionBid> auctionBids = auctionBidRepository.selectAuctionBidByAuctionProduct(AuctionNo);
+        List<AuctionBid> auctionBids = auctionBidRepository.selectAuctionBidByAuctionProduct(auctionNo);
 
         //Set 만들어준다.
         Set<Long> bidderNoSet = new HashSet<>();
@@ -91,9 +94,15 @@ public class NotificationService {
 
     //Test Method
     public void sendMessageTest(){
+        log.info("sseEmitterMap.size() = {}", sseEmitterMap.size());
+        String sendingMessage = new JSONObject()
+                .put("auctionNo",1)
+                .put("bidderNickname", 1)
+                .put("price", 1)
+                .toString();
         for (Long userNo : sseEmitterMap.keySet()) {
             try {
-                sseEmitterMap.get(userNo).send(SseEmitter.event().name("new bid").data("test12345"));
+                sseEmitterMap.get(userNo).send(SseEmitter.event().name("new bid").data(sendingMessage));
             } catch (IOException e) {
                 sseEmitterMap.remove(userNo);
                 throw new CustomException(CustomExceptionStatus.SSEEMITTER_DOES_NOT_EXIST);

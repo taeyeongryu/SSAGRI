@@ -99,4 +99,8 @@ public class AuctionProduct extends BaseTimeEntity {
         this.finallyPrice =finallyPrice;
         this.setUpdateDate(modifyTime);
         }
+
+        public void setFinallyPrice(int finallyPrice){
+            this.finallyPrice = finallyPrice;
+        }
 }
