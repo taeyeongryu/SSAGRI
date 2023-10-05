@@ -104,7 +104,7 @@ const BoardCreateMain = () => {
   const [userId, setUserId] = useState(0);
   // 게시판 정보
   const [urlparam, setUrlparam] = useState(0);
-  
+  const storedAccessToken = sessionStorage.getItem('accessToken');
   // 글 입력정보
   const onInput1 = (e) => {
     setTitle(e.target.value);
@@ -123,7 +123,7 @@ const BoardCreateMain = () => {
   };
 
   // 게시판 정보 가져오기
-  
+
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     for (const param of searchParams) {
@@ -133,7 +133,7 @@ const BoardCreateMain = () => {
       setUrlparam(paramValue);
     }
     const BoardApi = axios.create({
-      headers: { 'cotent-type': 'application/json' }
+      headers: { Authorization: storedAccessToken }
     });
     //유저 id정보 요청
     BoardApi.get('/util/get-userno')
@@ -146,7 +146,7 @@ const BoardCreateMain = () => {
   }, []);
   const CreateBoard = () => {
     const BoardApi2 = axios.create({
-      headers: { 'cotent-type': 'application/json' }
+      headers: { Authorization: storedAccessToken }
     });
     const data = {
       allowComment: accept, // 댓글 허용여부 true ,false
@@ -158,14 +158,13 @@ const BoardCreateMain = () => {
     //게시글 생성
     BoardApi2.post('/board/write', data)
       .then((res) => {
-        console.log(res.data, '2번요청성공');
+        console.log(res.data, '게시글 생성요청 성공');
       })
       .catch((err) => {
         console.log('실패2', err);
-        console.log('실패2', data);
       });
 
-    navigate('/community/List');
+    navigate(`/community/${urlparam}?boardNo=${urlparam}`);
   };
 
   return (
@@ -187,7 +186,11 @@ const BoardCreateMain = () => {
 
       <BottomFlexDiv>
         <CreateBtn onClick={CreateBoard}>게시글 생성하기</CreateBtn>
-        <CancelBtn onClick={() => navigate('/community/1')}>뒤로가기</CancelBtn>
+        <CancelBtn
+          onClick={() => navigate(`/community/${urlparam}?boardNo=${urlparam}`)}
+        >
+          뒤로가기
+        </CancelBtn>
       </BottomFlexDiv>
     </TopDiv>
   );
