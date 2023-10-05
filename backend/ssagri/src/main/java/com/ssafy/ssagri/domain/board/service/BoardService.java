@@ -236,6 +236,7 @@ public class BoardService {
                     .no(boardWriteList.get(i).getNo())
                     .user(boardWriteList.get(i).getUser().getNickname())
                     .boardName(boardWriteList.get(i).getBoard().getTitle())
+                    .boardView(boardWriteList.get(i).getBoard().getBoardClick())
                     .boardLife(ChronoUnit.DAYS.between(LocalDateTime.now(),boardWriteList.get(i).getCreateDate()))
                     .title(boardWriteList.get(i).getTitle())
                     .view(boardWriteList.get(i).getView())

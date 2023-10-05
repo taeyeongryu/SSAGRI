@@ -27,6 +27,9 @@ public class BoardListDto {
     // 게시판 no
     private Long boardNo;
 
+    // 게시판 조회수
+    private int boardView;
+
     // 게시판 생명 주기
     private Long boardLife;
 
