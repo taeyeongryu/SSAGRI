@@ -82,4 +82,8 @@ public class BoardList extends BaseTimeEntity {
     public void like(){
         this.like += 1;
     }
+
+    public void click(){
+        this.view+=1;
+    }
 }

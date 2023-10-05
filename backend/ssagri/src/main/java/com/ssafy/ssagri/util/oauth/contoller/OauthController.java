@@ -1,5 +1,6 @@
 package com.ssafy.ssagri.util.oauth.contoller;
 
+import com.ssafy.ssagri.domain.redis.RedisService;
 import com.ssafy.ssagri.domain.user.repository.UserRegistAndModifyRepository;
 import com.ssafy.ssagri.domain.user.service.UserLoginAndLogoutService;
 import com.ssafy.ssagri.util.exception.CustomException;
@@ -30,6 +31,7 @@ public class OauthController {
     private final OauthService oauthService;
     private final UserRegistAndModifyRepository userRegistAndModifyRepository;
     private final UserLoginAndLogoutService userLoginAndLogoutService;
+    private final RedisService redisService;
 
     /*
     1. 인증 : 카카오 로그인 이후
@@ -68,24 +70,13 @@ public class OauthController {
     @Operation(summary = "카카오 로그인", description = "1. 카카오 로그인 창에서 로그인 \n" +
             "2. 백엔드에서 로그인한 유저의 핵심 정보를 FE로 넘겨줍니다.\n" +
             ">> 3. FE에서는 다시 백엔드로 이메일을 보내줍니다. : 이 부분에 해당하는 컨트롤러입니다.(1~2는 그냥 로그인 링크) <<" +
-            "FE에서는 email을 Param으로 넘겨주시면 됩니다. 이후 해당 이메일이 존재한다면 맞는 계정으로 로그인합니다.\n" +
+            "FE에서는 email, authcode을 Param으로 넘겨주시면 됩니다. 이후 해당 이메일이 존재한다면 맞는 계정으로 로그인합니다.\n" +
             "계정이 맞지 않다면 OAUTH_KAKAO_NOT_VALID_EMAIL(-901, \"해당 계정이 존재하지 않습니다.\") 가 발생합니다. \n" +
             "이후는 기존 로그인 로직과 동일합니다.")
-    public ResponseEntity<?> kakaoLogin(@RequestParam("email") String email, HttpServletResponse response) {
-        if(!userRegistAndModifyRepository.isEmailExists(email)) throw new CustomException(OAUTH_KAKAO_NOT_VALID_EMAIL); //이메일 존재 체크
+    public ResponseEntity<?> kakaoLogin(@RequestParam("email") String email, @RequestParam("authcode") String authcode, HttpServletResponse response) {
+        oauthService.checkAndDeleteRedisCode(email, authcode); //체크 과정 실행
         return userLoginAndLogoutService.loginUserForKakao(response, email);
     }
     //마찬가지로 유저메일 받아옴 -> 해당 메일이 존재 -> 해당 정보로 로그인
 
-//    @GetMapping("get/user-info")
-//    @Operation(summary = "사용자 정보 받아오기", description = "Token에서 뽑아온 accessToken으로 로그인 사용자가 동의한 정보 확인하기 ")
-//    public ResponseEntity<Map<String, String>> getUserInfo(@RequestParam("token") String token) {
-//        log.info("[KAKAO]액세스 토큰 입력 : {}", token);
-//        return oauthService.getUserInfo(token);
-//    }
-
-//    @GetMapping("logout")
-//    public String logout(@RequestParam("code") String code) throws JSONException {
-//
-//    }
 }
