@@ -19,6 +19,7 @@ import AuctionPage from './pages/auctionPage/auctionPage';
 import AuctionDetailPage from './pages/auctionPage/auctionDetailPage';
 import AuctionCreatePage from './pages/auctionPage/auctionCreatePage';
 import Navbar from './components/navbar';
+import MyPagePage from './pages/mypagePage';
 
 import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
@@ -42,6 +43,8 @@ const App = () => {
       <Routes>
         {/* 로그인 페이지 */}
         <Route path='/login' element={<LoginPage />} />
+        {/* 마이 페이지 */}
+        <Route path='/mypage' element={<MyPagePage />} />
         {/* 카카오 로그인 중간 페이지 */}
         <Route path='/oauth/callback/kakao' element={<SocialKakaoPage />} />
         {/* 메인 페이지 */}

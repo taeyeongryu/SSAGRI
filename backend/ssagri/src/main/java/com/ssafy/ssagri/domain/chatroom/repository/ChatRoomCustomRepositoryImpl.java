@@ -55,21 +55,24 @@ public class ChatRoomCustomRepositoryImpl
     @Override
     public ChatRoomListResponseDto findReceiver(Long receiverNo) {
         List<Tuple> result = jpaQueryFactory
-            .select(user.nickname, user.profile, user.region)
+            .select(user.no, user.nickname, user.profile, user.region)
             .from(user)
             .where(user.no.eq(receiverNo))
             .fetch();
 
+        Long no = null;
         String nickname = null;
         String profile = null;
         Region region = null;
         for (Tuple t : result) {
+            no = t.get(user.no);
             nickname = t.get(user.nickname);
             profile = t.get(user.profile);
             region = t.get(user.region);
         }
 
         return ChatRoomListResponseDto.builder()
+            .receiverNo(no)
             .receiverNickName(nickname)
             .receiverProfile(profile)
             .receiverRegion(region)
