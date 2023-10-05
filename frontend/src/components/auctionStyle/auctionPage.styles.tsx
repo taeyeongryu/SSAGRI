@@ -1,6 +1,5 @@
 import { styled } from 'styled-components';
-import { AuctionSearchInput } from '../tradeStyle/tradeMainPage.styles';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRecoilValue } from 'recoil';
@@ -243,6 +242,57 @@ const PagingButtonText = styled.div`
   font-weight: bold;
 `;
 
+///// 경매 키워드 검색
+// ------ 검색 입력 01 --------
+const Search01 = styled.div`
+  width: 500px;
+  height: 40px;
+  border: 1px solid #4786fa;
+  border-radius: 20px;
+  padding: 0px 30px 0px 0px;
+  margin-right: 25px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+const SearchInput01 = styled.input`
+  width: 440px;
+  height: 38px;
+  border: 0;
+  margin-left: 16px;
+  font-size: 16px;
+`;
+
+// ------ 검색 버튼 --------
+const SearchButton = styled.button`
+  background-color: #fff;
+  border: 0;
+  cursor: pointer;
+`;
+const SearchImg = styled.img`
+  width: 20px;
+  height: 20px;
+  color: #4786fa;
+`;
+
+const AuctionSearchInput = ({ onKeywordHandler, getListByKeyword }) => {
+  return (
+    <Search01>
+      <SearchInput01
+        onChange={onKeywordHandler}
+        type='text'
+        placeholder='원하는 제품을 검색해 보세요!'
+      ></SearchInput01>
+      <SearchButton onClick={getListByKeyword}>
+        <SearchImg src='/assets/img/searchGlass-4786fa.png'></SearchImg>
+      </SearchButton>
+    </Search01>
+  );
+};
+
+////
+
 const BottomPageSpace = ({ setCurrentPage, totalPage }) => {
   const NextPage = (num) => {
     setCurrentPage(num);
@@ -443,7 +493,7 @@ const CategoryItem = styled.div`
   }
 `;
 
-const AuctionTradeList = (setTypes) => {
+const AuctionTradeList = ({ setTypes }) => {
   const CheckType = (num) => {
     setTypes(num);
   };
@@ -464,11 +514,33 @@ const AuctionPage = () => {
   const [itemList, setItemList] = useState([]);
 
   const [types, setTypes] = useState(0);
-  console.log(types);
+
+  const [keyword, SetKeyword] = useState('');
+
+  const onKeywordHandler = (e) => {
+    SetKeyword(e.target.value);
+  };
+
+  const getListByKeyword = () => {
+    const auctionSearch = keyword;
+
+    axios
+      .get(`/auction-product/search`, {
+        params: {
+          auctionSearch: auctionSearch
+        }
+      })
+      .then((res) => {
+        setItemList(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   // 로그인하고 다시 돌아오기 위해 현재 경로 저장
-  const { pathname } = useLocation();
-  console.log(pathname);
+  // const { pathname } = useLocation();
+  // console.log(pathname);
 
   // const [researchItems,setResearchItems] =
   // const researchItems = itemList.filter(item => item.type === '모니터');
@@ -521,6 +593,42 @@ const AuctionPage = () => {
     }
   }, [isLoggedIn]);
 
+  const formatType = (type) => {
+    if (type === 1) {
+      return '모니터';
+    } else if (type === 2) {
+      return '키보드';
+    } else if (type === 3) {
+      return '마우스';
+    } else if (type === 4) {
+      return '생활용품';
+    } else if (type === 5) {
+      return '기타용품';
+    }
+  };
+
+  // 카테고리별 경매 조회
+  useEffect(() => {
+    const getListByType = () => {
+      const auctionType = formatType(types);
+      axios
+        .get(`/auction-product/type`, {
+          params: {
+            auctionType: auctionType
+          }
+        })
+        .then((res) => {
+          setItemList(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    if (types !== 0) {
+      getListByType();
+    }
+  }, [types]);
+
   return (
     <AuctionDiv>
       <AuctionBody>
@@ -530,7 +638,10 @@ const AuctionPage = () => {
         <AuctionTag2></AuctionTag2>
         <AuctionTag3>
           <AuctionInputDiv>
-            <AuctionSearchInput></AuctionSearchInput>
+            <AuctionSearchInput
+              onKeywordHandler={onKeywordHandler}
+              getListByKeyword={getListByKeyword}
+            ></AuctionSearchInput>
             <AuctionTag5> 검색결과 15 건</AuctionTag5>
           </AuctionInputDiv>
         </AuctionTag3>
