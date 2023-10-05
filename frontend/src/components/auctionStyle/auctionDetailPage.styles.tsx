@@ -381,12 +381,12 @@ const AuctionDetail = () => {
         auctionNo: auctionNo,
         userNo: Number(userNo) // 입찰자의 유저 넘버
       };
-      console.log('입찰 정보: ', bidData);
+      // console.log('입찰 정보: ', bidData);
 
       axios
         .post(`/auction-bid`, bidData)
-        .then((res) => {
-          console.log(res);
+        .then(() => {
+          // console.log(res);
           // 입찰 가능한 최소금액을 갱신해준다.
           setStartPrice(selectedPrice + auctionItem.priceCount);
           getBidList();
@@ -429,7 +429,7 @@ const AuctionDetail = () => {
     AuctionApi.get(`/auction-product/load/${auctionNo}`)
       .then((res) => {
         if (res.data.result) {
-          console.log('상품 사진 있음: ', res.data.result);
+          // console.log('상품 사진 있음: ', res.data.result);
           const auctionItemImages = res.data.result;
           setImages(auctionItemImages);
         } else {
@@ -451,7 +451,7 @@ const AuctionDetail = () => {
     });
     AuctionApi.get(`/auction-bid/${auctionNo}`)
       .then((res) => {
-        console.log('입찰 내역: ', res.data);
+        // console.log('입찰 내역: ', res.data);
         setBidList(res.data);
       })
       .catch((err) => {
@@ -524,7 +524,7 @@ const AuctionDetail = () => {
     })
       .then((res) => {
         const data = res.data;
-        console.log('경매 상품 데이터 :', data);
+        // console.log('경매 상품 데이터 :', data);
         setAuctionItem(data);
       })
       .catch((err) => {

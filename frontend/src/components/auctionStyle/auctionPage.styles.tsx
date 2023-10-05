@@ -92,12 +92,12 @@ const AuctionTag4 = styled.div`
   display: flex;
   justify-content: center;
 `;
-const AuctionTag5 = styled.div`
-  font-size: 20px;
-  position: absolute;
-  left: 1120px;
-  bottom: 0;
-`;
+// const AuctionTag5 = styled.div`
+//   font-size: 20px;
+//   position: absolute;
+//   left: 1120px;
+//   bottom: 0;
+// `;
 const AuctionTag6 = styled.div`
   animation: fadein 4s ease-in-out;
 
@@ -301,7 +301,7 @@ const AuctionSearchInput = ({
 const BottomPageSpace = ({ setCurrentPage, totalPage }) => {
   const NextPage = (num) => {
     setCurrentPage(num);
-    console.log(num);
+    // console.log(num);
   };
   const pageButtons: JSX.Element[] = [];
 
@@ -336,7 +336,7 @@ const AuctionItme = (item: any) => {
   const navigate = useNavigate();
   // 상세 페이지로 이동
   const goAuctionDetail = (item) => {
-    console.log(item);
+    // console.log(item);
     navigate(`/auctionDetail/${item.item.no}`);
   };
   const storedAccessToken = sessionStorage.getItem('accessToken');
@@ -586,11 +586,11 @@ const AuctionPage = () => {
   });
 
   const GetAuctionItemList = () => {
-    console.log(isLoggedIn);
+    // console.log(isLoggedIn);
     auctionApi
       .get('/auction-product/all-list')
       .then((res) => {
-        console.log(res.data, '성공2');
+        // console.log(res.data, '성공2');
         setItemList(res.data);
         // itemList.current = res.data;
       })
@@ -619,6 +619,8 @@ const AuctionPage = () => {
       return '생활용품';
     } else if (type === 5) {
       return '기타용품';
+    } else if (type === 0) {
+      return '전체';
     }
   };
 
@@ -626,28 +628,30 @@ const AuctionPage = () => {
   useEffect(() => {
     const getListByType = () => {
       const auctionType = formatType(types);
-      axios
-        .get(`/auction-product/type`, {
-          params: {
-            auctionType: auctionType
-          }
-        })
-        .then((res) => {
-          setItemList(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      if (types === 0) {
+        GetAuctionItemList();
+      } else {
+        axios
+          .get(`/auction-product/type`, {
+            params: {
+              auctionType: auctionType
+            }
+          })
+          .then((res) => {
+            setItemList(res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     };
-    if (types !== 0) {
-      getListByType();
-    }
+    getListByType();
   }, [types]);
 
   return (
     <AuctionDiv>
       <AuctionBody>
-        <AuctionTag1>현재 등록된 경매 리스트 총 23회</AuctionTag1>
+        <AuctionTag1>검색결과 {itemList.length}건</AuctionTag1>
 
         <Line></Line>
         <AuctionTag2></AuctionTag2>
@@ -658,16 +662,19 @@ const AuctionPage = () => {
               getListByKeyword={getListByKeyword}
               handleKeyDown={handleKeyDown}
             ></AuctionSearchInput>
-            <AuctionTag5> 검색결과 15 건</AuctionTag5>
           </AuctionInputDiv>
         </AuctionTag3>
         <Line2></Line2>
         <AuctionTag6>
           <AuctionTradeList setTypes={setTypes}></AuctionTradeList>
           <AuctionList>
-            {SortList.map((item, id) => (
-              <AuctionItme key={id} item={item}></AuctionItme>
-            ))}
+            {SortList ? (
+              SortList.map((item, id) => (
+                <AuctionItme key={id} item={item}></AuctionItme>
+              ))
+            ) : (
+              <div>등록된 경매가 없습니다.</div>
+            )}
           </AuctionList>
           <AuctionCreateBtn onClick={goAuctionCreate}>
             경매 등록
