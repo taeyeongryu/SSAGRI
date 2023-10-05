@@ -382,8 +382,12 @@ const AuctionDetail = () => {
         userNo: Number(userNo) // 입찰자의 유저 넘버
       };
       // console.log('입찰 정보: ', bidData);
+    const storedAccessToken = sessionStorage.getItem('accessToken');
+    const AuctionApi = axios.create({
+      headers: { Authorization: storedAccessToken }
+    });
 
-      axios
+      AuctionApi
         .post(`/auction-bid`, bidData)
         .then(() => {
           // console.log(res);
