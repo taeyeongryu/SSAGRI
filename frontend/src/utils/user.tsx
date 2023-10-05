@@ -1,12 +1,11 @@
 import axios from 'axios';
 import base64 from 'base-64';
-
+import { isLoggedInAtom } from '../states/account/loginAtom';
 // 액세스토큰 만료 시간
 const JWT_EXPIRY_TIME = 24 * 3600 * 1000; // 만료 시간 (24시간)
 
 // 로그인 성공
 const onLoginSuccess = (response: any) => {
-  console.log('로그인 성공!');
   // 로컬 스토리지에 로그인 여부 저장 (새로고침 시 날아가는 것 때문)
   localStorage.setItem('isLoggedIn', 'true');
 
@@ -32,20 +31,23 @@ const onLoginSuccess = (response: any) => {
 // silent Refresh
 // 액세스 토큰이 만료되었을 때, 새로고침 되었을 때 사용
 const onSilentRefresh = () => {
-  localStorage.removeItem('isLoggedIn');
-  axios
-    .get('/jwt/refill')
-    .then((res) => {
-      console.log('silent refresh, 새로운 액세스 토큰 발급');
-      // 리프레시 토큰이 유효 [ STATUS 200 ]
-      // 새로운 액세스 토큰 발급
-      onLoginSuccess(res);
-    })
-    .catch(() => {
-      console.log('silent refresh, 리프레시 토큰이 유효하지 않습니다.');
-      // 리프레시 토큰이 유효하지 않은 경우 [ STATUS 400, 500 ]
-      // 로그인페이지로 이동
-    });
+  if (isLoggedInAtom) {
+    localStorage.removeItem('isLoggedIn');
+
+    axios
+      .get('/jwt/refill')
+      .then((res) => {
+        console.log('silent refresh, 새로운 액세스 토큰 발급');
+        // 리프레시 토큰이 유효 [ STATUS 200 ]
+        // 새로운 액세스 토큰 발급
+        onLoginSuccess(res);
+      })
+      .catch(() => {
+        console.log('silent refresh, 리프레시 토큰이 유효하지 않습니다.');
+        // 리프레시 토큰이 유효하지 않은 경우 [ STATUS 400, 500 ]
+        // 로그인페이지로 이동
+      });
+  }
 };
 
 const onLogout = () => {

@@ -195,6 +195,20 @@ public class BoardService {
 
     }
 
+    // 게시글 바 출력
+    public BoardDto boardWriteBar(Long boardNo)
+    {
+
+        Board board = boardRopository.findByNo(boardNo);
+
+        BoardDto boardDto = BoardDto.builder()
+                .boardLife(ChronoUnit.DAYS.between(LocalDateTime.now(),board.getCreateDate()))
+                .boardClick(board.getBoardClick())
+                .title(board.getTitle()).build();
+
+        return boardDto;
+    }
+
     // 게시글 모두 출력
     public Page<BoardListDto> boardWriteList(Long boardNo, Pageable pageable){
 
@@ -202,11 +216,10 @@ public class BoardService {
 
         Page<BoardList> allBoardWriteList = boardListRepository.findAllByBoardOrderByCreateDateAsc(board,pageable);
 
-
-
         List<BoardList> boardWriteList = allBoardWriteList.getContent();
 
-        List<BoardListDto> result = new ArrayList<>();
+        List<BoardListDto> result1 = new ArrayList<>();
+
 
         for(int i=0;i<boardWriteList.size();i++){
 
@@ -235,9 +248,9 @@ public class BoardService {
             BoardListDto boardListDto = BoardListDto.builder()
                     .no(boardWriteList.get(i).getNo())
                     .user(boardWriteList.get(i).getUser().getNickname())
-                    .boardName(boardWriteList.get(i).getBoard().getTitle())
-                    .boardView(boardWriteList.get(i).getBoard().getBoardClick())
-                    .boardLife(ChronoUnit.DAYS.between(LocalDateTime.now(),boardWriteList.get(i).getCreateDate()))
+//                    .boardName(boardWriteList.get(i).getBoard().getTitle())
+//                    .boardView(boardWriteList.get(i).getBoard().getBoardClick())
+//                    .boardLife(ChronoUnit.DAYS.between(LocalDateTime.now(),boardWriteList.get(i).getCreateDate()))
                     .title(boardWriteList.get(i).getTitle())
                     .view(boardWriteList.get(i).getView())
                     .like(boardWriteList.get(i).getLike())
@@ -246,10 +259,11 @@ public class BoardService {
                     .commentCount(boardCommentRepository.findAllByBoardList(boardWriteList.get(i)).size())
                     .content(boardWriteList.get(i).getContent()).build();
 
-            result.add(boardListDto);
+            result1.add(boardListDto);
+
         }
 
-        return new PageImpl<>(result, allBoardWriteList.getPageable(), allBoardWriteList.getTotalElements());
+        return new PageImpl<>(result1, allBoardWriteList.getPageable(), allBoardWriteList.getTotalElements());
     }
 
     // 게시글 상세보기

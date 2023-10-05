@@ -3,6 +3,7 @@ package com.ssafy.ssagri.domain.message.service;
 import com.ssafy.ssagri.domain.message.dto.MessageRequestDto;
 import com.ssafy.ssagri.domain.message.dto.MessageResponseDto;
 import com.ssafy.ssagri.domain.message.repository.MessageRepository;
+import com.ssafy.ssagri.domain.notification.NotificationService;
 import com.ssafy.ssagri.domain.user.repository.UserRegistAndModifyRepository;
 import com.ssafy.ssagri.entity.chat.Message;
 import com.ssafy.ssagri.entity.user.User;
@@ -25,6 +26,7 @@ import java.util.List;
 public class MessageService {
     private final MessageRepository messageRepository;
     private final UserRegistAndModifyRepository userRegistAndModifyRepository;
+    private final NotificationService notificationService;
 
     public Page<MessageResponseDto> selectMessageResponse(Long roomNo, Pageable pageable){
         log.info("roomNo : {}",roomNo);
@@ -59,11 +61,13 @@ public class MessageService {
         log.info("messageRequest = {}", messageRequest);
 
         //sender
-        User sender = userRegistAndModifyRepository.findById(messageRequest.getSenderNo()).orElseThrow(() -> new CustomException(CustomExceptionStatus.USER_DOES_NOT_EXSIST));
+        User sender = userRegistAndModifyRepository.findById(messageRequest.getSenderNo())
+                .orElseThrow(() -> new CustomException(CustomExceptionStatus.USER_DOES_NOT_EXSIST));
         log.info("sender = {}", sender);
 
         //receiver
-        User receiver = userRegistAndModifyRepository.findById(messageRequest.getReceiverNo()).orElseThrow(() -> new CustomException(CustomExceptionStatus.USER_DOES_NOT_EXSIST));
+        User receiver = userRegistAndModifyRepository.findById(messageRequest.getReceiverNo())
+                .orElseThrow(() -> new CustomException(CustomExceptionStatus.USER_DOES_NOT_EXSIST));
         log.info("receiver = {}", receiver);
 
         //Entity로 바꾸고
@@ -75,6 +79,12 @@ public class MessageService {
 
         MessageResponseDto responseDto = message.toResponse();
         log.info("responseDto = {}", responseDto);
+
+
+
+        //알림 보낸다.
+        notificationService.sendMessageToChatter(sender,receiver,messageRequest.getChatRoomNo());
+
 
         //client로 반환
         return responseDto;

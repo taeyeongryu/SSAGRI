@@ -99,38 +99,67 @@ const TagBtn = styled.div`
   }
 `;
 
+const BottomTag = styled.div`
+  margin: 200px;
+`;
+
 // 게시글 디테일 양식
 
 const BoardDetailMain = () => {
   const [urlparam, setUrlparam] = useState(0);
-  const [boardData, setBoardData] = useState([]);
-  console.log(urlparam, boardData);
+  const storedAccessToken = sessionStorage.getItem('accessToken');
+
+  const [listNo, setListNo] = useState(1);
+
+  type board = {
+    title: string;
+    content: string;
+    user: string;
+  };
+
+  // const [boardData, setBoardData] = useState([]);
+  const [boardData, setBoardData] = useState<board | null>(null);
 
   const navigate = useNavigate();
   const GoBack = () => {
-    navigate('/');
+    navigate(`/community/${urlparam}?boardNo=${urlparam}`);
   };
   // 게시글 정보 가져오기
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
-    for (const param of searchParams) {
-      const paramName = param[0];
-      console.log(paramName);
-      const paramValue = parseInt(param[1], 10);
-      setUrlparam(paramValue);
+    const paramValue = searchParams.get('boardNo');
+    const paramListValue = searchParams.get('ListNo');
+
+    if (paramValue !== null) {
+      setUrlparam(parseInt(paramValue, 10)); // 가져온 값이 문자열이므로 숫자로 변환 후 설정
     }
+    if (paramListValue !== null) {
+      setListNo(parseInt(paramListValue, 10)); // 가져온 값이 문자열이므로 숫자로 변환 후 설정
+    }
+
     const BoardListApi = axios.create({
-      headers: { 'cotent-type': 'application/json' }
+      headers: { Authorization: storedAccessToken }
     });
+
     //유저 id정보 요청
-    BoardListApi.get(`/board/write-list-detail/${1}`)
+    BoardListApi.get(`/board/write-list-detail/${listNo}`)
       .then((res) => {
         setBoardData(res.data);
       })
       .catch((err) => {
         console.log('실패1', err);
       });
+
+    // 게시글 조회수 증가
+    BoardListApi.get(`/board/boardList-click/${listNo}`)
+      .then(() => {
+        console.log('조회수증가');
+      })
+      .catch((err) => {
+        console.log('조회수증가 실패', err);
+      });
   }, []);
+
   return (
     <DetailDiv>
       <TopTitle>
@@ -140,14 +169,16 @@ const BoardDetailMain = () => {
         </TitleDiv>
       </TopTitle>
       <TopDiv>
-        <TopTag>글 제목 : asdf</TopTag>
+        <TopTag>글 제목 : {boardData?.title}</TopTag>
       </TopDiv>
       <MidDiv>
         <MidTag>
-          글 내용 : <br />
+          글 내용 :
           <br />
-          sodyd
+          <br />
+          {boardData?.content}
         </MidTag>
+        <BottomTag>작성자 : {boardData?.user}</BottomTag>
       </MidDiv>
       <TagBtn onClick={GoBack}>뒤로가기</TagBtn>
     </DetailDiv>

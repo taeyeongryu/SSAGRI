@@ -49,7 +49,7 @@ public class AuctionProductService {
     public List<AuctionProductAllDTO> getAuctionProducts() {
 
 
-         List<AuctionProduct> products = auctionRepository.findAll();
+         List<AuctionProduct> products = auctionRepository.findAllByOrderByEndDateDesc();
 
 
          List<AuctionProductAllDTO> result = new ArrayList<>();

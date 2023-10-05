@@ -583,6 +583,7 @@ const Page2_section2 = ({
 const Page2_Auction = styled.div`
   width: 2020px;
   height: 100vh;
+  position: relative;
 `;
 
 const AuctionDiv = styled.div`
@@ -638,6 +639,7 @@ const NameTag1_3 = styled.p`
   font-size: 21px;
   margin-left: 10px;
   color: rgb(0, 0, 0, 0.4);
+  z-index: 20;
 `;
 
 const Auctionbox = styled.div`
@@ -686,12 +688,29 @@ const Auction_btn = styled.div`
   }
 `;
 
+// const TradeImg1 = styled.img`
+//   position: absolute;
+//   top: 310px;
+//   left: 250px;
+//   width: 100px;
+//   height: 40px;
+// `;
+// const TradeImg2 = styled.img`
+//   position: absolute;
+//   opacity: 0.3;
+//   top: -120px;
+//   left: -400px;
+//   width: 1500px;
+//   height: 700px;
+//   z-index: -10;
+// `;
+
 const AuctionBorder = styled.div`
   position: absolute;
   margin-left: 75px;
   width: 700px;
   height: 500px;
-  border: 30px solid rgb(191, 136, 69, 0.8);
+  border: 30px solid rgb(191, 136, 69, 0.5);
   border-radius: 20px;
   /* left: 100px; */
   z-index: 1;
@@ -701,7 +720,7 @@ const AuctionBorder2 = styled.div`
   margin-left: 50px;
   width: 750px;
   height: 500px;
-  border: 30px solid rgb(191, 136, 69, 0.8);
+  border: 30px solid rgb(191, 136, 69, 0.5);
   border-radius: 20px;
   /* left: 100px; */
   z-index: 300;
@@ -717,8 +736,11 @@ const AuctionMain = styled.div`
   height: 420px;
   border-radius: 10px;
   transition: transform 0.5s;
-  /* background-color: #e7c17f; */
-  background: linear-gradient(to bottom, #f2ddb6, #e7c17f);
+  background: linear-gradient(
+    to bottom,
+    rgb(238, 219, 183),
+    rgb(228, 194, 135)
+  );
 `;
 const AuctionSide = styled.div`
   position: absolute;
@@ -770,6 +792,7 @@ const Page2_section3 = ({ fadepages4Tag1, fadepages4Tag2 }) => {
           }}
         >
           <NameTag1>경매</NameTag1>
+          {/* <TradeImg1 src='/assets/img/tradeImg1.png'></TradeImg1> */}
           <Auctionbox>
             <NameTag1_2>이번주의 경매 리스트.</NameTag1_2>
             <NameTag1_3>
@@ -785,6 +808,7 @@ const Page2_section3 = ({ fadepages4Tag1, fadepages4Tag2 }) => {
             transition: 'opacity 1.5s ease'
           }}
         >
+          {/* <TradeImg2 src='/assets/img/tradeImg2.png'></TradeImg2> */}
           <AuctionMain>
             <AuctionDiv2>
               <AuctionMidtag1>경매 가이드</AuctionMidtag1>
