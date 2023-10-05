@@ -75,9 +75,7 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         //토큰 원본 꺼내기 및 처리
         String rawToken = request.getHeader(HttpHeaders.AUTHORIZATION);
-        System.out.println("테스트 : jwtFilter, rawToken = " + rawToken);
         if(rawToken == null || !rawToken.startsWith("Bearer ")){
-            System.out.println("토큰이 없거나 올바르지 않네요");
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.setContentType("application/json");
             response.getWriter().write("{\"error\": \"Null or Not Bearer Token\"}");

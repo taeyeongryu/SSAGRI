@@ -90,7 +90,8 @@ public class OauthService {
             String email = jsonNode.path("kakao_account").path("email").asText();
 
             //랜덤 코드 만들어 Redis에 저장
-            String authcode = emailService.createKey();
+//            String authcode = emailService.createKey();
+            String authcode = "1234";
             redisService.saveKakaoAuthCode(authcode, email);
             log.info("[OauthService]카카오 인가 코드 생성 : {} {}", authcode, email);
 
