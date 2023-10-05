@@ -697,8 +697,8 @@ const DoChatting = ({ selectChat }) => {
   // 연결
   const connect = () => {
     // stomp 객체 생성
-    // const socket = new SockJS('https://j9b209.p.ssafy.io/api/ws', null, {
-    const socket = new SockJS('http://localhost:5000/api/ws', null, {
+    const socket = new SockJS('https://j9b209.p.ssafy.io/api/ws', null, {
+    // const socket = new SockJS('http://localhost:5000/api/ws', null, {
       transports: ['websocket', 'xhr-streaming', 'xhr-polling']
     });
     const stompClient = Stomp.over(socket);
