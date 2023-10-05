@@ -296,7 +296,7 @@ const SideBar = () => {
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
   // 알람유무
-  const [notify, setNotify] = useState(true);
+  const [notify, setNotify] = useState(false);
   const [price, setPrice] = useState(0);
   const [auctionNo, setauctionNo] = useState(0);
   const [bidderNickname, setbidderNickname] = useState('');
