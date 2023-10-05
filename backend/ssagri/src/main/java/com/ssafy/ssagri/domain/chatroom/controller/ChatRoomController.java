@@ -34,11 +34,12 @@ public class ChatRoomController {
     }
 
     //특정 유저가 참여하는 채팅방 전부 조회
-    @GetMapping("/list/{userNo}")
+    @GetMapping("/list/{userNo}/{sellorNo}")
     @Operation(summary = "UserA의 No를 받아서 UserA의 채팅방 목록 반환하는 메서드"
             , description = "특정 유저의 userNo를 넘겨주면 그 유저의 채팅방 전체를 List로 반환")
-    public ResponseEntity<List<ChatRoomListResponseDto>> selectChatRoomByUser(@PathVariable(name = "userNo") Long userNo){
-        List<ChatRoomListResponseDto> chatRoomResponseDtoList = chatRoomService.selectAllChatRoomByUser(userNo);
+    public ResponseEntity<List<ChatRoomListResponseDto>> selectChatRoomByUser(@PathVariable(name = "userNo") Long userNo
+        , @PathVariable(name = "sellorNo", required = false) Long sellorNo){
+        List<ChatRoomListResponseDto> chatRoomResponseDtoList = chatRoomService.selectAllChatRoomByUser(userNo, sellorNo);
         return ResponseEntity.ok(chatRoomResponseDtoList);
     }
 

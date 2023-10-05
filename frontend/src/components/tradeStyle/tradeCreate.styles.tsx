@@ -146,6 +146,8 @@ const TradeCreate = () => {
   const user = localStorage.getItem('userNo');
   const FILE_SIZE_MAX_LIMIT = 100 * 1024 * 1024;
   const [thumbnailPhoto, setthumbnailPhoto] = useState<File | null>(null);
+  const accessToken = sessionStorage.getItem('accessToken');
+  axios.defaults.headers.common['Authorization'] = `${accessToken}`;
   // const [data, setData] = useState<string>('');
   //axios 전달을 위한 데이터 key값을 먼저 지정해둠
   // @ts-ignore
@@ -336,6 +338,8 @@ const TradeUpdate = () => {
   const user = localStorage.getItem('userNo');
   const FILE_SIZE_MAX_LIMIT = 100 * 1024 * 1024;
   const [thumbnailPhoto, setthumbnailPhoto] = useState<File | null>(null);
+  const accessToken = sessionStorage.getItem('accessToken');
+  axios.defaults.headers.common['Authorization'] = `${accessToken}`;
   // const [data, setData] = useState<string>('');
   //axios 전달을 위한 데이터 key값을 먼저 지정해둠
   // @ts-ignore
