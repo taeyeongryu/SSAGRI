@@ -231,11 +231,11 @@ public class BoardService {
 
                 time =  ChronoUnit.MINUTES.between(boardWriteList.get(i).getCreateDate(),LocalDateTime.now()) + "분 전";
             }
-            if(ChronoUnit.SECONDS.between(boardWriteList.get(i).getCreateDate(),LocalDateTime.now()) > 3600){
+            else if(ChronoUnit.SECONDS.between(boardWriteList.get(i).getCreateDate(),LocalDateTime.now()) > 3600){
 
                 time =  ChronoUnit.HOURS.between(boardWriteList.get(i).getCreateDate(),LocalDateTime.now()) + "시간 전";
             }
-            if(ChronoUnit.SECONDS.between(boardWriteList.get(i).getCreateDate(),LocalDateTime.now()) > 86400){
+            else if(ChronoUnit.SECONDS.between(boardWriteList.get(i).getCreateDate(),LocalDateTime.now()) > 86400){
                 time = ChronoUnit.DAYS.between(boardWriteList.get(i).getCreateDate(),LocalDateTime.now()) + "일 전";
             }
             else {
