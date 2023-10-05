@@ -145,6 +145,10 @@ const AuctionItem = styled.div`
   border-radius: 10px;
   margin: 70px auto;
   display: flex;
+
+  &.종료 {
+    opacity: 0.4;
+  }
 `;
 
 const ItemImg = styled.img`
@@ -183,11 +187,22 @@ const ItemCurrent1 = styled.div`
   left: 960px;
   width: 60px;
   height: 30px;
-  background-color: red;
   color: white;
   border-radius: 7px;
   text-align: center;
   line-height: 30px;
+
+  &.진행중 {
+    background-color: red;
+  }
+
+  &.예정 {
+    background-color: #4786fa;
+  }
+
+  &.종료 {
+    background-color: #929292;
+  }
 `;
 // const ItemCurrent2 = styled.div`
 //   position: absolute;
@@ -282,7 +297,7 @@ const AuctionItme = (item: any) => {
           const firstPhoto = res.data.result[0].imageLink;
           setThumbnail(firstPhoto);
         } else {
-          setThumbnail('/public/assets/img/사진이 없어요.jfif');
+          setThumbnail('/assets/img/사진이 없어요.jfif');
         }
       })
       .catch((err) => {
@@ -360,6 +375,7 @@ const AuctionItme = (item: any) => {
 
   return (
     <AuctionItem
+      className={item.item.auctionStatus}
       onClick={() => {
         goAuctionDetail(item);
       }}
@@ -372,17 +388,34 @@ const AuctionItme = (item: any) => {
         <ItemTag2>현재가 {item.item.finallyPrice} </ItemTag2>
       </ItmeDiv1>
       <ItemTime1>
-        <div style={{ color: 'black' }}>남은 시간</div>
-        <div className='time'>
-          <span id='d-day-hour'>{ddayHour}</span>
-          <span className='col'>:</span>
-          <span id='d-day-min'>{ddayMin}</span>
-          <span className='col'>:</span>
-          <span id='d-day-sec'>{ddaySec}</span>
-        </div>
+        {item.item.auctionStatus === '진행중' ? (
+          <div>
+            <div style={{ color: 'black' }}>남은 시간</div>
+            <div className='time'>
+              <span id='d-day-hour'>{ddayHour}</span>
+              <span className='col'>:</span>
+              <span id='d-day-min'>{ddayMin}</span>
+              <span className='col'>:</span>
+              <span id='d-day-sec'>{ddaySec}</span>
+            </div>
+          </div>
+        ) : (
+          <div>
+            <div style={{ color: 'black' }}>남은 시간</div>
+            <div className='time' style={{ color: 'black' }}>
+              <span id='d-day-hour'>00</span>
+              <span className='col'>:</span>
+              <span id='d-day-min'>00</span>
+              <span className='col'>:</span>
+              <span id='d-day-sec'>00</span>
+            </div>
+          </div>
+        )}
       </ItemTime1>
       <ItmeDiv2>
-        <ItemCurrent1>{item.item.auctionStatus}</ItemCurrent1>
+        <ItemCurrent1 className={item.item.auctionStatus}>
+          {item.item.auctionStatus}
+        </ItemCurrent1>
         {/* <ItemCurrent2>참여자수</ItemCurrent2> */}
       </ItmeDiv2>
     </AuctionItem>
