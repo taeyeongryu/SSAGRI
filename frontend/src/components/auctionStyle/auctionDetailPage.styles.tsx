@@ -108,6 +108,10 @@ const InfoTitle = styled.div`
 `;
 // 내용 구분
 const InfoContentBox = styled.div`
+  &.bidlist {
+    overflow-y: auto;
+    max-height: 760px;
+  }
   /* margin: 10px; */
 `;
 // 각 내용들
@@ -184,6 +188,7 @@ const SelectPrice = styled.div`
 `;
 // 입찰 버튼
 const BidButton = styled.div`
+  cursor: pointer;
   width: 40px;
   height: 40px;
   text-align: center;
@@ -196,6 +201,7 @@ const BidButton = styled.div`
 // 입찰자 프로필사진
 const BidderProfileImg = styled.img`
   width: 50px;
+  height: 50px;
   border-radius: 70%;
 
   &.none-image {
@@ -343,31 +349,35 @@ const AuctionDetail = () => {
 
   // 경매 입찰
   const auctionBid = () => {
-    const bidData = {
-      auctionBidPrice: selectedPrice,
-      auctionNo: auctionNo,
-      userNo: Number(localStorage.getItem('userNo')) // 입찰자의 유저 넘버
-    };
-    console.log('입찰 정보: ', bidData);
+    if (auctionItem.auctionStatus !== '진행중') {
+      alert('진행중인 경매가 아닙니다.');
+    } else {
+      const bidData = {
+        auctionBidPrice: selectedPrice,
+        auctionNo: auctionNo,
+        userNo: Number(localStorage.getItem('userNo')) // 입찰자의 유저 넘버
+      };
+      console.log('입찰 정보: ', bidData);
 
-    axios
-      .post(`/auction-bid`, bidData)
-      .then((res) => {
-        console.log(res);
-        // 입찰 가능한 최소금액을 갱신해준다.
-        setStartPrice(selectedPrice + auctionItem.priceCount);
-        getBidList();
-        getAuctionDetail();
-      })
-      .catch((err) => {
-        console.log(err);
-        if (
-          err.response.data.message ===
-          '입찰자와 경매올린 사람이 같은 사람입니다.'
-        ) {
-          alert('본인의 경매 상품에 입찰할 수 없습니다.');
-        }
-      });
+      axios
+        .post(`/auction-bid`, bidData)
+        .then((res) => {
+          console.log(res);
+          // 입찰 가능한 최소금액을 갱신해준다.
+          setStartPrice(selectedPrice + auctionItem.priceCount);
+          getBidList();
+          getAuctionDetail();
+        })
+        .catch((err) => {
+          console.log(err);
+          if (
+            err.response.data.message ===
+            '입찰자와 경매올린 사람이 같은 사람입니다.'
+          ) {
+            alert('본인의 경매 상품에 입찰할 수 없습니다.');
+          }
+        });
+    }
   };
 
   // 지역 포맷
@@ -595,7 +605,7 @@ const AuctionDetail = () => {
             {/* 남은 시간 */}
             <CountTime>
               <div>남은 시간</div>
-              <div className='time'>
+              <div className='time' style={{ color: '#ff4b2b' }}>
                 <span id='d-day-hour'>{ddayHour}</span>
                 <span className='col'>:</span>
                 <span id='d-day-min'>{ddayMin}</span>
@@ -611,6 +621,7 @@ const AuctionDetail = () => {
                   id='priceSelect'
                   onChange={handlePriceChange}
                   value={selectedPrice}
+                  disabled={auctionItem.auctionStatus !== '진행중'}
                 >
                   {priceOptions.map((price, index) => (
                     <option key={index} value={price}>
@@ -633,7 +644,7 @@ const AuctionDetail = () => {
       {/* 입찰 현황 */}
       <BidInfo>
         <InfoTitle>입찰 현황</InfoTitle>
-        <InfoContentBox>
+        <InfoContentBox className='bidlist'>
           {bidList.map((bid, idx) => (
             <EachBid key={idx}>
               {bid.userProfileImageLink ? (
