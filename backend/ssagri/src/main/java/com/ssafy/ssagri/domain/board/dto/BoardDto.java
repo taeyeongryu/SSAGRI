@@ -30,6 +30,6 @@ public class BoardDto {
     private boolean allowDelete;
 
     // 게시판 생명 주기
-    private String boardLife;
+    private Long boardLife;
 
 }
