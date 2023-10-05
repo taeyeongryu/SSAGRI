@@ -52,7 +52,7 @@ public class NotificationService {
     }
 
     @Transactional(readOnly = true)
-    public void sendMessageToBidder(Long auctionNo, String bidderNickname, int price) {
+    public void sendMessageToBidder(Long auctionNo, Long newBidderNo, String bidderNickname, int price) {
         log.info("sseEmitterMap.size() = {}", sseEmitterMap.size());
         log.info("sendMessageToBidder");
 
@@ -73,7 +73,9 @@ public class NotificationService {
         //경매 입찰을 돌면서 Set에 추가해준다.
         for (AuctionBid auctionBid : auctionBids) {
             Long bidderNo = auctionBid.getUser().getNo();
-            bidderNoSet.add(bidderNo);
+            if(bidderNo!=newBidderNo){
+                bidderNoSet.add(bidderNo);
+            }
         }
 
         //SseEmitter Map을 돌면서 Bid한 사람이 있는지 찾음
