@@ -4,10 +4,13 @@ import com.ssafy.ssagri.entity.auction.AuctionProductImage;
 import com.ssafy.ssagri.entity.auction.AuctionProductType;
 
 import com.ssafy.ssagri.entity.auction.AuctionStatus;
+import com.ssafy.ssagri.entity.user.Region;
+import com.ssafy.ssagri.entity.user.User;
 import lombok.Builder;
 import lombok.Getter;
 
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +22,20 @@ public class AuctionProductAllDTO {
     // 경매 no
     private Long no;
 
+    // 경매 개최자 nickname
+    private String userNickName;
+
     // 경매 개최자 no
     private Long userNo;
+
+    // 경매 개최자 지역
+    private Region region;
+
+    // 경매 개최자 기수
+    private int number;
+
+    // 경매 개최자 프로필
+    private String profile;
 
     // 경매 상품 이름
     private String name;
@@ -52,8 +67,8 @@ public class AuctionProductAllDTO {
     // 경매 상품 삭제 시간
     private LocalDateTime deleteDate;
 
-    // 경매 상품 수정 시간
-    private LocalDateTime modifyDate;
+    // 경매 상품 생성 시간
+    private LocalDateTime createDate;
 
     // 경매 상품 분류
     private AuctionProductType type;
@@ -61,7 +76,9 @@ public class AuctionProductAllDTO {
     // 경매 상품 정가
     private int originPrice;
 
-    // 경매 상품에 대한 이미지들
-    @Builder.Default
-    private List<AuctionProductImage> photos = new ArrayList<>();
+
+
+
+
+
 }

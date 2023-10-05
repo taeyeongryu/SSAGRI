@@ -2,7 +2,6 @@ package com.ssafy.ssagri.domain.user.service;
 
 import com.ssafy.ssagri.domain.redis.RedisService;
 import com.ssafy.ssagri.domain.user.repository.UserLoginAndLogoutRepository;
-import com.ssafy.ssagri.domain.user.repository.UserRegistRepository;
 import com.ssafy.ssagri.dto.user.ResponseDTO;
 import com.ssafy.ssagri.dto.user.UserLoginDTO;
 import com.ssafy.ssagri.util.exception.CustomException;
@@ -18,8 +17,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-
-import java.io.IOException;
 
 import static com.ssafy.ssagri.util.ResponseStatusEnum.*;
 import static com.ssafy.ssagri.util.exception.CustomExceptionStatus.*;
@@ -42,6 +39,7 @@ public class UserLoginAndLogoutService {
     public ResponseEntity<ResponseDTO> loginUser(UserLoginDTO userLoginDTO, HttpServletResponse response) throws CustomException {
         //1. 유저 DB 존재 체크
         ResponseEntity<ResponseDTO> responseResult = checkAccount(userLoginDTO);
+        if(userLoginAndLogoutRepository.isAccountDeleted(userLoginDTO.getEmail())) throw new CustomException(LOGIN_ACCOUT_IS_REMOVED);
         Long userNo = userLoginAndLogoutRepository.getUserNoUsingEmail(userLoginDTO.getEmail()); //userNo 찾기
 
         //2. 유저가 존재한다면 Access token과 Refresh token 발급, Refresh의 경우 Cookie로 설정
@@ -59,6 +57,30 @@ public class UserLoginAndLogoutService {
         //4. 헤더에 토큰 추가하여 메시지 발급
         return addJwtTokenAtHeader(responseResult, accessToken);
     }
+
+    //카카오용 로그인 로직
+    @Transactional
+    public ResponseEntity<ResponseDTO> loginUserForKakao(HttpServletResponse response, String email) throws CustomException {
+        //1. 유저 DB 존재 체크 생략
+        ResponseEntity<ResponseDTO> responseResult = ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(LOGIN_IS_OK.getCode(),LOGIN_IS_OK.getMessage()));
+        Long userNo = userLoginAndLogoutRepository.getUserNoUsingEmail(email); //userNo 찾기
+
+        //2. 유저가 존재한다면 Access token과 Refresh token 발급, Refresh의 경우 Cookie로 설정
+        String accessToken = getToken(userNo, "Access");
+        String refreshToken = getToken(userNo, "Refresh");
+        Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
+        refreshTokenCookie.setHttpOnly(true); //HTTP Only Cookie set
+        refreshTokenCookie.setPath("/");      //모든 경로에서 쿠키에 접근 가능
+        refreshTokenCookie.setMaxAge(3600 * 12); //12시간으로 수명 설정
+        response.addCookie(refreshTokenCookie);
+
+        //3. Redis에 Refresh 토큰 저장
+        saveRefreshToken(userNo, refreshToken);
+
+        //4. 헤더에 토큰 추가하여 메시지 발급
+        return addJwtTokenAtHeader(responseResult, accessToken);
+    }
+
 
     private ResponseEntity<ResponseDTO> addJwtTokenAtHeader(ResponseEntity<ResponseDTO> responseResult, String accessToken) throws CustomException {
         HttpHeaders headers = new HttpHeaders();

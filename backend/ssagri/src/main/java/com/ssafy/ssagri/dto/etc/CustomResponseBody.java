@@ -1,8 +1,14 @@
 package com.ssafy.ssagri.dto.etc;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 @Data
+@EqualsAndHashCode(callSuper=false)
+@Getter
+@Setter
 public class CustomResponseBody<T> extends BaseResponseBody {
     private int resultCode;
     private String resultMsg;
