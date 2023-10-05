@@ -16,6 +16,7 @@ public enum CustomExceptionStatus {
     //Oauth
     OAUTH_USERINFO_PARSING_ERR(-900,"액세스 토큰 요청 후 유저 값 파싱 도중 문제가 발생했습니다."),
     OAUTH_KAKAO_NOT_VALID_EMAIL(-901, "해당 계정이 존재하지 않습니다."),
+    OAUTH_KAKAO_NOT_VALID_AUTHCODE(-902, "인증코드가 유효하지 않습니다"),
 
     //Register and Find = 1xxx
     REGISTER_NICKNAME_IS_DUPLICATE(-1000, "유저 닉네임이 중복됩니다."),

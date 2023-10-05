@@ -56,13 +56,6 @@ public class RedisService {
         stringRedisTemplate.expire(key, 300, TimeUnit.SECONDS);
     }
 
-    public void deletePasswordAuthCode(String email){
-        stringRedisTemplate.delete("[PW-CHECK-CODE]"+email);
-    }
-    //동일 로직 모듈화 필요
-    public void deleteKakaoAuthCode(String email){
-        stringRedisTemplate.delete("[KAKAO-CHECK-CODE]"+email);
-    }
 
     public Boolean authcodeExists(String authcode) {
         return stringRedisTemplate.hasKey(authcode);
