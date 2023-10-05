@@ -150,7 +150,7 @@ const AuctionItem = styled.div`
 const ItemImg = styled.img`
   width: 120px;
   height: 120px;
-  /* border: 2px solid black; */
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   border-radius: 5px;
   margin: 14px 60px 0 60px;
 `;
@@ -189,12 +189,12 @@ const ItemCurrent1 = styled.div`
   text-align: center;
   line-height: 30px;
 `;
-const ItemCurrent2 = styled.div`
-  position: absolute;
-  top: 110px;
-  left: 960px;
-  width: 100px;
-`;
+// const ItemCurrent2 = styled.div`
+//   position: absolute;
+//   top: 110px;
+//   left: 960px;
+//   width: 100px;
+// `;
 
 const PagingSpace = styled.div`
   width: 50%;
@@ -270,23 +270,118 @@ const AuctionItme = (item: any) => {
     navigate(`/auctionDetail/${item.item.no}`);
   };
 
+  const [thumbnail, setThumbnail] = useState('');
+
+  const getThumbnail = () => {
+    axios
+      .get(`/auction-product/load/${item.item.no}`)
+      .then((res) => {
+        if (res.data.resultMsg === '등록된 사진이 있습니다.') {
+          const firstPhoto = res.data.result[0].imageLink;
+          setThumbnail(firstPhoto);
+        } else {
+          setThumbnail('/public/assets/img/사진이 없어요.jfif');
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  ////
+
+  const [ddayHour, setddayHour] = useState('00');
+  const [ddayMin, setddayMin] = useState('00');
+  const [ddaySec, setddaySec] = useState('00');
+
+  // 남은 시간 카운트 다운
+  const remaindTime = () => {
+    const koreanDate = item.item.endDate;
+
+    const parts = koreanDate.match(/\d+/g);
+
+    if (parts !== null && parts.length >= 0) {
+      const year = parseInt(parts[0], 10); // 연도
+      const month = parseInt(parts[1], 10); // 월
+      const day = parseInt(parts[2], 10); // 일
+      const hour = parseInt(parts[3], 10); // 시
+      const minute = parseInt(parts[4], 10); // 분
+      const second = parseInt(parts[5], 10); // 초
+
+      const now: Date = new Date();
+      const end: Date = new Date(year, month - 1, day, hour, minute, second);
+
+      let nt: number = now.getTime();
+      let et: number = end.getTime();
+
+      if (nt < et) {
+        let sec: string | number = Math.floor((et - nt) / 1000); // 초 단위로 남은 시간 계산
+        let hour: string | number = Math.floor(sec / 3600); // 시간 계산
+        sec %= 3600;
+        let min: string | number = Math.floor(sec / 60); // 분 계산
+        sec %= 60;
+
+        // 시, 분, 초가 10보다 작을 때 앞에 0을 추가
+        hour = hour < 10 ? '0' + hour : hour;
+        min = min < 10 ? '0' + min : min;
+        sec = sec < 10 ? '0' + sec : sec;
+
+        // HTML 요소에 시간 정보 업데이트
+        // document.getElementById('d-day-hour')!.innerHTML = hour.toString();
+        // document.getElementById('d-day-min')!.innerHTML = min.toString();
+        // document.getElementById('d-day-sec')!.innerHTML = sec.toString();
+        setddayHour(hour.toString());
+        setddayMin(min.toString());
+        setddaySec(sec.toString());
+      } else {
+        // 현재시간이 종료시간보다 크면
+        setddayHour('00');
+        setddayMin('00');
+        setddaySec('00');
+      }
+    }
+  };
+
+  useEffect(() => {
+    const intervalid = setInterval(remaindTime, 1000);
+
+    return () => {
+      clearInterval(intervalid);
+    };
+  }, [item.item.endDate]);
+
+  ////
+
+  useEffect(() => {
+    getThumbnail();
+  });
+
   return (
     <AuctionItem
       onClick={() => {
         goAuctionDetail(item);
       }}
     >
-      <ItemImg src='assets/img/auctionsample.PNG'></ItemImg>
+      <ItemImg src={thumbnail}></ItemImg>
 
       <ItmeDiv1>
         <ItemTitle>{item.item.name}</ItemTitle>
         <ItemTag1>시작가 {item.item.downPrice}</ItemTag1>
-        <ItemTag2>판매가 {item.item.upPrice} </ItemTag2>
+        <ItemTag2>현재가 {item.item.finallyPrice} </ItemTag2>
       </ItmeDiv1>
-      <ItemTime1>남은시간 </ItemTime1>
+      <ItemTime1>
+        <div style={{ color: 'black' }}>남은 시간</div>
+        <div className='time'>
+          <span id='d-day-hour'>{ddayHour}</span>
+          <span className='col'>:</span>
+          <span id='d-day-min'>{ddayMin}</span>
+          <span className='col'>:</span>
+          <span id='d-day-sec'>{ddaySec}</span>
+        </div>
+      </ItemTime1>
       <ItmeDiv2>
         <ItemCurrent1>{item.item.auctionStatus}</ItemCurrent1>
-        <ItemCurrent2>참여자수</ItemCurrent2>
+        {/* <ItemCurrent2>참여자수</ItemCurrent2> */}
       </ItmeDiv2>
     </AuctionItem>
   );

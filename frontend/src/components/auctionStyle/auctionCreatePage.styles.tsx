@@ -389,9 +389,11 @@ const AuctionCreate = () => {
     auctionApi
       .post('/auction-product/auction/regist', data)
       .then((res) => {
-        console.log(res.data); // 생성된 경매 번호
+        console.log('생성된 경매 번호: ', res.data);
+        const auctionNo = res.data;
         // 성공하면 등록된 경매 번호 받아서 사진 업로드 하는 로직 추가해줘야 함.
-        photoUpload(uploadImage, res.data);
+        photoUpload(uploadImage, auctionNo);
+        navigate(`/auctionDetail/${auctionNo}`);
       })
       .catch((err) => {
         console.log(err);
