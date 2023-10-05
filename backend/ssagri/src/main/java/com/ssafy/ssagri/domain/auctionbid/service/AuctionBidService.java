@@ -74,7 +74,7 @@ public class AuctionBidService {
         auctionBidRepository.save(auctionBid);
 
         //이 Auction에 입찰했던 사람들한테 메시지 보내주기
-        notificationService.sendMessageToBidder(auctionProduct.getNo(),user.getNickname(),auctionBidSaveRequestDto.getAuctionBidPrice());
+        notificationService.sendMessageToBidder(auctionProduct.getNo(),user.getNo(),user.getNickname(),auctionBidSaveRequestDto.getAuctionBidPrice());
 
         return auctionBid.getNo();
     }

@@ -11,6 +11,8 @@ import java.util.List;
 
 public interface AuctionRepository extends JpaRepository<AuctionProduct, Long>, AuctionCustomRepository {
 
+    List<AuctionProduct> findAllByOrderByEndDateDesc();
+
 AuctionProduct findByNo(Long no);
 
 List<AuctionProduct> findAllByType(AuctionProductType type);
