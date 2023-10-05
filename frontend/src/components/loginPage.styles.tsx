@@ -453,8 +453,12 @@ const SignInAndUpComponent = () => {
       await navigate('/');
     } catch (error) {
       // ... 에러 처리
-      console.log('data', data);
-      console.error(error);
+      // @ts-ignore
+      console.log(error.response.data);
+      // @ts-ignore
+      if (error.response.data.message === '일치하는 계정이 없습니다.') {
+        alert('아이디나 비밀번호를 다시 확인해주세요.');
+      }
     }
   };
 
