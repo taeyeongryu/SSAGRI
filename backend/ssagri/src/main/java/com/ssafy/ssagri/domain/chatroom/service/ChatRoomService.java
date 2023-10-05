@@ -12,6 +12,7 @@ import com.ssafy.ssagri.entity.chat.ChatRoom;
 import com.ssafy.ssagri.entity.chat.Message;
 import com.ssafy.ssagri.entity.user.User;
 import com.ssafy.ssagri.util.exception.CustomException;
+import java.util.LinkedList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -42,33 +43,28 @@ public class ChatRoomService {
     * 있는 모든 채팅방 정보 Dto로 반환하는 메서드
     * */
     public List<ChatRoomListResponseDto> selectAllChatRoomByUser(Long userNo, Long sellorNo){
+        // 나와 관련된 채팅방들의 데이터를 가져온다. (메세지는 안 가져옴)
         List<Message> messageList = messageRepository.findChatRoomByUserNo(userNo);
-        List<ChatRoomListResponseDto> chatRoomResponseDtoList = new ArrayList<>();
         log.info("MessageList {} : ", messageList);
-
-        Long firstReceiverNo = null;
-        // 사용자와 수신인의 no가 같다면, 반대편 사용자는 receiverNo, 아니라면 반대
-        if (messageList != null) {
-            if (userNo.equals(messageList.get(0).getSenderNo())) {
-                firstReceiverNo = messageList.get(0).getReceiverNo();
-            } else {
-                firstReceiverNo = messageList.get(0).getSenderNo();
-            }
-        }
+        // 반환할 변수명 미리 지정
+        List<ChatRoomListResponseDto> chatRoomResponseDtoList = new LinkedList<>();
 
         // 내가 호출하는 sellor와 채팅하는 채팅방이 가장 위로 올라오도록 설정
-        // 1. 채팅한 메세지가 없다면
-        // 2. 채팅한 메세지가 있지만, 마지막에 대화한 메세지가 내가 지금 대화할 사람이 아니라면
-        if (messageList == null || messageList.size() == 0 || (firstReceiverNo != null && firstReceiverNo != sellorNo)) {
+        // 1. 내가 다른 사람들과 채팅한 메세지가 하나도 없을 때
+        //      -> 채팅방은 만들어졌다. 그 채팅방을 가져와 반환하지만 메세지와 메세지 시간 데이터는 없을 것이다.
+        if (messageList == null || messageList.size() == 0) {
+            // sellorNo의 닉네임, 프로필 링크, 지역 가져온다.
             ChatRoomListResponseDto receiver = chatRoomRepository.findReceiver(sellorNo);
+            // 나와 상대방이 대화한 채팅방 관련 정보를 가져온다.
             Optional<ChatRoom> findChatRoom = chatRoomRepository.selectByUserAUserB(userNo, sellorNo);
+            //채팅방이 존재한다면 저장 = 무조건 저장될 것이다.
             Long chatRoomNo = null;
-            //채팅방이 존재한다면
             if (findChatRoom.isPresent()) {
                 chatRoomNo = findChatRoom.get().getNo();
             }
+            // 메세지가 없더라도, 채팅방의 정보는 가져온다.
             ChatRoomListResponseDto responseDto = ChatRoomListResponseDto.builder()
-                .receiverNo(sellorNo)
+                .receiverNo(receiver.getReceiverNo())
                 .chatRoomNo(chatRoomNo)
                 .lastMent("")
                 .lastDate(null)
@@ -77,30 +73,25 @@ public class ChatRoomService {
                 .receiverRegion(receiver.getReceiverRegion())
                 .build();
             chatRoomResponseDtoList.add(responseDto);
-            if (messageList != null) {
-                for (Message msg : messageList) {
-                    Long receiverNo = null;
-                    // 사용자와 수신인의 no가 같다면, 반대편 사용자는 receiverNo, 아니라면 반대
-                    if (userNo.longValue() == msg.getSenderNo().longValue()) {
-                        receiverNo = msg.getReceiverNo();
-                    } else {
-                        receiverNo = msg.getSenderNo();
-                    }
-                    if (receiverNo.equals(sellorNo)) continue;
-                    ChatRoomListResponseDto receiver02 = chatRoomRepository.findReceiver(receiverNo);
-                    ChatRoomListResponseDto responseDto02 = ChatRoomListResponseDto.builder()
-                        .receiverNo(receiverNo)
-                        .chatRoomNo(msg.getRoomNo())
-                        .lastMent(msg.getContent())
-                        .lastDate(msg.getTime())
-                        .receiverNickName(receiver02.getReceiverNickName())
-                        .receiverProfile(receiver02.getReceiverProfile())
-                        .receiverRegion(receiver02.getReceiverRegion())
-                        .build();
-                    chatRoomResponseDtoList.add(responseDto02);
-                }
-            }
+            log.info("chatRoomResponseDtoList : {}", chatRoomResponseDtoList);
+            return chatRoomResponseDtoList;
+        }
+
+        // 여기부터는 messageList가 무조건 있는 상황이다.
+
+        // 마지막으로 메세지를 나눈 상대방의 No를 가져온다.
+        Long firstReceiverNo = null;
+        if (userNo.equals(messageList.get(0).getSenderNo())) {
+            firstReceiverNo = messageList.get(0).getReceiverNo();
         } else {
+            firstReceiverNo = messageList.get(0).getSenderNo();
+        }
+
+        // 2. 채팅한 메세지가 있지만, 마지막에 대화한 사람이 sellorNo가 아닐 때
+        //      -> sellorNo와의 채팅방을 맨 처음에 가져오고, 이후에 sellorNo를 제외한 나머지 채팅 목록을 가져온다.
+        if (!firstReceiverNo.equals(sellorNo)) {
+            boolean chatExist = false;
+
             for (Message msg : messageList) {
                 Long receiverNo = null;
                 // 사용자와 수신인의 no가 같다면, 반대편 사용자는 receiverNo, 아니라면 반대
@@ -111,7 +102,7 @@ public class ChatRoomService {
                 }
                 ChatRoomListResponseDto receiver = chatRoomRepository.findReceiver(receiverNo);
                 ChatRoomListResponseDto responseDto = ChatRoomListResponseDto.builder()
-                    .receiverNo(receiverNo)
+                    .receiverNo(receiver.getReceiverNo())
                     .chatRoomNo(msg.getRoomNo())
                     .lastMent(msg.getContent())
                     .lastDate(msg.getTime())
@@ -119,10 +110,66 @@ public class ChatRoomService {
                     .receiverProfile(receiver.getReceiverProfile())
                     .receiverRegion(receiver.getReceiverRegion())
                     .build();
+
+                if (receiverNo.equals(sellorNo)) {
+                    chatExist = true;
+                    chatRoomResponseDtoList.add(0, responseDto);
+                } else {
+                    chatRoomResponseDtoList.add(responseDto);
+                }
+            }
+
+            // 2-2. 채팅한 메세지가 있지만, 마지막에 대화한 사람이 sellorNo가 아니고, 내가 대화하려는 사람과 대화한 적은 없을 때
+            if(!chatExist) {
+                // sellorNo의 닉네임, 프로필 링크, 지역 가져온다.
+                ChatRoomListResponseDto receiver = chatRoomRepository.findReceiver(sellorNo);
+                // 나와 상대방이 대화한 채팅방 관련 정보를 가져온다.
+                Optional<ChatRoom> findChatRoom = chatRoomRepository.selectByUserAUserB(userNo, sellorNo);
+                //채팅방이 존재한다면 저장 = 무조건 저장될 것이다.
+                Long chatRoomNo = null;
+                if (findChatRoom.isPresent()) {
+                    chatRoomNo = findChatRoom.get().getNo();
+                }
+                ChatRoomListResponseDto responseDto = ChatRoomListResponseDto.builder()
+                    .receiverNo(receiver.getReceiverNo())
+                    .chatRoomNo(chatRoomNo)
+                    .lastMent("")
+                    .lastDate(null)
+                    .receiverNickName(receiver.getReceiverNickName())
+                    .receiverProfile(receiver.getReceiverProfile())
+                    .receiverRegion(receiver.getReceiverRegion())
+                    .build();
+                chatRoomResponseDtoList.add(0, responseDto);
+            }
+
+            log.info("chatRoomResponseDtoList : {}", chatRoomResponseDtoList);
+            return chatRoomResponseDtoList;
+        } else {    // 3. 채팅한 메세지가 있고, 마지막에 대화한 사람이 sellorNo가 맞을 때 -> 그냥 가져오면 된다.
+            for (Message msg : messageList) {
+                Long receiverNo = null;
+                // 사용자와 수신인의 no가 같다면, 반대편 사용자는 receiverNo, 아니라면 반대
+                if (userNo.longValue() == msg.getSenderNo().longValue()) {
+                    receiverNo = msg.getReceiverNo();
+                } else {
+                    receiverNo = msg.getSenderNo();
+                }
+
+                ChatRoomListResponseDto receiver = chatRoomRepository.findReceiver(receiverNo);
+                ChatRoomListResponseDto responseDto = ChatRoomListResponseDto.builder()
+                    .receiverNo(receiver.getReceiverNo())
+                    .chatRoomNo(msg.getRoomNo())
+                    .lastMent(msg.getContent())
+                    .lastDate(msg.getTime())
+                    .receiverNickName(receiver.getReceiverNickName())
+                    .receiverProfile(receiver.getReceiverProfile())
+                    .receiverRegion(receiver.getReceiverRegion())
+                    .build();
+
                 chatRoomResponseDtoList.add(responseDto);
             }
+            log.info("chatRoomResponseDtoList : {}", chatRoomResponseDtoList);
+            return chatRoomResponseDtoList;
         }
-        return chatRoomResponseDtoList;
     }
 
     public ChatRoomResponseDto selectOneChatRoom(Long chatRoomNo){
