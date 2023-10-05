@@ -817,6 +817,8 @@ const TradeMainProduct = (region) => {
   };
 
   const userNo = localStorage.getItem('userNo');
+  const accessToken = sessionStorage.getItem('accessToken');
+  axios.defaults.headers.common['Authorization'] = `${accessToken}`;
 
   useEffect(() => {
     // recentData

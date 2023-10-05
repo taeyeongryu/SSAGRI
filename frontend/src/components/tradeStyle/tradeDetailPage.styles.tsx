@@ -565,6 +565,8 @@ const TradeDetail = () => {
   const [link, setLink] = useState<string>('https://i.imgur.com/pqvW1Yv.png');
   const userNo = localStorage.getItem('userNo');
   const chatSellor = document.querySelector('#chat-sellor');
+  const accessToken = sessionStorage.getItem('accessToken');
+  axios.defaults.headers.common['Authorization'] = `${accessToken}`;
 
   // @ts-ignore
   if (userNo == sellorInfo.sellorNo && chatSellor !== null) {

@@ -175,6 +175,8 @@ const ProductListSearch = ({
   const [response, setResponse] = useState({});
   const [number, setNumber] = useState<number>(0);
   const userNo = localStorage.getItem('userNo');
+  const accessToken = sessionStorage.getItem('accessToken');
+  axios.defaults.headers.common['Authorization'] = `${accessToken}`;
 
   useEffect(() => {
     search = search === null ? '' : search;

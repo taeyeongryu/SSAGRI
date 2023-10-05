@@ -41,19 +41,76 @@ public class ChatRoomService {
     * 특정유저의 No를 받아서 그 사람 참여하고
     * 있는 모든 채팅방 정보 Dto로 반환하는 메서드
     * */
-    public List<ChatRoomListResponseDto> selectAllChatRoomByUser(Long userNo){
-        List<Message> MessageList = messageRepository.findChatRoomByUserNo(userNo);
+    public List<ChatRoomListResponseDto> selectAllChatRoomByUser(Long userNo, Long sellorNo){
+        List<Message> messageList = messageRepository.findChatRoomByUserNo(userNo);
         List<ChatRoomListResponseDto> chatRoomResponseDtoList = new ArrayList<>();
-        for (Message msg : MessageList) {
-            Long receiverNo = null;
-            // 사용자와 수신인의 no가 같다면, 반대편 사용자는 receiverNo, 아니라면 반대
-            if (userNo.longValue() == msg.getSenderNo().longValue()) {
-                receiverNo = msg.getReceiverNo();
+        log.info("MessageList {} : ", messageList);
+
+        Long firstReceiverNo = null;
+        // 사용자와 수신인의 no가 같다면, 반대편 사용자는 receiverNo, 아니라면 반대
+        if (messageList != null) {
+            if (userNo.equals(messageList.get(0).getSenderNo())) {
+                firstReceiverNo = messageList.get(0).getReceiverNo();
             } else {
-                receiverNo = msg.getSenderNo();
+                firstReceiverNo = messageList.get(0).getSenderNo();
             }
-            ChatRoomListResponseDto receiver = chatRoomRepository.findReceiver(receiverNo);
+        }
+
+        // 내가 호출하는 sellor와 채팅하는 채팅방이 가장 위로 올라오도록 설정
+        // 1. 채팅한 메세지가 없다면
+        // 2. 채팅한 메세지가 있지만, 마지막에 대화한 메세지가 내가 지금 대화할 사람이 아니라면
+        if (messageList == null || messageList.size() == 0 || (firstReceiverNo != null && firstReceiverNo != sellorNo)) {
+            ChatRoomListResponseDto receiver = chatRoomRepository.findReceiver(sellorNo);
+            Optional<ChatRoom> findChatRoom = chatRoomRepository.selectByUserAUserB(userNo, sellorNo);
+            Long chatRoomNo = null;
+            //채팅방이 존재한다면
+            if (findChatRoom.isPresent()) {
+                chatRoomNo = findChatRoom.get().getNo();
+            }
             ChatRoomListResponseDto responseDto = ChatRoomListResponseDto.builder()
+                .receiverNo(sellorNo)
+                .chatRoomNo(chatRoomNo)
+                .lastMent("")
+                .lastDate(null)
+                .receiverNickName(receiver.getReceiverNickName())
+                .receiverProfile(receiver.getReceiverProfile())
+                .receiverRegion(receiver.getReceiverRegion())
+                .build();
+            chatRoomResponseDtoList.add(responseDto);
+            if (messageList != null) {
+                for (Message msg : messageList) {
+                    Long receiverNo = null;
+                    // 사용자와 수신인의 no가 같다면, 반대편 사용자는 receiverNo, 아니라면 반대
+                    if (userNo.longValue() == msg.getSenderNo().longValue()) {
+                        receiverNo = msg.getReceiverNo();
+                    } else {
+                        receiverNo = msg.getSenderNo();
+                    }
+                    if (receiverNo.equals(sellorNo)) continue;
+                    ChatRoomListResponseDto receiver02 = chatRoomRepository.findReceiver(receiverNo);
+                    ChatRoomListResponseDto responseDto02 = ChatRoomListResponseDto.builder()
+                        .receiverNo(receiverNo)
+                        .chatRoomNo(msg.getRoomNo())
+                        .lastMent(msg.getContent())
+                        .lastDate(msg.getTime())
+                        .receiverNickName(receiver02.getReceiverNickName())
+                        .receiverProfile(receiver02.getReceiverProfile())
+                        .receiverRegion(receiver02.getReceiverRegion())
+                        .build();
+                    chatRoomResponseDtoList.add(responseDto02);
+                }
+            }
+        } else {
+            for (Message msg : messageList) {
+                Long receiverNo = null;
+                // 사용자와 수신인의 no가 같다면, 반대편 사용자는 receiverNo, 아니라면 반대
+                if (userNo.longValue() == msg.getSenderNo().longValue()) {
+                    receiverNo = msg.getReceiverNo();
+                } else {
+                    receiverNo = msg.getSenderNo();
+                }
+                ChatRoomListResponseDto receiver = chatRoomRepository.findReceiver(receiverNo);
+                ChatRoomListResponseDto responseDto = ChatRoomListResponseDto.builder()
                     .receiverNo(receiverNo)
                     .chatRoomNo(msg.getRoomNo())
                     .lastMent(msg.getContent())
@@ -62,7 +119,8 @@ public class ChatRoomService {
                     .receiverProfile(receiver.getReceiverProfile())
                     .receiverRegion(receiver.getReceiverRegion())
                     .build();
-            chatRoomResponseDtoList.add(responseDto);
+                chatRoomResponseDtoList.add(responseDto);
+            }
         }
         return chatRoomResponseDtoList;
     }
