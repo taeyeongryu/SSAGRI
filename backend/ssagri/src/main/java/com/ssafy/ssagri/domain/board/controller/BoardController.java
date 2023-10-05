@@ -65,6 +65,13 @@ public class BoardController {
         boardService.boardClick(boardNo);
     }
 
+    // 게시글 클릭시 조회수 증가
+    @GetMapping(value = "/boardList-click/{boardListNo}")
+    @ApiOperation("게시글 클릭 시 조회수 증가")
+    public void boardListClick(@PathVariable("boardListNo") Long boardListNo){
+        boardService.boardListClick(boardListNo);
+    }
+
     // 게시판 삭제
     @GetMapping(value = "/delete/{boardNo}")
     @ApiOperation("게시판 삭제")

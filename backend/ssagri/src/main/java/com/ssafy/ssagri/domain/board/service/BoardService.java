@@ -88,6 +88,7 @@ public class BoardService {
                     .title(boardlist.get(i).getTitle())
                     .boardClick(boardlist.get(i).getBoardClick())
                     .showName(boardlist.get(i).getShowName())
+                    .boardLife(ChronoUnit.DAYS.between(LocalDateTime.now(),boardlist.get(i).getBoardLife()))
                     .allowDelete(boardlist.get(i).isAllowDelete()).build();
 
             result.add(boardDto);
@@ -134,6 +135,18 @@ public class BoardService {
 
 
         board1.click();
+
+
+    }
+
+    // 게시글 클릭 시 조회수 증가
+    @Transactional
+    public void boardListClick(Long boardListNo){
+
+        BoardList board = boardListRepository.findByNo(boardListNo);
+
+
+        board.click();
 
 
     }
@@ -199,18 +212,36 @@ public class BoardService {
 
             System.out.println(boardWriteList.get(i).getNo());
 
+            String time;
 
-            String boardLife = boardWriteList.get(i).getBoard().getBoardLife().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"));
+            if(ChronoUnit.SECONDS.between(boardWriteList.get(i).getCreateDate(),LocalDateTime.now()) > 60){
+
+                time =  ChronoUnit.MINUTES.between(boardWriteList.get(i).getCreateDate(),LocalDateTime.now()) + "분 전";
+            }
+            if(ChronoUnit.SECONDS.between(boardWriteList.get(i).getCreateDate(),LocalDateTime.now()) > 3600){
+
+                time =  ChronoUnit.HOURS.between(boardWriteList.get(i).getCreateDate(),LocalDateTime.now()) + "시간 전";
+            }
+            if(ChronoUnit.SECONDS.between(boardWriteList.get(i).getCreateDate(),LocalDateTime.now()) > 86400){
+                time = ChronoUnit.DAYS.between(boardWriteList.get(i).getCreateDate(),LocalDateTime.now()) + "일 전";
+            }
+            else {
+                time = ChronoUnit.SECONDS.between(boardWriteList.get(i).getCreateDate(),LocalDateTime.now()) + "초 전";
+            }
+
+
+//            String boardLife = boardWriteList.get(i).getBoard().getBoardLife().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"));
 
             BoardListDto boardListDto = BoardListDto.builder()
                     .no(boardWriteList.get(i).getNo())
                     .user(boardWriteList.get(i).getUser().getNickname())
                     .boardName(boardWriteList.get(i).getBoard().getTitle())
-                    .boardLife(boardLife)
+                    .boardView(boardWriteList.get(i).getBoard().getBoardClick())
+                    .boardLife(ChronoUnit.DAYS.between(LocalDateTime.now(),boardWriteList.get(i).getCreateDate()))
                     .title(boardWriteList.get(i).getTitle())
                     .view(boardWriteList.get(i).getView())
                     .like(boardWriteList.get(i).getLike())
-                    .createDate(ChronoUnit.DAYS.between(boardWriteList.get(i).getCreateDate(),LocalDateTime.now()))
+                    .writeTime(time)
                     .allowComment(boardWriteList.get(i).isAllowComment())
                     .commentCount(boardCommentRepository.findAllByBoardList(boardWriteList.get(i)).size())
                     .content(boardWriteList.get(i).getContent()).build();
@@ -227,7 +258,9 @@ public class BoardService {
         BoardList boardList = boardListRepository.findByNo(boardWriteNo);
 
         BoardListDto boardListDto = BoardListDto.builder()
+
                 .title(boardList.getTitle())
+                .boardNo(boardList.getBoard().getNo())
                 .user(boardList.getUser().getNickname())
                 .view(boardList.getView())
                 .allowComment(boardList.isAllowComment())
@@ -244,9 +277,17 @@ public class BoardService {
 
         List<BoardDto> result = new ArrayList<>();
 
+//        LocalDateTime now = LocalDateTime.now();
+
+//        System.out.println(now);
+
         for(int i=0;i<boardList.size();i++){
 
-            String boardLife = boardList.get(i).getBoardLife().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"));
+//        LocalDateTime afterTime = boardList.get(i).getBoardLife();
+
+
+
+//            String boardLife = minus.format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"));
 
             BoardDto boardDto = BoardDto.builder()
                     .no(boardList.get(i).getNo())
@@ -254,8 +295,10 @@ public class BoardService {
                     .title(boardList.get(i).getTitle())
                     .boardClick(boardList.get(i).getBoardClick())
                     .showName(boardList.get(i).getShowName())
-                    .boardLife(boardLife)
+                    .boardLife(ChronoUnit.DAYS.between(LocalDateTime.now(), boardList.get(i).getBoardLife()))
                     .allowDelete(boardList.get(i).isAllowDelete()).build();
+
+
 
             result.add(boardDto);
         }

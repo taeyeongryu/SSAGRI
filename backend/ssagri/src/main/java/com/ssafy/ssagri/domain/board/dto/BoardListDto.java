@@ -21,11 +21,17 @@ public class BoardListDto {
     // 글을 쓰는 사람 no
     private String user;
 
-    // 게시판 no
+    // 게시판 이름
     private String boardName;
 
+    // 게시판 no
+    private Long boardNo;
+
+    // 게시판 조회수
+    private int boardView;
+
     // 게시판 생명 주기
-    private String boardLife;
+    private Long boardLife;
 
     // 글 제목
     private String title;
@@ -42,8 +48,8 @@ public class BoardListDto {
     // 글 좋아요 수
     private int like;
 
-    // 글 작성 시간
-    private Long createDate;
+    // 글 작성 시간이 얼마나 지났는 지
+    private String writeTime;
 
     // 댓글 갯수
     private int commentCount;

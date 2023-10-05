@@ -1,8 +1,10 @@
 package com.ssafy.ssagri;
 
+import com.ssafy.ssagri.domain.redis.RedisService;
 import com.ssafy.ssagri.domain.user.repository.RandomFirstNameRepository;
 import com.ssafy.ssagri.util.mail.EmailService;
 
+import com.ssafy.ssagri.util.oauth.service.OauthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,9 @@ public class TestController {
     @Value("${kakao.redirect.key}")
     private String REDIRECT_URI;
 
+    private final RedisService redisService;
+    private final OauthService oauthService;
+
     @GetMapping
     public String test() {
         System.out.println("TEST");
@@ -31,7 +36,8 @@ public class TestController {
     @GetMapping("oauth")
     public String test2() {
         System.out.println("TEST");
-        return "https://kauth.kakao.com/oauth/authorize?client_id=" + REST_API_KEY + "&redirect_uri=" + REDIRECT_URI + "&response_type=code";
+        redisService.saveKakaoAuthCode("TESTAUTH", "EMAIL");
+        return "asd";
     }
 
 
