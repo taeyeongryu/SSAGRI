@@ -1,214 +1,214 @@
 import axios from 'axios';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { styled } from 'styled-components';
+// import { styled } from 'styled-components';
 
-import { ReactComponent as IcLeft } from '/src/assets/icon_left.svg';
-import { ReactComponent as IcRight } from '/src/assets/icon_right.svg';
+// import { ReactComponent as IcLeft } from '/src/assets/icon_left.svg';
+// import { ReactComponent as IcRight } from '/src/assets/icon_right.svg';
 
-const DetailDiv = styled.div`
-  /* margin-top: 200px;
-  margin-left: 200px; */
-  margin: 200px auto 0px;
+// const DetailDiv = styled.div`
+//   /* margin-top: 200px;
+//   margin-left: 200px; */
+//   margin: 200px auto 0px;
 
-  width: 1600px;
-  height: 1000px;
-  /* border: 3px solid black; */
-  display: flex;
-  justify-content: space-around;
-`;
+//   width: 1600px;
+//   height: 1000px;
+//   /* border: 3px solid black; */
+//   display: flex;
+//   justify-content: space-around;
+// `;
 
-// 상품 정보
-const ProductInfo = styled.div`
-  margin: 10px;
-`;
+// // 상품 정보
+// const ProductInfo = styled.div`
+//   margin: 10px;
+// `;
 
-// 상품 이미지
-const StWrapper = styled.div`
-  display: flex;
-  position: relative;
-  width: 500px;
-  height: 400px;
-  overflow: hidden;
-  border-radius: 16px;
-`;
+// // 상품 이미지
+// const StWrapper = styled.div`
+//   display: flex;
+//   position: relative;
+//   width: 500px;
+//   height: 400px;
+//   overflow: hidden;
+//   border-radius: 16px;
+// `;
 
-const StImageWrapper = styled.div`
-  display: flex;
+// const StImageWrapper = styled.div`
+//   display: flex;
 
-  & > img {
-    width: 500px;
-    height: 400px;
-    object-fit: cover;
-    border-radius: 16px;
-  }
-`;
+//   & > img {
+//     width: 500px;
+//     height: 400px;
+//     object-fit: cover;
+//     border-radius: 16px;
+//   }
+// `;
 
-const StLeftButton = styled(IcLeft)`
-  position: absolute;
-  top: calc(100% / 2);
-  left: 10px;
-  z-index: 999;
+// const StLeftButton = styled(IcLeft)`
+//   position: absolute;
+//   top: calc(100% / 2);
+//   left: 10px;
+//   z-index: 999;
 
-  &:hover {
-    cursor: pointer;
-    & > path {
-      fill: rgba(255, 255, 255, 0.5);
-    }
-  }
-`;
+//   &:hover {
+//     cursor: pointer;
+//     & > path {
+//       fill: rgba(255, 255, 255, 0.5);
+//     }
+//   }
+// `;
 
-const StRightButton = styled(IcRight)`
-  position: absolute;
-  top: calc(100% / 2);
-  right: 10px;
-  z-index: 999;
+// const StRightButton = styled(IcRight)`
+//   position: absolute;
+//   top: calc(100% / 2);
+//   right: 10px;
+//   z-index: 999;
 
-  &:hover {
-    cursor: pointer;
-    & > path {
-      fill: rgba(255, 255, 255, 0.5);
-    }
-  }
-`;
+//   &:hover {
+//     cursor: pointer;
+//     & > path {
+//       fill: rgba(255, 255, 255, 0.5);
+//     }
+//   }
+// `;
 
-const SellerInfo = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 5px;
-`;
+// const SellerInfo = styled.div`
+//   display: flex;
+//   align-items: center;
+//   gap: 5px;
+// `;
 
-// 입찰 정보
-const BidInfo = styled.div`
-  margin: 10px;
-  width: 600px;
-`;
+// // 입찰 정보
+// const BidInfo = styled.div`
+//   margin: 10px;
+//   width: 600px;
+// `;
 
-const EachBid = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 10px;
+// const EachBid = styled.div`
+//   display: flex;
+//   align-items: center;
+//   gap: 10px;
 
-  background-color: rgba(157, 198, 255, 0.3);
-  border-radius: 8px;
+//   background-color: rgba(157, 198, 255, 0.3);
+//   border-radius: 8px;
 
-  padding: 10px;
-  margin-top: 10px;
-`;
+//   padding: 10px;
+//   margin-top: 10px;
+// `;
 
-const HighPriceIcon = styled.div`
-  border: 1px solid #315dfb;
-  background: #9dc6ff;
-`;
+// const HighPriceIcon = styled.div`
+//   border: 1px solid #315dfb;
+//   background: #9dc6ff;
+// `;
 
-// 각 소제목
-const InfoTitle = styled.div`
-  font-size: 40px;
-  font-weight: 700;
-`;
-// 내용 구분
-const InfoContentBox = styled.div`
-  /* margin: 10px; */
-`;
-// 각 내용들
-const InfoContent = styled.div`
-  margin: 20px 10px;
+// // 각 소제목
+// const InfoTitle = styled.div`
+//   font-size: 40px;
+//   font-weight: 700;
+// `;
+// // 내용 구분
+// const InfoContentBox = styled.div`
+//   /* margin: 10px; */
+// `;
+// // 각 내용들
+// const InfoContent = styled.div`
+//   margin: 20px 10px;
 
-  &.price-info {
-    border-top: 1px solid black;
-    border-bottom: 1px solid black;
-  }
+//   &.price-info {
+//     border-top: 1px solid black;
+//     border-bottom: 1px solid black;
+//   }
 
-  &.image {
-    border-radius: 16px;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-  }
-`;
+//   &.image {
+//     border-radius: 16px;
+//     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+//   }
+// `;
 
-// 상품 이미지
-const ProductImg = styled.img`
-  border-radius: 16px;
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-`;
+// // 상품 이미지
+// const ProductImg = styled.img`
+//   border-radius: 16px;
+//   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+// `;
 
-// 상품명
-const ProductName = styled.div`
-  margin: 10px 0px;
-`;
-// 상품 설명
-const ProductExplain = styled.div`
-  padding: 20px 0px;
-  border-radius: 4px;
-  background: #efefef;
-  text-align: center;
-`;
-/////////////////////
+// // 상품명
+// const ProductName = styled.div`
+//   margin: 10px 0px;
+// `;
+// // 상품 설명
+// const ProductExplain = styled.div`
+//   padding: 20px 0px;
+//   border-radius: 4px;
+//   background: #efefef;
+//   text-align: center;
+// `;
+// /////////////////////
 
-// 가격 정보 박스 (시작가, 정가, 현재가)
-const PriceInfo = styled.div`
-  display: flex;
-  justify-content: space-between;
+// // 가격 정보 박스 (시작가, 정가, 현재가)
+// const PriceInfo = styled.div`
+//   display: flex;
+//   justify-content: space-between;
 
-  margin: 10px 0px;
-`;
+//   margin: 10px 0px;
+// `;
 
-// 가격 정보 소제목
-const PriceInfoTitle = styled.div`
-  width: 80px;
-  text-align: center;
-  border: 1px solid #a5a2a2;
+// // 가격 정보 소제목
+// const PriceInfoTitle = styled.div`
+//   width: 80px;
+//   text-align: center;
+//   border: 1px solid #a5a2a2;
 
-  &.current-price {
-    border: 1px solid black;
-    font-weight: 800;
-  }
-`;
+//   &.current-price {
+//     border: 1px solid black;
+//     font-weight: 800;
+//   }
+// `;
 
-// 가격 정보
-const PriceInfoContent = styled.div`
-  /* width: 160px; */
-  text-align: end;
-`;
+// // 가격 정보
+// const PriceInfoContent = styled.div`
+//   /* width: 160px; */
+//   text-align: end;
+// `;
 
-////////////////
+// ////////////////
 
-// 남은 시간
-const CountTime = styled.div`
-  width: 80px;
-  height: 40px;
-  text-align: center;
-`;
-// 입찰 가격 선택박스
-const SelectPrice = styled.div`
-  width: 80px;
-`;
-// 입찰 버튼
-const BidButton = styled.div`
-  width: 40px;
-  height: 40px;
-  text-align: center;
-  line-height: 40px;
-`;
-////////////////
+// // 남은 시간
+// const CountTime = styled.div`
+//   width: 80px;
+//   height: 40px;
+//   text-align: center;
+// `;
+// // 입찰 가격 선택박스
+// const SelectPrice = styled.div`
+//   width: 80px;
+// `;
+// // 입찰 버튼
+// const BidButton = styled.div`
+//   width: 40px;
+//   height: 40px;
+//   text-align: center;
+//   line-height: 40px;
+// `;
+// ////////////////
 
-//// 입찰 현황
+// //// 입찰 현황
 
-// 입찰자 프로필사진
-const BidderProfileImg = styled.img`
-  width: 50px;
-  border-radius: 70%;
+// // 입찰자 프로필사진
+// const BidderProfileImg = styled.img`
+//   width: 50px;
+//   border-radius: 70%;
 
-  &.none-image {
-    opacity: 0.5;
-  }
-`;
+//   &.none-image {
+//     opacity: 0.5;
+//   }
+// `;
 
-// 입찰자 닉네임
-const BidderNickname = styled.div`
-  width: 150px;
-`;
-// 입찰액
-const BidPrice = styled.div``;
+// // 입찰자 닉네임
+// const BidderNickname = styled.div`
+//   width: 150px;
+// `;
+// // 입찰액
+// const BidPrice = styled.div``;
 
 const AuctionDetail = () => {
   // url에서 경매상품 번호 가져오기
