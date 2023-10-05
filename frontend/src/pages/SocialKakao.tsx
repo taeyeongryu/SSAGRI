@@ -15,7 +15,8 @@ const SocialKakaoPage = () => {
   const userKakaoData = {
     nickname: '',
     profileURL: '',
-    email: ''
+    email: '',
+    authcode: ''
   };
 
   const authCode = code.searchParams.get('code');
@@ -28,7 +29,8 @@ const SocialKakaoPage = () => {
     axios
       .get(`/oauth/kakao-login`, {
         params: {
-          email: userData.email
+          email: userData.email,
+          authcode: userData.authcode
         }
       })
       .then((res) => {
@@ -50,6 +52,9 @@ const SocialKakaoPage = () => {
               userData: userData
             }
           });
+        } else {
+          alert('부적절한 접근입니다. 로그인을 다시 시도해주세요.');
+          navigate('/login');
         }
       });
   };
@@ -66,7 +71,8 @@ const SocialKakaoPage = () => {
         userKakaoData.nickname = res.data[0];
         userKakaoData.profileURL = res.data[1];
         userKakaoData.email = res.data[2];
-
+        userKakaoData.authcode = res.data[3];
+        console.log(userKakaoData);
         onKakaoLogin(userKakaoData);
       })
       .catch((err) => {

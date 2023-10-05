@@ -267,9 +267,7 @@ const AuctionItme = (item: any) => {
   // 상세 페이지로 이동
   const goAuctionDetail = (item) => {
     console.log(item);
-    navigate(`/auctionDetail/${item.item.no}`, {
-      state: item
-    });
+    navigate(`/auctionDetail/${item.item.no}`);
   };
 
   return (
