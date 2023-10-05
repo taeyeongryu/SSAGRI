@@ -357,6 +357,7 @@ const AuctionDetail = () => {
         // 입찰 가능한 최소금액을 갱신해준다.
         setStartPrice(selectedPrice + auctionItem.priceCount);
         getBidList();
+        getAuctionDetail();
       })
       .catch((err) => {
         console.log(err);
@@ -523,7 +524,7 @@ const AuctionDetail = () => {
                     <ProductImg src={url.imageLink} key={id} />
                   ))
                 ) : (
-                  <ProductImg src='/public/assets/img/사진이 없어요.jfif' />
+                  <ProductImg src='/assets/img/사진이 없어요.jfif' />
                 )}
               </StImageWrapper>
             </StWrapper>

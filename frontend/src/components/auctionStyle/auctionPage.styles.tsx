@@ -280,7 +280,7 @@ const AuctionItme = (item: any) => {
           const firstPhoto = res.data.result[0].imageLink;
           setThumbnail(firstPhoto);
         } else {
-          setThumbnail('/public/assets/img/사진이 없어요.jfif');
+          setThumbnail('/assets/img/사진이 없어요.jfif');
         }
       })
       .catch((err) => {
