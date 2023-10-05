@@ -15,28 +15,40 @@ const NavbarDiv = styled.div`
   left: 0;
   width: 100vw;
   height: 60px;
-  /* border-top: 2px solid black; */
-  /* border-bottom: 2px solid black; */
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   z-index: 10;
   background-color: #242526;
-  /* font-family: 'Poppins', sans-serif; */
 `;
 
 const MenuDiv = styled.div`
-  width: 50vw;
+  width: 1500px;
   height: 7vh;
   margin-top: 5px;
-  /* border: 2px solid red; */
   display: flex;
-  /* line-height: 4vh; */
-  /* align-items: center; */
+  /* border: 2px solid red; */
+  /* margin-left: 00px; */
 `;
 
 const MenuName = styled.p`
-  font-size: 15px;
-  margin-right: 3vw;
+  line-height: 1.4vh;
+  font-size: 17px;
+  /* margin-right: 3vw; */
+  margin-left: 4.5vw;
+  color: rgb(255, 255, 255, 0.5);
+  transition:
+    color 0.2s,
+    font-weight 0.2s;
+  &:hover {
+    color: rgb(255, 255, 255);
+    font-weight: 560;
+  }
+`;
+const MenuName2 = styled.p`
+  line-height: 1.3vh;
+  font-size: 17px;
+  /* margin-right: 3vw; */
+  margin-left: 39.5vw;
   color: rgb(255, 255, 255, 0.5);
   transition:
     color 0.2s,
@@ -48,10 +60,11 @@ const MenuName = styled.p`
 `;
 
 const TitleTag = styled.div`
-  width: 80px;
+  width: 180px;
   height: 30px;
   margin-top: 4px;
-  margin-left: 17px;
+  margin-left: 207px;
+  position: relative;
 `;
 
 const TitleName1 = styled.span`
@@ -67,7 +80,6 @@ const TitleName2 = styled.span`
 
 const NotifyDiv = styled.div`
   z-index: 50;
-  /* display: flex; */
   position: fixed;
   bottom: 50px;
   right: 50px;
@@ -96,7 +108,6 @@ const NotifyText = styled.p`
 const CancleBtn = styled.div`
   width: 40px;
   height: 30px;
-  /* border: 1px solid black; */
   font-size: 20px;
   border-radius: 5px;
   text-align: center;
@@ -132,6 +143,15 @@ const UserTag = styled.div`
   top: 65px;
   left: 280px;
 `;
+
+const LogoImg = styled.img`
+  width: 26px;
+  position: absolute;
+  top: 11px;
+  left: 80px;
+  z-index: -1;
+`;
+
 const Notify = ({ setNotify, bidderNickname, price, auctionNo }) => {
   const navigate = useNavigate();
   return (
@@ -158,6 +178,7 @@ const Title = () => {
   };
   return (
     <TitleTag onClick={goMain}>
+      <LogoImg src='/assets/img/logoImg.png'></LogoImg>
       <TitleName1>싸</TitleName1>
       <TitleName2>그리</TitleName2>
     </TitleTag>
@@ -166,6 +187,7 @@ const Title = () => {
 
 const MenuBar = () => {
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
+  const [selectedMenu, setSelectedMenu] = useState('');
 
   const navigate = useNavigate();
 
@@ -187,18 +209,23 @@ const MenuBar = () => {
   };
 
   const goLogin = () => {
+    setSelectedMenu('로그인페이지');
     navigate('/login');
   };
   const goMain = () => {
+    setSelectedMenu('메인페이지');
     navigate('/');
   };
   const goTrade = () => {
+    setSelectedMenu('거래페이지');
     navigate('/tradeMain');
   };
   const goAuction = () => {
+    setSelectedMenu('경매페이지');
     navigate('/auction');
   };
   const goCommu = () => {
+    setSelectedMenu('커뮤니티페이지');
     navigate('/community');
   };
 
@@ -208,35 +235,25 @@ const MenuBar = () => {
 
   return (
     <MenuDiv>
-      {isLoggedIn ? (
-        <MenuName
-          onClick={goLogout}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-        >
-          로그아웃
-        </MenuName>
-      ) : (
-        <MenuName
-          onClick={goLogin}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-        >
-          로그인
-        </MenuName>
-      )}
-
       <MenuName
         onClick={goMain}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        style={{
+          color:
+            selectedMenu === '메인페이지' ? 'white' : 'rgb(255, 255, 255, 0.5)'
+        }}
       >
-        메인
+        메인페이지
       </MenuName>
       <MenuName
         onClick={goTrade}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        style={{
+          color:
+            selectedMenu === '거래페이지' ? 'white' : 'rgb(255, 255, 255, 0.5)'
+        }}
       >
         중고거래{' '}
       </MenuName>
@@ -244,6 +261,10 @@ const MenuBar = () => {
         onClick={goAuction}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        style={{
+          color:
+            selectedMenu === '경매페이지' ? 'white' : 'rgb(255, 255, 255, 0.5)'
+        }}
       >
         경매{' '}
       </MenuName>
@@ -251,6 +272,12 @@ const MenuBar = () => {
         onClick={goCommu}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        style={{
+          color:
+            selectedMenu === '커뮤니티페이지'
+              ? 'white'
+              : 'rgb(255, 255, 255, 0.5)'
+        }}
       >
         커뮤니티{' '}
       </MenuName>
@@ -260,38 +287,54 @@ const MenuBar = () => {
           top: '100%',
           left: 0,
           width: '100vw',
-          height: showOverlay ? '40px' : 0,
+          height: showOverlay ? '10px' : 0,
           backgroundColor: '#242526',
           transition: 'height 0.7s' // 이 부분 수정
-          // overflow: 'hidden'
         }}
       ></div>
+      {isLoggedIn ? (
+        <MenuName2
+          onClick={goLogout}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          로그아웃
+        </MenuName2>
+      ) : (
+        <MenuName2
+          onClick={goLogin}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          로그인
+        </MenuName2>
+      )}
     </MenuDiv>
   );
 };
 
-const SideDiv = styled.div`
-  width: 20vw;
-  height: 7vh;
-  /* border: 2px solid blue; */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
+// const SideDiv = styled.div`
+//   width: 20vw;
+//   height: 7vh;
+//   /* border: 2px solid blue; */
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// `;
 
-const SideName = styled.p`
-  font-size: 1.1vw;
-  margin-right: 2vw;
-`;
+// const SideName = styled.p`
+//   font-size: 1.1vw;
+//   margin-right: 2vw;
+// `;
 
-const SideBar = () => {
-  return (
-    <SideDiv>
-      <SideName>마이페이지</SideName>
-      <SideName>햄버그바</SideName>
-    </SideDiv>
-  );
-};
+// const SideBar = () => {
+//   return (
+//     <SideDiv>
+//       <SideName>마이페이지</SideName>
+//       <SideName>햄버그바</SideName>
+//     </SideDiv>
+//   );
+// };
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
@@ -320,13 +363,11 @@ const Navbar = () => {
   };
 
   useEffect(() => {
+    const userId = localStorage.getItem('userNo');
     onSilentRefreshInNav();
-    // notification();
     // 알림기능
-    const urlEndPoint =
-      'https://j9b209.p.ssafy.io/api/notification/subscribe/1';
+    const urlEndPoint = `https://j9b209.p.ssafy.io/api/notification/subscribe/${userId}`;
     const eventSource = new EventSource(urlEndPoint);
-
     eventSource.addEventListener('sse-emitter-created', function (event) {
       console.log('소켓 연결', event);
     });
@@ -346,7 +387,7 @@ const Navbar = () => {
     <NavbarDiv>
       <Title></Title>
       <MenuBar></MenuBar>
-      <SideBar></SideBar>
+      {/* <SideBar></SideBar> */}
       {/* 알림 */}
       {notify ? (
         <Notify

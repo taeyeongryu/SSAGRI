@@ -398,8 +398,11 @@ const AuctionDetail = () => {
 
   // 상품 사진 불러오기
   const loadImg = () => {
-    axios
-      .get(`/auction-product/load/${auctionNo}`)
+    const storedAccessToken = sessionStorage.getItem('accessToken');
+    const AuctionApi = axios.create({
+      headers: { Authorization: storedAccessToken }
+    });
+    AuctionApi.get(`/auction-product/load/${auctionNo}`)
       .then((res) => {
         if (res.data.result) {
           console.log('상품 사진 있음: ', res.data.result);
@@ -418,8 +421,11 @@ const AuctionDetail = () => {
 
   // 경매 입찰 내역 조회
   const getBidList = () => {
-    axios
-      .get(`/auction-bid/${auctionNo}`)
+    const storedAccessToken = sessionStorage.getItem('accessToken');
+    const AuctionApi = axios.create({
+      headers: { Authorization: storedAccessToken }
+    });
+    AuctionApi.get(`/auction-bid/${auctionNo}`)
       .then((res) => {
         console.log('입찰 내역: ', res.data);
         setBidList(res.data);
@@ -478,12 +484,15 @@ const AuctionDetail = () => {
 
   // 경매 상세 데이터 가져오기
   const getAuctionDetail = () => {
-    axios
-      .get(`/auction-product/detail`, {
-        params: {
-          auctionNo: auctionNo
-        }
-      })
+    const storedAccessToken = sessionStorage.getItem('accessToken');
+    const AuctionApi = axios.create({
+      headers: { Authorization: storedAccessToken }
+    });
+    AuctionApi.get(`/auction-product/detail`, {
+      params: {
+        auctionNo: auctionNo
+      }
+    })
       .then((res) => {
         const data = res.data;
         console.log(data);
