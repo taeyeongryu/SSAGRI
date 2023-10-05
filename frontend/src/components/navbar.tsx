@@ -224,7 +224,7 @@ const ChatNotify = ({ setChatNotify, chatNickname }) => {
       <GoChatBtn
         onClick={() => {
           setChatNotify(false);
-          navigate(`/chat?sellorNo=${1}`);
+          navigate(`/chat?sellorNo=${2}`);
         }}
       >
         채팅하러 가기
