@@ -178,6 +178,11 @@ const CommuPage = styled.div`
   text-align: center;
   line-height: 80px;
   font-size: 30px;
+  &:hover {
+    background-color: rgb(200, 142, 167, 0.4);
+
+    cursor: pointer; /* 호버 시 커서 모양 변경 (선택 사항) */
+  }
   /* color: #CE5959; */
 `;
 
@@ -192,7 +197,7 @@ const LifeTags = styled.div`
   font-size: 40px;
   margin: 200px 0 100px 150px;
   width: 300px;
-  height: 80px;BoardLife
+  height: 80px;
   font-weight: 600;
 
   /* border: 2px solid #186fc7; */

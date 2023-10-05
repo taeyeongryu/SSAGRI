@@ -105,10 +105,11 @@ const CommuCreate = () => {
   const [clickCount, setClickCount] = useState(0);
 
   const navigate = useNavigate();
+  const storedAccessToken = sessionStorage.getItem('accessToken');
 
   const CreateCommu = () => {
     const CommuApi = axios.create({
-      headers: { 'cotent-type': 'application/json' }
+      headers: { Authorization: storedAccessToken }
     });
     const data = {
       comment: commuContent,
@@ -116,7 +117,6 @@ const CommuCreate = () => {
       userNo: userId,
       who: anony
     };
-
     //게시판 순위 정보
     CommuApi.post('/board/regist', data)
       .then((res) => {
@@ -124,34 +124,28 @@ const CommuCreate = () => {
       })
       .catch((err) => {
         console.log('실패1', err);
-        console.log('실패1', commuContent, commuTitle, anony);
-        console.log('실패1', data);
       });
     navigate('/community');
   };
 
   const onInput1 = (e) => {
     setCommuTitle(e.target.value);
-    console.log(e.target.value);
   };
   const onInput2 = (e) => {
     setCommuContent(e.target.value);
-    console.log(e.target.value);
   };
   const onInput3 = () => {
     setClickCount((prevCount) => prevCount + 1);
     if (clickCount % 2 === 0) {
       setAnony('익명');
-      console.log(anony);
     } else {
       setAnony('실명');
-      console.log(anony);
     }
   };
 
   useEffect(() => {
     const BoardApi = axios.create({
-      headers: { 'cotent-type': 'application/json' }
+      headers: { Authorization: storedAccessToken }
     });
     //유저 id정보 요청
     BoardApi.get('/util/get-userno')
