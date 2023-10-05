@@ -3,8 +3,10 @@ package com.ssafy.ssagri.util.oauth.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.ssagri.domain.redis.RedisService;
 import com.ssafy.ssagri.util.exception.CustomException;
 import com.ssafy.ssagri.util.exception.CustomExceptionStatus;
+import com.ssafy.ssagri.util.mail.EmailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -28,6 +30,9 @@ public class OauthService {
 
     @Value("${kakao.client.secret}")
     private String CLIENT_SECRET;
+
+    private EmailService emailService;
+    private RedisService redisService;
 
     public String getToken(String code) {
         //Kakao 보낼 API
@@ -73,7 +78,7 @@ public class OauthService {
                         .block();
 
 
-        log.info("토큰으로 받아낸 유저 정보 : {}" + infoResponse);
+        log.info("[OauthService]토큰으로 받아낸 유저 정보 : {}" + infoResponse);
         //Map 내부 값 파싱
         try {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -84,7 +89,12 @@ public class OauthService {
             String profileImageUrl = jsonNode.path("properties").path("profile_image").asText();
             String email = jsonNode.path("kakao_account").path("email").asText();
 
-            return new String[]{nickname, profileImageUrl, email};
+            //랜덤 코드 만들어 Redis에 저장
+            String authcode = emailService.createKey();
+            redisService.saveKakaoAuthCode(authcode, email);
+            log.info("[OauthService]카카오 인가 코드 생성 : {} {}", authcode, email);
+
+            return new String[]{nickname, profileImageUrl, email, authcode};
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -95,4 +105,6 @@ public class OauthService {
     public String getKakaoLoginPage() {
         return "https://kauth.kakao.com/oauth/authorize?client_id=" + REST_API_KEY + "&redirect_uri=" + REDIRECT_URI + "&response_type=code";
     }
+
+
 }
