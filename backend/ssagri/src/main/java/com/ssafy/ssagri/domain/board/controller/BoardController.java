@@ -85,10 +85,19 @@ public class BoardController {
     @GetMapping("/all-write-list/{boardNo}")
     @ApiOperation("하나의 게시판에 대한 모든 게시글 출력")
     public Page<BoardListDto> allWriteList(@PathVariable("boardNo") Long boardNo, Pageable pageable) {
-        System.out.println("헹어");
         Page<BoardListDto> BoardListDtos = boardService.boardWriteList(boardNo, pageable);
         return BoardListDtos;
     }
+
+    // 모든 게시글 보여줄때 바
+    @GetMapping("/all-write-list-bar/{boardNo}")
+    @ApiOperation("하나의 게시판에 대한 모든 게시글 출력")
+    public BoardDto allWriteListBar(@PathVariable("boardNo") Long boardNo, Pageable pageable) {
+        BoardDto boardDto = boardService.boardWriteBar(boardNo);
+        return boardDto;
+    }
+
+
 
     // 게시글 상세보기
     @GetMapping("/write-list-detail/{boardWriteNo}")
