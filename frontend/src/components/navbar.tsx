@@ -152,6 +152,22 @@ const LogoImg = styled.img`
   z-index: -1;
 `;
 
+const ChattingBtn = styled.div`
+  cursor: pointer;
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+
+  width: 100px;
+  height: 100px;
+  border-radius: 70%;
+  background-color: rgb(157, 198, 255, 0.7);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const Notify = ({ setNotify, bidderNickname, price, auctionNo }) => {
   const navigate = useNavigate();
   return (
@@ -227,6 +243,10 @@ const MenuBar = () => {
   const goCommu = () => {
     setSelectedMenu('커뮤니티페이지');
     navigate('/community');
+  };
+  const goMyChat = () => {
+    const userNo = localStorage.getItem('userNo');
+    navigate(`/chat/?sellorNo=${userNo}`);
   };
 
   useEffect(() => {
@@ -309,6 +329,19 @@ const MenuBar = () => {
           로그인
         </MenuName2>
       )}
+      {isLoggedIn ? (
+        <ChattingBtn
+          onClick={() => {
+            goMyChat();
+          }}
+        >
+          <img
+            style={{ width: '70px', height: '70px' }}
+            src={'/assets/img/chat-icon.png'}
+            alt='채팅 아이콘'
+          />
+        </ChattingBtn>
+      ) : null}
     </MenuDiv>
   );
 };

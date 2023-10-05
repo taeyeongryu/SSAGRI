@@ -276,11 +276,16 @@ const SearchImg = styled.img`
   color: #4786fa;
 `;
 
-const AuctionSearchInput = ({ onKeywordHandler, getListByKeyword }) => {
+const AuctionSearchInput = ({
+  onKeywordHandler,
+  getListByKeyword,
+  handleKeyDown
+}) => {
   return (
     <Search01>
       <SearchInput01
         onChange={onKeywordHandler}
+        onKeyDown={handleKeyDown}
         type='text'
         placeholder='원하는 제품을 검색해 보세요!'
       ></SearchInput01>
@@ -521,6 +526,16 @@ const AuctionPage = () => {
     SetKeyword(e.target.value);
   };
 
+  const handleKeyDown = (event) => {
+    const key = event.code;
+    switch (key) {
+      case 'Enter':
+        getListByKeyword();
+        break;
+      default:
+    }
+  };
+
   const getListByKeyword = () => {
     const auctionSearch = keyword;
 
@@ -641,6 +656,7 @@ const AuctionPage = () => {
             <AuctionSearchInput
               onKeywordHandler={onKeywordHandler}
               getListByKeyword={getListByKeyword}
+              handleKeyDown={handleKeyDown}
             ></AuctionSearchInput>
             <AuctionTag5> 검색결과 15 건</AuctionTag5>
           </AuctionInputDiv>

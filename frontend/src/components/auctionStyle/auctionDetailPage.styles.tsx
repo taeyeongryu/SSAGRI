@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useState, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 
 import { ReactComponent as IcLeft } from '/src/assets/icon_left.svg';
@@ -97,7 +97,12 @@ const EachBid = styled.div`
 `;
 
 const HighPriceIcon = styled.div`
-  border: 1px solid #315dfb;
+  width: 60px;
+  height: 30px;
+  text-align: center;
+  font-weight: 700;
+  line-height: 30px;
+  /* border: 1px solid #315dfb; */
   background: #9dc6ff;
 `;
 
@@ -214,13 +219,25 @@ const BidderNickname = styled.div`
   width: 150px;
 `;
 // 입찰액
-const BidPrice = styled.div``;
+const BidPrice = styled.div`
+  width: 70px;
+`;
+
+// 채팅 버튼
+const ChatButton = styled.img`
+  margin-left: 10px;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+`;
 
 const AuctionDetail = () => {
+  const userNo = localStorage.getItem('userNo');
   // url에서 경매상품 번호 가져오기
   const paramData = useParams();
   const auctionNo = paramData['no'];
-  // console.log('경매 번호: ', auctionNo);
+
+  const navigate = useNavigate();
 
   const [auctionItem, setAuctionItem] = useState({
     auctionStatus: '',
@@ -319,6 +336,11 @@ const AuctionDetail = () => {
   // 입찰가격 옵션 설정
   const [priceOptions, setPriceOptions] = useState([]);
 
+  // useEffect(() => {
+  //   setSelectedPrice(auctionItem.downPrice);
+  //   console.log(auctionItem);
+  // }, [auctionItem]);
+
   const setPriceOption = () => {
     const priceList = [];
 
@@ -326,8 +348,10 @@ const AuctionDetail = () => {
       const newStartPrice = auctionItem.finallyPrice + auctionItem.priceCount;
       // console.log('현재가 있을 경우 시작 가격 설정', newStartPrice);
       setStartPrice(newStartPrice);
+      setSelectedPrice(newStartPrice);
     } else {
       setStartPrice(auctionItem.downPrice);
+      setSelectedPrice(auctionItem.downPrice);
     }
 
     for (
@@ -355,7 +379,7 @@ const AuctionDetail = () => {
       const bidData = {
         auctionBidPrice: selectedPrice,
         auctionNo: auctionNo,
-        userNo: Number(localStorage.getItem('userNo')) // 입찰자의 유저 넘버
+        userNo: Number(userNo) // 입찰자의 유저 넘버
       };
       console.log('입찰 정보: ', bidData);
 
@@ -435,6 +459,11 @@ const AuctionDetail = () => {
       });
   };
 
+  ////// 채팅 내역 조회하기
+  const goChat = (sellorNo) => {
+    navigate(`/chat?sellorNo=${sellorNo}`);
+  };
+
   const [currentIdx, setCurrentIdx] = useState(0);
   const slideRef = useRef(null);
 
@@ -495,7 +524,7 @@ const AuctionDetail = () => {
     })
       .then((res) => {
         const data = res.data;
-        console.log(data);
+        console.log('경매 상품 데이터 :', data);
         setAuctionItem(data);
       })
       .catch((err) => {
@@ -684,6 +713,13 @@ const AuctionDetail = () => {
                   <div style={{ color: '#4786FA' }}>최고가</div>
                 </HighPriceIcon>
               )}
+              {/* 채팅 연결 버튼 */}
+              {userNo === String(auctionItem.userNo) ? (
+                <ChatButton
+                  src={'/assets/img/chat-icon.png'}
+                  onClick={() => goChat(bid.userNo)}
+                ></ChatButton>
+              ) : null}
             </EachBid>
           ))}
         </InfoContentBox>
