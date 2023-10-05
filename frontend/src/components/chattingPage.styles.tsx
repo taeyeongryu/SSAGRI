@@ -440,9 +440,18 @@ const ChattingDiv = () => {
   const formatDate = (inputDate) => {
     const time = new Date(inputDate);
     const timeNow = new Date();
-    const diffSec = timeNow.getTime() - time.getTime();
+
+    // UTC 시간을 로컬 시간으로 변환
+    const localTime = new Date(
+      time.getTime() + time.getTimezoneOffset() * 60000
+    );
+
+    // UTC+9:00 적용
+    const utcPlus9Time = new Date(localTime.getTime() + 9 * 60 * 60 * 1000);
+
+    const diffSec = timeNow.getTime() - utcPlus9Time.getTime();
+
     const minute = diffSec / (60 * 1000);
-    // console.log(Math.floor(minute / 60));
 
     if (inputDate === null) {
       return '';
@@ -688,8 +697,8 @@ const DoChatting = ({ selectChat }) => {
   // 연결
   const connect = () => {
     // stomp 객체 생성
-    const socket = new SockJS('https://j9b209.p.ssafy.io/api/ws', null, {
-      // const socket = new SockJS('http://localhost:5000/api/ws', null, {
+    // const socket = new SockJS('https://j9b209.p.ssafy.io/api/ws', null, {
+    const socket = new SockJS('http://localhost:5000/api/ws', null, {
       transports: ['websocket', 'xhr-streaming', 'xhr-polling']
     });
     const stompClient = Stomp.over(socket);
@@ -904,15 +913,27 @@ const ChatContentComp = ({ messageList, receiverProfile }) => {
   // 메세지 시간 포맷
   const messageFormatDate = (date) => {
     const result = new Date(date);
-    const hour = result.getHours();
-    let minute = result.getMinutes().toString();
+
+    // UTC 시간을 로컬 시간으로 변환
+    const localTime = new Date(
+      result.getTime() + result.getTimezoneOffset() * 60000
+    );
+
+    // UTC+9:00 적용
+    const utcPlus9Time = new Date(localTime.getTime() + 9 * 60 * 60 * 1000);
+
+    const hour = utcPlus9Time.getHours();
+
+    let minute = utcPlus9Time.getMinutes().toString();
+
     if (minute.length === 1) {
       minute = `0${minute}`;
     }
+
     if (hour < 12) {
       return `오전 ${hour}:${minute}`;
     } else {
-      if (hour == 12) {
+      if (hour === 12) {
         return `오후 ${12}:${minute}`;
       } else {
         return `오후 ${hour - 12}:${minute}`;
