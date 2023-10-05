@@ -88,6 +88,7 @@ public class BoardService {
                     .title(boardlist.get(i).getTitle())
                     .boardClick(boardlist.get(i).getBoardClick())
                     .showName(boardlist.get(i).getShowName())
+                    .boardLife(ChronoUnit.DAYS.between(LocalDateTime.now(),boardlist.get(i).getBoardLife()))
                     .allowDelete(boardlist.get(i).isAllowDelete()).build();
 
             result.add(boardDto);
@@ -210,7 +211,7 @@ public class BoardService {
                     .title(boardWriteList.get(i).getTitle())
                     .view(boardWriteList.get(i).getView())
                     .like(boardWriteList.get(i).getLike())
-                    .createDate(ChronoUnit.DAYS.between(boardWriteList.get(i).getCreateDate(),LocalDateTime.now()))
+//                    .createDate(ChronoUnit.DAYS.between(boardWriteList.get(i).getCreateDate(),LocalDateTime.now()))
                     .allowComment(boardWriteList.get(i).isAllowComment())
                     .commentCount(boardCommentRepository.findAllByBoardList(boardWriteList.get(i)).size())
                     .content(boardWriteList.get(i).getContent()).build();
@@ -244,9 +245,17 @@ public class BoardService {
 
         List<BoardDto> result = new ArrayList<>();
 
+//        LocalDateTime now = LocalDateTime.now();
+
+//        System.out.println(now);
+
         for(int i=0;i<boardList.size();i++){
 
-            String boardLife = boardList.get(i).getBoardLife().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"));
+//        LocalDateTime afterTime = boardList.get(i).getBoardLife();
+
+
+
+//            String boardLife = minus.format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"));
 
             BoardDto boardDto = BoardDto.builder()
                     .no(boardList.get(i).getNo())
@@ -254,8 +263,10 @@ public class BoardService {
                     .title(boardList.get(i).getTitle())
                     .boardClick(boardList.get(i).getBoardClick())
                     .showName(boardList.get(i).getShowName())
-                    .boardLife(boardLife)
+                    .boardLife(ChronoUnit.DAYS.between(LocalDateTime.now(), boardList.get(i).getBoardLife()))
                     .allowDelete(boardList.get(i).isAllowDelete()).build();
+
+
 
             result.add(boardDto);
         }
