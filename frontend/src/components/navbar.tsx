@@ -91,6 +91,10 @@ const NotifyDiv = styled.div`
   font-weight: 600;
 `;
 
+const ChatNotifyDiv = styled(NotifyDiv)`
+  border: 2px solid #e74118;
+`;
+
 const NotifyImg = styled.img`
   width: 150px;
   margin: 15px 0 0 110px;
@@ -100,6 +104,12 @@ const NotifyTag = styled.p`
   margin: 30px 0 0 40px;
   color: #337ccf;
 `;
+const ChatNotifyTag = styled.p`
+  font-size: 27px;
+  margin: 30px 0 0 40px;
+  color: #e74118;
+`;
+
 const NotifyText = styled.p`
   font-size: 27px;
   margin: 5px 0 0 140px;
@@ -123,7 +133,7 @@ const CancleBtn = styled.div`
 const GoTradeBtn = styled.div`
   width: 140px;
   height: 40px;
-  border: 1px solid black;
+  /* border: 1px solid black; */
   border-radius: 15px;
   text-align: center;
   line-height: 40px;
@@ -136,12 +146,19 @@ const GoTradeBtn = styled.div`
     cursor: pointer; /* 호버 시 커서 모양 변경 (선택 사항) */
   }
 `;
+const GoChatBtn = styled(GoTradeBtn)`
+  background-color: #f15e3a;
+  &:hover {
+    background-color: #ee4b22; /* 호버 시 변경될 배경색 */
+    cursor: pointer; /* 호버 시 커서 모양 변경 (선택 사항) */
+  }
+`;
 
 const UserTag = styled.div`
   font-size: 13px;
   position: absolute;
   top: 65px;
-  left: 280px;
+  left: 110px;
 `;
 
 const LogoImg = styled.img`
@@ -163,10 +180,40 @@ const Notify = ({ setNotify, bidderNickname, price, auctionNo }) => {
       {/* <GoTradeBtn onClick={() => navigate('/')}>재입찰하러 가기</GoTradeBtn> */}
       <UserTag>{bidderNickname}님이 입찰하셨습니다.</UserTag>
 
-      <GoTradeBtn onClick={() => navigate(`/auctionDetail/${auctionNo}`)}>
+      <GoTradeBtn
+        onClick={() => {
+          setNotify(false);
+          navigate(`/auctionDetail/${auctionNo}`);
+        }}
+      >
         재입찰하러 가기
       </GoTradeBtn>
     </NotifyDiv>
+  );
+};
+const ChatNotify = ({ setChatNotify, chatNickname }) => {
+  const navigate = useNavigate();
+  return (
+    <ChatNotifyDiv>
+      <CancleBtn onClick={() => setChatNotify(false)}>x</CancleBtn>
+      <ChatNotifyTag>{chatNickname}님이 메시지를 보냈어요!</ChatNotifyTag>
+      <NotifyImg
+        src='/assets/img/ChaTArm.PNG'
+        style={{ opacity: 0.7 }}
+      ></NotifyImg>
+      {/* <NotifyText>+ {price}</NotifyText> */}
+      {/* <GoTradeBtn onClick={() => navigate('/')}>재입찰하러 가기</GoTradeBtn> */}
+      {/* <UserTag>{bidderNickname}님이 입찰하셨습니다.</UserTag> */}
+
+      <GoChatBtn
+        onClick={() => {
+          setChatNotify(false);
+          navigate(`/chat?sellorNo=${1}`);
+        }}
+      >
+        채팅하러 가기
+      </GoChatBtn>
+    </ChatNotifyDiv>
   );
 };
 
@@ -340,9 +387,11 @@ const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
   // 알람유무
   const [notify, setNotify] = useState(false);
+  const [chatNotify, setChatNotify] = useState(false);
   const [price, setPrice] = useState(0);
   const [auctionNo, setauctionNo] = useState(0);
   const [bidderNickname, setbidderNickname] = useState('');
+  const [chatNickname, setChatNickname] = useState('');
 
   const onSilentRefreshInNav = () => {
     if (isLoggedIn) {
@@ -379,19 +428,21 @@ const Navbar = () => {
 
       eventSource.addEventListener('new bid', function (e) {
         if (!notify) {
-          setPrice(e.data['price']);
-          setauctionNo(e.data['auctionNo']);
-          setbidderNickname(e.data['bidderNickname']);
+          const eventData = JSON.parse(e.data);
+          setPrice(eventData.price);
+          setauctionNo(eventData.auctionNo);
+          setbidderNickname(eventData.bidderNickname);
           setNotify(true);
         }
-        console.log('경매 알림 :', e.data);
+        console.log('경매 알림 :', JSON.parse(e.data));
       });
       eventSource.addEventListener('new chat', function (e) {
         if (!notify) {
-          // setPrice(e.data.price);
+          const eventChatData = JSON.parse(e.data);
+          setChatNickname(eventChatData.senderNickname);
           // setauctionNo(e.data.auctionNo);
           // setbidderNickname(e.data.bidderNickname);
-          setNotify(true);
+          setChatNotify(true);
         }
         console.log('채팅 알림 :', e.data);
       });
@@ -411,6 +462,12 @@ const Navbar = () => {
           auctionNo={auctionNo}
           bidderNickname={bidderNickname}
         ></Notify>
+      ) : null}
+      {chatNotify ? (
+        <ChatNotify
+          setChatNotify={setChatNotify}
+          chatNickname={chatNickname}
+        ></ChatNotify>
       ) : null}
     </NavbarDiv>
   );
