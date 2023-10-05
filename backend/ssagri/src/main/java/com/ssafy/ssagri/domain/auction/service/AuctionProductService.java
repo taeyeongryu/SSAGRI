@@ -175,32 +175,32 @@ public class AuctionProductService {
     }
 
     // 경매 상품 상세페이지
-    public AuctionProductAllDTO auctionDetail(Long auctionProductNo){
-       AuctionProduct auctionProduct = auctionRepository.findByNo(auctionProductNo);
-
-        String startDate = auctionProduct.getStartDate().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"));
-
-        String endDate = auctionProduct.getEndDate().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"));
-
-       AuctionProductAllDTO auctionProductAllDTO =AuctionProductAllDTO.builder()
-               .no(auctionProduct.getNo())
-               .userNickName(userRegistRepository.findByNo(auctionProduct.getUser().getNo()).getNickname())
-               .name(auctionProduct.getName())
-               .upPrice(auctionProduct.getUpPrice())
-               .downPrice(auctionProduct.getDownPrice())
-               .priceCount(auctionProduct.getPriceCount())
-               .startDate(startDate) // String 으로 변환해서 주기
-               .endDate(endDate)
-               .comment(auctionProduct.getComment())
-               .auctionStatus(auctionProduct.getAuctionStatus())
-               .finallyPrice(auctionProduct.getFinallyPrice())
-               .deleteDate(auctionProduct.getDeleteDate())
-               .createDate(auctionProduct.getCreateDate())
-               .type(auctionProduct.getType())
-               .originPrice(auctionProduct.getOriginPrice()).build();
-
-       return auctionProductAllDTO;
-    }
+//    public AuctionProductAllDTO auctionDetail(Long auctionProductNo){
+//       AuctionProduct auctionProduct = auctionRepository.findByNo(auctionProductNo);
+//
+//        String startDate = auctionProduct.getStartDate().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"));
+//
+//        String endDate = auctionProduct.getEndDate().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"));
+//
+//       AuctionProductAllDTO auctionProductAllDTO =AuctionProductAllDTO.builder()
+//               .no(auctionProduct.getNo())
+//               .userNickName(userRegistRepository.findByNo(auctionProduct.getUser().getNo()).getNickname())
+//               .name(auctionProduct.getName())
+//               .upPrice(auctionProduct.getUpPrice())
+//               .downPrice(auctionProduct.getDownPrice())
+//               .priceCount(auctionProduct.getPriceCount())
+//               .startDate(startDate) // String 으로 변환해서 주기
+//               .endDate(endDate)
+//               .comment(auctionProduct.getComment())
+//               .auctionStatus(auctionProduct.getAuctionStatus())
+//               .finallyPrice(auctionProduct.getFinallyPrice())
+//               .deleteDate(auctionProduct.getDeleteDate())
+//               .createDate(auctionProduct.getCreateDate())
+//               .type(auctionProduct.getType())
+//               .originPrice(auctionProduct.getOriginPrice()).build();
+//
+//       return auctionProductAllDTO;
+//    }
 
 
     // 타입에 대한 경매 상품 리스트 출력
@@ -291,40 +291,40 @@ public class AuctionProductService {
         return result;
     }
 
-//    // 경매 상세 페이지
-//    public AuctionProductAllDTO auctionDetail(Long auctionNo) {
-//
-//        AuctionProduct auctionProduct = auctionRepository.findByNo(auctionNo);
-//
-//
-//            String startDate = auctionProduct.getStartDate().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"));
-//
-//            String endDate = auctionProduct.getEndDate().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"));
-//
-//            AuctionProductAllDTO auctionProductAllDTO = AuctionProductAllDTO.builder()
-//                    .no(auctionProduct.getNo())
-//                    .userNickName(auctionProduct.getUser().getNickname())
-//                    .userNo(auctionProduct.getUser().getNo())
-//                    .number(auctionProduct.getUser().getNumber())
-//                    .region(auctionProduct.getUser().getRegion())
-//                    .profile(auctionProduct.getUser().getProfile())
-//                    .name(auctionProduct.getName())
-//                    .upPrice(auctionProduct.getUpPrice())
-//                    .downPrice(auctionProduct.getDownPrice())
-//                    .priceCount(auctionProduct.getPriceCount())
-//                    .startDate(startDate)
-//                    .endDate(endDate)
-//                    .comment(auctionProduct.getComment())
-//                    .auctionStatus(auctionProduct.getAuctionStatus())
-//                    .finallyPrice(auctionProduct.getFinallyPrice())
-//                    .createDate(auctionProduct.getCreateDate())
-//                    .type(auctionProduct.getType())
-//                    .originPrice(auctionProduct.getOriginPrice())
-//                    .build();
-//
-//            return auctionProductAllDTO;
-//
-//    }
+    // 경매 상세 페이지
+    public AuctionProductAllDTO auctionDetail(Long auctionNo) {
+
+        AuctionProduct auctionProduct = auctionRepository.findByNo(auctionNo);
+
+
+            String startDate = auctionProduct.getStartDate().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"));
+
+            String endDate = auctionProduct.getEndDate().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"));
+
+            AuctionProductAllDTO auctionProductAllDTO = AuctionProductAllDTO.builder()
+                    .no(auctionProduct.getNo())
+                    .userNickName(auctionProduct.getUser().getNickname())
+                    .userNo(auctionProduct.getUser().getNo())
+                    .number(auctionProduct.getUser().getNumber())
+                    .region(auctionProduct.getUser().getRegion())
+                    .profile(auctionProduct.getUser().getProfile())
+                    .name(auctionProduct.getName())
+                    .upPrice(auctionProduct.getUpPrice())
+                    .downPrice(auctionProduct.getDownPrice())
+                    .priceCount(auctionProduct.getPriceCount())
+                    .startDate(startDate)
+                    .endDate(endDate)
+                    .comment(auctionProduct.getComment())
+                    .auctionStatus(auctionProduct.getAuctionStatus())
+                    .finallyPrice(auctionProduct.getFinallyPrice())
+                    .createDate(auctionProduct.getCreateDate())
+                    .type(auctionProduct.getType())
+                    .originPrice(auctionProduct.getOriginPrice())
+                    .build();
+
+            return auctionProductAllDTO;
+
+    }
 
 
 

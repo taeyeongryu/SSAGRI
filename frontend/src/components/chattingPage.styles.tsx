@@ -419,10 +419,10 @@ const ChatButton = styled.button`
 const ChattingDiv = () => {
   // 페이지 진입시, 채팅창 목록 보여주기
   const userNo = localStorage.getItem('userNo');
-  // @ts-ignore
-  const [sellorNo, setSellorNo] = useState(
-    new URLSearchParams(window.location.search).get('sellorNo')
-  );
+  const accessToken = sessionStorage.getItem('accessToken');
+  axios.defaults.headers.common['Authorization'] = `${accessToken}`;
+  const [sellorNo, setSellorNo] = useState<string>('');
+  const [chatRoomNo, setChatRoomNo] = useState<string>('');
   const [userNick, setUserNick] = useState<string>('');
   const [selectChat, setSelectChat] = useState(null);
   const [myChatList, setMyChatList] = useState<any[]>([]);
@@ -443,6 +443,10 @@ const ChattingDiv = () => {
     const diffSec = timeNow.getTime() - time.getTime();
     const minute = diffSec / (60 * 1000);
     // console.log(Math.floor(minute / 60));
+
+    if (inputDate === null) {
+      return '';
+    }
 
     if (minute < 1) {
       return `방금 전`;
@@ -483,42 +487,75 @@ const ChattingDiv = () => {
 
   // 대화 목록 렌더링
   useEffect(() => {
-    // 채팅방이 없으면 생성하기
-    axios
-      .get(`chatroom/${userNo}/${sellorNo}?page=0&size=100`)
-      // @ts-ignore
-      .then((res) => {
-        // console.log('chatroom/A/B : ', res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const urlSellorNo = new URLSearchParams(window.location.search).get(
+      'sellorNo'
+    );
+    if (urlSellorNo) {
+      setSellorNo(urlSellorNo);
+    }
+  }, []);
 
-    axios
+  useEffect(() => {
+    if (!sellorNo || sellorNo == undefined) {
+      return;
+    }
+    console.log('sellorNo', sellorNo);
+
+    // sellorNo가 존재하고, 채팅방이 없으면 생성하기
+    if (sellorNo !== '') {
+      axios // 채팅방 번호 불러오기 & 생성
+        .get(`chatroom/${userNo}/${sellorNo}?page=0&size=100`)
+        // @ts-ignore
+        .then((res) => {
+          console.log('chatroom/A/B : ', res.data);
+          setChatRoomNo(res.data.chatRoomNo);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      axios // 채팅목록 불러오기 -> 이미 있는 채팅들을 가져온다 -> 이때 내가 원하는 대화 상대가 아니라면?
+        .get(`/chatroom/list/${userNo}/${sellorNo}`)
+        .then((res) => {
+          console.log('chatroom list : ', res.data);
+          setMyChatList(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      axios // 그냥 들어 왔을 때 채팅목록 불러오기
+        .get(`/chatroom/list/${userNo}`)
+        .then((res) => {
+          console.log('chatroom list : ', res.data);
+          setMyChatList(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+
+    axios // 내 닉네임 불러오기
       .get(`/chatroom/nickname/${userNo}`)
       .then((res) => {
-        // console.log('nickname : ', res.data);
+        console.log('nickname : ', res.data);
         setUserNick(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
+  }, [sellorNo]);
 
-    axios
-      .get(`/chatroom/list/${userNo}`)
-      .then((res) => {
-        // console.log('chatroom list : ', res.data);
-        setMyChatList(res.data);
-        setSelectChat(res.data[0]);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
-
-  // useEffect(() => {
-  //   console.log('selectChat', selectChat);
-  // }, [selectChat]);
+  useEffect(() => {
+    if (!myChatList[0]) {
+      return;
+    }
+    console.log('myChatList[0]', myChatList[0].chatRoomNo);
+    console.log('chatRoomNo', chatRoomNo);
+    if (chatRoomNo != '' && myChatList[0].chatRoomNo !== chatRoomNo) {
+      console.log('다른 채팅방입니다.');
+    }
+    setSelectChat(myChatList[0]);
+  }, [myChatList]);
 
   // 채팅목록 DIV
   const chatListRendering = () => {
@@ -632,6 +669,8 @@ const DoChatting = ({ selectChat }) => {
   const number = useRef(0); // 현재 페이지
   const totalPages = useRef(0); // 전체 페이지 수
   const pastMessage = useRef(false); // 이전 페이지 유무
+  const accessToken = sessionStorage.getItem('accessToken');
+  axios.defaults.headers.common['Authorization'] = `${accessToken}`;
 
   // const observerRef: any = useRef(null);
   // const hasMoreLogs = useRef(true);

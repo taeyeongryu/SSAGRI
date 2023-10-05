@@ -8,9 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-import springfox.documentation.spring.web.json.Json;
+
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -39,7 +38,7 @@ public class NotificationService {
 
         //더미 메시지 보냄
         try {
-            sseEmitter.send(SseEmitter.event().name("sse-emitter-created"));
+            sseEmitter.send(SseEmitter.event().name("sse-emitter-created").data("연결성공"));
         } catch (IOException e) {
             new CustomException(CustomExceptionStatus.SSEEMITTER_CAN_NOT_CREATE);
         }
@@ -55,6 +54,7 @@ public class NotificationService {
 
     public void sendMessageToBidder(Long auctionNo, String bidderNickname, int price) {
         log.info("sseEmitterMap.size() = {}", sseEmitterMap.size());
+        log.info("sendMessageToBidder");
 
         //메시지 Json으로 만들어 준다.
         //"bidderNickname을 가진 사용자가, price을 입찰했다"는 의미
@@ -81,6 +81,7 @@ public class NotificationService {
             try {
                 //비드한 사람의 Emitter를 찾으면 메시지 전송한다.
                 if(bidderNoSet.contains(userNo)){
+                    log.info("sendingMessage = {}", sendingMessage);
                     sseEmitterMap.get(userNo).send(SseEmitter.event().name("new bid").data(sendingMessage));
                 }
             } catch (IOException e) {

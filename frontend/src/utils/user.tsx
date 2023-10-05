@@ -33,6 +33,7 @@ const onLoginSuccess = (response: any) => {
 // 액세스 토큰이 만료되었을 때, 새로고침 되었을 때 사용
 const onSilentRefresh = () => {
   localStorage.removeItem('isLoggedIn');
+
   axios
     .get('/jwt/refill')
     .then((res) => {

@@ -90,7 +90,7 @@ const NotifyTag = styled.p`
 `;
 const NotifyText = styled.p`
   font-size: 27px;
-  margin: 5px 0 0 110px;
+  margin: 5px 0 0 140px;
   color: #337ccf;
 `;
 const CancleBtn = styled.div`
@@ -125,17 +125,25 @@ const GoTradeBtn = styled.div`
     cursor: pointer; /* 호버 시 커서 모양 변경 (선택 사항) */
   }
 `;
-const Notify = ({ setNotify }) => {
+
+const UserTag = styled.div`
+  font-size: 13px;
+  position: absolute;
+  top: 65px;
+  left: 280px;
+`;
+const Notify = ({ setNotify, bidderNickname, price, auctionNo }) => {
   const navigate = useNavigate();
   return (
     <NotifyDiv>
       <CancleBtn onClick={() => setNotify(false)}>x</CancleBtn>
       <NotifyTag>경매상회입찰이 되었어요!</NotifyTag>
-
       <NotifyImg src='/assets/img/notify.PNG'></NotifyImg>
-      <NotifyText>+ ㅇㄴㅁㄹ</NotifyText>
+      <NotifyText>+ {price}</NotifyText>
       {/* <GoTradeBtn onClick={() => navigate('/')}>재입찰하러 가기</GoTradeBtn> */}
-      <GoTradeBtn onClick={() => navigate('/auctionDetail/3')}>
+      <UserTag>{bidderNickname}님이 입찰하셨습니다.</UserTag>
+
+      <GoTradeBtn onClick={() => navigate(`/auctionDetail/${auctionNo}`)}>
         재입찰하러 가기
       </GoTradeBtn>
     </NotifyDiv>
@@ -288,8 +296,10 @@ const SideBar = () => {
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
   // 알람유무
-  const [notify, setNotify] = useState(true);
-
+  const [notify, setNotify] = useState(false);
+  const [price, setPrice] = useState(0);
+  const [auctionNo, setauctionNo] = useState(0);
+  const [bidderNickname, setbidderNickname] = useState('');
   const onSilentRefreshInNav = () => {
     localStorage.removeItem('isLoggedIn');
     axios
@@ -318,15 +328,17 @@ const Navbar = () => {
     const eventSource = new EventSource(urlEndPoint);
 
     eventSource.addEventListener('sse-emitter-created', function (event) {
-      // event.preventDefault();
-      console.log(event);
+      console.log('소켓 연결', event);
     });
 
     eventSource.addEventListener('new bid', function (e) {
-      // e.preventDefault();
-      console.log('알림', e.data);
-      if (e.data) {
+      if (!notify) {
+        setPrice(e.data.price);
+        setauctionNo(e.data.auctionNo);
+        setbidderNickname(e.data.bidderNickname);
+        setNotify(true);
       }
+      console.log('경매 알림 :', e.data.price);
     });
   }, []);
 
@@ -336,7 +348,14 @@ const Navbar = () => {
       <MenuBar></MenuBar>
       <SideBar></SideBar>
       {/* 알림 */}
-      {notify ? <Notify setNotify={setNotify}></Notify> : null}
+      {notify ? (
+        <Notify
+          setNotify={setNotify}
+          price={price}
+          auctionNo={auctionNo}
+          bidderNickname={bidderNickname}
+        ></Notify>
+      ) : null}
     </NavbarDiv>
   );
 };
