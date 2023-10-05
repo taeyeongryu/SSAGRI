@@ -269,12 +269,14 @@ const AuctionItme = (item: any) => {
     console.log(item);
     navigate(`/auctionDetail/${item.item.no}`);
   };
-
+  const storedAccessToken = sessionStorage.getItem('accessToken');
+  const AuctionApi = axios.create({
+    headers: { Authorization: storedAccessToken }
+  });
   const [thumbnail, setThumbnail] = useState('');
 
   const getThumbnail = () => {
-    axios
-      .get(`/auction-product/load/${item.item.no}`)
+    AuctionApi.get(`/auction-product/load/${item.item.no}`)
       .then((res) => {
         if (res.data.resultMsg === '등록된 사진이 있습니다.') {
           const firstPhoto = res.data.result[0].imageLink;
@@ -458,9 +460,9 @@ const AuctionPage = () => {
   };
 
   // 경매 리스트 요청
-
+  const storedAccessToken = sessionStorage.getItem('accessToken');
   const auctionApi = axios.create({
-    headers: { 'content-type': 'application/json' }
+    headers: { Authorization: storedAccessToken }
   });
 
   const GetAuctionItemList = () => {

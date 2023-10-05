@@ -363,12 +363,11 @@ const Navbar = () => {
   };
 
   useEffect(() => {
+    const userId = localStorage.getItem('userNo');
     onSilentRefreshInNav();
     // 알림기능
-    const urlEndPoint =
-      'https://j9b209.p.ssafy.io/api/notification/subscribe/1';
+    const urlEndPoint = `https://j9b209.p.ssafy.io/api/notification/subscribe/${userId}`;
     const eventSource = new EventSource(urlEndPoint);
-
     eventSource.addEventListener('sse-emitter-created', function (event) {
       console.log('소켓 연결', event);
     });
