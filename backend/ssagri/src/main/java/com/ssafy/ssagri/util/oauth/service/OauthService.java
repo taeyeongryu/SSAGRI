@@ -4,6 +4,7 @@ package com.ssafy.ssagri.util.oauth.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.ssagri.domain.redis.RedisService;
+import com.ssafy.ssagri.domain.user.repository.UserRegistAndModifyRepository;
 import com.ssafy.ssagri.util.exception.CustomException;
 import com.ssafy.ssagri.util.exception.CustomExceptionStatus;
 import com.ssafy.ssagri.util.mail.EmailService;
@@ -35,6 +36,7 @@ public class OauthService {
 
     private final EmailService emailService;
     private final RedisService redisService;
+    private final UserRegistAndModifyRepository userRegistAndModifyRepository;
 
     public String getToken(String code) {
         //Kakao 보낼 API
@@ -110,6 +112,7 @@ public class OauthService {
 
 
     public void checkAndDeleteRedisCode(String email, String authcode) {
+        if(!userRegistAndModifyRepository.isEmailExists(email)) throw new CustomException(OAUTH_KAKAO_NOT_VALID_EMAIL);
         if(!redisService.authcodeExists("[KAKAO-CHECK-CODE]"+email)) throw new CustomException(OAUTH_KAKAO_NOT_VALID_EMAIL); //레디스에 값 존재하는지 체크
         if(!redisService.getAuthCode("[KAKAO-CHECK-CODE]"+email).equals(authcode)) throw new CustomException(OAUTH_KAKAO_NOT_VALID_AUTHCODE); //값의 value가 코드와 맞는지 체크
         redisService.deleteRegistAuthCode("[KAKAO-CHECK-CODE]"+email); //해당 값 삭제 과정 진행
