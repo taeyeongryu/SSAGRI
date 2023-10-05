@@ -343,45 +343,60 @@ const Navbar = () => {
   const [price, setPrice] = useState(0);
   const [auctionNo, setauctionNo] = useState(0);
   const [bidderNickname, setbidderNickname] = useState('');
+
   const onSilentRefreshInNav = () => {
-    localStorage.removeItem('isLoggedIn');
-    axios
-      .get('/jwt/refill')
-      .then((res) => {
-        console.log('silent refresh, 새로운 액세스 토큰 발급');
-        console.log('Recoil 로그인 여부: ', isLoggedIn);
-        // 리프레시 토큰이 유효 [ STATUS 200 ]
-        // 새로운 액세스 토큰 발급
-        onLoginSuccess(res);
-        setIsLoggedIn(true);
-      })
-      .catch(() => {
-        console.log('silent refresh, 리프레시 토큰이 유효하지 않습니다.');
-        // 리프레시 토큰이 유효하지 않은 경우 [ STATUS 400, 500 ]
-        // 로그인페이지로 이동
-      });
+    if (isLoggedIn) {
+      localStorage.removeItem('isLoggedIn');
+      axios
+        .get('/jwt/refill')
+        .then((res) => {
+          console.log('silent refresh, 새로운 액세스 토큰 발급');
+          console.log('Recoil 로그인 여부: ', isLoggedIn);
+          // 리프레시 토큰이 유효 [ STATUS 200 ]
+          // 새로운 액세스 토큰 발급
+          onLoginSuccess(res);
+          setIsLoggedIn(true);
+        })
+        .catch(() => {
+          console.log('silent refresh, 리프레시 토큰이 유효하지 않습니다.');
+          // 리프레시 토큰이 유효하지 않은 경우 [ STATUS 400, 500 ]
+          // 로그인페이지로 이동
+        });
+    }
   };
 
   useEffect(() => {
-    const userId = localStorage.getItem('userNo');
-    onSilentRefreshInNav();
-    // 알림기능
-    const urlEndPoint = `https://j9b209.p.ssafy.io/api/notification/subscribe/${userId}`;
-    const eventSource = new EventSource(urlEndPoint);
-    eventSource.addEventListener('sse-emitter-created', function (event) {
-      console.log('소켓 연결', event);
-    });
+    if (isLoggedIn) {
+      console.log('로그인 성공@@@ : 알림 시작');
+      const userId = localStorage.getItem('userNo');
+      onSilentRefreshInNav();
+      // 알림기능
+      const urlEndPoint = `https://j9b209.p.ssafy.io/api/notification/subscribe/${userId}`;
+      const eventSource = new EventSource(urlEndPoint);
+      eventSource.addEventListener('sse-emitter-created', function (event) {
+        console.log('소켓 연결', event);
+      });
 
-    eventSource.addEventListener('new bid', function (e) {
-      if (!notify) {
-        setPrice(e.data.price);
-        setauctionNo(e.data.auctionNo);
-        setbidderNickname(e.data.bidderNickname);
-        setNotify(true);
-      }
-      console.log('경매 알림 :', e.data.price);
-    });
-  }, []);
+      eventSource.addEventListener('new bid', function (e) {
+        if (!notify) {
+          setPrice(e.data['price']);
+          setauctionNo(e.data['auctionNo']);
+          setbidderNickname(e.data['bidderNickname']);
+          setNotify(true);
+        }
+        console.log('경매 알림 :', e.data);
+      });
+      eventSource.addEventListener('new chat', function (e) {
+        if (!notify) {
+          // setPrice(e.data.price);
+          // setauctionNo(e.data.auctionNo);
+          // setbidderNickname(e.data.bidderNickname);
+          setNotify(true);
+        }
+        console.log('채팅 알림 :', e.data);
+      });
+    }
+  }, [isLoggedIn]);
 
   return (
     <NavbarDiv>
