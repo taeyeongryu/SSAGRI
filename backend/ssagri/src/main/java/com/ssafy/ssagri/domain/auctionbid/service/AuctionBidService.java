@@ -56,6 +56,11 @@ public class AuctionBidService {
         }else{
             throw new CustomException(CustomExceptionStatus.USER_DOES_NOT_EXSIST);
         }
+        //만약 입찰자가 경매 올린 본인이면 예외
+        if(user.getNo().equals(auctionProduct.getUser().getNo())){
+            throw new CustomException(CustomExceptionStatus.AUCTION_BIDBER_SAME);
+        }
+
 
         //비드 Entity 만들어 주고 DB에 저장
         AuctionBid auctionBid = AuctionBid.builder()
