@@ -5,7 +5,7 @@ import com.ssafy.ssagri.domain.auctionbid.dto.AuctionBidSaveRequestDto;
 import com.ssafy.ssagri.domain.auctionbid.dto.AuctionBidSelectResponseDto;
 import com.ssafy.ssagri.domain.auctionbid.dto.AuctionBidSocketRequestDto;
 import com.ssafy.ssagri.domain.auctionbid.repository.AuctionBidRepository;
-//import com.ssafy.ssagri.domain.notification.NotificationService;
+import com.ssafy.ssagri.domain.notification.NotificationService;
 import com.ssafy.ssagri.domain.user.repository.UserRegistAndModifyRepository;
 import com.ssafy.ssagri.entity.auction.AuctionBid;
 import com.ssafy.ssagri.entity.auction.AuctionProduct;
@@ -29,7 +29,7 @@ public class AuctionBidService {
     private final AuctionBidRepository auctionBidRepository;
     private final UserRegistAndModifyRepository userRegistAndModifyRepository;
     private final AuctionRepository auctionRepository;
-//    private final NotificationService notificationService;
+    private final NotificationService notificationService;
 
 
     /*
@@ -69,7 +69,7 @@ public class AuctionBidService {
         auctionBidRepository.save(auctionBid);
 
         //이 Auction에 입찰했던 사람들한테 메시지 보내주기
-//        notificationService.sendMessageToBidder(auctionProduct.getNo(),user.getNickname(),auctionBidSaveRequestDto.getAuctionBidPrice());
+        notificationService.sendMessageToBidder(auctionProduct.getNo(),user.getNickname(),auctionBidSaveRequestDto.getAuctionBidPrice());
 
         return auctionBid.getNo();
     }
