@@ -1,5 +1,6 @@
 package com.ssafy.ssagri.util.oauth.contoller;
 
+import com.ssafy.ssagri.domain.redis.RedisService;
 import com.ssafy.ssagri.domain.user.repository.UserRegistAndModifyRepository;
 import com.ssafy.ssagri.domain.user.service.UserLoginAndLogoutService;
 import com.ssafy.ssagri.util.exception.CustomException;
@@ -30,6 +31,7 @@ public class OauthController {
     private final OauthService oauthService;
     private final UserRegistAndModifyRepository userRegistAndModifyRepository;
     private final UserLoginAndLogoutService userLoginAndLogoutService;
+    private final RedisService redisService;
 
     /*
     1. 인증 : 카카오 로그인 이후
@@ -72,20 +74,10 @@ public class OauthController {
             "계정이 맞지 않다면 OAUTH_KAKAO_NOT_VALID_EMAIL(-901, \"해당 계정이 존재하지 않습니다.\") 가 발생합니다. \n" +
             "이후는 기존 로그인 로직과 동일합니다.")
     public ResponseEntity<?> kakaoLogin(@RequestParam("email") String email, HttpServletResponse response) {
-        if(!userRegistAndModifyRepository.isEmailExists(email)) throw new CustomException(OAUTH_KAKAO_NOT_VALID_EMAIL); //이메일 존재 체크
+        if(!redisService.authcodeExists("[KAKAO-CHECK-CODE]"+email)) throw new CustomException(OAUTH_KAKAO_NOT_VALID_EMAIL); //인증코드 존재 체크
+        redisService.deleteKakaoAuthCode("[KAKAO-CHECK-CODE]"+email);
         return userLoginAndLogoutService.loginUserForKakao(response, email);
     }
     //마찬가지로 유저메일 받아옴 -> 해당 메일이 존재 -> 해당 정보로 로그인
 
-//    @GetMapping("get/user-info")
-//    @Operation(summary = "사용자 정보 받아오기", description = "Token에서 뽑아온 accessToken으로 로그인 사용자가 동의한 정보 확인하기 ")
-//    public ResponseEntity<Map<String, String>> getUserInfo(@RequestParam("token") String token) {
-//        log.info("[KAKAO]액세스 토큰 입력 : {}", token);
-//        return oauthService.getUserInfo(token);
-//    }
-
-//    @GetMapping("logout")
-//    public String logout(@RequestParam("code") String code) throws JSONException {
-//
-//    }
 }
