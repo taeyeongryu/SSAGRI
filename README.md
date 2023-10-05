@@ -1,7 +1,3 @@
-
-
-
----
 # 🌊 <span style="background-color:#C0FFFF"> SSAGRI </span> 
 ![Imgur](https://i.imgur.com/B9kthsD.png)
 
