@@ -704,7 +704,7 @@ const TradeProductItem02 = ({ item }) => {
     </ProductStyle02>
   );
 };
-const TradeProductItem03 = ({ item }) => {
+const TradeProductItem03 = ({ item, setProductNo }) => {
   let productLike: string = '';
   if (item.like) {
     productLike = '/assets/img/heartColor.png';
@@ -749,6 +749,7 @@ const TradeProductItem03 = ({ item }) => {
 
   const navigate = useNavigate();
   const goTradeDetail = (no: number) => {
+    setProductNo(no);
     navigate(`/tradeDetail/${no}`);
   };
 

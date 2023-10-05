@@ -548,7 +548,7 @@ const TradeDetail = () => {
     userTemper: 0
   });
   // URI에서 물품번호 가져오기
-  const productNo = useParams().no;
+  const [productNo, setProductNo] = useState(useParams().no);
   // console.log(productNo, 'Detail');
   // 판매자 정보 저장
   const [sellorInfo, setSellorInfo] = useState({});
@@ -755,8 +755,9 @@ const TradeDetail = () => {
         console.log(err);
       }
     };
+    window.scrollTo(0, 0);
     firstFunction();
-  }, []);
+  }, [productNo]);
 
   return (
     <DetailFrame>
@@ -845,7 +846,11 @@ const TradeDetail = () => {
               {/* @ts-ignore */}
               {responseList.map((item: ProductItemType, id) => {
                 return (
-                  <TradeProductItem03 key={id} item={item}></TradeProductItem03>
+                  <TradeProductItem03
+                    key={id}
+                    item={item}
+                    setProductNo={setProductNo}
+                  ></TradeProductItem03>
                 );
               })}
             </ProductList03>
