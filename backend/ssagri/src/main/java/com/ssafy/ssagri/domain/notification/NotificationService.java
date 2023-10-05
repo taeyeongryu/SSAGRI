@@ -92,7 +92,7 @@ public class NotificationService {
         }
     }
     public void sendMessageToChatter(User sender, User receiver,Long chatRoomNo){
-
+        log.info("sendMessageToChatter");
         //만약 receiver가 로그인해서 sseEmitter를 발급 받았다면
         if(sseEmitterMap.containsKey(receiver.getNo())){
             SseEmitter sseEmitter = sseEmitterMap.get(receiver.getNo());
@@ -104,9 +104,11 @@ public class NotificationService {
                     .put("senderNo", sender.getNo())
                     .put("receiverNo", receiver.getNo())
                     .put("chatRoomNo", chatRoomNo).toString();
+            log.info("message = {}", message);
             try {
                 //메시지 보낸다.
                 sseEmitter.send(SseEmitter.event().name("new chat").data(message));
+                log.info("message sent");
             } catch (IOException e) {
                 sseEmitterMap.remove(receiver.getNo());
                 throw new CustomException(CustomExceptionStatus.SSEEMITTER_DOES_NOT_EXIST);
