@@ -480,7 +480,7 @@ const ChattingDiv = () => {
   // chatRoomNo 따라 채팅하기 -> chatRoomNo으로 useEffect 활성화
   // const navigate = useNavigate();
   const selectChatting = (selectChat) => () => {
-    console.log('채팅 전환 확인!! selectChat : ', selectChat);
+    // console.log('채팅 전환 확인!! selectChat : ', selectChat);
     setSellorNo(selectChat.receiverNo);
   };
 
@@ -503,7 +503,7 @@ const ChattingDiv = () => {
       axios // 내 닉네임 불러오기
         .get(`/chatroom/nickname/${userNo}`)
         .then((res) => {
-          console.log('nickname : ', res.data);
+          // console.log('nickname : ', res.data);
           setUserNick(res.data);
         })
         .catch((err) => {
@@ -516,7 +516,7 @@ const ChattingDiv = () => {
       axios // 채팅방 번호 불러오기 & 생성
         .get(`chatroom/${userNo}/${sellorNo}?page=0&size=100`)
         .then((res) => {
-          console.log('chatroom/A/B : ', res.data);
+          // console.log('chatroom/A/B : ', res.data);
           setChatRoomNo(res.data.chatRoomNo);
         })
         .catch((err) => {
@@ -532,7 +532,7 @@ const ChattingDiv = () => {
       axios // 채팅목록 불러오기 -> 이미 있는 채팅들을 가져온다 -> 이때 내가 원하는 대화 상대가 아니라면?
         .get(`/chatroom/list/${userNo}/${sellorNo}`)
         .then((res) => {
-          console.log('chatroom list : ', res.data);
+          // console.log('chatroom list : ', res.data);
           setMyChatList(res.data);
         })
         .catch((err) => {
@@ -542,7 +542,7 @@ const ChattingDiv = () => {
       axios // 그냥 들어 왔을 때 채팅목록 불러오기
         .get(`/chatroom/list/${userNo}`)
         .then((res) => {
-          console.log('chatroom list : ', res.data);
+          // console.log('chatroom list : ', res.data);
           setMyChatList(res.data);
         })
         .catch((err) => {
@@ -558,7 +558,7 @@ const ChattingDiv = () => {
     // console.log('myChatList[0]', myChatList[0].chatRoomNo);
     // console.log('chatRoomNo', chatRoomNo);
     if (chatRoomNo != '' && myChatList[0].chatRoomNo !== chatRoomNo) {
-      console.log('다른 채팅방입니다.');
+      // console.log('다른 채팅방입니다.');
       return;
     }
     setSelectChat(myChatList[0]);
@@ -658,7 +658,7 @@ const ChattingDiv = () => {
 
 // 대화 주고받는 컴포넌트
 const DoChatting = ({ selectChat }) => {
-  console.log('DoChatting - selectChat : ', selectChat);
+  // console.log('DoChatting - selectChat : ', selectChat);
   if (!selectChat) {
     return null; // 혹은 로딩 중인 UI 등 다른 처리 가능
   }
@@ -790,7 +790,7 @@ const DoChatting = ({ selectChat }) => {
   }, []);
 
   useEffect(() => {
-    console.log('DoChatting - receiverNo', receiverNo);
+    // console.log('DoChatting - receiverNo', receiverNo);
   }, [receiverNo]);
 
   // 웹소켓 연결을 갱신
