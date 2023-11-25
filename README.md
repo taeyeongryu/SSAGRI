@@ -210,9 +210,6 @@
 
 
 # 📋 프로젝트 산출물
-
-- [ERD](https://www.erdcloud.com/d/6MNLWHTebijmyPxpE)
-- [와이어프레임](https://www.figma.com/file/DL5Qh66SOt80ehDzSqqS35/%ED%8A%B9%ED%99%94-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8?type=design&node-id=0-1&mode=design&t=SlrwvSMX9HAsiX06-0)
 - [시스템 아키텍처](https://www.canva.com/design/DAF0te5OJxk/3bnzNEo0MnBsVTEkN0vS4Q/edit?utm_content=DAF0te5OJxk&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
 
